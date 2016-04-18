@@ -73,17 +73,17 @@ export class Popup extends DOMObject {
 	}
 
 	handleSubmit(event) {
-		console.log('submit');
-		this.hide();
+		this.submit();
 	}
 
 	handleKeyPress(event) {
 		switch(event.keyCode) {
 			case 13: //Enter
-				console.log('enter');
+				this.submit();
+
 				break;
 			case 27: //Esc
-				this.hide()
+				this.hide();
 				break;
 		}
 	}
@@ -96,8 +96,25 @@ export class Popup extends DOMObject {
 
 	hide() {
 		this.removeEvents();
-		this.el.parentNode.removeChild(this.el);
+		if(this.el.parentNode)
+			this.el.parentNode.removeChild(this.el);
 		
+	}
+
+	submit() {
+		let elements = this.elements;
+		let isValid = true
+		if(elements) {
+			for(let i =1; i < elements.length; i++) {
+				let element = elements[i];
+				if(element instanceof Field )
+					isValid = isValid && element.validate();
+			}
+		}
+		if(isValid) {
+			console.log('submitted');
+			this.hide();
+		}
 	}
 }
 

@@ -25,4 +25,8 @@ export class Field extends DOMObject {
 		return settings;
 	}
 
+	validate() {
+		return true;
+	}
+
 }
