@@ -7,6 +7,9 @@
     height: 100%;
     background-color: rgba(0, 0, 0, 0.8);
     box-sizing: border-box;
+    animation: sendsay-wrapper-animate;
+    animation-duration: 300ms;
+    animation-timing-function: cubic-bezier(.175,.885,.32,1.275);
 }
 
 .sendsay-wrapper * {
@@ -24,6 +27,10 @@
     background-color: #fff;
     box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.3);
     transform: translate(-50%, -50%);
+    animation: sendsay-popup-animate;
+    animation-duration: 300ms;
+    animation-timing-function: cubic-bezier(.175,.885,.32,1.275);
+
 
 }
 
@@ -75,5 +82,33 @@
 
     background-color: #008cff;
 
+}
+
+.sendsay-title {
+	font-size: 20px;
+    font-weight: 400;
+    margin: 0;
+    margin-bottom: 20px;
+}
+
+@keyframes sendsay-wrapper-animate {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+
+@keyframes sendsay-popup-animate {
+    from {
+        -ms-transform: scale(.88) translate(-50%, -50%);
+            transform: scale(.88) translate(-50%, -50%);
+    }
+    to {
+        -ms-transform: scale(1) translate(-50%, -50%);
+            transform: scale(1) translate(-50%, -50%);
+    }
 }
 

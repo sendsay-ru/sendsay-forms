@@ -6,8 +6,9 @@ export class Button extends DOMObject {
 		super();
 		this.data = data;
 		this.template = '<div class = "sendsay-button" style="[%style%]"">' +
-							'<input type="button"  value=[%value%] />' + 
+							'<input type="button"  value=[%text%] />' + 
 						'</div>';
+		this.build();
 	}
 
 	build() {
@@ -17,7 +18,7 @@ export class Button extends DOMObject {
 	makeSettings() {
 		let data = this.data,
 			settings = super.makeSettings();
-		settings.value = data.value || 'Unknown';
+		settings.text = data.text || 'Unknown';
 		return settings;
 	}
 }

@@ -10,6 +10,7 @@ export class Field extends DOMObject {
 						'<label for="[%name%]" class = "sendsay-label">[%label%]</label>' +
 						'<input name="[%name%]" type="text" class="sendsay-input"/>' + 
 						'</div>';
+		this.build();
 	}
 
 	build() {

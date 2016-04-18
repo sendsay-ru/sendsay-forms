@@ -1,28 +1,15 @@
 
 import {Popup} from "./classes/Popup.js";
+import {Loader} from "./classes/Loader.js";
 (function() {
 
-
+	
 	var activatePopup  = function(id) {
-		let popup = new Popup ({
-		elements: [
-				{
-					type: 'text',
-					label: 'Hello world'
-				},
-				{
-					type: 'button',
-					value: 'Submit'
-				}
-			],
-			styles: {
-				width: '400px'
-			},
-			displaySettings: {
-				delay: 5000
-			}
+		var loader = new Loader('p10');
+		loader.load().then(function(data) {
+			let popup = new Popup(loader.data);
+			popup.activate();
 		});
-		popup.activate();
 	};
 	window.SENDSAY = {
 		activatePopup: activatePopup

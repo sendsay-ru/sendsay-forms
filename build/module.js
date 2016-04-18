@@ -27,7 +27,8 @@ var Button = exports.Button = function (_DOMObject) {
 		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Button).call(this));
 
 		_this.data = data;
-		_this.template = '<div class = "sendsay-button" style="[%style%]"">' + '<input type="button"  value=[%value%] />' + '</div>';
+		_this.template = '<div class = "sendsay-button" style="[%style%]"">' + '<input type="button"  value=[%text%] />' + '</div>';
+		_this.build();
 		return _this;
 	}
 
@@ -41,7 +42,7 @@ var Button = exports.Button = function (_DOMObject) {
 		value: function makeSettings() {
 			var data = this.data,
 			    settings = _get(Object.getPrototypeOf(Button.prototype), 'makeSettings', this).call(this);
-			settings.value = data.value || 'Unknown';
+			settings.text = data.text || 'Unknown';
 			return settings;
 		}
 	}]);
@@ -146,6 +147,7 @@ var Field = exports.Field = function (_DOMObject) {
 
 		_this.data = data;
 		_this.template = '<div class = "sendsay-field" style="[%style%]"">' + '<label for="[%name%]" class = "sendsay-label">[%label%]</label>' + '<input name="[%name%]" type="text" class="sendsay-input"/>' + '</div>';
+		_this.build();
 		return _this;
 	}
 
@@ -181,11 +183,14 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Loader = exports.Loader = function () {
-	function Loader() {
+	function Loader(id) {
 		_classCallCheck(this, Loader);
 
 		this.request = new XMLHttpRequest();
-		this.request.open('GET', 'https://sendsay.ru/form/x_1445438168224221/2/', true);
+		this.request.open('POST', 'https://sendsay.ru/form/x_1445438168224221/2/', true);
+		this.request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		var jsonRequest = '{"id":' + id + ' }';
+		this.params = 'apiversion=' + encodeURIComponent(100) + '&json=1&request=' + encodeURIComponent(jsonRequest);
 	}
 
 	_createClass(Loader, [{
@@ -194,7 +199,33 @@ var Loader = exports.Loader = function () {
 	}, {
 		key: 'handleSuccess',
 		value: function handleSuccess() {
+			var rawJson = '{' + '"fields": {' + '"q43": {' + '"type": "free",' + '"name": "First field",' + '"questionnaire": "SomeQuest"' + '},' + '"q46": {' + '"type": "free",' + '"name": "Second field",' + '"questionnaire": "SomeQuest"' + '},' + '"q48": {' + '"type": "number",' + '"name": "Third field",' + '"questionnaire": "SomeQuest"' + '}' + '},' + '"name": "Important form"' + '}';
+			var json = JSON.parse(rawJson);
+			this.transformAnswer(json);
 			console.log('success');
+		}
+	}, {
+		key: 'transformAnswer',
+		value: function transformAnswer(json) {
+			this.data = {};
+			this.data.elements = [];
+			this.data.active = json.active || false;
+			if (json.fields) {
+				var fields = json.fields;
+				for (var key in fields) {
+					var field = fields[key];
+					this.data.elements.push({
+						type: field.type,
+						name: '_' + field.questionnaire + '_' + key,
+						label: field.name
+					});
+				}
+				this.data.elements.push({
+					type: 'button',
+					text: 'submit'
+				});
+			}
+			if (json.name) this.data.title = json.name;
 		}
 	}, {
 		key: 'handleFail',
@@ -214,14 +245,17 @@ var Loader = exports.Loader = function () {
 				if (self.request.readyState == 4) {
 					if (self.request.status == 200) {
 						self.handleSuccess();
-						resolve(true);
+						resolve(this.data);
 					} else {
-						self.handleFail();
-						reject(false);
+						// self.handleFail();
+						// reject(false);
+						self.handleSuccess();
+						resolve(this.data);
 					}
 				}
 			};
-			this.request.send(null);
+			console.log(this.params);
+			this.request.send(this.params);
 		}
 	}]);
 
@@ -261,7 +295,8 @@ var Popup = exports.Popup = function (_DOMObject) {
 		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Popup).call(this));
 
 		_this.data = data;
-		_this.template = '<div class = "sendsay-wrapper">' + '<div class = "sendsay-popup" style="[%style%]"">' + '' + '</div>' + '</div>';
+		_this.template = '<div class = "sendsay-wrapper">' + '<div class = "sendsay-popup" style="[%style%]"">' + (data.title ? '<div class = "sendsay-title">[%title%]</div>' : '') + '' + '</div>' + '</div>';
+		_this.build();
 		return _this;
 	}
 
@@ -269,13 +304,15 @@ var Popup = exports.Popup = function (_DOMObject) {
 		key: "build",
 		value: function build() {
 			_get(Object.getPrototypeOf(Popup.prototype), "build", this).call(this);
+			this.elements = [];
 			var factory = new ElementFactory();
 			var popupBody = this.el.querySelector('.sendsay-popup');
 			if (this.data.elements) {
 				var elements = this.data.elements;
 				for (var i = 0; i < elements.length; i++) {
-					var newEl = factory.make(elements[i]).build();
-					popupBody.appendChild(newEl);
+					var newEl = factory.make(elements[i]);
+					this.elements.push(newEl);
+					popupBody.appendChild(newEl.el);
 				}
 			}
 			return this.el;
@@ -298,12 +335,16 @@ var Popup = exports.Popup = function (_DOMObject) {
 		value: function addEvents() {
 			this.el.addEventListener('click', this.handleWrapperClick.bind(this));
 			this.el.querySelector('.sendsay-popup').addEventListener('click', this.handlePopupClick.bind(this));
+			this.el.querySelector('.sendsay-button input').addEventListener('click', this.handleSubmit.bind(this));
+			document.addEventListener('keypress', this.handleKeyPress.bind(this));
 		}
 	}, {
 		key: "removeEvents",
 		value: function removeEvents() {
 			this.el.removeEventListener('click', this.handleWrapperClick.bind(this));
 			this.el.querySelector('.sendsay-popup').removeEventListener('click', this.handlePopupClick.bind(this));
+			this.el.querySelector('.sendsay-button input').removeEventListener('click', this.handleSubmit.bind(this));
+			document.removeEventListener('keypress', this.handleKeyPress.bind(this));
 		}
 	}, {
 		key: "handleWrapperClick",
@@ -314,6 +355,26 @@ var Popup = exports.Popup = function (_DOMObject) {
 		key: "handlePopupClick",
 		value: function handlePopupClick(event) {
 			event.stopPropagation();
+		}
+	}, {
+		key: "handleSubmit",
+		value: function handleSubmit(event) {
+			console.log('submit');
+			this.hide();
+		}
+	}, {
+		key: "handleKeyPress",
+		value: function handleKeyPress(event) {
+			switch (event.keyCode) {
+				case 13:
+					//Enter
+					console.log('enter');
+					break;
+				case 27:
+					//Esc
+					this.hide();
+					break;
+			}
 		}
 	}, {
 		key: "show",
@@ -361,7 +422,8 @@ var ElementFactory = function (_Factory) {
 		key: "make",
 		value: function make(data) {
 			switch (data.type) {
-				case 'text':
+				case 'number':
+				case 'free':
 					return new _Field.Field(data);
 				case 'button':
 					return new _Button.Button(data);
@@ -373,33 +435,25 @@ var ElementFactory = function (_Factory) {
 }(Factory);
 
 },{"./Button.js":1,"./DOMObject.js":2,"./Field.js":3}],6:[function(require,module,exports){
-'use strict';
+"use strict";
 
-var _Popup = require('./classes/Popup.js');
+var _Popup = require("./classes/Popup.js");
+
+var _Loader = require("./classes/Loader.js");
 
 (function () {
 
 	var activatePopup = function activatePopup(id) {
-		var popup = new _Popup.Popup({
-			elements: [{
-				type: 'text',
-				label: 'Hello world'
-			}, {
-				type: 'button',
-				value: 'Submit'
-			}],
-			styles: {
-				width: '400px'
-			},
-			displaySettings: {
-				delay: 5000
-			}
+		var loader = new _Loader.Loader('p10');
+		loader.load().then(function (data) {
+			console.log(loader.data);
+			var popup = new _Popup.Popup(loader.data);
+			popup.activate();
 		});
-		popup.activate();
 	};
 	window.SENDSAY = {
 		activatePopup: activatePopup
 	};
 })();
 
-},{"./classes/Popup.js":5}]},{},[6,1,2,3,4,5]);
+},{"./classes/Loader.js":4,"./classes/Popup.js":5}]},{},[6,1,2,3,4,5]);

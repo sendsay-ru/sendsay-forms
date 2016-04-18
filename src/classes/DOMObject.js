@@ -21,7 +21,7 @@ export class DOMObject {
 	applySettings(settings) {
 		let string = this.template;
 		for(var key in settings) {
-			string = string.replace('[%' + key + '%]', settings[key]);
+			string = string.replace(new RegExp('\\[%' + key + '%\\]', 'g'), settings[key]);
 		}
 		return string;
 	}
