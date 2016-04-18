@@ -2,13 +2,26 @@
 <html>
 <head>
 	<title></title>
-	<script type="text/javascript" src="main.js"></script>
+	<script src="bower_components/traceur/traceur.js"></script>
+	<script src="bower_components/es6-module-loader/es6-module-loader.js"></script>
+  	<script src="bower_components/system.js/dist/system.js"></script>
+	
+	<script>
+	  // set our baseURL reference path
+	  System.config({
+	    baseURL: '/'
+	  });
+
+	  // loads /app/main.js
+	  System.import('main.js').then(function() {
+	  	SENDSAY.activatePopup('someid');
+	  });
+	</script>
 	<link rel="stylesheet" type="text/css" href="css/sendsayPopup.css">
+	
 </head>
 <body>
 
 </body>
-<script type="text/javascript">
-	SENDSAY.activatePopup('someid');
-</script>
+
 </html>

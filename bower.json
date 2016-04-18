@@ -1,0 +1,25 @@
+{
+  "name": "popupForm",
+  "description": "Library for displaying popups",
+  "main": "index.js",
+  "authors": [
+    "Radiansz <lightwaveinthespace@gmail.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "popup"
+  ],
+  "homepage": "https://github.com/sendsay-ru/popupForm",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "system.js": "^0.19.26",
+    "traceur": "^0.0.107"
+  }
+}

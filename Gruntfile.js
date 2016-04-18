@@ -18,6 +18,21 @@ module.exports = function(grunt) {
             }]
         }
       },
+      browserify: {
+         dist: {
+            options: {
+               transform: [
+                  ["babelify", {
+                     sourceMap: true,
+                     presets: ['es2015']
+                  }]
+               ]
+            },
+            files: {
+              "./build/module.js": ["./src/*.js", "./src/classes/*.js"]
+            }
+         }
+      },
       connect: {
         server: {
           port: 8082,
@@ -30,9 +45,11 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-babel');
   grunt.loadNpmTasks('grunt-connect');
+  grunt.loadNpmTasks("grunt-browserify");
 
   // Default task(s).
-  grunt.registerTask('default', ['babel']);
+  grunt.registerTask('default', ['babel', 'browserify']);
+  grunt.registerTask('build', ['browserify']);
 
 
 };
