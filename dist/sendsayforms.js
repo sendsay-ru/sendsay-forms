@@ -459,6 +459,7 @@ var ElementFactory = function (_Factory) {
 			switch (data.type) {
 				case 'number':
 				case 'free':
+				case 'field':
 					return new _Field.Field(data);
 				case 'button':
 					return new _Button.Button(data);

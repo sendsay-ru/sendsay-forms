@@ -150,7 +150,8 @@ class ElementFactory extends Factory {
 	make(data) {
 		switch(data.type) {
 			case 'number':
-			case 'free': 
+			case 'free':
+			case 'field': 
 				return new Field(data);
 			case 'button':
 				return new Button(data);
