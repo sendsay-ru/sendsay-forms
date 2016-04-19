@@ -45,9 +45,15 @@ export class Popup extends DOMObject {
 		return settings;
 	}
 
-	activate() {
-		if(this.data.active)
-			setTimeout(this.show.bind(this), this.data.displaySettings && this.data.displaySettings.delay || 1000 );
+	activate(options) {
+
+		if(this.data.active) {
+			if(!options.instant) {
+				setTimeout(this.show.bind(this, options), this.data.displaySettings && this.data.displaySettings.delay || 1000 );
+			} else {
+				this.show(options);
+			}
+		}
 	}
 
 	addEvents() {
@@ -88,10 +94,13 @@ export class Popup extends DOMObject {
 		}
 	}
 
-	show() {
+	show(options) {
 		this.build();
 		this.addEvents();
-		document.querySelector('body').appendChild(this.el); 
+		if(!options.el)
+			document.querySelector('body').appendChild(this.el);
+		else
+			options.el.appendChild(this.el); 
 	}
 
 	hide() {

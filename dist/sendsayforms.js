@@ -334,8 +334,15 @@ var Popup = exports.Popup = function (_DOMObject) {
 		}
 	}, {
 		key: "activate",
-		value: function activate() {
-			if (this.data.active) setTimeout(this.show.bind(this), this.data.displaySettings && this.data.displaySettings.delay || 1000);
+		value: function activate(options) {
+
+			if (this.data.active) {
+				if (!options.instant) {
+					setTimeout(this.show.bind(this, options), this.data.displaySettings && this.data.displaySettings.delay || 1000);
+				} else {
+					this.show(options);
+				}
+			}
 		}
 	}, {
 		key: "addEvents",
@@ -385,10 +392,10 @@ var Popup = exports.Popup = function (_DOMObject) {
 		}
 	}, {
 		key: "show",
-		value: function show() {
+		value: function show(options) {
 			this.build();
 			this.addEvents();
-			document.querySelector('body').appendChild(this.el);
+			if (!options.el) document.querySelector('body').appendChild(this.el);else options.el.appendChild(this.el);
 		}
 	}, {
 		key: "hide",
@@ -466,17 +473,17 @@ var _Loader = require("./classes/Loader.js");
 
 (function () {
 
-	var activatePopup = function activatePopup(id) {
+	var activatePopup = function activatePopup(id, options) {
 		var loader = new _Loader.Loader('p10');
 		loader.load().then(function (data) {
 			var popup = new _Popup.Popup(loader.data);
-			popup.activate();
+			popup.activate(options);
 		});
 	};
 
-	var showPopup = function showPopup(data) {
+	var showPopup = function showPopup(data, options) {
 		var popup = new _Popup.Popup(data);
-		popup.activate();
+		popup.activate(options);
 	};
 	window.SENDSAY = {
 		activatePopup: activatePopup,
