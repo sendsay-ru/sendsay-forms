@@ -14,7 +14,7 @@
 
 	  // loads /app/main.js
 	  System.import('main.js').then(function() {
-	  	SENDSAY.showPopup(JSON.parse('{"elements":[{"type":"text","text":"<b>Form title</b>"},{"type":"text","text":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum rerum dignissimos quibusdam officiis temporibus quis sunt esse explicabo modi officia."},{"type":"field","subtype":"free","name":"_member_email"},{"type":"button","text":"Submit"}], "active": true}'));
+	  	SENDSAY.showPopup(JSON.parse('{"elements":[{"type":"text","text":"<b>Form title</b>"},{"type":"text","text":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum rerum dignissimos quibusdam officiis temporibus quis sunt esse explicabo modi officia."},{"type":"field","subtype":"free","name":"_member_email", "hidden": true},{"type":"field","subtype":"free","name":"_member_email", "required": true, "placeholder": "placeholder"},{"type":"button","text":"Submit"}], "active": true}'));
 	  });
 	</script>
 	<link rel="stylesheet" type="text/css" href="css/sendsayforms.css">

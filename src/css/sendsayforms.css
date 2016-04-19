@@ -35,8 +35,16 @@
 
 }
 
+.sendsay-field-hidden {
+    display: none;
+}
+
 .sendsay-field {
 	padding-bottom: 10px;
+}
+
+.sendsay-field.sendsay-field-invalid .sendsay-input, .sendsay-field.sendsay-field-invalid .sendsay-input:focus {
+    border-color: red;
 }
 
 .sendsay-label {

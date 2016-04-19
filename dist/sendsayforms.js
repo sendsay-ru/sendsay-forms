@@ -146,7 +146,7 @@ var Field = exports.Field = function (_DOMObject) {
 		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Field).call(this));
 
 		_this.data = data;
-		_this.template = '<div class = "sendsay-field" style="[%style%]"">' + '<label for="[%name%]" class = "sendsay-label">[%label%]</label>' + '<input name="[%name%]" type="text" class="sendsay-input"/>' + '</div>';
+		_this.template = '<div class = "sendsay-field [%classes%]" style="[%style%]"">' + '<label for="[%name%]" class = "sendsay-label">[%label%]</label>' + '<input name="[%name%]" placeholder=[%placeholder%] type="text" class="sendsay-input"/>' + '</div>';
 		_this.build();
 		return _this;
 	}
@@ -161,14 +161,26 @@ var Field = exports.Field = function (_DOMObject) {
 		value: function makeSettings() {
 			var data = this.data,
 			    settings = _get(Object.getPrototypeOf(Field.prototype), 'makeSettings', this).call(this);
+			settings.classes = '';
 			settings.name = data.name || '';
 			settings.label = data.label || data.name || '';
+			settings.placeholder = data.placeholder || '';
+			if (data.hidden) {
+				settings.classes = 'sendsay-field-hidden';
+			}
+			if (data.required) {
+				settings.label += '*';
+			}
 
 			return settings;
 		}
 	}, {
 		key: 'validate',
 		value: function validate() {
+			if (this.data.required && this.el.querySelector('input').value.trim() == '') {
+				this.el.classList.add('sendsay-field-invalid');
+				return false;
+			}
 			return true;
 		}
 	}]);
