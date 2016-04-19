@@ -10,6 +10,7 @@
     animation: sendsay-wrapper-animate;
     animation-duration: 300ms;
     animation-timing-function: cubic-bezier(.175,.885,.32,1.275);
+    text-align: left;
 }
 
 .sendsay-wrapper * {

@@ -99,8 +99,10 @@ export class Popup extends DOMObject {
 		this.addEvents();
 		if(!options.el)
 			document.querySelector('body').appendChild(this.el);
-		else
+		else {
+			this.el.style.position = 'absolute';
 			options.el.appendChild(this.el); 
+		}
 	}
 
 	hide() {

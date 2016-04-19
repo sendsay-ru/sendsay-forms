@@ -395,7 +395,10 @@ var Popup = exports.Popup = function (_DOMObject) {
 		value: function show(options) {
 			this.build();
 			this.addEvents();
-			if (!options.el) document.querySelector('body').appendChild(this.el);else options.el.appendChild(this.el);
+			if (!options.el) document.querySelector('body').appendChild(this.el);else {
+				this.el.style.position = 'absolute';
+				options.el.appendChild(this.el);
+			}
 		}
 	}, {
 		key: "hide",
