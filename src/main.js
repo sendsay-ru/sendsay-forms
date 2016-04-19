@@ -11,7 +11,13 @@ import {Loader} from "./classes/Loader.js";
 			popup.activate();
 		});
 	};
+
+	var showPopup = function(data) {
+		let popup = new Popup(data);
+		popup.activate();
+	} 
 	window.SENDSAY = {
-		activatePopup: activatePopup
+		activatePopup: activatePopup,
+		showPopup: showPopup
 	};
 })();
