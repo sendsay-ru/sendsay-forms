@@ -20,7 +20,7 @@ export class Field extends DOMObject {
 		let data = this.data,
 			settings = super.makeSettings();
 		settings.name = data.name || '';
-		settings.label = data.label || '';
+		settings.label = data.label || data.name || '';
 		
 		return settings;
 	}

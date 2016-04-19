@@ -1,6 +1,7 @@
 import {DOMObject} from "./DOMObject.js";
 import {Field} from "./Field.js";
 import {Button} from "./Button.js";
+import {Text} from "./Text.js";
 
 
 
@@ -50,7 +51,7 @@ export class Popup extends DOMObject {
 	activate(options) {
 
 		if(this.data.active) {
-			if(!options.instant) {
+			if(!options || !options.instant) {
 				setTimeout(this.show.bind(this, options), this.data.displaySettings && this.data.displaySettings.delay || 1000 );
 			} else {
 				this.show(options);
@@ -99,7 +100,7 @@ export class Popup extends DOMObject {
 	show(options) {
 		this.build();
 		this.addEvents();
-		if(!options.el)
+		if(!options || !options.el)
 			document.querySelector('body').appendChild(this.el);
 		else {
 			this.el.style.position = 'absolute';
@@ -149,6 +150,8 @@ class ElementFactory extends Factory {
 
 	make(data) {
 		switch(data.type) {
+			case 'text':
+				return new Text(data);
 			case 'number':
 			case 'free':
 			case 'field': 

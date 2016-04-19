@@ -162,7 +162,7 @@ var Field = exports.Field = function (_DOMObject) {
 			var data = this.data,
 			    settings = _get(Object.getPrototypeOf(Field.prototype), 'makeSettings', this).call(this);
 			settings.name = data.name || '';
-			settings.label = data.label || '';
+			settings.label = data.label || data.name || '';
 
 			return settings;
 		}
@@ -285,6 +285,8 @@ var _Field = require("./Field.js");
 
 var _Button = require("./Button.js");
 
+var _Text = require("./Text.js");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -339,7 +341,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 		value: function activate(options) {
 
 			if (this.data.active) {
-				if (!options.instant) {
+				if (!options || !options.instant) {
 					setTimeout(this.show.bind(this, options), this.data.displaySettings && this.data.displaySettings.delay || 1000);
 				} else {
 					this.show(options);
@@ -397,7 +399,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 		value: function show(options) {
 			this.build();
 			this.addEvents();
-			if (!options.el) document.querySelector('body').appendChild(this.el);else {
+			if (!options || !options.el) document.querySelector('body').appendChild(this.el);else {
 				this.el.style.position = 'absolute';
 				options.el.appendChild(this.el);
 			}
@@ -457,6 +459,8 @@ var ElementFactory = function (_Factory) {
 		key: "make",
 		value: function make(data) {
 			switch (data.type) {
+				case 'text':
+					return new _Text.Text(data);
 				case 'number':
 				case 'free':
 				case 'field':
@@ -470,7 +474,59 @@ var ElementFactory = function (_Factory) {
 	return ElementFactory;
 }(Factory);
 
-},{"./Button.js":1,"./DOMObject.js":2,"./Field.js":3}],6:[function(require,module,exports){
+},{"./Button.js":1,"./DOMObject.js":2,"./Field.js":3,"./Text.js":6}],6:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.Text = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _DOMObject2 = require('./DOMObject.js');
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Text = exports.Text = function (_DOMObject) {
+	_inherits(Text, _DOMObject);
+
+	function Text(data) {
+		_classCallCheck(this, Text);
+
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Text).call(this));
+
+		_this.data = data;
+		_this.template = '<div class = "sendsay-text" style="[%style%]"">' + '[%text%]' + '</div>';
+		_this.build();
+		return _this;
+	}
+
+	_createClass(Text, [{
+		key: 'build',
+		value: function build() {
+			return _get(Object.getPrototypeOf(Text.prototype), 'build', this).call(this);
+		}
+	}, {
+		key: 'makeSettings',
+		value: function makeSettings() {
+			var data = this.data,
+			    settings = _get(Object.getPrototypeOf(Text.prototype), 'makeSettings', this).call(this);
+			settings.text = data.text || '';
+			return settings;
+		}
+	}]);
+
+	return Text;
+}(_DOMObject2.DOMObject);
+
+},{"./DOMObject.js":2}],7:[function(require,module,exports){
 "use strict";
 
 var _Popup = require("./classes/Popup.js");
@@ -497,4 +553,4 @@ var _Loader = require("./classes/Loader.js");
 	};
 })();
 
-},{"./classes/Loader.js":4,"./classes/Popup.js":5}]},{},[6,1,2,3,4,5]);
+},{"./classes/Loader.js":4,"./classes/Popup.js":5}]},{},[7,1,2,3,4,5,6]);
