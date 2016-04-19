@@ -31,8 +31,10 @@ export class Popup extends DOMObject {
 			let elements = this.data.elements;
 			for(var i=0; i < elements.length; i++) {
 				let newEl = factory.make(elements[i]);
-				this.elements.push(newEl);
-				popupBody.appendChild(newEl.el); 
+				if(newEl) {
+					this.elements.push(newEl);
+					popupBody.appendChild(newEl.el);
+				} 
 			}
 		}
 		return this.el; 
