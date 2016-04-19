@@ -29,7 +29,7 @@ module.exports = function(grunt) {
                ]
             },
             files: {
-              "./build/module.js": ["./src/*.js", "./src/classes/*.js"]
+              "./build/sendsayforms.js": ["./src/*.js", "./src/classes/*.js"]
             }
          }
       },
