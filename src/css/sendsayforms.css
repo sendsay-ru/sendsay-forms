@@ -47,6 +47,17 @@
     border-color: red;
 }
 
+.sendsay-error {
+    font-size: 12px;
+    display: none;
+    padding-top: 4px;
+    color: red;
+}
+
+.sendsay-field.sendsay-field-invalid .sendsay-error {
+    display: block;
+}
+
 .sendsay-label {
     font-size: 12px;
     display: block;

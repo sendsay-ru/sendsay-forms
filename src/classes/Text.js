@@ -8,6 +8,7 @@ export class Text extends DOMObject {
 		this.template = '<div class = "sendsay-text" style="[%style%]"">' +
 							'[%text%]' + 
 						'</div>';
+		this.baseClass = 'sendsay-text';
 		this.build();
 	}
 

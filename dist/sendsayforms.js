@@ -27,7 +27,8 @@ var Button = exports.Button = function (_DOMObject) {
 		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Button).call(this));
 
 		_this.data = data;
-		_this.template = '<div class = "sendsay-button" style="[%style%]"">' + '<input type="button"  value=[%text%] />' + '</div>';
+		_this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<input type="button"  value=[%text%] />' + '</div>';
+		_this.baseClass = 'sendsay-button';
 		_this.build();
 		return _this;
 	}
@@ -66,6 +67,7 @@ var DOMObject = exports.DOMObject = function () {
 		_classCallCheck(this, DOMObject);
 
 		this.template = '<div></div>';
+		this.baseClass = 'sendsay-main';
 	}
 
 	_createClass(DOMObject, [{
@@ -80,9 +82,28 @@ var DOMObject = exports.DOMObject = function () {
 		key: 'makeSettings',
 		value: function makeSettings() {
 			var data = this.data,
-			    settings = {};
-			settings.style = this.makeStyles();
+			    settings = {
+				classes: this.makeClasses(),
+				style: this.makeStyles()
+			};
 			return settings;
+		}
+	}, {
+		key: 'makeStyles',
+		value: function makeStyles() {
+			var styleString = '';
+			if (this.data && this.data.styles) {
+				var styles = this.data.styles;
+				for (var key in styles) {
+					styleString += key + ':' + styles[key] + ';';
+				}
+			}
+			return styleString;
+		}
+	}, {
+		key: 'makeClasses',
+		value: function makeClasses() {
+			return this.baseClass;
 		}
 	}, {
 		key: 'applySettings',
@@ -101,17 +122,21 @@ var DOMObject = exports.DOMObject = function () {
 			return this.el;
 		}
 	}, {
-		key: 'makeStyles',
-		value: function makeStyles() {
-			var styleString = '';
-			if (this.data && this.data.styles) {
-				var styles = this.data.styles;
-				for (var key in styles) {
-					styleString += key + ':' + styles[key] + ';';
-				}
+		key: 'rerender',
+		value: function rerender() {
+			var old = this.el;
+			this.removeEvents();
+			if (old.parentNode) {
+				old.parentNode.replaceChild(this.build(), old);
 			}
-			return styleString;
+			this.addEvents();
 		}
+	}, {
+		key: 'addEvents',
+		value: function addEvents() {}
+	}, {
+		key: 'removeEvents',
+		value: function removeEvents() {}
 	}]);
 
 	return DOMObject;
@@ -146,7 +171,8 @@ var Field = exports.Field = function (_DOMObject) {
 		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Field).call(this));
 
 		_this.data = data;
-		_this.template = '<div class = "sendsay-field [%classes%]" style="[%style%]"">' + '<label for="[%name%]" class = "sendsay-label">[%label%]</label>' + '<input name="[%name%]" placeholder=[%placeholder%] type="text" class="sendsay-input"/>' + '</div>';
+		_this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%name%]" class = "sendsay-label">[%label%]</label>' + '<input name="[%name%]" placeholder=[%placeholder%] type="text" class="sendsay-input"/>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
+		_this.baseClass = 'sendsay-field';
 		_this.build();
 		return _this;
 	}
@@ -161,12 +187,11 @@ var Field = exports.Field = function (_DOMObject) {
 		value: function makeSettings() {
 			var data = this.data,
 			    settings = _get(Object.getPrototypeOf(Field.prototype), 'makeSettings', this).call(this);
-			settings.classes = '';
 			settings.name = data.name || '';
 			settings.label = data.label || data.name || '';
 			settings.placeholder = data.placeholder || '';
 			if (data.hidden) {
-				settings.classes = 'sendsay-field-hidden';
+				settings.classes += ' sendsay-field-hidden';
 			}
 			if (data.required) {
 				settings.label += '*';
@@ -179,6 +204,7 @@ var Field = exports.Field = function (_DOMObject) {
 		value: function validate() {
 			if (this.data.required && this.el.querySelector('input').value.trim() == '') {
 				this.el.classList.add('sendsay-field-invalid');
+				this.el.querySelector('.sendsay-error').innerHTML = "Обязательное поле";
 				return false;
 			}
 			return true;
@@ -314,7 +340,8 @@ var Popup = exports.Popup = function (_DOMObject) {
 		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Popup).call(this));
 
 		_this.data = data;
-		_this.template = '<div class = "sendsay-wrapper">' + '<div class = "sendsay-popup" style="[%style%]"">' + (data.title ? '<div class = "sendsay-title">[%title%]</div>' : '') + '' + '</div>' + '</div>';
+		_this.template = '<div class = "sendsay-wrapper">' + '<div class = "[%classes%]" style="[%style%]"">' + '' + '</div>' + '</div>';
+		_this.baseClass = 'sendsay-popup';
 		if (data.active) _this.build();
 		return _this;
 	}
@@ -339,14 +366,6 @@ var Popup = exports.Popup = function (_DOMObject) {
 				}
 			}
 			return this.el;
-		}
-	}, {
-		key: "makeSettings",
-		value: function makeSettings() {
-			var data = this.data,
-			    settings = _get(Object.getPrototypeOf(Popup.prototype), "makeSettings", this).call(this);
-			settings.title = data.title || '';
-			return settings;
 		}
 	}, {
 		key: "activate",
@@ -516,6 +535,7 @@ var Text = exports.Text = function (_DOMObject) {
 
 		_this.data = data;
 		_this.template = '<div class = "sendsay-text" style="[%style%]"">' + '[%text%]' + '</div>';
+		_this.baseClass = 'sendsay-text';
 		_this.build();
 		return _this;
 	}

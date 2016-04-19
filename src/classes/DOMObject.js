@@ -2,6 +2,7 @@
 export class DOMObject {
 	constructor() {
 		this.template = '<div></div>';
+		this.baseClass = 'sendsay-main';
 	}
 
 	makeElement() {
@@ -13,9 +14,25 @@ export class DOMObject {
 
 	makeSettings() {
 		let data = this.data,
-			settings = {};
-		settings.style = this.makeStyles();
+			settings = {
+				classes: this.makeClasses(),
+				style: this.makeStyles()
+			};
 		return settings;
+	}
+
+	makeStyles() {
+		let styleString = '';
+		if(this.data && this.data.styles) {
+			let styles = this.data.styles;
+			for(var key in styles)
+				styleString += key + ':' + styles[key] + ';';
+		}
+		return styleString;
+	}
+
+	makeClasses() {
+		return this.baseClass;
 	}
 
 	applySettings(settings) {
@@ -32,14 +49,23 @@ export class DOMObject {
 		return this.el;
 	}
 
-
-	makeStyles() {
-		let styleString = '';
-		if(this.data && this.data.styles) {
-			let styles = this.data.styles;
-			for(var key in styles)
-				styleString += key + ':' + styles[key] + ';';
+	rerender() {
+		let old = this.el;
+		this.removeEvents();
+		if(old.parentNode) {
+			old.parentNode.replaceChild(this.build(), old)
 		}
-		return styleString;
+		this.addEvents();
 	}
+
+	addEvents() {
+
+	}
+
+	removeEvents() {
+
+	}
+
+
+
 }

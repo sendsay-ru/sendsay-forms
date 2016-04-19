@@ -11,11 +11,11 @@ export class Popup extends DOMObject {
 		super();
 		this.data = data;
 		this.template = '<div class = "sendsay-wrapper">' +
-						'<div class = "sendsay-popup" style="[%style%]"">' +
-						(data.title ? '<div class = "sendsay-title">[%title%]</div>' : '') +
+						'<div class = "[%classes%]" style="[%style%]"">' +
 						'' +
 						'</div>' +
 						'</div>';
+		this.baseClass = 'sendsay-popup';
 		if(data.active)
 			this.build();
 	}
@@ -39,13 +39,6 @@ export class Popup extends DOMObject {
 			}
 		}
 		return this.el; 
-	}
-
-	makeSettings() {
-		let data = this.data,
-			settings = super.makeSettings();
-		settings.title = data.title || '';
-		return settings;
 	}
 
 	activate(options) {
