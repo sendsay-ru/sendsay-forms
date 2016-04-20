@@ -27,7 +27,7 @@ var Button = exports.Button = function (_DOMObject) {
 		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Button).call(this));
 
 		_this.data = data;
-		_this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<input type="button"  value=[%text%] />' + '</div>';
+		_this.template = '<div class = "[%classes%]">' + '<input type="button"  value="[%text%]"  style="[%style%]" />' + '</div>';
 		_this.baseClass = 'sendsay-button';
 		_this.build();
 		return _this;
@@ -37,6 +37,15 @@ var Button = exports.Button = function (_DOMObject) {
 		key: 'build',
 		value: function build() {
 			return _get(Object.getPrototypeOf(Button.prototype), 'build', this).call(this);
+		}
+	}, {
+		key: 'makeStyles',
+		value: function makeStyles() {
+			var styleObj = _get(Object.getPrototypeOf(Button.prototype), 'makeStyles', this).call(this),
+			    data = this.data;
+			styleObj['background-color'] = data.backgroundColor || styleObj['background-color'];
+			styleObj['color'] = data.textColor || styleObj['color'];
+			return styleObj;
 		}
 	}, {
 		key: 'makeSettings',
@@ -84,21 +93,31 @@ var DOMObject = exports.DOMObject = function () {
 			var data = this.data,
 			    settings = {
 				classes: this.makeClasses(),
-				style: this.makeStyles()
+				style: this.convertStyles()
 			};
 			return settings;
 		}
 	}, {
 		key: 'makeStyles',
 		value: function makeStyles() {
-			var styleString = '';
+			var styleObj = {};
 			if (this.data && this.data.styles) {
 				var styles = this.data.styles;
 				for (var key in styles) {
-					styleString += key + ':' + styles[key] + ';';
+					styleObj[key] = styles[key];
 				}
 			}
-			return styleString;
+			return styleObj;
+		}
+	}, {
+		key: 'convertStyles',
+		value: function convertStyles() {
+			var styleObj = this.makeStyles(),
+			    styleStr = '';
+
+			for (var key in styleObj) {
+				styleStr += ' ' + key + ':' + styleObj[key] + ';';
+			}return styleStr;
 		}
 	}, {
 		key: 'makeClasses',

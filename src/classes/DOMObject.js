@@ -16,19 +16,28 @@ export class DOMObject {
 		let data = this.data,
 			settings = {
 				classes: this.makeClasses(),
-				style: this.makeStyles()
+				style: this.convertStyles()
 			};
 		return settings;
 	}
 
 	makeStyles() {
-		let styleString = '';
+		let styleObj = {};
 		if(this.data && this.data.styles) {
 			let styles = this.data.styles;
 			for(var key in styles)
-				styleString += key + ':' + styles[key] + ';';
+				styleObj[key] = styles[key];
 		}
-		return styleString;
+		return styleObj;
+	}
+
+	convertStyles() {
+		let styleObj = this.makeStyles(),
+			styleStr = '';
+
+		for(var key in styleObj)
+			styleStr += ' ' + key + ':' + styleObj[key] + ';';
+		return styleStr;
 	}
 
 	makeClasses() {
