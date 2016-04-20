@@ -19,11 +19,11 @@ export class Button extends DOMObject {
 	makeStyles() {
 		let styleObj = super.makeStyles(),
 			data = this.data;
-			
+
 		styleObj['background-color'] = data.backgroundColor || styleObj['background-color'];
 		styleObj['color'] = data.textColor || styleObj['color'];
 		styleObj['border-radius'] = data.borderRadius + 'px' || styleObj['border-radius'];
-		styleObj['border-width'] = data.borderRadius + 'px' || styleObj['border-width'];
+		styleObj['border-width'] = data.borderWidth + 'px' || styleObj['border-width'];
 		styleObj['border-style'] = 'solid';
 		styleObj['border-color'] = data.borderColor || styleObj['border-color'];
 		styleObj['font-size'] = data.fontSize + 'px' || styleObj['font-size'];
