@@ -2,7 +2,7 @@
   "name": "popupForm",
   "description": "Library for displaying popups",
   "main": "index.js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "authors": [
     "Radiansz <lightwaveinthespace@gmail.com>"
   ],
