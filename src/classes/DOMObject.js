@@ -34,7 +34,7 @@ export class DOMObject {
 			data = this.data;
 		for(var key in mapping) {
 			let val = mapping[key];
-			if(data[val.param]) {
+			if(data[val.param] !== undefined) {
 				styles[key] = data[val.param] + (val.postfix ? val.postfix : '');
 			} else if(val.default) {
 				styles[key] = val.default;
