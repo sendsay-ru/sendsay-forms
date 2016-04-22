@@ -16,6 +16,14 @@ export class Popup extends DOMObject {
 						'</div>' +
 						'</div>';
 		this.baseClass = 'sendsay-popup';
+		this.applicableStyles = {
+			'background-color': { param: 'backgroundColor' },
+			'border-radius': { param: 'borderRadius', postfix: 'px' },
+			'padding-bottom': { param: 'paddingBottom', postfix: 'px'},
+			'padding-top': { param: 'paddingTop', postfix: 'px'},
+			'padding-left': { param: 'paddingLeft', postfix: 'px'},
+			'padding-right': { param: 'paddingRight', postfix: 'px'}
+		};
 		if(data.active)
 			this.build();
 	}

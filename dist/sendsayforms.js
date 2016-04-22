@@ -27,8 +27,15 @@ var Button = exports.Button = function (_DOMObject) {
 		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Button).call(this));
 
 		_this.data = data;
-		_this.template = '<div class = "[%classes%]">' + '<input type="button"  value="[%text%]"  style="[%style%]" />' + '</div>';
+		_this.template = '<div class = "[%classes%]" style="[%wrapperstyle%]">' + '<input type="button"  value="[%text%]"  style="[%style%]" />' + '</div>';
+
 		_this.baseClass = 'sendsay-button';
+		_this.applicableStyles = {
+			'background-color': { param: 'backgroundColor' },
+			'border-radius': { param: 'borderRadius', postfix: 'px' },
+			'color': { param: 'textColor' },
+			'line-height': { param: 'lineHeight', default: 'normal' }
+		};
 		_this.build();
 		return _this;
 	}
@@ -43,15 +50,7 @@ var Button = exports.Button = function (_DOMObject) {
 		value: function makeStyles() {
 			var styleObj = _get(Object.getPrototypeOf(Button.prototype), 'makeStyles', this).call(this),
 			    data = this.data;
-
-			styleObj['background-color'] = data.backgroundColor || styleObj['background-color'];
-			styleObj['color'] = data.textColor || styleObj['color'];
-			styleObj['border-radius'] = data.borderRadius + 'px' || styleObj['border-radius'];
-			styleObj['border-width'] = data.borderWidth + 'px' || styleObj['border-width'];
-			styleObj['border-style'] = 'solid';
-			styleObj['border-color'] = data.borderColor || styleObj['border-color'];
-			styleObj['font-size'] = data.fontSize + 'px' || styleObj['font-size'];
-
+			if (data.align === 'justify') styleObj.width = '100%';
 			return styleObj;
 		}
 	}, {
@@ -60,7 +59,18 @@ var Button = exports.Button = function (_DOMObject) {
 			var data = this.data,
 			    settings = _get(Object.getPrototypeOf(Button.prototype), 'makeSettings', this).call(this);
 			settings.text = data.text || 'Unknown';
+			settings.wrapperstyle = this.makeWrapperStyle();
 			return settings;
+		}
+	}, {
+		key: 'makeWrapperStyle',
+		value: function makeWrapperStyle() {
+			var style = {},
+			    data = this.data;
+
+			if (data.align !== 'justify') style['text-align'] = data.align;
+
+			return this.convertStyles(style);
 		}
 	}]);
 
@@ -84,6 +94,7 @@ var DOMObject = exports.DOMObject = function () {
 
 		this.template = '<div></div>';
 		this.baseClass = 'sendsay-main';
+		this.applicableStyles = {};
 	}
 
 	_createClass(DOMObject, [{
@@ -100,26 +111,35 @@ var DOMObject = exports.DOMObject = function () {
 			var data = this.data,
 			    settings = {
 				classes: this.makeClasses(),
-				style: this.convertStyles()
+				style: this.convertStyles(this.makeStyles())
 			};
 			return settings;
 		}
 	}, {
 		key: 'makeStyles',
 		value: function makeStyles() {
-			var styleObj = {};
-			if (this.data && this.data.styles) {
-				var styles = this.data.styles;
-				for (var key in styles) {
-					styleObj[key] = styles[key];
-				}
-			}
+			var styleObj = this.applyStyles(this.applicableStyles);
 			return styleObj;
 		}
 	}, {
+		key: 'applyStyles',
+		value: function applyStyles(mapping) {
+			var styles = {},
+			    data = this.data;
+			for (var key in mapping) {
+				var val = mapping[key];
+				if (data[val.param]) {
+					styles[key] = data[val.param] + (val.postfix ? val.postfix : '');
+				} else if (val.default) {
+					styles[key] = val.default;
+				}
+			}
+			return styles;
+		}
+	}, {
 		key: 'convertStyles',
-		value: function convertStyles() {
-			var styleObj = this.makeStyles(),
+		value: function convertStyles(toConvert) {
+			var styleObj = toConvert,
 			    styleStr = '';
 
 			for (var key in styleObj) {
@@ -368,6 +388,14 @@ var Popup = exports.Popup = function (_DOMObject) {
 		_this.data = data;
 		_this.template = '<div class = "sendsay-wrapper">' + '<div class = "[%classes%]" style="[%style%]"">' + '' + '</div>' + '</div>';
 		_this.baseClass = 'sendsay-popup';
+		_this.applicableStyles = {
+			'background-color': { param: 'backgroundColor' },
+			'border-radius': { param: 'borderRadius', postfix: 'px' },
+			'padding-bottom': { param: 'paddingBottom', postfix: 'px' },
+			'padding-top': { param: 'paddingTop', postfix: 'px' },
+			'padding-left': { param: 'paddingLeft', postfix: 'px' },
+			'padding-right': { param: 'paddingRight', postfix: 'px' }
+		};
 		if (data.active) _this.build();
 		return _this;
 	}

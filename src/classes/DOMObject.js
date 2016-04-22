@@ -3,6 +3,9 @@ export class DOMObject {
 	constructor() {
 		this.template = '<div></div>';
 		this.baseClass = 'sendsay-main';
+		this.applicableStyles = {
+
+		};
 	}
 
 	makeElement() {
@@ -16,23 +19,32 @@ export class DOMObject {
 		let data = this.data,
 			settings = {
 				classes: this.makeClasses(),
-				style: this.convertStyles()
+				style: this.convertStyles(this.makeStyles())
 			};
 		return settings;
 	}
 
 	makeStyles() {
-		let styleObj = {};
-		if(this.data && this.data.styles) {
-			let styles = this.data.styles;
-			for(var key in styles)
-				styleObj[key] = styles[key];
-		}
+		let styleObj = this.applyStyles(this.applicableStyles);
 		return styleObj;
 	}
 
-	convertStyles() {
-		let styleObj = this.makeStyles(),
+	applyStyles(mapping) {
+		let styles = {},
+			data = this.data;
+		for(var key in mapping) {
+			let val = mapping[key];
+			if(data[val.param]) {
+				styles[key] = data[val.param] + (val.postfix ? val.postfix : '');
+			} else if(val.default) {
+				styles[key] = val.default;
+			}
+		}
+		return styles;
+	}
+
+	convertStyles(toConvert) {
+		let styleObj = toConvert,
 			styleStr = '';
 
 		for(var key in styleObj)
