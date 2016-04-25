@@ -4,7 +4,7 @@
   "description": "Library for displaying popups",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node ./node_modules/karma/bin/karma start ./tools/karma.conf.js "
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,14 @@
     "grunt-browserify": "~5.0.0",
     "babelify": "~7.2.0",
     "es6-module-loader": "~0.17.11",
-    "grunt-contrib-uglify": "~1.0.1"
+    "grunt-contrib-uglify": "~1.0.1",
+    "karma": "~0.13.22",
+    "karma-jasmine": "~0.3.8",
+    "karma-chrome-launcher": "~0.2.3",
+    "karma-mocha-reporter": "~2.0.2",
+    "karma-coverage": "~0.5.5",
+    "karma-systemjs": "~0.13.0",
+    "systemjs": "~0.19.26",
+    "traceur": "0.0.108"
   }
 }
