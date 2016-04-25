@@ -39,6 +39,13 @@ module.exports = function(grunt) {
           base: 'src'
         }
       },
+      uglify: {
+        target: {
+          files: {
+            'dist/sendsayforms.min.js': ['dist/sendsayforms.js']
+          }
+        }
+      }
 
   });
 
@@ -46,10 +53,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-babel');
   grunt.loadNpmTasks('grunt-connect');
   grunt.loadNpmTasks("grunt-browserify");
+  grunt.loadNpmTasks('grunt-contrib-uglify');
 
   // Default task(s).
-  grunt.registerTask('default', ['babel', 'browserify']);
-  grunt.registerTask('build', ['browserify']);
+  grunt.registerTask('default', ['babel', 'browserify', 'uglify']);
+  grunt.registerTask('build', ['browserify', 'uglify']);
 
 
 };
