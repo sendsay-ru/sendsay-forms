@@ -8,6 +8,9 @@ export class Text extends DOMObject {
 							'[%text%]' + 
 						'</div>';
 		this.baseClass = 'sendsay-text';
+		this.applicableStyles = {
+			'text-align': { param: 'align' }
+		}
 		this.build();
 	}
 

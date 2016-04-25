@@ -123,7 +123,7 @@ export class Popup extends DOMObject {
 			for(let i =1; i < elements.length; i++) {
 				let element = elements[i];
 				if(element instanceof Field )
-					isValid = isValid && element.validate();
+					isValid = element.validate() && isValid;
 			}
 		}
 		if(isValid) {
