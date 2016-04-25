@@ -7,9 +7,9 @@ import {Text} from "./Text.js";
 
 export class Popup extends DOMObject {
 
-	constructor(data) {
-		super();
-		this.data = data;
+	constructor(data, parent) {
+		super(data, parent);
+
 		this.template = '<div class = "sendsay-wrapper">' +
 						'<div class = "[%classes%]" style="[%style%]"">' +
 						'' +
@@ -39,7 +39,7 @@ export class Popup extends DOMObject {
 		if(this.data.elements) {
 			let elements = this.data.elements;
 			for(var i=0; i < elements.length; i++) {
-				let newEl = factory.make(elements[i]);
+				let newEl = factory.make(elements[i], this);
 				if(newEl) {
 					this.elements.push(newEl);
 					popupBody.appendChild(newEl.el);
@@ -149,16 +149,16 @@ class ElementFactory extends Factory {
 		super();
 	}
 
-	make(data) {
+	make(data, parent) {
 		switch(data.type) {
 			case 'text':
-				return new Text(data);
+				return new Text(data, parent);
 			case 'number':
 			case 'free':
 			case 'field': 
-				return new Field(data);
+				return new Field(data, parent);
 			case 'button':
-				return new Button(data);
+				return new Button(data, parent);
 		}
 	} 
 }

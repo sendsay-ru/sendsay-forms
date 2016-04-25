@@ -1,8 +1,10 @@
 
 export class DOMObject {
-	constructor() {
+	constructor(data, parent) {
+		this.data = data;
 		this.template = '<div></div>';
 		this.baseClass = 'sendsay-main';
+		this.parent = parent || null;
 		this.applicableStyles = {
 
 		};

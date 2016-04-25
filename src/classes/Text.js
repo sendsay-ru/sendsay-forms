@@ -2,9 +2,8 @@ import {DOMObject} from "./DOMObject.js";
 
 
 export class Text extends DOMObject {
-	constructor(data) {
-		super();
-		this.data = data;
+	constructor(data, parent) {
+		super(data, parent);
 		this.template = '<div class = "sendsay-text" style="[%style%]"">' +
 							'[%text%]' + 
 						'</div>';
@@ -21,5 +20,13 @@ export class Text extends DOMObject {
 			settings = super.makeSettings();
 		settings.text = data.text || '';
 		return settings;
+	}
+
+	makeStyles() {
+		let styleObj = super.makeStyles(),
+			data = this.data;
+		if(this.parent && this.parent.data && this.parent.data.textColor)
+			styleObj.color = this.parent.data.textColor;
+		return styleObj;
 	}
 }

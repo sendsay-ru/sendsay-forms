@@ -21,12 +21,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Button = exports.Button = function (_DOMObject) {
 	_inherits(Button, _DOMObject);
 
-	function Button(data) {
+	function Button(data, parent) {
 		_classCallCheck(this, Button);
 
-		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Button).call(this));
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Button).call(this, data, parent));
 
-		_this.data = data;
 		_this.template = '<div class = "[%classes%]" style="[%wrapperstyle%]">' + '<input type="button"  value="[%text%]"  style="[%style%]" />' + '</div>';
 
 		_this.baseClass = 'sendsay-button';
@@ -89,11 +88,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var DOMObject = exports.DOMObject = function () {
-	function DOMObject() {
+	function DOMObject(data, parent) {
 		_classCallCheck(this, DOMObject);
 
+		this.data = data;
 		this.template = '<div></div>';
 		this.baseClass = 'sendsay-main';
+		this.parent = parent || null;
 		this.applicableStyles = {};
 	}
 
@@ -128,7 +129,7 @@ var DOMObject = exports.DOMObject = function () {
 			    data = this.data;
 			for (var key in mapping) {
 				var val = mapping[key];
-				if (data[val.param]) {
+				if (data[val.param] !== undefined) {
 					styles[key] = data[val.param] + (val.postfix ? val.postfix : '');
 				} else if (val.default) {
 					styles[key] = val.default;
@@ -211,12 +212,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Field = exports.Field = function (_DOMObject) {
 	_inherits(Field, _DOMObject);
 
-	function Field(data) {
+	function Field(data, parent) {
 		_classCallCheck(this, Field);
 
-		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Field).call(this));
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Field).call(this, data, parent));
 
-		_this.data = data;
 		_this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%name%]" class = "sendsay-label">[%label%]</label>' + '<input name="[%name%]" placeholder=[%placeholder%] type="text" class="sendsay-input"/>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
 		_this.baseClass = 'sendsay-field';
 		_this.build();
@@ -244,6 +244,14 @@ var Field = exports.Field = function (_DOMObject) {
 			}
 
 			return settings;
+		}
+	}, {
+		key: 'makeStyles',
+		value: function makeStyles() {
+			var styleObj = _get(Object.getPrototypeOf(Field.prototype), 'makeStyles', this).call(this),
+			    data = this.data;
+			if (this.parent && this.parent.data && this.parent.data.textColor) styleObj.color = this.parent.data.textColor;
+			return styleObj;
 		}
 	}, {
 		key: 'validate',
@@ -380,12 +388,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Popup = exports.Popup = function (_DOMObject) {
 	_inherits(Popup, _DOMObject);
 
-	function Popup(data) {
+	function Popup(data, parent) {
 		_classCallCheck(this, Popup);
 
-		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Popup).call(this));
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Popup).call(this, data, parent));
 
-		_this.data = data;
 		_this.template = '<div class = "sendsay-wrapper">' + '<div class = "[%classes%]" style="[%style%]"">' + '' + '</div>' + '</div>';
 		_this.baseClass = 'sendsay-popup';
 		_this.applicableStyles = {
@@ -412,7 +419,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 			if (this.data.elements) {
 				var elements = this.data.elements;
 				for (var i = 0; i < elements.length; i++) {
-					var newEl = factory.make(elements[i]);
+					var newEl = factory.make(elements[i], this);
 					if (newEl) {
 						this.elements.push(newEl);
 						popupBody.appendChild(newEl.el);
@@ -542,16 +549,16 @@ var ElementFactory = function (_Factory) {
 
 	_createClass(ElementFactory, [{
 		key: "make",
-		value: function make(data) {
+		value: function make(data, parent) {
 			switch (data.type) {
 				case 'text':
-					return new _Text.Text(data);
+					return new _Text.Text(data, parent);
 				case 'number':
 				case 'free':
 				case 'field':
-					return new _Field.Field(data);
+					return new _Field.Field(data, parent);
 				case 'button':
-					return new _Button.Button(data);
+					return new _Button.Button(data, parent);
 			}
 		}
 	}]);
@@ -582,12 +589,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Text = exports.Text = function (_DOMObject) {
 	_inherits(Text, _DOMObject);
 
-	function Text(data) {
+	function Text(data, parent) {
 		_classCallCheck(this, Text);
 
-		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Text).call(this));
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Text).call(this, data, parent));
 
-		_this.data = data;
 		_this.template = '<div class = "sendsay-text" style="[%style%]"">' + '[%text%]' + '</div>';
 		_this.baseClass = 'sendsay-text';
 		_this.build();
@@ -606,6 +612,14 @@ var Text = exports.Text = function (_DOMObject) {
 			    settings = _get(Object.getPrototypeOf(Text.prototype), 'makeSettings', this).call(this);
 			settings.text = data.text || '';
 			return settings;
+		}
+	}, {
+		key: 'makeStyles',
+		value: function makeStyles() {
+			var styleObj = _get(Object.getPrototypeOf(Text.prototype), 'makeStyles', this).call(this),
+			    data = this.data;
+			if (this.parent && this.parent.data && this.parent.data.textColor) styleObj.color = this.parent.data.textColor;
+			return styleObj;
 		}
 	}]);
 

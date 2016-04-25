@@ -2,9 +2,8 @@ import {DOMObject} from "./DOMObject.js";
 
 
 export class Button extends DOMObject {
-	constructor(data) {
-		super();
-		this.data = data;
+	constructor(data, parent) {
+		super(data, parent);
 		this.template = '<div class = "[%classes%]" style="[%wrapperstyle%]">' +
 							'<input type="button"  value="[%text%]"  style="[%style%]" />' + 
 						'</div>';

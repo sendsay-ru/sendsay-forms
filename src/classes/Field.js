@@ -3,9 +3,8 @@ import {DOMObject} from "./DOMObject.js";
 
 export class Field extends DOMObject {
 
-	constructor(data) {
-		super();
-		this.data = data;
+	constructor(data, parent) {
+		super(data, parent);
 		this.template = '<div class = "[%classes%]" style="[%style%]"">' +
 						'<label for="[%name%]" class = "sendsay-label">[%label%]</label>' +
 						'<input name="[%name%]" placeholder=[%placeholder%] type="text" class="sendsay-input"/>' +
@@ -32,6 +31,14 @@ export class Field extends DOMObject {
 		}
 		
 		return settings;
+	}
+
+	makeStyles() {
+		let styleObj = super.makeStyles(),
+			data = this.data;
+		if(this.parent && this.parent.data && this.parent.data.textColor)
+			styleObj.color = this.parent.data.textColor;
+		return styleObj;
 	}
 
 	validate() {
