@@ -7,7 +7,7 @@ export class Field extends DOMObject {
 		super(data, parent);
 		this.template = '<div class = "[%classes%]" style="[%style%]"">' +
 						'<label for="[%name%]" class = "sendsay-label">[%label%]</label>' +
-						'<input name="[%name%]" placeholder=[%placeholder%] type="text" class="sendsay-input"/>' +
+						'<input name="[%name%]" placeholder="[%placeholder%]" type="text" class="sendsay-input"/>' +
 						'<div type="text" class="sendsay-error"></div>' +  
 						'</div>';
 		this.baseClass = 'sendsay-field';
@@ -20,6 +20,7 @@ export class Field extends DOMObject {
 	makeSettings() {
 		let data = this.data,
 			settings = super.makeSettings();
+		console.log(this.data);
 		settings.name = data.name || '';
 		settings.label = data.label || data.name || '';
 		settings.placeholder = data.placeholder || '';
