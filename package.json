@@ -1,6 +1,6 @@
 {
   "name": "popupForm",
-  "version": "0.0.0",
+  "version": "0.0.32",
   "description": "Library for displaying popups",
   "main": "index.js",
   "scripts": {
