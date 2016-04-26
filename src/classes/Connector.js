@@ -8,7 +8,8 @@ export class Connector {
 		var rawJson = '{'+
 						'"fields": {' +
 							'"q43": {' +
-								'"type": "free",' +
+								'"type": "field",' +
+								'"subtype": "int",' +
 								'"name": "First field",' +
 								'"questionnaire": "SomeQuest"' +
 							'},' +
@@ -44,7 +45,8 @@ export class Connector {
 				this.data.elements.push({
 					type: field.type,
 					name: '_' + field.questionnaire + '_' + key,
-					label: field.name
+					label: field.name,
+					subtype: field.subtype
 				})
 			}
 			this.data.elements.push({
@@ -77,6 +79,7 @@ export class Connector {
 			this.params += key + '=' + params[key];
 		}
 		this.params = encodeURIComponent(this.params);
+
 		return (new Promise(this.promiseHandler.bind(this)));
 	}
 
@@ -84,6 +87,7 @@ export class Connector {
 		var self = this;
 		this.request.onreadystatechange = function() {
 			if(self.request.readyState == 4) {
+
 				if(self.request.status == 200 ) {
 
 					resolve(this.data);

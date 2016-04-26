@@ -1,5 +1,6 @@
 import {DOMObject} from "./DOMObject.js";
 import {Field} from "./Field.js";
+import {NumberField} from "./NumberField.js";
 import {Button} from "./Button.js";
 import {Text} from "./Text.js";
 
@@ -15,6 +16,7 @@ export class Popup extends DOMObject {
 						'' +
 						'</div>' +
 						'</div>';
+
 		this.baseClass = 'sendsay-popup';
 		this.applicableStyles = {
 			'background-color': { param: 'backgroundColor' },
@@ -160,10 +162,18 @@ class ElementFactory extends Factory {
 			case 'text':
 				return new Text(data, parent);
 			case 'number':
+				return new NumberField(data, parent);
 			case 'free':
-			case 'field':
-
 				return new Field(data, parent);
+			case 'field':
+				switch(data.subtype) {
+					case 'int': 
+						return new NumberField(data, parent);
+					case 'free':
+					default:
+						return new Field(data, parent);	
+				}
+				break;
 			case 'button':
 				return new Button(data, parent);
 		}

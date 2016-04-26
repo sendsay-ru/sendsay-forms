@@ -20,7 +20,6 @@ export class Field extends DOMObject {
 	makeSettings() {
 		let data = this.data,
 			settings = super.makeSettings();
-		console.log(this.data);
 		settings.name = data.name || '';
 		settings.label = data.label || data.name || '';
 		settings.placeholder = data.placeholder || '';
@@ -43,16 +42,25 @@ export class Field extends DOMObject {
 	}
 
 	validate() {
-		if(this.data.required && this.el.querySelector('input').value.trim() == '') {
-			this.el.classList.add('sendsay-field-invalid');
-			this.el.querySelector('.sendsay-error').innerHTML = "Обязательное поле";
+		this.removeErrorMessage();
+		if(this.data.required && this.el.querySelector('input').value == '') {
+			this.showErrorMessage("Обязательное поле")
 			return false;
 		}
 		return true;
 	}
+	showErrorMessage(message) {
+		this.el.classList.add('sendsay-field-invalid');
+		this.el.querySelector('.sendsay-error').innerHTML = message;
+	}
+
+	removeErrorMessage() {
+		this.el.classList.remove('sendsay-field-invalid');
+		this.el.querySelector('.sendsay-error').innerHTML = '';
+	}
 
 	getValue() {
-		return this.el.querySelector('input').value.trim();
+		return this.el.querySelector('input').value;
 	}
 
 }

@@ -17,7 +17,7 @@ export class Form {
 	}
 
 	handleSubmit(event) {
-		console.log(event);
+
 		var params = event.detail.extra;
 		this.connector.submit(params).then(this.handleSuccessSubmit.bind(this),
 											this.handleFailSubmit.bind(this));
