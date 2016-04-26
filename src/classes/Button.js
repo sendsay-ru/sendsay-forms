@@ -19,7 +19,26 @@ export class Button extends DOMObject {
 	}
 
 	build() {
-		return super.build();
+		this.removeEvents();
+		var el = super.build();
+		this.addEvents();
+		return el;
+	}
+
+	addEvents() {
+		if(this.el) {
+			this.el.querySelector('input').addEventListener('click', this.handleClick.bind(this));
+		}
+	}
+
+	handleClick() {
+		this.trigger('sendsay-click');
+	}
+
+	removeEvents() {
+		if(this.el) {
+			this.el.querySelector('input').removeEventListener('click', this.handleClick.bind(this));
+		}
 	}
 
 	makeStyles() {

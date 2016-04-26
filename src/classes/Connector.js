@@ -1,18 +1,10 @@
-export class Loader {
+export class Connector {
 
-	constructor(id) {
-		this.request = new XMLHttpRequest();
-		this.request.open('POST', 'https://sendsay.ru/form/x_1445438168224221/2/', true);
-		this.request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
-		let jsonRequest = '{"id":' + id + ' }';
-		this.params = 'apiversion=' + encodeURIComponent(100) + '&json=1&request=' + encodeURIComponent(jsonRequest);
+	constructor(url) {
+		this.url = url;
 	}
 
-	stateWatcher() {
-		
-	}
-
-	handleSuccess() {
+	handleLoadSuccess() {
 		var rawJson = '{'+
 						'"fields": {' +
 							'"q43": {' +
@@ -36,7 +28,9 @@ export class Loader {
 		'}';
 		var json = JSON.parse(rawJson);
 		this.transformAnswer(json);
-		console.log('success');
+	}
+
+	handleLoadFail() {
 	}
 
 	transformAnswer(json) {
@@ -63,12 +57,27 @@ export class Loader {
 
 	}
 
-	handleFail() {
-		console.log('fail');
-	}
 
 	load() {
-		return new Promise(this.promiseHandler.bind(this));
+		this.request = new XMLHttpRequest();
+		this.request.open('GET', this.url + '?render=json', true);
+		this.request.setRequestHeader('Content-Type', 'application/json');
+		return (new Promise(this.promiseHandler.bind(this))).then(this.handleLoadSuccess.bind(this),
+																	this.handleLoadFail.bind(this));
+	}
+
+	submit(params) {
+		this.request = new XMLHttpRequest();
+		this.request.open('POST', this.url, true);
+		this.request.setRequestHeader('Content-Type', 'application/json');
+		this.params = '';
+		for(let key in params) {
+			if(this.params === '')
+				this.params += '&';
+			this.params += key + '=' + params[key];
+		}
+		this.params = encodeURIComponent(this.params);
+		return (new Promise(this.promiseHandler.bind(this)));
 	}
 
 	promiseHandler(resolve, reject) {
@@ -76,17 +85,14 @@ export class Loader {
 		this.request.onreadystatechange = function() {
 			if(self.request.readyState == 4) {
 				if(self.request.status == 200 ) {
-					self.handleSuccess();
+
 					resolve(this.data);
 				} else {
-					// self.handleFail();
 					// reject(false);
-					self.handleSuccess();
 					resolve(this.data);
 				}
 			}
 		}
-		console.log(this.params);
 		this.request.send(this.params);
 	}
 }

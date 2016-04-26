@@ -41,11 +41,15 @@ export class Popup extends DOMObject {
 			for(var i=0; i < elements.length; i++) {
 				let newEl = factory.make(elements[i], this);
 				if(newEl) {
+					if(newEl.data.type == 'button') 
+						newEl.el.addEventListener('sendsay-click', this.handleSubmit.bind(this));
+
 					this.elements.push(newEl);
 					popupBody.appendChild(newEl.el);
 				} 
 			}
 		}
+
 		return this.el; 
 	}
 
@@ -63,14 +67,12 @@ export class Popup extends DOMObject {
 	addEvents() {
 		this.el.addEventListener('click', this.handleWrapperClick.bind(this));
 		this.el.querySelector('.sendsay-popup').addEventListener('click', this.handlePopupClick.bind(this));
-		this.el.querySelector('.sendsay-button input').addEventListener('click', this.handleSubmit.bind(this));
 		document.addEventListener('keyup', this.handleKeyPress.bind(this));
 	}
 
 	removeEvents() {
 		this.el.removeEventListener('click', this.handleWrapperClick.bind(this));
 		this.el.querySelector('.sendsay-popup').removeEventListener('click', this.handlePopupClick.bind(this));
-		this.el.querySelector('.sendsay-button input').removeEventListener('click', this.handleSubmit.bind(this));
 		document.removeEventListener('keyup', this.handleKeyPress.bind(this));
 	}
 
@@ -99,7 +101,7 @@ export class Popup extends DOMObject {
 	}
 
 	show(options) {
-		this.build();
+
 		this.addEvents();
 		if(!options || !options.el)
 			document.querySelector('body').appendChild(this.el);
@@ -118,17 +120,21 @@ export class Popup extends DOMObject {
 
 	submit() {
 		let elements = this.elements;
-		let isValid = true
+		let isValid = true,
+			data = {}
+
 		if(elements) {
-			for(let i =1; i < elements.length; i++) {
+			for(let i = 0; i < elements.length; i++) {
 				let element = elements[i];
-				if(element instanceof Field )
+				if(element instanceof Field ) {
+
+					data[element.data.name] = element.getValue();
 					isValid = element.validate() && isValid;
+				}
 			}
 		}
 		if(isValid) {
-			console.log('submitted');
-			this.hide();
+			this.trigger('sendsay-success', data);
 		}
 	}
 }
@@ -155,7 +161,8 @@ class ElementFactory extends Factory {
 				return new Text(data, parent);
 			case 'number':
 			case 'free':
-			case 'field': 
+			case 'field':
+
 				return new Field(data, parent);
 			case 'button':
 				return new Button(data, parent);

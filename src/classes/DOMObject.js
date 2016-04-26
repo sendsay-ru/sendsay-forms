@@ -89,6 +89,19 @@ export class DOMObject {
 
 	}
 
+	trigger(eventName, data) {
+		let event, extra = { extra : data };
+		if(CustomEvent && typeof CustomEvent === 'function') {
+			event = new CustomEvent(eventName, { detail: extra });
+		} else {
+			event = document.createEvent('HTMLEvents');
+			event.initEvent(eventName, true, true);
+			event.detail = extra;
+		}
+
+		this.el.dispatchEvent(event);
+	}
+
 
 
 }

@@ -50,4 +50,8 @@ export class Field extends DOMObject {
 		return true;
 	}
 
+	getValue() {
+		return this.el.querySelector('input').value.trim();
+	}
+
 }
