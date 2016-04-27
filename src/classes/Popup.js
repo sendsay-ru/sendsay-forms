@@ -83,6 +83,7 @@ export class Popup extends DOMObject {
 	}
 
 	activate(options) {
+		this.demo = options && options.demo;
 		if(this.data.active) {
 			if(!options || !options.instant) {
 				setTimeout(this.show.bind(this, options), this.data.displaySettings && this.data.displaySettings.delay || 1000 );
@@ -154,10 +155,11 @@ export class Popup extends DOMObject {
 				}
 			}
 		}
-		this.isSubmitted = true;
+		this.isSubmitted = isValid;
 		if(isValid) {
 			this.trigger('sendsay-success', data);
 		}
+		return isValid;
 	}
 
 	handleWrapperClick() {
@@ -171,15 +173,21 @@ export class Popup extends DOMObject {
 	handleButtonClick(event) {
 		if(this.isSubmitted)
 			this.hide();
-		else 
-			this.submit();
+		else {
+			if(this.submit() && this.demo)
+					this.showEndDialog();
+		}
 	}
 
 	handleKeyPress(event) {
 		switch(event.keyCode) {
 			case 13: //Enter
-				this.submit();
-
+				if(this.isSubmitted)
+					this.hide();
+				else {
+					if(this.submit() && this.demo)
+							this.showEndDialog();
+				}
 				break;
 			case 27: //Esc
 				this.hide();

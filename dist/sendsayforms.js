@@ -632,6 +632,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 	}, {
 		key: "activate",
 		value: function activate(options) {
+			this.demo = options && options.demo;
 			if (this.data.active) {
 				if (!options || !options.instant) {
 					setTimeout(this.show.bind(this, options), this.data.displaySettings && this.data.displaySettings.delay || 1000);
@@ -701,10 +702,11 @@ var Popup = exports.Popup = function (_DOMObject) {
 					}
 				}
 			}
-			this.isSubmitted = true;
+			this.isSubmitted = isValid;
 			if (isValid) {
 				this.trigger('sendsay-success', data);
 			}
+			return isValid;
 		}
 	}, {
 		key: "handleWrapperClick",
@@ -719,7 +721,9 @@ var Popup = exports.Popup = function (_DOMObject) {
 	}, {
 		key: "handleButtonClick",
 		value: function handleButtonClick(event) {
-			if (this.isSubmitted) this.hide();else this.submit();
+			if (this.isSubmitted) this.hide();else {
+				if (this.submit() && this.demo) this.showEndDialog();
+			}
 		}
 	}, {
 		key: "handleKeyPress",
@@ -727,8 +731,9 @@ var Popup = exports.Popup = function (_DOMObject) {
 			switch (event.keyCode) {
 				case 13:
 					//Enter
-					this.submit();
-
+					if (this.isSubmitted) this.hide();else {
+						if (this.submit() && this.demo) this.showEndDialog();
+					}
 					break;
 				case 27:
 					//Esc

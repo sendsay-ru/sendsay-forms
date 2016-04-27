@@ -15,7 +15,10 @@
 	  // loads /app/main.js
 	  System.import('main.js').then(function() {
 	  	// SENDSAY.showPopup(JSON.parse('{"elements":[{"type":"text","text":"<b>Form title</b>"},{"type":"text","text":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum rerum dignissimos quibusdam officiis temporibus quis sunt esse explicabo modi officia."},{"type":"field","subtype":"free","name":"_member_email", "hidden": true},{"type":"field","subtype":"free","name":"_member_email", "required": true, "placeholder": "placeholder"},{"type":"button","text":"Submit", "backgroundColor": "#ff0000", "textColor": "#fff"}], "active": true, "textColor": "#f00"}'));
-	  	SENDSAY.activatePopup('https://test.sendsay.ru/form/x_144472956661635/2/');
+	  	//SENDSAY.activatePopup('https://test.sendsay.ru/form/x_144472956661635/2/');
+	  	SENDSAY.showPopup(JSON.parse('{"borderRadius":0,"paddingLeft":20,"paddingTop":20,"paddingRight":20,"paddingBottom":20,"backgroundColor":"#962424","textColor":"#ffffff","endDialogMessage":"Поздравляем! Вы подписались на лучшую рассылку на свете!","elements":[{"type":"text","text":"<b>Form title</b>"},{"type":"text","text":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum rerum dignissimos quibusdam officiis temporibus quis sunt esse explicabo modi officia."},{"type":"field","subtype":"free","name":"_member_email","label":"Ваша почта","placeholder":"Почта","hidden":false,"required":true,"id":"_member_email","questionnaire":"member","default":""},{"type":"button","text":"Вперед!","textColor":"#ffffff","backgroundColor":"#000000","borderRadius":"5","align":"justify"}], "active": "true"}'), {
+	  		demo: true
+	  	});
 	  });
 	</script>
 	<link rel="stylesheet" type="text/css" href="css/sendsayforms.css">
