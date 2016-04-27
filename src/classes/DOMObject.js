@@ -61,7 +61,7 @@ export class DOMObject {
 	applySettings(settings) {
 		settings = settings || {};
 		let string = this.template;
-		let templateParams = string.match(new RegExp('\\[% *[a-zA-Z0-9\\-]* *%\\]', 'g'));
+		let templateParams = string.match(new RegExp('\\[% *[a-zA-Z0-9\\-]* *%\\]', 'g')) || [];
 		for(let i=0; i<templateParams.length; i++) {
 			let param = templateParams[i];
 			param = param.substring(2, param.length-2);
