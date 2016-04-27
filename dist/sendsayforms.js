@@ -594,7 +594,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 					}
 				}
 			}
-
+			if (this.demo) this.el.style.position = 'absolute';
 			return this.el;
 		}
 	}, {

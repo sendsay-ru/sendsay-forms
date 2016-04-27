@@ -50,7 +50,8 @@ export class Popup extends DOMObject {
 				} 
 			}
 		}
-
+		if(this.demo)
+			this.el.style.position = 'absolute';
 		return this.el; 
 	}
 
