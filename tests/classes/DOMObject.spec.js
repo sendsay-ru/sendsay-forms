@@ -76,4 +76,88 @@ describe("DOMObject.spec.js", function() {
 
         expect(dom.convertStyles(style)).toEqual(' style1:test1; style2:test2;');
     });
+
+    it('Cheking applySettings with all params' , function() {
+        var dom = new DOMObject({
+                                 "param1": 200,
+                                 "param2": "test"
+                                });
+        dom.template = '[%value1%] [%  value2   %] [%value3%]';
+        var settings = {
+            value1: 'test1',
+            value2: 'test2',
+            value3: 'test3'
+        };
+    
+        expect(dom.applySettings(settings)).toEqual('test1 test2 test3');
+    });
+
+    it('Cheking applySettings without all params' , function() {
+        var dom = new DOMObject({
+                                 "param1": 200,
+                                 "param2": "test"
+                                });
+        dom.template = '[%value1%] [%  value2   %] [%value3%]';
+        var settings = {
+            value1: 'test1',
+            value2: 'test2'
+        };
+    
+        expect(dom.applySettings(settings)).toEqual('test1 test2 ');
+    });
+
+    it('Cheking applySettings without params' , function() {
+        var dom = new DOMObject({
+                                 "param1": 200,
+                                 "param2": "test"
+                                });
+        dom.template = '[%value1%] [%  value2   %] [%value3%]';
+    
+        expect(dom.applySettings()).toEqual('  ');
+    });
+
+    it('Cheking trigger event without extra data' , function() {
+        var dom = new DOMObject({
+                                 "param1": 200,
+                                 "param2": "test"
+                                });
+        dom.render();
+        var test = false;
+        var testBlock = { 
+            testFunc: function() {
+                test = true;
+            }
+        };
+        dom.el.addEventListener('TestEvent', testBlock.testFunc);
+        dom.trigger('TestEvent');
+
+        expect(test).toEqual(true);
+
+    });
+
+    it('Cheking trigger event with extra data' , function() {
+        var dom = new DOMObject({
+                                 "param1": 200,
+                                 "param2": "test"
+                                });
+        dom.render();
+        var test = false,
+            extra;
+        var testBlock = { 
+            testFunc: function(event) {
+                test = true;
+                extra =  event.detail.extra;
+            }
+        };
+        dom.el.addEventListener('TestEvent', testBlock.testFunc);
+        dom.trigger('TestEvent', {
+            test: 'testData'
+        });
+
+        expect(test).toEqual(true);
+        expect(extra).toEqual({
+            test: 'testData'
+        })
+
+    });
 });
