@@ -29,7 +29,7 @@ module.exports = function(config) {
         // list of files / patterns to load in the browser
         files: [
             {pattern: 'src/classes/*.js', included: false},
-            {pattern: 'test/classes/*.js', included: true}
+            {pattern: 'tests/classes/*.js', included: true}
         ],
 
         // list of files to exclude
@@ -38,20 +38,12 @@ module.exports = function(config) {
             'src/node_modules',
             'src/bower_components/**/*.spec.js'
         ],
-         babelPreprocessor: {
-          options: {
-                presets: ['es2015'],
-                sourceMap: 'inline'
-              }
-          },
 
 
 
         systemjs: {
             // Path to your SystemJS configuration file 
             configFile: 'tools/system.conf.js',
-         
-
         },
 
 
