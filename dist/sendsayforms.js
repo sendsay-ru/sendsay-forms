@@ -33,21 +33,13 @@ var Button = exports.Button = function (_DOMObject) {
 			'background-color': { param: 'backgroundColor' },
 			'border-radius': { param: 'borderRadius', postfix: 'px' },
 			'color': { param: 'textColor' },
-			'line-height': { param: 'lineHeight', default: 'normal' }
+			'line-height': { param: 'lineHeighFt', default: 'normal' }
 		};
-		_this.build();
+		_this.render();
 		return _this;
 	}
 
 	_createClass(Button, [{
-		key: 'build',
-		value: function build() {
-			this.removeEvents();
-			var el = _get(Object.getPrototypeOf(Button.prototype), 'build', this).call(this);
-			this.addEvents();
-			return el;
-		}
-	}, {
 		key: 'addEvents',
 		value: function addEvents() {
 			if (this.el) {
@@ -129,7 +121,11 @@ var Connector = exports.Connector = function () {
 	}, {
 		key: 'transformAnswer',
 		value: function transformAnswer(json) {
-			this.data = {};
+			this.data = {
+				backgroundColor: '#000',
+				textColor: '#fff',
+				endDialogMessage: 'Раз-два-три'
+			};
 			this.data.elements = [];
 			this.data.active = json.active || false;
 			if (json.fields) {
@@ -145,7 +141,8 @@ var Connector = exports.Connector = function () {
 				}
 				this.data.elements.push({
 					type: 'button',
-					text: 'submit'
+					text: 'submit',
+					backgroundColor: '#f00'
 				});
 			}
 			if (json.name) this.data.title = json.name;
@@ -289,14 +286,13 @@ var DOMObject = exports.DOMObject = function () {
 			return this.el;
 		}
 	}, {
-		key: 'rerender',
-		value: function rerender() {
-			var old = this.el;
+		key: 'render',
+		value: function render() {
+			var oldEl = this.el;
 			this.removeEvents();
-			if (old.parentNode) {
-				old.parentNode.replaceChild(this.build(), old);
-			}
+			this.build();
 			this.addEvents();
+			if (oldEl && oldEl.parentNode) oldEl.parentNode.replaceChild(this.el, oldEl);
 		}
 	}, {
 		key: 'addEvents',
@@ -318,6 +314,14 @@ var DOMObject = exports.DOMObject = function () {
 			}
 
 			this.el.dispatchEvent(event);
+		}
+	}, {
+		key: 'extend',
+		value: function extend(dest, source) {
+			for (var key in source) {
+				dest[key] = source[key];
+			}
+			return dest;
 		}
 	}]);
 
@@ -354,7 +358,7 @@ var Field = exports.Field = function (_DOMObject) {
 
 		_this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%name%]" class = "sendsay-label">[%label%]</label>' + '<input name="[%name%]" placeholder="[%placeholder%]" type="text" class="sendsay-input"/>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
 		_this.baseClass = 'sendsay-field';
-		_this.build();
+		_this.render();
 		return _this;
 	}
 
@@ -461,6 +465,7 @@ var Form = exports.Form = function () {
 		key: 'handleSuccessSubmit',
 		value: function handleSuccessSubmit() {
 			console.log('Success submit');
+			this.domObj.showEndDialog();
 		}
 	}, {
 		key: 'handleFailSubmit',
@@ -553,7 +558,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 
 		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Popup).call(this, data, parent));
 
-		_this.template = '<div class = "sendsay-wrapper">' + '<div class = "[%classes%]" style="[%style%]"">' + '' + '</div>' + '</div>';
+		_this.template = '<div class = "sendsay-wrapper [%wrapperClasses%]">' + '<div class = "[%classes%]" style="[%style%]"">' + '' + '</div>' + '</div>';
 
 		_this.baseClass = 'sendsay-popup';
 		_this.applicableStyles = {
@@ -564,7 +569,8 @@ var Popup = exports.Popup = function (_DOMObject) {
 			'padding-left': { param: 'paddingLeft', postfix: 'px' },
 			'padding-right': { param: 'paddingRight', postfix: 'px' }
 		};
-		if (data.active) _this.build();
+		_this.makeEndDialogData();
+		if (data.active) _this.render();
 		return _this;
 	}
 
@@ -574,7 +580,6 @@ var Popup = exports.Popup = function (_DOMObject) {
 			if (!this.data.active) return false;
 			_get(Object.getPrototypeOf(Popup.prototype), "build", this).call(this);
 			this.elements = [];
-
 			var factory = new ElementFactory();
 			var popupBody = this.el.querySelector('.sendsay-popup');
 			if (this.data.elements) {
@@ -582,7 +587,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 				for (var i = 0; i < elements.length; i++) {
 					var newEl = factory.make(elements[i], this);
 					if (newEl) {
-						if (newEl.data.type == 'button') newEl.el.addEventListener('sendsay-click', this.handleSubmit.bind(this));
+						if (newEl.data.type == 'button') newEl.el.addEventListener('sendsay-click', this.handleButtonClick.bind(this));
 
 						this.elements.push(newEl);
 						popupBody.appendChild(newEl.el);
@@ -593,9 +598,40 @@ var Popup = exports.Popup = function (_DOMObject) {
 			return this.el;
 		}
 	}, {
+		key: "addEvents",
+		value: function addEvents() {
+			if (this.el) {
+				this.el.addEventListener('click', this.handleWrapperClick.bind(this));
+				this.el.querySelector('.sendsay-popup').addEventListener('click', this.handlePopupClick.bind(this));
+				document.addEventListener('keyup', this.handleKeyPress.bind(this));
+			}
+		}
+	}, {
+		key: "removeEvents",
+		value: function removeEvents() {
+			if (this.el) {
+				this.el.removeEventListener('click', this.handleWrapperClick.bind(this));
+				this.el.querySelector('.sendsay-popup').removeEventListener('click', this.handlePopupClick.bind(this));
+				document.removeEventListener('keyup', this.handleKeyPress.bind(this));
+			}
+		}
+	}, {
+		key: "makeSettings",
+		value: function makeSettings() {
+			var settings = _get(Object.getPrototypeOf(Popup.prototype), "makeSettings", this).call(this);
+			settings.wrapperClasses = this.data.noAnimation ? 'sendsay-noanimation' : '';
+			return settings;
+		}
+	}, {
+		key: "makeClasses",
+		value: function makeClasses() {
+			var classes = _get(Object.getPrototypeOf(Popup.prototype), "makeClasses", this).call(this);
+			classes += this.data.endDialog ? ' sendsay-enddialog' : '';
+			return classes;
+		}
+	}, {
 		key: "activate",
 		value: function activate(options) {
-
 			if (this.data.active) {
 				if (!options || !options.instant) {
 					setTimeout(this.show.bind(this, options), this.data.displaySettings && this.data.displaySettings.delay || 1000);
@@ -605,54 +641,39 @@ var Popup = exports.Popup = function (_DOMObject) {
 			}
 		}
 	}, {
-		key: "addEvents",
-		value: function addEvents() {
-			this.el.addEventListener('click', this.handleWrapperClick.bind(this));
-			this.el.querySelector('.sendsay-popup').addEventListener('click', this.handlePopupClick.bind(this));
-			document.addEventListener('keyup', this.handleKeyPress.bind(this));
-		}
-	}, {
-		key: "removeEvents",
-		value: function removeEvents() {
-			this.el.removeEventListener('click', this.handleWrapperClick.bind(this));
-			this.el.querySelector('.sendsay-popup').removeEventListener('click', this.handlePopupClick.bind(this));
-			document.removeEventListener('keyup', this.handleKeyPress.bind(this));
-		}
-	}, {
-		key: "handleWrapperClick",
-		value: function handleWrapperClick() {
-			this.hide();
-		}
-	}, {
-		key: "handlePopupClick",
-		value: function handlePopupClick(event) {
-			event.stopPropagation();
-		}
-	}, {
-		key: "handleSubmit",
-		value: function handleSubmit(event) {
-			this.submit();
-		}
-	}, {
-		key: "handleKeyPress",
-		value: function handleKeyPress(event) {
-			switch (event.keyCode) {
-				case 13:
-					//Enter
-					this.submit();
-
-					break;
-				case 27:
-					//Esc
-					this.hide();
-					break;
+		key: "makeEndDialogData",
+		value: function makeEndDialogData() {
+			var data = this.data;
+			this.submitData = this.extend({
+				noAnimation: true,
+				endDialog: true
+			}, data);
+			delete this.submitData.elements;
+			var button = void 0;
+			for (var i = 0; i < data.elements.length; i++) {
+				var element = data.elements[i];
+				if (element.type == 'button') {
+					button = this.extend({}, element);
+					button.text = 'Закрыть';
+				}
 			}
+			this.submitData.elements = [{
+				type: 'text',
+				text: data.endDialogMessage || 'Спасибо за заполнение формы',
+				paddingTop: '10',
+				paddingBottom: '20'
+			}, button];
+		}
+	}, {
+		key: "showEndDialog",
+		value: function showEndDialog() {
+			this.data = this.submitData;
+			this.render();
 		}
 	}, {
 		key: "show",
 		value: function show(options) {
 
-			this.addEvents();
 			if (!options || !options.el) document.querySelector('body').appendChild(this.el);else {
 				this.el.style.position = 'absolute';
 				options.el.appendChild(this.el);
@@ -661,7 +682,6 @@ var Popup = exports.Popup = function (_DOMObject) {
 	}, {
 		key: "hide",
 		value: function hide() {
-			this.removeEvents();
 			if (this.el.parentNode) this.el.parentNode.removeChild(this.el);
 		}
 	}, {
@@ -681,8 +701,39 @@ var Popup = exports.Popup = function (_DOMObject) {
 					}
 				}
 			}
+			this.isSubmitted = true;
 			if (isValid) {
 				this.trigger('sendsay-success', data);
+			}
+		}
+	}, {
+		key: "handleWrapperClick",
+		value: function handleWrapperClick() {
+			this.hide();
+		}
+	}, {
+		key: "handlePopupClick",
+		value: function handlePopupClick(event) {
+			event.stopPropagation();
+		}
+	}, {
+		key: "handleButtonClick",
+		value: function handleButtonClick(event) {
+			if (this.isSubmitted) this.hide();else this.submit();
+		}
+	}, {
+		key: "handleKeyPress",
+		value: function handleKeyPress(event) {
+			switch (event.keyCode) {
+				case 13:
+					//Enter
+					this.submit();
+
+					break;
+				case 27:
+					//Esc
+					this.hide();
+					break;
 			}
 		}
 	}]);
@@ -773,9 +824,15 @@ var Text = exports.Text = function (_DOMObject) {
 		_this.template = '<div class = "sendsay-text" style="[%style%]"">' + '[%text%]' + '</div>';
 		_this.baseClass = 'sendsay-text';
 		_this.applicableStyles = {
-			'text-align': { param: 'align' }
+			'text-align': { param: 'align', default: 'left' },
+			'line-height': { param: 'lineHeight', default: 'normal' },
+			'padding-bottom': { param: 'paddingBottom', postfix: 'px' },
+			'padding-top': { param: 'paddingTop', postfix: 'px' },
+			'padding-left': { param: 'paddingLeft', postfix: 'px' },
+			'padding-right': { param: 'paddingRight', postfix: 'px' }
+
 		};
-		_this.build();
+		_this.render();
 		return _this;
 	}
 
