@@ -59,9 +59,17 @@ export class DOMObject {
 	}
 
 	applySettings(settings) {
+		settings = settings || {};
 		let string = this.template;
+		let templateParams = string.match(new RegExp('\\[% *[a-zA-Z0-9\\-]* *%\\]', 'g'));
+		for(let i=0; i<templateParams.length; i++) {
+			let param = templateParams[i];
+			param = param.substring(2, param.length-2);
+			let paramValue = settings[param.trim()] || '';
+			string = string.replace(new RegExp('\\[%' + param + '%\\]', 'g'), paramValue);
+		}
 		for(var key in settings) {
-			string = string.replace(new RegExp('\\[%' + key + '%\\]', 'g'), settings[key]);
+			
 		}
 		return string;
 	}
