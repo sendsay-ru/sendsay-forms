@@ -35,7 +35,11 @@ export class Connector {
 	}
 
 	transformAnswer(json) {
-		this.data = {};
+		this.data = {
+			backgroundColor: '#000',
+			textColor: '#fff',
+			endDialogMessage: 'Раз-два-три'
+		};
 		this.data.elements = [];
 		this.data.active = json.active || false;
 		if(json.fields) {
@@ -51,7 +55,8 @@ export class Connector {
 			}
 			this.data.elements.push({
 					type: 'button',
-					text: 'submit'
+					text: 'submit',
+					backgroundColor: '#f00'
 				});
 		}
 		if(json.name)

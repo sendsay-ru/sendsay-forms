@@ -9,9 +9,15 @@ export class Text extends DOMObject {
 						'</div>';
 		this.baseClass = 'sendsay-text';
 		this.applicableStyles = {
-			'text-align': { param: 'align' }
+			'text-align': { param: 'align', default: 'left' },
+			'line-height': { param: 'lineHeight', default: 'normal' },
+			'padding-bottom': { param: 'paddingBottom', postfix: 'px'},
+			'padding-top': { param: 'paddingTop', postfix: 'px'},
+			'padding-left': { param: 'paddingLeft', postfix: 'px'},
+			'padding-right': { param: 'paddingRight', postfix: 'px'}
+
 		}
-		this.build();
+		this.render();
 	}
 
 	build() {

@@ -10,8 +10,7 @@ export class Popup extends DOMObject {
 
 	constructor(data, parent) {
 		super(data, parent);
-
-		this.template = '<div class = "sendsay-wrapper">' +
+		this.template = '<div class = "sendsay-wrapper [%wrapperClasses%]">' +
 						'<div class = "[%classes%]" style="[%style%]"">' +
 						'' +
 						'</div>' +
@@ -26,8 +25,9 @@ export class Popup extends DOMObject {
 			'padding-left': { param: 'paddingLeft', postfix: 'px'},
 			'padding-right': { param: 'paddingRight', postfix: 'px'}
 		};
+		this.makeEndDialogData();
 		if(data.active)
-			this.build();
+			this.render();
 	}
 
 	build() {
@@ -35,7 +35,6 @@ export class Popup extends DOMObject {
 			return false;
 		super.build();
 		this.elements = [];
-
 		let factory = new ElementFactory();
 		let popupBody = this.el.querySelector('.sendsay-popup');
 		if(this.data.elements) {
@@ -44,7 +43,7 @@ export class Popup extends DOMObject {
 				let newEl = factory.make(elements[i], this);
 				if(newEl) {
 					if(newEl.data.type == 'button') 
-						newEl.el.addEventListener('sendsay-click', this.handleSubmit.bind(this));
+						newEl.el.addEventListener('sendsay-click', this.handleButtonClick.bind(this));
 
 					this.elements.push(newEl);
 					popupBody.appendChild(newEl.el);
@@ -55,8 +54,35 @@ export class Popup extends DOMObject {
 		return this.el; 
 	}
 
-	activate(options) {
+	addEvents() {
+		if(this.el) {
+			this.el.addEventListener('click', this.handleWrapperClick.bind(this));
+			this.el.querySelector('.sendsay-popup').addEventListener('click', this.handlePopupClick.bind(this));
+			document.addEventListener('keyup', this.handleKeyPress.bind(this));
+		}
+	}
 
+	removeEvents() {
+		if(this.el) {
+			this.el.removeEventListener('click', this.handleWrapperClick.bind(this));
+			this.el.querySelector('.sendsay-popup').removeEventListener('click', this.handlePopupClick.bind(this));
+			document.removeEventListener('keyup', this.handleKeyPress.bind(this));
+		}
+	}
+
+	makeSettings() {
+		let settings = super.makeSettings();
+		settings.wrapperClasses = this.data.noAnimation ? 'sendsay-noanimation' : '';
+		return settings;
+	}
+
+	makeClasses() {
+		let classes = super.makeClasses();
+		classes += this.data.endDialog ? ' sendsay-enddialog' : '';
+		return classes;
+	}
+
+	activate(options) {
 		if(this.data.active) {
 			if(!options || !options.instant) {
 				setTimeout(this.show.bind(this, options), this.data.displaySettings && this.data.displaySettings.delay || 1000 );
@@ -66,45 +92,39 @@ export class Popup extends DOMObject {
 		}
 	}
 
-	addEvents() {
-		this.el.addEventListener('click', this.handleWrapperClick.bind(this));
-		this.el.querySelector('.sendsay-popup').addEventListener('click', this.handlePopupClick.bind(this));
-		document.addEventListener('keyup', this.handleKeyPress.bind(this));
-	}
-
-	removeEvents() {
-		this.el.removeEventListener('click', this.handleWrapperClick.bind(this));
-		this.el.querySelector('.sendsay-popup').removeEventListener('click', this.handlePopupClick.bind(this));
-		document.removeEventListener('keyup', this.handleKeyPress.bind(this));
-	}
-
-	handleWrapperClick() {
-		this.hide();
-	}
-
-	handlePopupClick(event) {
-		event.stopPropagation() 
-	}
-
-	handleSubmit(event) {
-		this.submit();
-	}
-
-	handleKeyPress(event) {
-		switch(event.keyCode) {
-			case 13: //Enter
-				this.submit();
-
-				break;
-			case 27: //Esc
-				this.hide();
-				break;
+	makeEndDialogData() {
+		let data = this.data;
+		this.submitData = this.extend({ 
+			noAnimation: true,
+			endDialog: true
+		}, data);
+		delete this.submitData.elements;
+		let button;
+		for(let i=0; i < data.elements.length; i++) {
+			let element = data.elements[i];
+			if(element.type == 'button') {	
+				button = this.extend({}, element);
+				button.text = 'Закрыть';
+			}
 		}
+		this.submitData.elements = [
+			{
+				type: 'text',
+				text: data.endDialogMessage || 'Спасибо за заполнение формы',
+				paddingTop: '10',
+				paddingBottom: '20'
+			},
+			button
+		];
+	}
+
+	showEndDialog() {
+		this.data = this.submitData;
+		this.render();
 	}
 
 	show(options) {
 
-		this.addEvents();
 		if(!options || !options.el)
 			document.querySelector('body').appendChild(this.el);
 		else {
@@ -114,7 +134,6 @@ export class Popup extends DOMObject {
 	}
 
 	hide() {
-		this.removeEvents();
 		if(this.el.parentNode)
 			this.el.parentNode.removeChild(this.el);
 		
@@ -135,8 +154,36 @@ export class Popup extends DOMObject {
 				}
 			}
 		}
+		this.isSubmitted = true;
 		if(isValid) {
 			this.trigger('sendsay-success', data);
+		}
+	}
+
+	handleWrapperClick() {
+		this.hide();
+	}
+
+	handlePopupClick(event) {
+		event.stopPropagation() 
+	}
+
+	handleButtonClick(event) {
+		if(this.isSubmitted)
+			this.hide();
+		else 
+			this.submit();
+	}
+
+	handleKeyPress(event) {
+		switch(event.keyCode) {
+			case 13: //Enter
+				this.submit();
+
+				break;
+			case 27: //Esc
+				this.hide();
+				break;
 		}
 	}
 }

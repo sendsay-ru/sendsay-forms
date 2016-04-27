@@ -13,16 +13,9 @@ export class Button extends DOMObject {
 			'background-color': { param: 'backgroundColor' },
 			'border-radius': { param: 'borderRadius', postfix: 'px' },
 			'color': { param: 'textColor'},
-			'line-height': { param: 'lineHeight' ,default: 'normal'}
+			'line-height': { param: 'lineHeighFt' ,default: 'normal'}
 		};
-		this.build();
-	}
-
-	build() {
-		this.removeEvents();
-		var el = super.build();
-		this.addEvents();
-		return el;
+		this.render();
 	}
 
 	addEvents() {

@@ -25,6 +25,7 @@ export class Form {
 
 	handleSuccessSubmit() {
 		console.log('Success submit');
+		this.domObj.showEndDialog();
 	}
 
 	handleFailSubmit() {

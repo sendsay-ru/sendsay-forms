@@ -72,13 +72,13 @@ export class DOMObject {
 		return this.el;
 	}
 
-	rerender() {
-		let old = this.el;
+	render() {
+		let oldEl = this.el;
 		this.removeEvents();
-		if(old.parentNode) {
-			old.parentNode.replaceChild(this.build(), old)
-		}
+		this.build();
 		this.addEvents();
+		if(oldEl && oldEl.parentNode)
+			oldEl.parentNode.replaceChild(this.el, oldEl);
 	}
 
 	addEvents() {
@@ -102,6 +102,10 @@ export class DOMObject {
 		this.el.dispatchEvent(event);
 	}
 
-
-
+	extend(dest, source) {
+		for(let key in source) {
+			dest[key] = source[key];
+		}
+		return dest;
+	}
 }

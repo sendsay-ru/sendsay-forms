@@ -11,7 +11,7 @@ export class Field extends DOMObject {
 						'<div type="text" class="sendsay-error"></div>' +  
 						'</div>';
 		this.baseClass = 'sendsay-field';
-		this.build();
+		this.render();
 	}
 
 	build() {
