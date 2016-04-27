@@ -68,9 +68,6 @@ export class DOMObject {
 			let paramValue = settings[param.trim()] || '';
 			string = string.replace(new RegExp('\\[%' + param + '%\\]', 'g'), paramValue);
 		}
-		for(var key in settings) {
-			
-		}
 		return string;
 	}
 
