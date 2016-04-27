@@ -13,13 +13,25 @@ export class Button extends DOMObject {
 			'background-color': { param: 'backgroundColor' },
 			'border-radius': { param: 'borderRadius', postfix: 'px' },
 			'color': { param: 'textColor'},
-			'line-height': { param: 'lineHeight' ,default: 'normal'}
+			'line-height': { param: 'lineHeighFt' ,default: 'normal'}
 		};
-		this.build();
+		this.render();
 	}
 
-	build() {
-		return super.build();
+	addEvents() {
+		if(this.el) {
+			this.el.querySelector('input').addEventListener('click', this.handleClick.bind(this));
+		}
+	}
+
+	handleClick() {
+		this.trigger('sendsay-click');
+	}
+
+	removeEvents() {
+		if(this.el) {
+			this.el.querySelector('input').removeEventListener('click', this.handleClick.bind(this));
+		}
 	}
 
 	makeStyles() {

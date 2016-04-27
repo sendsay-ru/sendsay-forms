@@ -7,11 +7,11 @@ export class Field extends DOMObject {
 		super(data, parent);
 		this.template = '<div class = "[%classes%]" style="[%style%]"">' +
 						'<label for="[%name%]" class = "sendsay-label">[%label%]</label>' +
-						'<input name="[%name%]" placeholder=[%placeholder%] type="text" class="sendsay-input"/>' +
+						'<input name="[%name%]" placeholder="[%placeholder%]" type="text" class="sendsay-input"/>' +
 						'<div type="text" class="sendsay-error"></div>' +  
 						'</div>';
 		this.baseClass = 'sendsay-field';
-		this.build();
+		this.render();
 	}
 
 	build() {
@@ -42,12 +42,25 @@ export class Field extends DOMObject {
 	}
 
 	validate() {
-		if(this.data.required && this.el.querySelector('input').value.trim() == '') {
-			this.el.classList.add('sendsay-field-invalid');
-			this.el.querySelector('.sendsay-error').innerHTML = "Обязательное поле";
+		this.removeErrorMessage();
+		if(this.data.required && this.el.querySelector('input').value == '') {
+			this.showErrorMessage("Обязательное поле")
 			return false;
 		}
 		return true;
+	}
+	showErrorMessage(message) {
+		this.el.classList.add('sendsay-field-invalid');
+		this.el.querySelector('.sendsay-error').innerHTML = message;
+	}
+
+	removeErrorMessage() {
+		this.el.classList.remove('sendsay-field-invalid');
+		this.el.querySelector('.sendsay-error').innerHTML = '';
+	}
+
+	getValue() {
+		return this.el.querySelector('input').value;
 	}
 
 }

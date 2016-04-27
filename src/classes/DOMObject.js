@@ -72,13 +72,13 @@ export class DOMObject {
 		return this.el;
 	}
 
-	rerender() {
-		let old = this.el;
+	render() {
+		let oldEl = this.el;
 		this.removeEvents();
-		if(old.parentNode) {
-			old.parentNode.replaceChild(this.build(), old)
-		}
+		this.build();
 		this.addEvents();
+		if(oldEl && oldEl.parentNode)
+			oldEl.parentNode.replaceChild(this.el, oldEl);
 	}
 
 	addEvents() {
@@ -89,6 +89,23 @@ export class DOMObject {
 
 	}
 
+	trigger(eventName, data) {
+		let event, extra = { extra : data };
+		if(CustomEvent && typeof CustomEvent === 'function') {
+			event = new CustomEvent(eventName, { detail: extra });
+		} else {
+			event = document.createEvent('HTMLEvents');
+			event.initEvent(eventName, true, true);
+			event.detail = extra;
+		}
 
+		this.el.dispatchEvent(event);
+	}
 
+	extend(dest, source) {
+		for(let key in source) {
+			dest[key] = source[key];
+		}
+		return dest;
+	}
 }

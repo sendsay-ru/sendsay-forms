@@ -1,22 +1,15 @@
-export class Loader {
+export class Connector {
 
-	constructor(id) {
-		this.request = new XMLHttpRequest();
-		this.request.open('POST', 'https://sendsay.ru/form/x_1445438168224221/2/', true);
-		this.request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
-		let jsonRequest = '{"id":' + id + ' }';
-		this.params = 'apiversion=' + encodeURIComponent(100) + '&json=1&request=' + encodeURIComponent(jsonRequest);
+	constructor(url) {
+		this.url = url;
 	}
 
-	stateWatcher() {
-		
-	}
-
-	handleSuccess() {
+	handleLoadSuccess() {
 		var rawJson = '{'+
 						'"fields": {' +
 							'"q43": {' +
-								'"type": "free",' +
+								'"type": "field",' +
+								'"subtype": "int",' +
 								'"name": "First field",' +
 								'"questionnaire": "SomeQuest"' +
 							'},' +
@@ -36,11 +29,17 @@ export class Loader {
 		'}';
 		var json = JSON.parse(rawJson);
 		this.transformAnswer(json);
-		console.log('success');
+	}
+
+	handleLoadFail() {
 	}
 
 	transformAnswer(json) {
-		this.data = {};
+		this.data = {
+			backgroundColor: '#000',
+			textColor: '#fff',
+			endDialogMessage: 'Раз-два-три'
+		};
 		this.data.elements = [];
 		this.data.active = json.active || false;
 		if(json.fields) {
@@ -50,12 +49,14 @@ export class Loader {
 				this.data.elements.push({
 					type: field.type,
 					name: '_' + field.questionnaire + '_' + key,
-					label: field.name
+					label: field.name,
+					subtype: field.subtype
 				})
 			}
 			this.data.elements.push({
 					type: 'button',
-					text: 'submit'
+					text: 'submit',
+					backgroundColor: '#f00'
 				});
 		}
 		if(json.name)
@@ -63,30 +64,44 @@ export class Loader {
 
 	}
 
-	handleFail() {
-		console.log('fail');
-	}
 
 	load() {
-		return new Promise(this.promiseHandler.bind(this));
+		this.request = new XMLHttpRequest();
+		this.request.open('GET', this.url + '?render=json', true);
+		this.request.setRequestHeader('Content-Type', 'application/json');
+		return (new Promise(this.promiseHandler.bind(this))).then(this.handleLoadSuccess.bind(this),
+																	this.handleLoadFail.bind(this));
+	}
+
+	submit(params) {
+		this.request = new XMLHttpRequest();
+		this.request.open('POST', this.url, true);
+		this.request.setRequestHeader('Content-Type', 'application/json');
+		this.params = '';
+		for(let key in params) {
+			if(this.params === '')
+				this.params += '&';
+			this.params += key + '=' + params[key];
+		}
+		this.params = encodeURIComponent(this.params);
+
+		return (new Promise(this.promiseHandler.bind(this)));
 	}
 
 	promiseHandler(resolve, reject) {
 		var self = this;
 		this.request.onreadystatechange = function() {
 			if(self.request.readyState == 4) {
+
 				if(self.request.status == 200 ) {
-					self.handleSuccess();
+
 					resolve(this.data);
 				} else {
-					// self.handleFail();
 					// reject(false);
-					self.handleSuccess();
 					resolve(this.data);
 				}
 			}
 		}
-		console.log(this.params);
 		this.request.send(this.params);
 	}
 }
