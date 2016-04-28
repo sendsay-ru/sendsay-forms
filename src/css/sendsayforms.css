@@ -133,12 +133,12 @@
 
 @keyframes sendsay-popup-animate {
     from {
-        -ms-transform: scale(.88) translate(-50%, -50%);
-            transform: scale(.88) translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%) scale(.88) ;
+            transform: translate(-50%, -50%) scale(.88) ;
     }
     to {
-        -ms-transform: scale(1) translate(-50%, -50%);
-            transform: scale(1) translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%) scale(1) ;
+            transform: translate(-50%, -50%) scale(1) ;
     }
 }
 

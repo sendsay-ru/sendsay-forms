@@ -7,7 +7,7 @@ export class Field extends DOMObject {
 		super(data, parent);
 		this.template = '<div class = "[%classes%]" style="[%style%]"">' +
 						'<label for="[%name%]" class = "sendsay-label">[%label%]</label>' +
-						'<input name="[%name%]" placeholder="[%placeholder%]" type="text" class="sendsay-input"/>' +
+						'<input name="[%qid%]" placeholder="[%placeholder%]" type="text" class="sendsay-input"/>' +
 						'<div type="text" class="sendsay-error"></div>' +  
 						'</div>';
 		this.baseClass = 'sendsay-field';
@@ -23,6 +23,7 @@ export class Field extends DOMObject {
 		settings.name = data.name || '';
 		settings.label = data.label || data.name || '';
 		settings.placeholder = data.placeholder || '';
+		settings.qid = data.qid || data.name || '';
 		if(data.hidden) {
 			settings.classes += ' sendsay-field-hidden';
 		}
