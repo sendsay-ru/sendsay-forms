@@ -272,9 +272,14 @@ var DOMObject = exports.DOMObject = function () {
 	}, {
 		key: 'applySettings',
 		value: function applySettings(settings) {
+			settings = settings || {};
 			var string = this.template;
-			for (var key in settings) {
-				string = string.replace(new RegExp('\\[%' + key + '%\\]', 'g'), settings[key]);
+			var templateParams = string.match(new RegExp('\\[% *[a-zA-Z0-9\\-]* *%\\]', 'g')) || [];
+			for (var i = 0; i < templateParams.length; i++) {
+				var param = templateParams[i];
+				param = param.substring(2, param.length - 2);
+				var paramValue = settings[param.trim()] || '';
+				string = string.replace(new RegExp('\\[%' + param + '%\\]', 'g'), paramValue);
 			}
 			return string;
 		}
@@ -356,7 +361,7 @@ var Field = exports.Field = function (_DOMObject) {
 
 		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Field).call(this, data, parent));
 
-		_this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%name%]" class = "sendsay-label">[%label%]</label>' + '<input name="[%name%]" placeholder="[%placeholder%]" type="text" class="sendsay-input"/>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
+		_this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%name%]" class = "sendsay-label">[%label%]</label>' + '<input name="[%qid%]" placeholder="[%placeholder%]" type="text" class="sendsay-input"/>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
 		_this.baseClass = 'sendsay-field';
 		_this.render();
 		return _this;
@@ -375,6 +380,7 @@ var Field = exports.Field = function (_DOMObject) {
 			settings.name = data.name || '';
 			settings.label = data.label || data.name || '';
 			settings.placeholder = data.placeholder || '';
+			settings.qid = data.qid || data.name || '';
 			if (data.hidden) {
 				settings.classes += ' sendsay-field-hidden';
 			}
