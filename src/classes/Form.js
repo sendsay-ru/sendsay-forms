@@ -3,10 +3,13 @@ export class Form {
 	constructor(domConstructor, connector) {
 		this.domConstructor = domConstructor;
 		this.connector = connector;
-		connector.load().then(this.handleSuccess.bind(this), this.handleFail.bind(this));
+		let promise = connector.load();
+		if(promise)
+			promise.then(this.handleSuccess.bind(this), this.handleFail.bind(this));
 	}
 
 	handleSuccess() {
+
 		this.domObj = new (this.domConstructor)(this.connector.data);
 		this.domObj.activate();
 		this.domObj.el.addEventListener('sendsay-success', this.handleSubmit.bind(this));
@@ -19,17 +22,21 @@ export class Form {
 	handleSubmit(event) {
 
 		var params = event.detail.extra;
-		this.connector.submit(params).then(this.handleSuccessSubmit.bind(this),
+		let promise = this.connector.submit(params);
+		if(promise)
+			promise.then(this.handleSuccessSubmit.bind(this),
 											this.handleFailSubmit.bind(this));
 	}
 
 	handleSuccessSubmit() {
-		console.log('Success submit');
 		this.domObj.showEndDialog();
 	}
 
 	handleFailSubmit() {
-		console.log('Fail submit');
+		console.log('tset');
+		let error = this.connector.error;
+		if(error.specific && error.specific === 'Неправильно заполнено поле email.')
+			this.domObj.showErrorFor('_member_email', 'Неверный формат email адреса');
 	}
 
 }

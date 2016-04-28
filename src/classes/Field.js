@@ -6,7 +6,7 @@ export class Field extends DOMObject {
 	constructor(data, parent) {
 		super(data, parent);
 		this.template = '<div class = "[%classes%]" style="[%style%]"">' +
-						'<label for="[%name%]" class = "sendsay-label">[%label%]</label>' +
+						'<label for="[%label%]" class = "sendsay-label">[%label%]</label>' +
 						'<input name="[%qid%]" placeholder="[%placeholder%]" value="[%value%]" type="text" class="sendsay-input"/>' +
 						'<div type="text" class="sendsay-error"></div>' +  
 						'</div>';
@@ -64,5 +64,6 @@ export class Field extends DOMObject {
 	getValue() {
 		return this.el.querySelector('input').value;
 	}
+
 
 }

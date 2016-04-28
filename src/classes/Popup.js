@@ -26,13 +26,11 @@ export class Popup extends DOMObject {
 			'padding-right': { param: 'paddingRight', postfix: 'px'}
 		};
 		this.makeEndDialogData();
-		if(data.active)
-			this.render();
+		this.render();
 	}
 
 	build() {
-		if(!this.data.active)
-			return false;
+
 		super.build();
 		this.elements = [];
 		let factory = new ElementFactory();
@@ -121,6 +119,7 @@ export class Popup extends DOMObject {
 	}
 
 	showEndDialog() {
+		this.isSubmitted = true;
 		this.data = this.submitData;
 		this.render();
 	}
@@ -156,11 +155,21 @@ export class Popup extends DOMObject {
 				}
 			}
 		}
-		this.isSubmitted = isValid;
+
 		if(isValid) {
 			this.trigger('sendsay-success', data);
 		}
 		return isValid;
+	}
+
+	showErrorFor(qid, message) {
+		let elements = this.elements;
+		for(let i = 0; i < elements.length; i++) {
+			let element = elements[i];
+			if(element.data.qid == qid ) {
+				element.showErrorMessage(message);
+			}
+		}
 	}
 
 	handleWrapperClick() {
