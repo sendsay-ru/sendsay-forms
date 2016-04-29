@@ -125,6 +125,11 @@ export class Popup extends DOMObject {
 		this.render();
 	}
 
+	onSubmitFail() {
+
+
+	}
+
 	show(options) {
 
 		if(!options || !options.el)
@@ -145,7 +150,7 @@ export class Popup extends DOMObject {
 		let elements = this.elements;
 		let isValid = true,
 			data = {}
-
+		let button;
 		if(elements) {
 			for(let i = 0; i < elements.length; i++) {
 				let element = elements[i];
@@ -154,13 +159,30 @@ export class Popup extends DOMObject {
 					data[element.data.name] = element.getValue();
 					isValid = element.validate() && isValid;
 				}
+				if(element instanceof Button) {
+					button = element;
+				}
 			}
 		}
 
 		if(isValid) {
+			button.el.querySelector('input').classList.add('sendsay-loading');
 			this.trigger('sendsay-success', data);
+
 		}
 		return isValid;
+	}
+
+	onSubmitFail() {
+		let elements = this.elements;
+		if(elements) {
+			for(let i = 0; i < elements.length; i++) {
+				let element = elements[i];
+				if(element instanceof Button) {
+					element.el.querySelector('input').classList.remove('sendsay-loading');
+				}
+			}
+		}
 	}
 
 	showErrorFor(qid, message) {
@@ -174,7 +196,7 @@ export class Popup extends DOMObject {
 	}
 
 	handleWrapperClick() {
-		this.hide();
+		//this.hide();
 	}
 
 	handlePopupClick(event) {

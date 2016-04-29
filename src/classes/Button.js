@@ -59,4 +59,5 @@ export class Button extends DOMObject {
 
 		return this.convertStyles(style)
 	}
+
 }

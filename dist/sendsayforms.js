@@ -191,17 +191,15 @@ var Connector = exports.Connector = function () {
 
 			var el = document.createElement('div');
 			el.innerHTML = this.request.responseText;
-			var formBody = el.querySelector('.form__body');
-			if (formBody) {
+			var infoEls = el.querySelectorAll('#container div span');
+			var info = {
+				general: infoEls[0] && infoEls[0].innerHTML && infoEls[0].innerHTML.trim(),
+				specific: infoEls[1] && infoEls[1].innerHTML && infoEls[1].innerHTML.trim()
+			};
+			if (!info.general || info.general === 'Благодарим за заполнение формы') {
 				return true;
 			} else {
-				var errors = el.querySelectorAll('#container div span');
-				if (errors != null) {
-					this.error = {
-						general: errors[0] && errors[0].innerHTML && errors[0].innerHTML.trim(),
-						specific: errors[1] && errors[1].innerHTML && errors[1].innerHTML.trim()
-					};
-				};
+				this.error = info;
 				return false;
 			}
 		}
@@ -507,7 +505,7 @@ var Form = exports.Form = function () {
 	}, {
 		key: 'handleFailSubmit',
 		value: function handleFailSubmit() {
-			console.log('tset');
+			this.domObj.onSubmitFail();
 			var error = this.connector.error;
 			if (error.specific && error.specific === 'Неправильно заполнено поле email.') this.domObj.showErrorFor('_member_email', 'Неверный формат email адреса');
 		}
@@ -713,6 +711,9 @@ var Popup = exports.Popup = function (_DOMObject) {
 			this.render();
 		}
 	}, {
+		key: "onSubmitFail",
+		value: function onSubmitFail() {}
+	}, {
 		key: "show",
 		value: function show(options) {
 
@@ -732,7 +733,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 			var elements = this.elements;
 			var isValid = true,
 			    data = {};
-
+			var button = void 0;
 			if (elements) {
 				for (var i = 0; i < elements.length; i++) {
 					var element = elements[i];
@@ -741,13 +742,30 @@ var Popup = exports.Popup = function (_DOMObject) {
 						data[element.data.name] = element.getValue();
 						isValid = element.validate() && isValid;
 					}
+					if (element instanceof _Button.Button) {
+						button = element;
+					}
 				}
 			}
 
 			if (isValid) {
+				button.el.querySelector('input').classList.add('sendsay-loading');
 				this.trigger('sendsay-success', data);
 			}
 			return isValid;
+		}
+	}, {
+		key: "onSubmitFail",
+		value: function onSubmitFail() {
+			var elements = this.elements;
+			if (elements) {
+				for (var i = 0; i < elements.length; i++) {
+					var element = elements[i];
+					if (element instanceof _Button.Button) {
+						element.el.querySelector('input').classList.remove('sendsay-loading');
+					}
+				}
+			}
 		}
 	}, {
 		key: "showErrorFor",
@@ -763,7 +781,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 	}, {
 		key: "handleWrapperClick",
 		value: function handleWrapperClick() {
-			this.hide();
+			//this.hide();
 		}
 	}, {
 		key: "handlePopupClick",

@@ -94,17 +94,15 @@ export class Connector {
 
 		let el = document.createElement('div');
 		el.innerHTML = this.request.responseText;
-		let formBody = el.querySelector('.form__body');
-		if(formBody) {
+		let infoEls = el.querySelectorAll('#container div span');
+		let info = {
+					general: infoEls[0] && infoEls[0].innerHTML && infoEls[0].innerHTML.trim(),
+					specific: infoEls[1] && infoEls[1].innerHTML && infoEls[1].innerHTML.trim()
+				}
+		if(!info.general || info.general === 'Благодарим за заполнение формы') {
 			return true;
 		} else {
-			let errors = el.querySelectorAll('#container div span');
-			if(errors != null) {
-				this.error = {
-					general: errors[0] && errors[0].innerHTML && errors[0].innerHTML.trim(),
-					specific: errors[1] && errors[1].innerHTML && errors[1].innerHTML.trim()
-				}
-			};
+			this.error =info;
 			return false; 
 		}
 
