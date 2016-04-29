@@ -83,6 +83,7 @@ export class Popup extends DOMObject {
 
 	activate(options) {
 		this.demo = options && options.demo;
+		this.ignoreKeyboard = options && options.ignoreKeyboard;
 		if(this.data.active) {
 			if(!options || !options.instant) {
 				setTimeout(this.show.bind(this, options), this.data.displaySettings && this.data.displaySettings.delay || 1000 );
@@ -190,6 +191,7 @@ export class Popup extends DOMObject {
 	}
 
 	handleKeyPress(event) {
+		if(!this.ignoreKeyboard)
 		switch(event.keyCode) {
 			case 13: //Enter
 				if(this.isSubmitted)
