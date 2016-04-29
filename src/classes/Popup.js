@@ -12,6 +12,7 @@ export class Popup extends DOMObject {
 		super(data, parent);
 		this.template = '<div class = "sendsay-wrapper [%wrapperClasses%]">' +
 						'<div class = "[%classes%]" style="[%style%]"">' +
+						'<div class = "sendsay-close">×</div>' +
 						'' +
 						'</div>' +
 						'</div>';
@@ -57,6 +58,7 @@ export class Popup extends DOMObject {
 		if(this.el) {
 			this.el.addEventListener('click', this.handleWrapperClick.bind(this));
 			this.el.querySelector('.sendsay-popup').addEventListener('click', this.handlePopupClick.bind(this));
+			this.el.querySelector('.sendsay-close').addEventListener('click', this.handleClose.bind(this));
 			document.addEventListener('keyup', this.handleKeyPress.bind(this));
 		}
 	}
@@ -214,6 +216,7 @@ export class Popup extends DOMObject {
 
 	handleKeyPress(event) {
 		if(!this.ignoreKeyboard)
+			return;
 		switch(event.keyCode) {
 			case 13: //Enter
 				if(this.isSubmitted)
@@ -227,6 +230,10 @@ export class Popup extends DOMObject {
 				this.hide();
 				break;
 		}
+	}
+
+	handleClose(event) {
+		this.hide();
 	}
 }
 

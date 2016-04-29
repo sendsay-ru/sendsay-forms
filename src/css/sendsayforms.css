@@ -122,7 +122,7 @@
 }
 
 .sendsay-button input {
-	padding: 5px 10px;
+	padding: 10px 10px;
 	cursor: pointer;
     font-weight: normal;
     position: relative;
@@ -152,6 +152,15 @@
     margin-bottom: 20px;
 }
 
+
+.sendsay-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 20px;
+}
 @keyframes sendsay-wrapper-animate {
     from {
         opacity: 0;
