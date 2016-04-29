@@ -595,7 +595,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 
 		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Popup).call(this, data, parent));
 
-		_this.template = '<div class = "sendsay-wrapper [%wrapperClasses%]">' + '<div class = "[%classes%]" style="[%style%]"">' + '' + '</div>' + '</div>';
+		_this.template = '<div class = "sendsay-wrapper [%wrapperClasses%]">' + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '' + '</div>' + '</div>';
 
 		_this.baseClass = 'sendsay-popup';
 		_this.applicableStyles = {
@@ -640,6 +640,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 			if (this.el) {
 				this.el.addEventListener('click', this.handleWrapperClick.bind(this));
 				this.el.querySelector('.sendsay-popup').addEventListener('click', this.handlePopupClick.bind(this));
+				this.el.querySelector('.sendsay-close').addEventListener('click', this.handleClose.bind(this));
 				document.addEventListener('keyup', this.handleKeyPress.bind(this));
 			}
 		}
@@ -798,7 +799,8 @@ var Popup = exports.Popup = function (_DOMObject) {
 	}, {
 		key: "handleKeyPress",
 		value: function handleKeyPress(event) {
-			if (!this.ignoreKeyboard) switch (event.keyCode) {
+			if (!this.ignoreKeyboard) return;
+			switch (event.keyCode) {
 				case 13:
 					//Enter
 					if (this.isSubmitted) this.hide();else {
@@ -810,6 +812,11 @@ var Popup = exports.Popup = function (_DOMObject) {
 					this.hide();
 					break;
 			}
+		}
+	}, {
+		key: "handleClose",
+		value: function handleClose(event) {
+			this.hide();
 		}
 	}]);
 
