@@ -44,7 +44,7 @@ export class Connector {
 			elements: [
 				{
 					type: 'text',
-					text: '<div style="font-size: 20px; padding-bottom: 10px; font-weight: bold;">Подписка на рассылку</div>'
+					text: '<div style="font-size: 16px; padding-bottom: 10px; font-weight: bold;">Подписка на рассылку</div>'
 				}
 			]
 		};

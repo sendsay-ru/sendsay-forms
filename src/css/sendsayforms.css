@@ -1,3 +1,6 @@
+
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,300,400,700);
+
 @-webkit-keyframes sendsay-progress-bar-stripes {
     from {
         background-position: 40px 0;
@@ -15,6 +18,8 @@
         background-position: 0 0;
     }
 }
+
+
 
 .sendsay-loading {
     -webkit-animation: sendsay-progress-bar-stripes 2s linear infinite;
@@ -38,6 +43,7 @@
     animation-duration: 300ms;
     animation-timing-function: cubic-bezier(.175,.885,.32,1.275);
     text-align: left;
+    font-family: 'Open Sans', 'Arial', sans-serif;
 }
 
 .sendsay-wrapper.sendsay-noanimation,
