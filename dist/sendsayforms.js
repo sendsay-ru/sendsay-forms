@@ -109,16 +109,33 @@ var Connector = exports.Connector = function () {
 	}
 
 	_createClass(Connector, [{
-		key: 'handleLoadSuccess',
-		value: function handleLoadSuccess() {
-
-			var rawJson = this.request.responseText;
-			var json = JSON.parse(rawJson);
-			this.transformAnswer(json);
+		key: 'promiseHandler',
+		value: function promiseHandler(resolve, reject) {
+			var self = this;
+			this.request.onreadystatechange = function () {
+				if (self.request.readyState == 4) {
+					self.pending = false;
+					var success = true;
+					if (self.request.onReady) success = self.request.onReady.apply(self);
+					if (self.request.status == 200 && success) {
+						resolve(self.data);
+					} else {
+						reject(false);
+					}
+				}
+			};
+			this.pending = true;
+			this.request.send(this.params);
 		}
 	}, {
-		key: 'handleLoadFail',
-		value: function handleLoadFail() {}
+		key: 'load',
+		value: function load() {
+			if (this.pending) return;
+			this.request = new XMLHttpRequest();
+			this.request.open('GET', this.url, true);
+			this.request.setRequestHeader('Content-Type', 'application/json');
+			return new Promise(this.promiseHandler.bind(this)).then(this.handleLoadSuccess.bind(this), this.handleLoadFail.bind(this));
+		}
 	}, {
 		key: 'transformAnswer',
 		value: function transformAnswer(json) {
@@ -156,15 +173,6 @@ var Connector = exports.Connector = function () {
 			if (json.name) this.data.title = json.name;
 		}
 	}, {
-		key: 'load',
-		value: function load() {
-			if (this.pending) return;
-			this.request = new XMLHttpRequest();
-			this.request.open('GET', this.url, true);
-			this.request.setRequestHeader('Content-Type', 'application/json');
-			return new Promise(this.promiseHandler.bind(this)).then(this.handleLoadSuccess.bind(this), this.handleLoadFail.bind(this));
-		}
-	}, {
 		key: 'submit',
 		value: function submit(params) {
 			if (this.pending) return;
@@ -176,25 +184,6 @@ var Connector = exports.Connector = function () {
 			this.params = JSON.stringify(params);
 
 			return new Promise(this.promiseHandler.bind(this));
-		}
-	}, {
-		key: 'promiseHandler',
-		value: function promiseHandler(resolve, reject) {
-			var self = this;
-			this.request.onreadystatechange = function () {
-				if (self.request.readyState == 4) {
-					self.pending = false;
-					var success = true;
-					if (self.request.onReady) success = self.request.onReady.apply(self);
-					if (self.request.status == 200 && success) {
-						resolve(self.data);
-					} else {
-						reject(false);
-					}
-				}
-			};
-			this.pending = true;
-			this.request.send(this.params);
 		}
 	}, {
 		key: 'handleSubmitResult',
@@ -216,6 +205,17 @@ var Connector = exports.Connector = function () {
 				return false;
 			}
 		}
+	}, {
+		key: 'handleLoadSuccess',
+		value: function handleLoadSuccess() {
+
+			var rawJson = this.request.responseText;
+			var json = JSON.parse(rawJson);
+			this.transformAnswer(json);
+		}
+	}, {
+		key: 'handleLoadFail',
+		value: function handleLoadFail() {}
 	}]);
 
 	return Connector;
@@ -672,6 +672,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 		key: "activate",
 		value: function activate(options) {
 			this.demo = options && options.demo;
+			this.ignoreKeyboard = options && options.ignoreKeyboard;
 			if (this.data.active) {
 				if (!options || !options.instant) {
 					setTimeout(this.show.bind(this, options), this.data.displaySettings && this.data.displaySettings.delay || 1000);
@@ -779,7 +780,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 	}, {
 		key: "handleKeyPress",
 		value: function handleKeyPress(event) {
-			switch (event.keyCode) {
+			if (!this.ignoreKeyboard) switch (event.keyCode) {
 				case 13:
 					//Enter
 					if (this.isSubmitted) this.hide();else {
@@ -930,13 +931,37 @@ var _Form = require("./classes/Form.js");
 (function () {
 
 	var activatePopup = function activatePopup(url, options) {
-		var connector = new _Connector.Connector(url);
-		var form = new _Form.Form(_Popup.Popup, connector);
+		loadCss();
+		var onLoad = function onLoad() {
+			var connector = new _Connector.Connector(url);
+			var form = new _Form.Form(_Popup.Popup, connector);
+			document.removeEventListener('load', onLoad);
+		};
+		if (document.readyState === "complete") {
+			onLoad();
+		} else {
+			document.addEventListener('load', onLoad);
+		}
 	};
 
 	var showPopup = function showPopup(data, options) {
+		loadCss();
 		var popup = new _Popup.Popup(data);
 		popup.activate(options);
+	};
+
+	var loadCss = function loadCss() {
+		var cssId = '_sendsay-styles'; // you could encode the css path itself to generate id..
+		if (!document.getElementById(cssId)) {
+			var head = document.getElementsByTagName('head')[0];
+			var link = document.createElement('link');
+			link.id = cssId;
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = 'https://0d46bfd887bfcf061429f33315cd9c9f4c9dc35a.googledrive.com/host/0B8TfwS63_P7-RkRrWnBHRG92UzA/sendsayforms.css';
+			link.media = 'all';
+			head.appendChild(link);
+		}
 	};
 	window.SENDSAY = {
 		activatePopup: activatePopup,
