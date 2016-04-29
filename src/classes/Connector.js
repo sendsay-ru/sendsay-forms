@@ -4,16 +4,38 @@ export class Connector {
 		this.url = url;
 	}
 
-	handleLoadSuccess() {
 
-		var rawJson = this.request.responseText; 
-		var json = JSON.parse(rawJson);
-		this.transformAnswer(json);
+	promiseHandler(resolve, reject) {
+		var self = this;
+		this.request.onreadystatechange = function() {
+			if(self.request.readyState == 4) {
+				self.pending = false;
+				var success = true;
+				if(self.request.onReady)
+					success = self.request.onReady.apply(self);
+				if(self.request.status == 200 && success ) {
+					resolve(self.data);
+				} else {
+					reject(false);
+				}
+			}
+		}
+		this.pending = true;
+		this.request.send(this.params);
 	}
 
-	handleLoadFail() {
 
+	load() {
+		if(this.pending)
+			return;
+		this.request = new XMLHttpRequest();
+		this.request.open('GET', this.url, true);
+		this.request.setRequestHeader('Content-Type', 'application/json');
+		return (new Promise(this.promiseHandler.bind(this))).then(this.handleLoadSuccess.bind(this),
+																	this.handleLoadFail.bind(this));
 	}
+
+
 
 	transformAnswer(json) {
 
@@ -54,17 +76,6 @@ export class Connector {
 
 	}
 
-
-	load() {
-		if(this.pending)
-			return;
-		this.request = new XMLHttpRequest();
-		this.request.open('GET', this.url, true);
-		this.request.setRequestHeader('Content-Type', 'application/json');
-		return (new Promise(this.promiseHandler.bind(this))).then(this.handleLoadSuccess.bind(this),
-																	this.handleLoadFail.bind(this));
-	}
-
 	submit(params) {
 		if(this.pending)
 			return;
@@ -77,25 +88,6 @@ export class Connector {
 
 
 		return (new Promise(this.promiseHandler.bind(this)));
-	}
-
-	promiseHandler(resolve, reject) {
-		var self = this;
-		this.request.onreadystatechange = function() {
-			if(self.request.readyState == 4) {
-				self.pending = false;
-				var success = true;
-				if(self.request.onReady)
-					success = self.request.onReady.apply(self);
-				if(self.request.status == 200 && success ) {
-					resolve(self.data);
-				} else {
-					reject(false);
-				}
-			}
-		}
-		this.pending = true;
-		this.request.send(this.params);
 	}
 
 	handleSubmitResult() {
@@ -115,6 +107,17 @@ export class Connector {
 			};
 			return false; 
 		}
+
+	}
+
+	handleLoadSuccess() {
+
+		var rawJson = this.request.responseText; 
+		var json = JSON.parse(rawJson);
+		this.transformAnswer(json);
+	}
+
+	handleLoadFail() {
 
 	}
 }

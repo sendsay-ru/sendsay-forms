@@ -111,7 +111,8 @@ var Connector = exports.Connector = function () {
 	_createClass(Connector, [{
 		key: 'handleLoadSuccess',
 		value: function handleLoadSuccess() {
-			var rawJson = '{' + '"fields": {' + '"q43": {' + '"type": "field",' + '"subtype": "int",' + '"name": "First field",' + '"questionnaire": "SomeQuest"' + '},' + '"q46": {' + '"type": "free",' + '"name": "Second field",' + '"questionnaire": "SomeQuest"' + '},' + '"q48": {' + '"type": "number",' + '"name": "Third field",' + '"questionnaire": "SomeQuest"' + '}' + '},' + '"name": "Important form",' + '"active": true' + '}';
+
+			var rawJson = this.request.responseText;
 			var json = JSON.parse(rawJson);
 			this.transformAnswer(json);
 		}
@@ -121,28 +122,35 @@ var Connector = exports.Connector = function () {
 	}, {
 		key: 'transformAnswer',
 		value: function transformAnswer(json) {
+
 			this.data = {
-				backgroundColor: '#000',
-				textColor: '#fff',
-				endDialogMessage: 'Раз-два-три'
+				endDialogMessage: 'Спасибо за заполнение формы!',
+				elements: [{
+					type: 'text',
+					text: '<div style="font-size: 20px; padding-bottom: 10px; font-weight: bold;">Подписка на рассылку</div>'
+				}]
 			};
-			this.data.elements = [];
-			this.data.active = json.active || false;
+
+			this.data.active = json.state == '1' || false;
 			if (json.fields) {
 				var fields = json.fields;
 				for (var key in fields) {
 					var field = fields[key];
-					this.data.elements.push({
-						type: field.type,
-						name: '_' + field.questionnaire + '_' + key,
-						label: field.name,
-						subtype: field.subtype
-					});
+					if (field.type !== 'submit') {
+						this.data.elements.push({
+							type: field.type == 'text' ? 'field' : field.type,
+							qid: field.name,
+							name: field.name,
+							label: field.label,
+							subtype: field['data_type'],
+							required: field.required == '1'
+						});
+					}
 				}
 				this.data.elements.push({
 					type: 'button',
-					text: 'submit',
-					backgroundColor: '#f00'
+					text: 'Подписаться',
+					align: 'justify'
 				});
 			}
 			if (json.name) this.data.title = json.name;
@@ -150,23 +158,22 @@ var Connector = exports.Connector = function () {
 	}, {
 		key: 'load',
 		value: function load() {
+			if (this.pending) return;
 			this.request = new XMLHttpRequest();
-			this.request.open('GET', this.url + '?render=json', true);
+			this.request.open('GET', this.url, true);
 			this.request.setRequestHeader('Content-Type', 'application/json');
 			return new Promise(this.promiseHandler.bind(this)).then(this.handleLoadSuccess.bind(this), this.handleLoadFail.bind(this));
 		}
 	}, {
 		key: 'submit',
 		value: function submit(params) {
+			if (this.pending) return;
 			this.request = new XMLHttpRequest();
 			this.request.open('POST', this.url, true);
 			this.request.setRequestHeader('Content-Type', 'application/json');
-			this.params = '';
-			for (var key in params) {
-				if (this.params === '') this.params += '&';
-				this.params += key + '=' + params[key];
-			}
-			this.params = encodeURIComponent(this.params);
+			this.request.onReady = this.handleSubmitResult;
+
+			this.params = JSON.stringify(params);
 
 			return new Promise(this.promiseHandler.bind(this));
 		}
@@ -176,17 +183,38 @@ var Connector = exports.Connector = function () {
 			var self = this;
 			this.request.onreadystatechange = function () {
 				if (self.request.readyState == 4) {
-
-					if (self.request.status == 200) {
-
-						resolve(this.data);
+					self.pending = false;
+					var success = true;
+					if (self.request.onReady) success = self.request.onReady.apply(self);
+					if (self.request.status == 200 && success) {
+						resolve(self.data);
 					} else {
-						// reject(false);
-						resolve(this.data);
+						reject(false);
 					}
 				}
 			};
+			this.pending = true;
 			this.request.send(this.params);
+		}
+	}, {
+		key: 'handleSubmitResult',
+		value: function handleSubmitResult() {
+
+			var el = document.createElement('div');
+			el.innerHTML = this.request.responseText;
+			var formBody = el.querySelector('.form__body');
+			if (formBody) {
+				return true;
+			} else {
+				var errors = el.querySelectorAll('#container div span');
+				if (errors != null) {
+					this.error = {
+						general: errors[0] && errors[0].innerHTML && errors[0].innerHTML.trim(),
+						specific: errors[1] && errors[1].innerHTML && errors[1].innerHTML.trim()
+					};
+				};
+				return false;
+			}
 		}
 	}]);
 
@@ -361,7 +389,7 @@ var Field = exports.Field = function (_DOMObject) {
 
 		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Field).call(this, data, parent));
 
-		_this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%name%]" class = "sendsay-label">[%label%]</label>' + '<input name="[%qid%]" placeholder="[%placeholder%]" type="text" class="sendsay-input"/>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
+		_this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + '<input name="[%qid%]" placeholder="[%placeholder%]" value="[%value%]" type="text" class="sendsay-input"/>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
 		_this.baseClass = 'sendsay-field';
 		_this.render();
 		return _this;
@@ -381,6 +409,7 @@ var Field = exports.Field = function (_DOMObject) {
 			settings.label = data.label || data.name || '';
 			settings.placeholder = data.placeholder || '';
 			settings.qid = data.qid || data.name || '';
+			settings.value = data.default || '';
 			if (data.hidden) {
 				settings.classes += ' sendsay-field-hidden';
 			}
@@ -447,12 +476,14 @@ var Form = exports.Form = function () {
 
 		this.domConstructor = domConstructor;
 		this.connector = connector;
-		connector.load().then(this.handleSuccess.bind(this), this.handleFail.bind(this));
+		var promise = connector.load();
+		if (promise) promise.then(this.handleSuccess.bind(this), this.handleFail.bind(this));
 	}
 
 	_createClass(Form, [{
 		key: 'handleSuccess',
 		value: function handleSuccess() {
+
 			this.domObj = new this.domConstructor(this.connector.data);
 			this.domObj.activate();
 			this.domObj.el.addEventListener('sendsay-success', this.handleSubmit.bind(this));
@@ -465,18 +496,20 @@ var Form = exports.Form = function () {
 		value: function handleSubmit(event) {
 
 			var params = event.detail.extra;
-			this.connector.submit(params).then(this.handleSuccessSubmit.bind(this), this.handleFailSubmit.bind(this));
+			var promise = this.connector.submit(params);
+			if (promise) promise.then(this.handleSuccessSubmit.bind(this), this.handleFailSubmit.bind(this));
 		}
 	}, {
 		key: 'handleSuccessSubmit',
 		value: function handleSuccessSubmit() {
-			console.log('Success submit');
 			this.domObj.showEndDialog();
 		}
 	}, {
 		key: 'handleFailSubmit',
 		value: function handleFailSubmit() {
-			console.log('Fail submit');
+			console.log('tset');
+			var error = this.connector.error;
+			if (error.specific && error.specific === 'Неправильно заполнено поле email.') this.domObj.showErrorFor('_member_email', 'Неверный формат email адреса');
 		}
 	}]);
 
@@ -576,14 +609,14 @@ var Popup = exports.Popup = function (_DOMObject) {
 			'padding-right': { param: 'paddingRight', postfix: 'px' }
 		};
 		_this.makeEndDialogData();
-		if (data.active) _this.render();
+		_this.render();
 		return _this;
 	}
 
 	_createClass(Popup, [{
 		key: "build",
 		value: function build() {
-			if (!this.data.active) return false;
+
 			_get(Object.getPrototypeOf(Popup.prototype), "build", this).call(this);
 			this.elements = [];
 			var factory = new ElementFactory();
@@ -674,6 +707,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 	}, {
 		key: "showEndDialog",
 		value: function showEndDialog() {
+			this.isSubmitted = true;
 			this.data = this.submitData;
 			this.render();
 		}
@@ -708,11 +742,22 @@ var Popup = exports.Popup = function (_DOMObject) {
 					}
 				}
 			}
-			this.isSubmitted = isValid;
+
 			if (isValid) {
 				this.trigger('sendsay-success', data);
 			}
 			return isValid;
+		}
+	}, {
+		key: "showErrorFor",
+		value: function showErrorFor(qid, message) {
+			var elements = this.elements;
+			for (var i = 0; i < elements.length; i++) {
+				var element = elements[i];
+				if (element.data.qid == qid) {
+					element.showErrorMessage(message);
+				}
+			}
 		}
 	}, {
 		key: "handleWrapperClick",
