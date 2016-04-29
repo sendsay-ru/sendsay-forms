@@ -10,12 +10,13 @@ import {Form} from "./classes/Form.js";
 		var onLoad = function() {
 			var connector = new Connector(url);
 			var form = new Form(Popup, connector);
-			document.removeEventListener('load', onLoad);
+			window.removeEventListener('load', onLoad);
 		};
+
 		if (document.readyState === "complete") {
 			onLoad();
 		} else {
-			document.addEventListener('load', onLoad)
+			window.addEventListener('load', onLoad)
 		}
 	};
 
