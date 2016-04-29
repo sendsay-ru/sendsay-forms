@@ -90,7 +90,7 @@ var Button = exports.Button = function (_DOMObject) {
 	return Button;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":3}],2:[function(require,module,exports){
+},{"./DOMObject.js":4}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -220,6 +220,84 @@ var Connector = exports.Connector = function () {
 }();
 
 },{}],3:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Cookies = exports.Cookies = function () {
+    function Cookies() {
+        _classCallCheck(this, Cookies);
+    }
+
+    _createClass(Cookies, null, [{
+        key: 'get',
+        value: function get(sKey) {
+            if (!sKey) {
+                return null;
+            }
+            return decodeURIComponent(document.cookie.replace(new RegExp('(?:(?:^|.*;)\\s*' + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, '\\$&') + '\\s*\\=\\s*([^;]*).*$)|^.*$'), '$1')) || null;
+        }
+    }, {
+        key: 'set',
+        value: function set(sKey, sValue, vEnd, sPath, sDomain, bSecure) {
+            if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) {
+                return false;
+            }
+            var sExpires = '';
+            if (vEnd) {
+                switch (vEnd.constructor) {
+                    case Number:
+                        sExpires = vEnd === Infinity ? '; expires=Fri, 31 Dec 9999 23:59:59 GMT' : '; max-age=' + vEnd;
+                        break;
+                    case String:
+                        sExpires = '; expires=' + vEnd;
+                        break;
+                    case Date:
+                        sExpires = '; expires=' + vEnd.toUTCString();
+                        break;
+                }
+            }
+            document.cookie = encodeURIComponent(sKey) + '=' + encodeURIComponent(sValue) + sExpires + (sDomain ? '; domain=' + sDomain : '') + (sPath ? '; path=' + sPath : '') + (bSecure ? '; secure' : '');
+            return true;
+        }
+    }, {
+        key: 'remove',
+        value: function remove(sKey, sPath, sDomain) {
+            if (!this.has(sKey)) {
+                return false;
+            }
+            document.cookie = encodeURIComponent(sKey) + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT' + (sDomain ? '; domain=' + sDomain : '') + (sPath ? '; path=' + sPath : '');
+            return true;
+        }
+    }, {
+        key: 'has',
+        value: function has(sKey) {
+            if (!sKey) {
+                return false;
+            }
+            return new RegExp('(?:^|;\\s*)' + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, '\\$&') + '\\s*\\=').test(document.cookie);
+        }
+    }, {
+        key: 'keys',
+        value: function keys() {
+            var aKeys = document.cookie.replace(/((?:^|\s*;)[^\=]+)(?=;|$)|^\s*|\s*(?:\=[^;]*)?(?:\1|$)/g, '').split(/\s*(?:\=[^;]*)?;\s*/);
+            for (var nLen = aKeys.length, nIdx = 0; nIdx < nLen; nIdx++) {
+                aKeys[nIdx] = decodeURIComponent(aKeys[nIdx]);
+            }
+            return aKeys;
+        }
+    }]);
+
+    return Cookies;
+}();
+
+},{}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -359,7 +437,7 @@ var DOMObject = exports.DOMObject = function () {
 	return DOMObject;
 }();
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -457,14 +535,17 @@ var Field = exports.Field = function (_DOMObject) {
 	return Field;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":3}],5:[function(require,module,exports){
+},{"./DOMObject.js":4}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+exports.Form = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Cookies = require('./Cookies.js');
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -472,10 +553,12 @@ var Form = exports.Form = function () {
 	function Form(domConstructor, connector) {
 		_classCallCheck(this, Form);
 
-		this.domConstructor = domConstructor;
-		this.connector = connector;
-		var promise = connector.load();
-		if (promise) promise.then(this.handleSuccess.bind(this), this.handleFail.bind(this));
+		if (!_Cookies.Cookies.has('__sendsay_forms')) {
+			this.domConstructor = domConstructor;
+			this.connector = connector;
+			var promise = connector.load();
+			if (promise) promise.then(this.handleSuccess.bind(this), this.handleFail.bind(this));
+		}
 	}
 
 	_createClass(Form, [{
@@ -514,7 +597,7 @@ var Form = exports.Form = function () {
 	return Form;
 }();
 
-},{}],6:[function(require,module,exports){
+},{"./Cookies.js":3}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -559,7 +642,7 @@ var NumberField = exports.NumberField = function (_Field) {
 	return NumberField;
 }(_Field2.Field);
 
-},{"./Field.js":4}],7:[function(require,module,exports){
+},{"./Field.js":5}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -580,6 +663,8 @@ var _NumberField = require("./NumberField.js");
 var _Button = require("./Button.js");
 
 var _Text = require("./Text.js");
+
+var _Cookies = require("./Cookies.js");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -717,7 +802,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 	}, {
 		key: "show",
 		value: function show(options) {
-
+			_Cookies.Cookies.set('__sendsay_forms', 'true', 60 * 60);
 			if (!options || !options.el) document.querySelector('body').appendChild(this.el);else {
 				this.el.style.position = 'absolute';
 				options.el.appendChild(this.el);
@@ -875,7 +960,7 @@ var ElementFactory = function (_Factory) {
 	return ElementFactory;
 }(Factory);
 
-},{"./Button.js":1,"./DOMObject.js":3,"./Field.js":4,"./NumberField.js":6,"./Text.js":8}],8:[function(require,module,exports){
+},{"./Button.js":1,"./Cookies.js":3,"./DOMObject.js":4,"./Field.js":5,"./NumberField.js":7,"./Text.js":9}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -944,7 +1029,7 @@ var Text = exports.Text = function (_DOMObject) {
 	return Text;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":3}],9:[function(require,module,exports){
+},{"./DOMObject.js":4}],10:[function(require,module,exports){
 "use strict";
 
 var _Popup = require("./classes/Popup.js");
@@ -984,7 +1069,7 @@ var _Form = require("./classes/Form.js");
 			link.id = cssId;
 			link.rel = 'stylesheet';
 			link.type = 'text/css';
-			link.href = 'https://0d46bfd887bfcf061429f33315cd9c9f4c9dc35a.googledrive.com/host/0B8TfwS63_P7-RkRrWnBHRG92UzA/sendsayforms.css';
+			link.href = 'https://dl.dropbox.com/s/hq9cw3paj4tcube/sendsayforms.css';
 			link.media = 'all';
 			head.appendChild(link);
 		}
@@ -995,4 +1080,4 @@ var _Form = require("./classes/Form.js");
 	};
 })();
 
-},{"./classes/Connector.js":2,"./classes/Form.js":5,"./classes/Popup.js":7}]},{},[9,1,2,3,4,5,6,7,8]);
+},{"./classes/Connector.js":2,"./classes/Form.js":6,"./classes/Popup.js":8}]},{},[10,1,2,3,4,5,6,7,8,9]);

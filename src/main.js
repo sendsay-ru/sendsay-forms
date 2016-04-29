@@ -35,7 +35,7 @@ import {Form} from "./classes/Form.js";
 		    link.id   = cssId;
 		    link.rel  = 'stylesheet';
 		    link.type = 'text/css';
-		    link.href = 'https://0d46bfd887bfcf061429f33315cd9c9f4c9dc35a.googledrive.com/host/0B8TfwS63_P7-RkRrWnBHRG92UzA/sendsayforms.css';
+		    link.href = 'https://dl.dropbox.com/s/hq9cw3paj4tcube/sendsayforms.css';
 		    link.media = 'all';
 		    head.appendChild(link);
 		}

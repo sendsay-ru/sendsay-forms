@@ -1,11 +1,15 @@
+import {Cookies} from "./Cookies.js";
+
 export class Form {
 
 	constructor(domConstructor, connector) {
-		this.domConstructor = domConstructor;
-		this.connector = connector;
-		let promise = connector.load();
-		if(promise)
-			promise.then(this.handleSuccess.bind(this), this.handleFail.bind(this));
+		if(!Cookies.has('__sendsay_forms')) {
+			this.domConstructor = domConstructor;
+			this.connector = connector;
+			let promise = connector.load();
+			if(promise)
+				promise.then(this.handleSuccess.bind(this), this.handleFail.bind(this));
+		}
 	}
 
 	handleSuccess() {

@@ -3,7 +3,7 @@ import {Field} from "./Field.js";
 import {NumberField} from "./NumberField.js";
 import {Button} from "./Button.js";
 import {Text} from "./Text.js";
-
+import {Cookies} from "./Cookies.js";
 
 
 export class Popup extends DOMObject {
@@ -133,7 +133,7 @@ export class Popup extends DOMObject {
 	}
 
 	show(options) {
-
+		Cookies.set('__sendsay_forms', 'true', 60*60);
 		if(!options || !options.el)
 			document.querySelector('body').appendChild(this.el);
 		else {
