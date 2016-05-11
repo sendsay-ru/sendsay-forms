@@ -4,6 +4,9 @@ import {DOMObject} from "./DOMObject.js";
 export class Text extends DOMObject {
 	constructor(data, parent) {
 		super(data, parent);
+	}
+
+	initialize() {
 		this.template = '<div class = "sendsay-text" style="[%style%]"">' +
 							'[%text%]' + 
 						'</div>';
@@ -16,8 +19,7 @@ export class Text extends DOMObject {
 			'padding-left': { param: 'paddingLeft', postfix: 'px'},
 			'padding-right': { param: 'paddingRight', postfix: 'px'}
 
-		}
-		this.render();
+		}		
 	}
 
 	build() {

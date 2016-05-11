@@ -5,18 +5,18 @@ export class Field extends DOMObject {
 
 	constructor(data, parent) {
 		super(data, parent);
-		this.template = '<div class = "[%classes%]" style="[%style%]"">' +
-						'<label for="[%label%]" class = "sendsay-label">[%label%]</label>' +
-						'<input name="[%qid%]" placeholder="[%placeholder%]" value="[%value%]" type="text" class="sendsay-input"/>' +
-						'<div type="text" class="sendsay-error"></div>' +  
-						'</div>';
-		this.baseClass = 'sendsay-field';
-		this.render();
 	}
 
-	build() {
-		return super.build();
+	initialize() {
+		this.template = '<div class = "[%classes%]" style="[%style%]"">' +
+				'<label for="[%label%]" class = "sendsay-label">[%label%]</label>' +
+				'<input name="[%qid%]" placeholder="[%placeholder%]" value="[%value%]" type="text" class="sendsay-input"/>' +
+				'<div type="text" class="sendsay-error"></div>' +  
+				'</div>';
+		this.baseClass = 'sendsay-field';
 	}
+
+	
 	makeSettings() {
 		let data = this.data,
 			settings = super.makeSettings();
@@ -45,7 +45,7 @@ export class Field extends DOMObject {
 
 	validate() {
 		this.removeErrorMessage();
-		if(this.data.required && this.el.querySelector('input').value == '') {
+		if(this.data.required && this.getValue() == '') {
 			this.showErrorMessage("Обязательное поле")
 			return false;
 		}

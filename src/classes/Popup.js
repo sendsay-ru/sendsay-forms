@@ -3,13 +3,19 @@ import {Field} from "./Field.js";
 import {NumberField} from "./NumberField.js";
 import {Button} from "./Button.js";
 import {Text} from "./Text.js";
+import {SingleChoiseField} from "./SingleChoiseField.js";
+import {MultipleChoiseField} from "./MultipleChoiseField.js";
 import {Cookies} from "./Cookies.js";
+
 
 
 export class Popup extends DOMObject {
 
 	constructor(data, parent) {
 		super(data, parent);
+	}
+
+	initialize() {
 		this.template = '<div class = "sendsay-wrapper [%wrapperClasses%]">' +
 						'<div class = "[%classes%]" style="[%style%]"">' +
 						'<div class = "sendsay-close">×</div>' +
@@ -26,8 +32,7 @@ export class Popup extends DOMObject {
 			'padding-left': { param: 'paddingLeft', postfix: 'px'},
 			'padding-right': { param: 'paddingRight', postfix: 'px'}
 		};
-		this.makeEndDialogData();
-		this.render();
+		this.makeEndDialogData();		
 	}
 
 	build() {
@@ -158,7 +163,7 @@ export class Popup extends DOMObject {
 				let element = elements[i];
 				if(element instanceof Field ) {
 
-					data[element.data.name] = element.getValue();
+					data[element.data.qid] = element.getValue();
 					isValid = element.validate() && isValid;
 				}
 				if(element instanceof Button) {
@@ -166,7 +171,6 @@ export class Popup extends DOMObject {
 				}
 			}
 		}
-
 		if(isValid) {
 			button.el.querySelector('input').classList.add('sendsay-loading');
 			this.trigger('sendsay-success', data);
@@ -265,6 +269,10 @@ class ElementFactory extends Factory {
 				switch(data.subtype) {
 					case 'int': 
 						return new NumberField(data, parent);
+					case '1m':
+						return new SingleChoiseField(data, parent);
+					case 'nm':
+						return new MultipleChoiseField(data, parent);
 					case 'free':
 					default:
 						return new Field(data, parent);	
