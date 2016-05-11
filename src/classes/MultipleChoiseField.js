@@ -13,7 +13,7 @@ export class MultipleChoiseField extends Field {
 						'<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + 
 						'<div type="text" class="sendsay-error"></div>' + 
 						'</div>';
-		this.curValues = this.data.default;
+		this.curValues = this.data.default || [];
 		this.handleChangeValue = this.handleChangeValue.bind(this);		
 	}
 

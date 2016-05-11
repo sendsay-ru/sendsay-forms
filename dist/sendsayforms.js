@@ -739,7 +739,7 @@ var MultipleChoiseField = exports.MultipleChoiseField = function (_Field) {
 		key: "initialize",
 		value: function initialize() {
 			this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
-			this.curValues = this.data.default;
+			this.curValues = this.data.default || [];
 			this.handleChangeValue = this.handleChangeValue.bind(this);
 		}
 	}, {
