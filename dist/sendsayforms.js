@@ -24,22 +24,23 @@ var Button = exports.Button = function (_DOMObject) {
 	function Button(data, parent) {
 		_classCallCheck(this, Button);
 
-		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Button).call(this, data, parent));
-
-		_this.template = '<div class = "[%classes%]" style="[%wrapperstyle%]">' + '<input type="button"  value="[%text%]"  style="[%style%]" />' + '</div>';
-
-		_this.baseClass = 'sendsay-button';
-		_this.applicableStyles = {
-			'background-color': { param: 'backgroundColor' },
-			'border-radius': { param: 'borderRadius', postfix: 'px' },
-			'color': { param: 'textColor' },
-			'line-height': { param: 'lineHeighFt', default: 'normal' }
-		};
-		_this.render();
-		return _this;
+		return _possibleConstructorReturn(this, Object.getPrototypeOf(Button).call(this, data, parent));
 	}
 
 	_createClass(Button, [{
+		key: 'initialize',
+		value: function initialize() {
+			this.template = '<div class = "[%classes%]" style="[%wrapperstyle%]">' + '<input type="button"  value="[%text%]"  style="[%style%]" />' + '</div>';
+
+			this.baseClass = 'sendsay-button';
+			this.applicableStyles = {
+				'background-color': { param: 'backgroundColor' },
+				'border-radius': { param: 'borderRadius', postfix: 'px' },
+				'color': { param: 'textColor' },
+				'line-height': { param: 'lineHeighFt', default: 'normal' }
+			};
+		}
+	}, {
 		key: 'addEvents',
 		value: function addEvents() {
 			if (this.el) {
@@ -90,7 +91,111 @@ var Button = exports.Button = function (_DOMObject) {
 	return Button;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":4}],2:[function(require,module,exports){
+},{"./DOMObject.js":5}],2:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.CheckBox = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _DOMObject2 = require('./DOMObject.js');
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var CheckBox = exports.CheckBox = function (_DOMObject) {
+	_inherits(CheckBox, _DOMObject);
+
+	function CheckBox(data, parent) {
+		_classCallCheck(this, CheckBox);
+
+		return _possibleConstructorReturn(this, Object.getPrototypeOf(CheckBox).call(this, data, parent));
+	}
+
+	_createClass(CheckBox, [{
+		key: 'initialize',
+		value: function initialize() {
+			this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<input [%checked%] name="[%qid%]" value="[%value%]" type="checkbox" class="sendsay-checkinput"/>' + (this.data.label ? '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' : '') + '</div>';
+			this.baseClass = 'sendsay-checkbox';
+			this.handleChange = this.handleChange.bind(this);
+			this.handleClick = this.handleClick.bind(this);
+		}
+	}, {
+		key: 'build',
+		value: function build() {
+			return _get(Object.getPrototypeOf(CheckBox.prototype), 'build', this).call(this);
+		}
+	}, {
+		key: 'makeSettings',
+		value: function makeSettings() {
+			var data = this.data,
+			    settings = _get(Object.getPrototypeOf(CheckBox.prototype), 'makeSettings', this).call(this);
+
+			settings.label = data.label || data.name || '';
+			settings.qid = data.qid || data.name || '';
+			settings.value = data.value || '';
+			settings.checked = data.checked ? 'checked' : '';
+			if (data.hidden) {
+				settings.classes += ' sendsay-field-hidden';
+			}
+			return settings;
+		}
+	}, {
+		key: 'addEvents',
+		value: function addEvents() {
+			if (this.el) {
+				this.el.querySelector('input').addEventListener('change', this.handleChange);
+				this.el.querySelector('label').addEventListener('click', this.handleClick);
+			}
+		}
+	}, {
+		key: 'removeEvents',
+		value: function removeEvents() {
+			if (this.el) {
+				this.el.querySelector('input').removeEventListener('change', this.handleChange);
+				this.el.querySelector('label').removeEventListener('click', this.handleClick);
+			}
+		}
+	}, {
+		key: 'handleChange',
+		value: function handleChange(event) {
+			event.stopPropagation();
+			this.trigger('sendsay-change', {
+				checked: event.target.checked,
+				value: event.target.value
+			});
+		}
+	}, {
+		key: 'handleClick',
+		value: function handleClick(event) {
+
+			event.stopPropagation();
+			var input = this.el.querySelector('input');
+			input.checked = !input.checked;
+		}
+	}, {
+		key: 'makeStyles',
+		value: function makeStyles() {
+			var styleObj = _get(Object.getPrototypeOf(CheckBox.prototype), 'makeStyles', this).call(this);
+			// 	data = this.data;
+			// if(this.parent && this.parent.data && this.parent.data.textColor)
+			// 	styleObj.color = this.parent.data.textColor;
+			return styleObj;
+		}
+	}]);
+
+	return CheckBox;
+}(_DOMObject2.DOMObject);
+
+},{"./DOMObject.js":5}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -219,7 +324,7 @@ var Connector = exports.Connector = function () {
 	return Connector;
 }();
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -297,7 +402,7 @@ var Cookies = exports.Cookies = function () {
     return Cookies;
 }();
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -313,13 +418,19 @@ var DOMObject = exports.DOMObject = function () {
 		_classCallCheck(this, DOMObject);
 
 		this.data = data;
-		this.template = '<div></div>';
-		this.baseClass = 'sendsay-main';
 		this.parent = parent || null;
-		this.applicableStyles = {};
+		this.initialize();
+		this.render();
 	}
 
 	_createClass(DOMObject, [{
+		key: 'initialize',
+		value: function initialize() {
+			this.template = '<div></div>';
+			this.baseClass = 'sendsay-main';
+			this.applicableStyles = {};
+		}
+	}, {
 		key: 'makeElement',
 		value: function makeElement() {
 			var div = document.createElement('div'),
@@ -437,7 +548,7 @@ var DOMObject = exports.DOMObject = function () {
 	return DOMObject;
 }();
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -463,18 +574,14 @@ var Field = exports.Field = function (_DOMObject) {
 	function Field(data, parent) {
 		_classCallCheck(this, Field);
 
-		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Field).call(this, data, parent));
-
-		_this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + '<input name="[%qid%]" placeholder="[%placeholder%]" value="[%value%]" type="text" class="sendsay-input"/>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
-		_this.baseClass = 'sendsay-field';
-		_this.render();
-		return _this;
+		return _possibleConstructorReturn(this, Object.getPrototypeOf(Field).call(this, data, parent));
 	}
 
 	_createClass(Field, [{
-		key: 'build',
-		value: function build() {
-			return _get(Object.getPrototypeOf(Field.prototype), 'build', this).call(this);
+		key: 'initialize',
+		value: function initialize() {
+			this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + '<input name="[%qid%]" placeholder="[%placeholder%]" value="[%value%]" type="text" class="sendsay-input"/>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
+			this.baseClass = 'sendsay-field';
 		}
 	}, {
 		key: 'makeSettings',
@@ -507,7 +614,7 @@ var Field = exports.Field = function (_DOMObject) {
 		key: 'validate',
 		value: function validate() {
 			this.removeErrorMessage();
-			if (this.data.required && this.el.querySelector('input').value == '') {
+			if (this.data.required && this.getValue() == '') {
 				this.showErrorMessage("Обязательное поле");
 				return false;
 			}
@@ -535,7 +642,7 @@ var Field = exports.Field = function (_DOMObject) {
 	return Field;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":4}],6:[function(require,module,exports){
+},{"./DOMObject.js":5}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -597,7 +704,99 @@ var Form = exports.Form = function () {
 	return Form;
 }();
 
-},{"./Cookies.js":3}],7:[function(require,module,exports){
+},{"./Cookies.js":4}],8:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.MultipleChoiseField = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _Field2 = require("./Field.js");
+
+var _CheckBox = require("./CheckBox.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var MultipleChoiseField = exports.MultipleChoiseField = function (_Field) {
+	_inherits(MultipleChoiseField, _Field);
+
+	function MultipleChoiseField(data, parent) {
+		_classCallCheck(this, MultipleChoiseField);
+
+		return _possibleConstructorReturn(this, Object.getPrototypeOf(MultipleChoiseField).call(this, data, parent));
+	}
+
+	_createClass(MultipleChoiseField, [{
+		key: "initialize",
+		value: function initialize() {
+			this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
+			this.curValues = this.data.default;
+			this.handleChangeValue = this.handleChangeValue.bind(this);
+		}
+	}, {
+		key: "build",
+		value: function build() {
+			_get(Object.getPrototypeOf(MultipleChoiseField.prototype), "build", this).call(this);
+			this.elements = [];
+			var body = this.el;
+			if (this.data.answers) {
+				var answers = this.data.answers;
+				for (var key in answers) {
+					var newEl = new _CheckBox.CheckBox({
+						qid: this.data.qid || '',
+						label: answers[key],
+						value: key,
+						checked: this.curValues.indexOf(key) !== -1
+					}, this);
+					if (newEl) {
+						newEl.el.addEventListener('sendsay-change', this.handleChangeValue);
+						this.elements.push(newEl);
+						body.appendChild(newEl.el);
+					}
+				}
+			}
+			return this.el;
+		}
+	}, {
+		key: "handleChangeValue",
+		value: function handleChangeValue(event) {
+			var data = event.detail.extra;
+			if (data.checked) {
+				if (this.curValues.indexOf(data.value) === -1) this.curValues.push(data.value);
+			} else {
+				if (this.curValues.indexOf(data.value) !== -1) this.curValues.splice(this.curValues.indexOf(data.value), 1);
+			}
+		}
+	}, {
+		key: "getValue",
+		value: function getValue() {
+			return this.curValues;
+		}
+	}, {
+		key: "validate",
+		value: function validate() {
+			this.removeErrorMessage();
+			if (this.data.required && this.getValue().length > 0) {
+				this.showErrorMessage("Обязательное поле");
+				return false;
+			}
+			return true;
+		}
+	}]);
+
+	return MultipleChoiseField;
+}(_Field2.Field);
+
+},{"./CheckBox.js":2,"./Field.js":6}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -642,7 +841,7 @@ var NumberField = exports.NumberField = function (_Field) {
 	return NumberField;
 }(_Field2.Field);
 
-},{"./Field.js":5}],8:[function(require,module,exports){
+},{"./Field.js":6}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -664,6 +863,10 @@ var _Button = require("./Button.js");
 
 var _Text = require("./Text.js");
 
+var _SingleChoiseField = require("./SingleChoiseField.js");
+
+var _MultipleChoiseField = require("./MultipleChoiseField.js");
+
 var _Cookies = require("./Cookies.js");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -678,25 +881,26 @@ var Popup = exports.Popup = function (_DOMObject) {
 	function Popup(data, parent) {
 		_classCallCheck(this, Popup);
 
-		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Popup).call(this, data, parent));
-
-		_this.template = '<div class = "sendsay-wrapper [%wrapperClasses%]">' + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '' + '</div>' + '</div>';
-
-		_this.baseClass = 'sendsay-popup';
-		_this.applicableStyles = {
-			'background-color': { param: 'backgroundColor' },
-			'border-radius': { param: 'borderRadius', postfix: 'px' },
-			'padding-bottom': { param: 'paddingBottom', postfix: 'px' },
-			'padding-top': { param: 'paddingTop', postfix: 'px' },
-			'padding-left': { param: 'paddingLeft', postfix: 'px' },
-			'padding-right': { param: 'paddingRight', postfix: 'px' }
-		};
-		_this.makeEndDialogData();
-		_this.render();
-		return _this;
+		return _possibleConstructorReturn(this, Object.getPrototypeOf(Popup).call(this, data, parent));
 	}
 
 	_createClass(Popup, [{
+		key: "initialize",
+		value: function initialize() {
+			this.template = '<div class = "sendsay-wrapper [%wrapperClasses%]">' + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '' + '</div>' + '</div>';
+
+			this.baseClass = 'sendsay-popup';
+			this.applicableStyles = {
+				'background-color': { param: 'backgroundColor' },
+				'border-radius': { param: 'borderRadius', postfix: 'px' },
+				'padding-bottom': { param: 'paddingBottom', postfix: 'px' },
+				'padding-top': { param: 'paddingTop', postfix: 'px' },
+				'padding-left': { param: 'paddingLeft', postfix: 'px' },
+				'padding-right': { param: 'paddingRight', postfix: 'px' }
+			};
+			this.makeEndDialogData();
+		}
+	}, {
 		key: "build",
 		value: function build() {
 
@@ -825,7 +1029,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 					var element = elements[i];
 					if (element instanceof _Field.Field) {
 
-						data[element.data.name] = element.getValue();
+						data[element.data.qid] = element.getValue();
 						isValid = element.validate() && isValid;
 					}
 					if (element instanceof _Button.Button) {
@@ -833,7 +1037,6 @@ var Popup = exports.Popup = function (_DOMObject) {
 					}
 				}
 			}
-
 			if (isValid) {
 				button.el.querySelector('input').classList.add('sendsay-loading');
 				this.trigger('sendsay-success', data);
@@ -946,6 +1149,10 @@ var ElementFactory = function (_Factory) {
 					switch (data.subtype) {
 						case 'int':
 							return new _NumberField.NumberField(data, parent);
+						case '1m':
+							return new _SingleChoiseField.SingleChoiseField(data, parent);
+						case 'nm':
+							return new _MultipleChoiseField.MultipleChoiseField(data, parent);
 						case 'free':
 						default:
 							return new _Field.Field(data, parent);
@@ -960,7 +1167,190 @@ var ElementFactory = function (_Factory) {
 	return ElementFactory;
 }(Factory);
 
-},{"./Button.js":1,"./Cookies.js":3,"./DOMObject.js":4,"./Field.js":5,"./NumberField.js":7,"./Text.js":9}],9:[function(require,module,exports){
+},{"./Button.js":1,"./Cookies.js":4,"./DOMObject.js":5,"./Field.js":6,"./MultipleChoiseField.js":8,"./NumberField.js":9,"./SingleChoiseField.js":12,"./Text.js":13}],11:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.RadioButton = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _DOMObject2 = require('./DOMObject.js');
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var RadioButton = exports.RadioButton = function (_DOMObject) {
+	_inherits(RadioButton, _DOMObject);
+
+	function RadioButton(data, parent) {
+		_classCallCheck(this, RadioButton);
+
+		return _possibleConstructorReturn(this, Object.getPrototypeOf(RadioButton).call(this, data, parent));
+	}
+
+	_createClass(RadioButton, [{
+		key: 'initialize',
+		value: function initialize() {
+			this.template = '<div class = "[%classes%]" style="[%style%]">' + '<input [%checked%] name="[%qid%]" value="[%value%]" type="radio" class="sendsay-radioinput"/>' + (this.data.label ? '<label for="[%qid%]" class = "sendsay-label">[%label%]</label>' : '') + '</div>';
+			this.baseClass = 'sendsay-radio';
+			this.handleChange = this.handleChange.bind(this);
+			this.handleClick = this.handleClick.bind(this);
+		}
+	}, {
+		key: 'build',
+		value: function build() {
+			return _get(Object.getPrototypeOf(RadioButton.prototype), 'build', this).call(this);
+		}
+	}, {
+		key: 'makeSettings',
+		value: function makeSettings() {
+			var data = this.data,
+			    settings = _get(Object.getPrototypeOf(RadioButton.prototype), 'makeSettings', this).call(this);
+
+			settings.label = data.label || data.name || '';
+			settings.qid = data.qid || data.name || '';
+			settings.value = data.value || '';
+			settings.checked = data.checked ? 'checked' : '';
+			if (data.hidden) {
+				settings.classes += ' sendsay-field-hidden';
+			}
+			return settings;
+		}
+	}, {
+		key: 'addEvents',
+		value: function addEvents() {
+			if (this.el) {
+				this.el.querySelector('input').addEventListener('change', this.handleChange);
+				this.el.querySelector('label').addEventListener('click', this.handleClick);
+			}
+		}
+	}, {
+		key: 'removeEvents',
+		value: function removeEvents() {
+			if (this.el) {
+				this.el.querySelector('input').removeEventListener('change', this.handleChange);
+				this.el.querySelector('label').removeEventListener('click', this.handleClick);
+			}
+		}
+	}, {
+		key: 'handleChange',
+		value: function handleChange(event) {
+			event.stopPropagation();
+			this.trigger('sendsay-change', {
+				checked: event.target.checked,
+				value: event.target.value
+			});
+		}
+	}, {
+		key: 'handleClick',
+		value: function handleClick(event) {
+
+			event.stopPropagation();
+			var input = this.el.querySelector('input');
+			input.checked = true;
+		}
+	}, {
+		key: 'makeStyles',
+		value: function makeStyles() {
+			var styleObj = _get(Object.getPrototypeOf(RadioButton.prototype), 'makeStyles', this).call(this);
+			// 	data = this.data;
+			// if(this.parent && this.parent.data && this.parent.data.textColor)
+			// 	styleObj.color = this.parent.data.textColor;
+			return styleObj;
+		}
+	}]);
+
+	return RadioButton;
+}(_DOMObject2.DOMObject);
+
+},{"./DOMObject.js":5}],12:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.SingleChoiseField = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _Field2 = require("./Field.js");
+
+var _RadioButton = require("./RadioButton.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var SingleChoiseField = exports.SingleChoiseField = function (_Field) {
+	_inherits(SingleChoiseField, _Field);
+
+	function SingleChoiseField(data, parent) {
+		_classCallCheck(this, SingleChoiseField);
+
+		return _possibleConstructorReturn(this, Object.getPrototypeOf(SingleChoiseField).call(this, data, parent));
+	}
+
+	_createClass(SingleChoiseField, [{
+		key: "initialize",
+		value: function initialize() {
+			this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
+			this.curValue = this.data.default || '';
+			this.handleChangeValue = this.handleChangeValue.bind(this);
+		}
+	}, {
+		key: "build",
+		value: function build() {
+			_get(Object.getPrototypeOf(SingleChoiseField.prototype), "build", this).call(this);
+			this.elements = [];
+			var body = this.el;
+			if (this.data.answers) {
+				var answers = this.data.answers;
+				for (var key in answers) {
+					var newEl = new _RadioButton.RadioButton({
+						qid: this.data.qid || '',
+						label: answers[key],
+						value: key,
+						checked: key === this.curValue
+
+					}, this);
+					if (newEl) {
+						newEl.el.addEventListener('sendsay-change', this.handleChangeValue);
+						this.elements.push(newEl);
+						body.appendChild(newEl.el);
+					}
+				}
+			}
+			return this.el;
+		}
+	}, {
+		key: "handleChangeValue",
+		value: function handleChangeValue(event) {
+			var data = event.detail.extra;
+			this.curValue = data.value;
+		}
+	}, {
+		key: "getValue",
+		value: function getValue() {
+			return this.curValue;
+		}
+	}]);
+
+	return SingleChoiseField;
+}(_Field2.Field);
+
+},{"./Field.js":6,"./RadioButton.js":11}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -986,24 +1376,25 @@ var Text = exports.Text = function (_DOMObject) {
 	function Text(data, parent) {
 		_classCallCheck(this, Text);
 
-		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Text).call(this, data, parent));
-
-		_this.template = '<div class = "sendsay-text" style="[%style%]"">' + '[%text%]' + '</div>';
-		_this.baseClass = 'sendsay-text';
-		_this.applicableStyles = {
-			'text-align': { param: 'align', default: 'left' },
-			'line-height': { param: 'lineHeight', default: 'normal' },
-			'padding-bottom': { param: 'paddingBottom', postfix: 'px' },
-			'padding-top': { param: 'paddingTop', postfix: 'px' },
-			'padding-left': { param: 'paddingLeft', postfix: 'px' },
-			'padding-right': { param: 'paddingRight', postfix: 'px' }
-
-		};
-		_this.render();
-		return _this;
+		return _possibleConstructorReturn(this, Object.getPrototypeOf(Text).call(this, data, parent));
 	}
 
 	_createClass(Text, [{
+		key: 'initialize',
+		value: function initialize() {
+			this.template = '<div class = "sendsay-text" style="[%style%]"">' + '[%text%]' + '</div>';
+			this.baseClass = 'sendsay-text';
+			this.applicableStyles = {
+				'text-align': { param: 'align', default: 'left' },
+				'line-height': { param: 'lineHeight', default: 'normal' },
+				'padding-bottom': { param: 'paddingBottom', postfix: 'px' },
+				'padding-top': { param: 'paddingTop', postfix: 'px' },
+				'padding-left': { param: 'paddingLeft', postfix: 'px' },
+				'padding-right': { param: 'paddingRight', postfix: 'px' }
+
+			};
+		}
+	}, {
 		key: 'build',
 		value: function build() {
 			return _get(Object.getPrototypeOf(Text.prototype), 'build', this).call(this);
@@ -1029,7 +1420,7 @@ var Text = exports.Text = function (_DOMObject) {
 	return Text;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":4}],10:[function(require,module,exports){
+},{"./DOMObject.js":5}],14:[function(require,module,exports){
 "use strict";
 
 var _Popup = require("./classes/Popup.js");
@@ -1080,4 +1471,4 @@ var _Form = require("./classes/Form.js");
 	};
 })();
 
-},{"./classes/Connector.js":2,"./classes/Form.js":6,"./classes/Popup.js":8}]},{},[10,1,2,3,4,5,6,7,8,9]);
+},{"./classes/Connector.js":3,"./classes/Form.js":7,"./classes/Popup.js":10}]},{},[14,1,2,3,4,5,6,7,8,9,10,11,12,13]);
