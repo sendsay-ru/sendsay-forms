@@ -887,7 +887,8 @@ var Popup = exports.Popup = function (_DOMObject) {
 	_createClass(Popup, [{
 		key: "initialize",
 		value: function initialize() {
-			this.template = '<div class = "sendsay-wrapper [%wrapperClasses%]">' + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '' + '</div>' + '</div>';
+			this.noWrapper = false;
+			this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]">' : '') + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '' + '</div>' + (!this.noWrapper ? '</div>' : '');
 
 			this.baseClass = 'sendsay-popup';
 			this.applicableStyles = {
@@ -898,6 +899,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 				'padding-left': { param: 'paddingLeft', postfix: 'px' },
 				'padding-right': { param: 'paddingRight', postfix: 'px' }
 			};
+			this.data.position = this.data.position || 'center';
 			this.makeEndDialogData();
 		}
 	}, {
@@ -907,7 +909,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 			_get(Object.getPrototypeOf(Popup.prototype), "build", this).call(this);
 			this.elements = [];
 			var factory = new ElementFactory();
-			var popupBody = this.el.querySelector('.sendsay-popup');
+			var popupBody = this.el.classList.contains('sendsay-popup') ? this.el : this.el.querySelector('.sendsay-popup');
 			if (this.data.elements) {
 				var elements = this.data.elements;
 				for (var i = 0; i < elements.length; i++) {
@@ -927,8 +929,13 @@ var Popup = exports.Popup = function (_DOMObject) {
 		key: "addEvents",
 		value: function addEvents() {
 			if (this.el) {
-				this.el.addEventListener('click', this.handleWrapperClick.bind(this));
-				this.el.querySelector('.sendsay-popup').addEventListener('click', this.handlePopupClick.bind(this));
+				var popup = this.el.classList.contains('sendsay-popup') ? this.el : this.el.querySelector('.sendsay-popup');
+				if (!this.noWrapper) {
+					this.el.addEventListener('click', this.handleWrapperClick.bind(this));
+					this.el.addEventListener('wheel', this.handleWrapperWheel.bind(this));
+					this.el.addEventListener('DOMMouseScroll', this.handleWrapperWheel.bind(this));
+				}
+				popup.addEventListener('click', this.handlePopupClick.bind(this));
 				this.el.querySelector('.sendsay-close').addEventListener('click', this.handleClose.bind(this));
 				document.addEventListener('keyup', this.handleKeyPress.bind(this));
 			}
@@ -937,8 +944,13 @@ var Popup = exports.Popup = function (_DOMObject) {
 		key: "removeEvents",
 		value: function removeEvents() {
 			if (this.el) {
-				this.el.removeEventListener('click', this.handleWrapperClick.bind(this));
-				this.el.querySelector('.sendsay-popup').removeEventListener('click', this.handlePopupClick.bind(this));
+				var popup = this.el.classList.contains('sendsay-popup') ? this.el : this.el.querySelector('.sendsay-popup');
+				if (!this.noWrapper) {
+					this.el.removeEventListener('click', this.handleWrapperClick.bind(this));
+					this.el.removeEventListener('wheel', this.handleWrapperWheel.bind(this));
+					this.el.removeEventListener('DOMMouseScroll', this.handleWrapperWheel.bind(this));
+				}
+				popup.removeEventListener('click', this.handlePopupClick.bind(this));
 				document.removeEventListener('keyup', this.handleKeyPress.bind(this));
 			}
 		}
@@ -954,6 +966,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 		value: function makeClasses() {
 			var classes = _get(Object.getPrototypeOf(Popup.prototype), "makeClasses", this).call(this);
 			classes += this.data.endDialog ? ' sendsay-enddialog' : '';
+			if (this.data.position) classes += ' sendsay-' + this.data.position;
 			return classes;
 		}
 	}, {
@@ -1071,6 +1084,13 @@ var Popup = exports.Popup = function (_DOMObject) {
 		key: "handleWrapperClick",
 		value: function handleWrapperClick() {
 			//this.hide();
+		}
+	}, {
+		key: "handleWrapperWheel",
+		value: function handleWrapperWheel(event) {
+
+			event.preventDefault();
+			return false;
 		}
 	}, {
 		key: "handlePopupClick",
@@ -1447,7 +1467,7 @@ var _Form = require("./classes/Form.js");
 	};
 
 	var showPopup = function showPopup(data, options) {
-		loadCss();
+		//loadCss();
 		var popup = new _Popup.Popup(data);
 		popup.activate(options);
 	};
