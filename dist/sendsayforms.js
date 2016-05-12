@@ -705,6 +705,75 @@ var Form = exports.Form = function () {
 }();
 
 },{"./Cookies.js":4}],8:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.ImageElement = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _DOMObject2 = require('./DOMObject.js');
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ImageElement = exports.ImageElement = function (_DOMObject) {
+	_inherits(ImageElement, _DOMObject);
+
+	function ImageElement(data, parent) {
+		_classCallCheck(this, ImageElement);
+
+		return _possibleConstructorReturn(this, Object.getPrototypeOf(ImageElement).call(this, data, parent));
+	}
+
+	_createClass(ImageElement, [{
+		key: 'initialize',
+		value: function initialize() {
+			this.template = '<div class = "[%classes%]" style="[%wrapperstyle%]">' + '<img src="[%url%]" style="[%style%]/>" />' + '</div>';
+
+			this.baseClass = 'sendsay-image';
+		}
+	}, {
+		key: 'makeStyles',
+		value: function makeStyles() {
+			var styleObj = _get(Object.getPrototypeOf(ImageElement.prototype), 'makeStyles', this).call(this),
+			    data = this.data;
+			if (data.extended) styleObj.width = '100%';else styleObj['max-width'] = '100%';
+			return styleObj;
+		}
+	}, {
+		key: 'makeSettings',
+		value: function makeSettings() {
+			var data = this.data,
+			    settings = _get(Object.getPrototypeOf(ImageElement.prototype), 'makeSettings', this).call(this);
+			settings.text = data.text || 'Unknown';
+			settings.wrapperstyle = this.makeWrapperStyle();
+			settings.url = data.url;
+			return settings;
+		}
+	}, {
+		key: 'makeWrapperStyle',
+		value: function makeWrapperStyle() {
+			var style = {},
+			    data = this.data;
+
+			style['text-align'] = data.align;
+
+			return this.convertStyles(style);
+		}
+	}]);
+
+	return ImageElement;
+}(_DOMObject2.DOMObject);
+
+},{"./DOMObject.js":5}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -796,7 +865,7 @@ var MultipleChoiseField = exports.MultipleChoiseField = function (_Field) {
 	return MultipleChoiseField;
 }(_Field2.Field);
 
-},{"./CheckBox.js":2,"./Field.js":6}],9:[function(require,module,exports){
+},{"./CheckBox.js":2,"./Field.js":6}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -841,7 +910,7 @@ var NumberField = exports.NumberField = function (_Field) {
 	return NumberField;
 }(_Field2.Field);
 
-},{"./Field.js":6}],10:[function(require,module,exports){
+},{"./Field.js":6}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -862,6 +931,8 @@ var _NumberField = require("./NumberField.js");
 var _Button = require("./Button.js");
 
 var _Text = require("./Text.js");
+
+var _ImageElement = require("./ImageElement.js");
 
 var _SingleChoiseField = require("./SingleChoiseField.js");
 
@@ -1174,6 +1245,8 @@ var ElementFactory = function (_Factory) {
 					return new _NumberField.NumberField(data, parent);
 				case 'free':
 					return new _Field.Field(data, parent);
+				case 'image':
+					return new _ImageElement.ImageElement(data, parent);
 				case 'field':
 					switch (data.subtype) {
 						case 'int':
@@ -1196,7 +1269,7 @@ var ElementFactory = function (_Factory) {
 	return ElementFactory;
 }(Factory);
 
-},{"./Button.js":1,"./Cookies.js":4,"./DOMObject.js":5,"./Field.js":6,"./MultipleChoiseField.js":8,"./NumberField.js":9,"./SingleChoiseField.js":12,"./Text.js":13}],11:[function(require,module,exports){
+},{"./Button.js":1,"./Cookies.js":4,"./DOMObject.js":5,"./Field.js":6,"./ImageElement.js":8,"./MultipleChoiseField.js":9,"./NumberField.js":10,"./SingleChoiseField.js":13,"./Text.js":14}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1300,7 +1373,7 @@ var RadioButton = exports.RadioButton = function (_DOMObject) {
 	return RadioButton;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":5}],12:[function(require,module,exports){
+},{"./DOMObject.js":5}],13:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1379,7 +1452,7 @@ var SingleChoiseField = exports.SingleChoiseField = function (_Field) {
 	return SingleChoiseField;
 }(_Field2.Field);
 
-},{"./Field.js":6,"./RadioButton.js":11}],13:[function(require,module,exports){
+},{"./Field.js":6,"./RadioButton.js":12}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1449,7 +1522,7 @@ var Text = exports.Text = function (_DOMObject) {
 	return Text;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":5}],14:[function(require,module,exports){
+},{"./DOMObject.js":5}],15:[function(require,module,exports){
 "use strict";
 
 var _Popup = require("./classes/Popup.js");
@@ -1500,4 +1573,4 @@ var _Form = require("./classes/Form.js");
 	};
 })();
 
-},{"./classes/Connector.js":3,"./classes/Form.js":7,"./classes/Popup.js":10}]},{},[14,1,2,3,4,5,6,7,8,9,10,11,12,13]);
+},{"./classes/Connector.js":3,"./classes/Form.js":7,"./classes/Popup.js":11}]},{},[15,1,2,3,4,5,6,7,8,9,10,11,12,13,14]);

@@ -3,6 +3,7 @@ import {Field} from "./Field.js";
 import {NumberField} from "./NumberField.js";
 import {Button} from "./Button.js";
 import {Text} from "./Text.js";
+import {ImageElement} from "./ImageElement.js";
 import {SingleChoiseField} from "./SingleChoiseField.js";
 import {MultipleChoiseField} from "./MultipleChoiseField.js";
 import {Cookies} from "./Cookies.js";
@@ -296,6 +297,8 @@ class ElementFactory extends Factory {
 				return new NumberField(data, parent);
 			case 'free':
 				return new Field(data, parent);
+			case 'image':
+				return new ImageElement(data, parent);
 			case 'field':
 				switch(data.subtype) {
 					case 'int': 
