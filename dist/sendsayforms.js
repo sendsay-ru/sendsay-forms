@@ -1162,7 +1162,15 @@ var ElementFactory = function (_Factory) {
 			switch (data.type) {
 				case 'text':
 					return new _Text.Text(data, parent);
-				case 'number':
+				case 'intField':
+					return new _NumberField.NumberField(data, parent);
+				case 'textField':
+					return new _Field.Field(data, parent);
+				case 'radioField':
+					return new _SingleChoiseField.SingleChoiseField(data, parent);
+				case 'checkboxField':
+					return new _MultipleChoiseField.MultipleChoiseField(data, parent);
+				case 'int':
 					return new _NumberField.NumberField(data, parent);
 				case 'free':
 					return new _Field.Field(data, parent);
