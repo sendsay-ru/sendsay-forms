@@ -932,6 +932,8 @@ var _Button = require("./Button.js");
 
 var _Text = require("./Text.js");
 
+var _Spacer = require("./Spacer.js");
+
 var _ImageElement = require("./ImageElement.js");
 
 var _SingleChoiseField = require("./SingleChoiseField.js");
@@ -1247,6 +1249,8 @@ var ElementFactory = function (_Factory) {
 					return new _Field.Field(data, parent);
 				case 'image':
 					return new _ImageElement.ImageElement(data, parent);
+				case 'spacer':
+					return new _Spacer.Spacer(data, parent);
 				case 'field':
 					switch (data.subtype) {
 						case 'int':
@@ -1269,7 +1273,7 @@ var ElementFactory = function (_Factory) {
 	return ElementFactory;
 }(Factory);
 
-},{"./Button.js":1,"./Cookies.js":4,"./DOMObject.js":5,"./Field.js":6,"./ImageElement.js":8,"./MultipleChoiseField.js":9,"./NumberField.js":10,"./SingleChoiseField.js":13,"./Text.js":14}],12:[function(require,module,exports){
+},{"./Button.js":1,"./Cookies.js":4,"./DOMObject.js":5,"./Field.js":6,"./ImageElement.js":8,"./MultipleChoiseField.js":9,"./NumberField.js":10,"./SingleChoiseField.js":13,"./Spacer.js":14,"./Text.js":15}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1458,6 +1462,48 @@ var SingleChoiseField = exports.SingleChoiseField = function (_Field) {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+exports.Spacer = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _DOMObject2 = require('./DOMObject.js');
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Spacer = exports.Spacer = function (_DOMObject) {
+	_inherits(Spacer, _DOMObject);
+
+	function Spacer(data, parent) {
+		_classCallCheck(this, Spacer);
+
+		return _possibleConstructorReturn(this, Object.getPrototypeOf(Spacer).call(this, data, parent));
+	}
+
+	_createClass(Spacer, [{
+		key: 'initialize',
+		value: function initialize() {
+			this.template = '<div class = "[%classes%]" style="[%style%]">' + '</div>';
+
+			this.baseClass = 'sendsay-spacer';
+			this.applicableStyles = {
+				'height': { param: 'height', postfix: 'px' }
+			};
+		}
+	}]);
+
+	return Spacer;
+}(_DOMObject2.DOMObject);
+
+},{"./DOMObject.js":5}],15:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
 exports.Text = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1522,7 +1568,7 @@ var Text = exports.Text = function (_DOMObject) {
 	return Text;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":5}],15:[function(require,module,exports){
+},{"./DOMObject.js":5}],16:[function(require,module,exports){
 "use strict";
 
 var _Popup = require("./classes/Popup.js");
@@ -1573,4 +1619,4 @@ var _Form = require("./classes/Form.js");
 	};
 })();
 
-},{"./classes/Connector.js":3,"./classes/Form.js":7,"./classes/Popup.js":11}]},{},[15,1,2,3,4,5,6,7,8,9,10,11,12,13,14]);
+},{"./classes/Connector.js":3,"./classes/Form.js":7,"./classes/Popup.js":11}]},{},[16,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
