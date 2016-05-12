@@ -284,7 +284,15 @@ class ElementFactory extends Factory {
 		switch(data.type) {
 			case 'text':
 				return new Text(data, parent);
-			case 'number':
+			case 'intField':
+				return new NumberField(data, parent);
+			case 'textField':
+				return new Field(data, parent);
+			case 'radioField':
+				return new SingleChoiseField(data, parent);
+			case 'checkboxField':
+				return new MultipleChoiseField(data, parent);
+			case 'int':
 				return new NumberField(data, parent);
 			case 'free':
 				return new Field(data, parent);
