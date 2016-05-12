@@ -16,12 +16,13 @@ export class Popup extends DOMObject {
 	}
 
 	initialize() {
-		this.template = '<div class = "sendsay-wrapper [%wrapperClasses%]">' +
+		this.noWrapper = false;
+		this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]">' : '') +
 						'<div class = "[%classes%]" style="[%style%]"">' +
 						'<div class = "sendsay-close">×</div>' +
 						'' +
-						'</div>' +
-						'</div>';
+						'</div>'+
+						(!this.noWrapper ? '</div>' : '');
 
 		this.baseClass = 'sendsay-popup';
 		this.applicableStyles = {
@@ -32,6 +33,7 @@ export class Popup extends DOMObject {
 			'padding-left': { param: 'paddingLeft', postfix: 'px'},
 			'padding-right': { param: 'paddingRight', postfix: 'px'}
 		};
+		this.data.position = this.data.position || 'center';
 		this.makeEndDialogData();		
 	}
 
@@ -40,7 +42,7 @@ export class Popup extends DOMObject {
 		super.build();
 		this.elements = [];
 		let factory = new ElementFactory();
-		let popupBody = this.el.querySelector('.sendsay-popup');
+		let popupBody = this.el.classList.contains('sendsay-popup') ? this.el : this.el.querySelector('.sendsay-popup');
 		if(this.data.elements) {
 			let elements = this.data.elements;
 			for(var i=0; i < elements.length; i++) {
@@ -61,8 +63,13 @@ export class Popup extends DOMObject {
 
 	addEvents() {
 		if(this.el) {
-			this.el.addEventListener('click', this.handleWrapperClick.bind(this));
-			this.el.querySelector('.sendsay-popup').addEventListener('click', this.handlePopupClick.bind(this));
+			var popup = this.el.classList.contains('sendsay-popup') ? this.el : this.el.querySelector('.sendsay-popup');
+			if(!this.noWrapper) {
+				this.el.addEventListener('click', this.handleWrapperClick.bind(this));
+				this.el.addEventListener('wheel', this.handleWrapperWheel.bind(this));
+				this.el.addEventListener('DOMMouseScroll', this.handleWrapperWheel.bind(this));
+			}
+			popup.addEventListener('click', this.handlePopupClick.bind(this));
 			this.el.querySelector('.sendsay-close').addEventListener('click', this.handleClose.bind(this));
 			document.addEventListener('keyup', this.handleKeyPress.bind(this));
 		}
@@ -70,8 +77,14 @@ export class Popup extends DOMObject {
 
 	removeEvents() {
 		if(this.el) {
-			this.el.removeEventListener('click', this.handleWrapperClick.bind(this));
-			this.el.querySelector('.sendsay-popup').removeEventListener('click', this.handlePopupClick.bind(this));
+			var popup = this.el.classList.contains('sendsay-popup') ? this.el : this.el.querySelector('.sendsay-popup');
+			if(!this.noWrapper) {
+				this.el.removeEventListener('click', this.handleWrapperClick.bind(this));
+				this.el.removeEventListener('wheel', this.handleWrapperWheel.bind(this));
+				this.el.removeEventListener('DOMMouseScroll', this.handleWrapperWheel.bind(this));
+				
+			}
+			popup.removeEventListener('click', this.handlePopupClick.bind(this));
 			document.removeEventListener('keyup', this.handleKeyPress.bind(this));
 		}
 	}
@@ -85,6 +98,8 @@ export class Popup extends DOMObject {
 	makeClasses() {
 		let classes = super.makeClasses();
 		classes += this.data.endDialog ? ' sendsay-enddialog' : '';
+		if(this.data.position)
+			classes += ' sendsay-'+this.data.position;
 		return classes;
 	}
 
@@ -203,6 +218,12 @@ export class Popup extends DOMObject {
 
 	handleWrapperClick() {
 		//this.hide();
+	}
+
+	handleWrapperWheel(event) {
+
+		event.preventDefault();
+		return false;
 	}
 
 	handlePopupClick(event) {

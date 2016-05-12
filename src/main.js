@@ -21,7 +21,7 @@ import {Form} from "./classes/Form.js";
 	};
 
 	var showPopup = function(data, options) {
-		loadCss();
+		//loadCss();
 		let popup = new Popup(data);
 		popup.activate(options);
 	}
