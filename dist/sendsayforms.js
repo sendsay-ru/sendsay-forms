@@ -1022,6 +1022,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 			_Cookies.Cookies.set('__sendsay_forms', 'true', 60 * 60);
 			if (!options || !options.el) document.querySelector('body').appendChild(this.el);else {
 				this.el.style.position = 'absolute';
+				if (!this.noWrapper) this.el.querySelector('.sendsay-popup').style.position = 'absolute';
 				options.el.appendChild(this.el);
 			}
 		}

@@ -158,6 +158,8 @@ export class Popup extends DOMObject {
 			document.querySelector('body').appendChild(this.el);
 		else {
 			this.el.style.position = 'absolute';
+			if(!this.noWrapper)
+				this.el.querySelector('.sendsay-popup').style.position = 'absolute';
 			options.el.appendChild(this.el); 
 		}
 	}
