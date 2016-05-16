@@ -1,4 +1,4 @@
-import {Text} from "src/classes/Text.js";
+import {Text} from "../../src/classes/Text.js";
 
 
 

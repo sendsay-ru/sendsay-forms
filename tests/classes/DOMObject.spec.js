@@ -1,4 +1,4 @@
-import {DOMObject} from "src/classes/DOMObject.js";
+import {DOMObject} from "../../src/classes/DOMObject.js";
 
 
 

@@ -7,8 +7,7 @@ module.exports = function(config) {
         client: {
             args: [
                 {
-                    filename: process.env.FILENAME,
-                    match: process.env.MATCH
+
                 }
             ]
         },
@@ -17,19 +16,17 @@ module.exports = function(config) {
         basePath: '../',
 
         // frameworks to use
-        frameworks: ['systemjs','jasmine'],
+        frameworks: ['jasmine'],
         plugins: [
             'karma-mocha-reporter',
             'karma-jasmine',
             'karma-coverage',
-            'karma-chrome-launcher',
-            'karma-systemjs'
+            'karma-chrome-launcher'
         ],
 
         // list of files / patterns to load in the browser
         files: [
-            {pattern: 'src/classes/*.js', included: false},
-            {pattern: 'tests/classes/*.js', included: true}
+            {pattern: 'test-dist/sendsayforms.js', included: true}
         ],
 
         // list of files to exclude
@@ -38,16 +35,6 @@ module.exports = function(config) {
             'src/node_modules',
             'src/bower_components/**/*.spec.js'
         ],
-
-
-
-        systemjs: {
-            // Path to your SystemJS configuration file 
-            configFile: 'tools/system.conf.js',
-        },
-
-
-
 
         junitReporter: {
             outputFile: 'reporters/junit.xml'
@@ -59,7 +46,7 @@ module.exports = function(config) {
 
         // test results reporter to use
         // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-        reporters: [ 'mocha', 'coverage'],
+        reporters: [ 'mocha' ],
 
         // web server port
         port: 9876,
