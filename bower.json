@@ -1,5 +1,5 @@
 {
-  "name": "popupForm",
+  "name": "sendsay-forms",
   "description": "Library for displaying popups",
   "main": "index.js",
   "version": "0.0.32",
@@ -10,7 +10,7 @@
   "keywords": [
     "popup"
   ],
-  "homepage": "https://github.com/sendsay-ru/popupForm",
+  "homepage": "https://github.com/sendsay-ru/sendsay-forms",
   "private": true,
   "ignore": [
     "**/.*",
