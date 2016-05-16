@@ -1,3 +1,35 @@
+
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,300,400,700);
+
+@-webkit-keyframes sendsay-progress-bar-stripes {
+    from {
+        background-position: 40px 0;
+    }
+    to {
+        background-position: 0 0;
+    }
+}
+
+@keyframes sendsay-progress-bar-stripes {
+    from {
+        background-position: 40px 0;
+    }
+    to {
+        background-position: 0 0;
+    }
+}
+
+
+
+.sendsay-loading {
+    -webkit-animation: sendsay-progress-bar-stripes 2s linear infinite;
+       -moz-animation: sendsay-progress-bar-stripes 2s linear infinite;
+            animation: sendsay-progress-bar-stripes 2s linear infinite;
+
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, .5) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .5) 50%, rgba(255, 255, 255, .5) 75%, transparent 75%, transparent);
+    background-size: 40px 40px;
+}
+
 .sendsay-wrapper {
     position: fixed;
     z-index: 9999;
@@ -5,12 +37,14 @@
     left: 0;
     width: 100%;
     height: 100%;
+    background-image: none;
     background-color: rgba(0, 0, 0, 0.8);
     box-sizing: border-box;
     animation: sendsay-wrapper-animate;
     animation-duration: 300ms;
     animation-timing-function: cubic-bezier(.175,.885,.32,1.275);
     text-align: left;
+    font-family: 'Open Sans', 'Arial', sans-serif;
 }
 
 .sendsay-wrapper.sendsay-noanimation,
@@ -21,25 +55,53 @@
 .sendsay-wrapper * {
 	box-sizing: border-box;
 }
+.sendsay-popup.sendsay-leftbottom {
+    bottom: 50px;
+    left: 50px;
+    animation: sendsay-popup-animate;
+    animation-duration: 300ms;
+    animation-timing-function: cubic-bezier(.175,.885,.32,1.275);
+}
 
+.sendsay-popup.sendsay-rightbottom {
+    bottom: 50px;
+    right: 50px;
+    animation: sendsay-popup-animate;
+    animation-duration: 300ms;
+    animation-timing-function: cubic-bezier(.175,.885,.32,1.275);
+}
 
-
-.sendsay-popup {
-    position: absolute;
+.sendsay-popup.sendsay-center {
     top: 50%;
     left: 50%;
+    transform: translate(-50%, -50%);
+    animation: sendsay-popup-animate-center;
+    animation-duration: 300ms;
+    animation-timing-function: cubic-bezier(.175,.885,.32,1.275);
+}
+
+.sendsay-popup {
+    background: none;
+    background-image: none;
+    height: auto;
+    text-align: left;
+    font-family: 'Open Sans', 'Arial', sans-serif;
+    position: fixed;
     min-width: 300px;
     max-width: 800px;
     padding: 20px;
     border-radius: 2px;
     background-color: #fff;
     box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.3);
-    transform: translate(-50%, -50%);
-    animation: sendsay-popup-animate;
-    animation-duration: 300ms;
-    animation-timing-function: cubic-bezier(.175,.885,.32,1.275);
+    box-sizing: border-box;
 
+}
 
+.sendsay-popup * {
+    box-sizing: border-box;
+    background: none;
+    background-image: none;
+    height: auto;
 }
 
 .sendsay-field-hidden {
@@ -70,6 +132,7 @@
     display: block;
     padding-bottom: 4px;
     font-family: 'Open Sans', 'Arial', sans-serif;
+    word-break: break-word;
 }
 
 .sendsay-input {
@@ -89,7 +152,7 @@
 }
 
 .sendsay-button input {
-	padding: 5px 10px;
+	padding: 10px 10px;
 	cursor: pointer;
     font-weight: normal;
     position: relative;
@@ -98,17 +161,20 @@
     text-align: center;
     vertical-align: middle;
     white-space: nowrap;
-    background-color: #007bff;
     border: none;
     border-radius: 2px;
     outline: none;
+    background-color: #000000;
+    border-radius: 5px;
+    color: #ffffff;
+    line-height: normal;
+    font-family: 'Open Sans', 'Arial', sans-serif;
 }
 
-.sendsay-button input:hover {
 
-
-    background-color: #008cff;
-
+.sendsay-text {
+    word-break: break-word;
+    font-family: 'Open Sans', 'Arial', sans-serif;
 }
 
 .sendsay-title {
@@ -118,6 +184,23 @@
     margin-bottom: 20px;
 }
 
+
+.sendsay-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 20px;
+}
+
+.sendsay-radioinput, .sendsay-checkinput {
+    display: inline-block;
+}
+
+.sendsay-radio .sendsay-label, .sendsay-checkbox .sendsay-label {
+    display: inline-block;
+}
 @keyframes sendsay-wrapper-animate {
     from {
         opacity: 0;
@@ -128,14 +211,26 @@
 }
 
 
-@keyframes sendsay-popup-animate {
+@keyframes sendsay-popup-animate-center {
     from {
-        -ms-transform: scale(.88) translate(-50%, -50%);
-            transform: scale(.88) translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%) scale(.88) ;
+            transform: translate(-50%, -50%) scale(.88) ;
     }
     to {
-        -ms-transform: scale(1) translate(-50%, -50%);
-            transform: scale(1) translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%) scale(1) ;
+            transform: translate(-50%, -50%) scale(1) ;
     }
 }
+
+@keyframes sendsay-popup-animate {
+    from {
+        -ms-transform:  scale(.88) ;
+            transform:  scale(.88) ;
+    }
+    to {
+        -ms-transform:  scale(1) ;
+            transform:  scale(1) ;
+    }
+}
+
 

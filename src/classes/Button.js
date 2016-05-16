@@ -4,6 +4,9 @@ import {DOMObject} from "./DOMObject.js";
 export class Button extends DOMObject {
 	constructor(data, parent) {
 		super(data, parent);
+	}
+
+	initialize() {
 		this.template = '<div class = "[%classes%]" style="[%wrapperstyle%]">' +
 							'<input type="button"  value="[%text%]"  style="[%style%]" />' + 
 						'</div>';
@@ -14,8 +17,7 @@ export class Button extends DOMObject {
 			'border-radius': { param: 'borderRadius', postfix: 'px' },
 			'color': { param: 'textColor'},
 			'line-height': { param: 'lineHeighFt' ,default: 'normal'}
-		};
-		this.render();
+		};		
 	}
 
 	addEvents() {
@@ -59,4 +61,5 @@ export class Button extends DOMObject {
 
 		return this.convertStyles(style)
 	}
+
 }

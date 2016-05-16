@@ -2,9 +2,14 @@
 export class DOMObject {
 	constructor(data, parent) {
 		this.data = data;
+		this.parent = parent || null;
+		this.initialize();
+		this.render();
+	}
+
+	initialize() {
 		this.template = '<div></div>';
 		this.baseClass = 'sendsay-main';
-		this.parent = parent || null;
 		this.applicableStyles = {
 
 		};
@@ -67,9 +72,6 @@ export class DOMObject {
 			param = param.substring(2, param.length-2);
 			let paramValue = settings[param.trim()] || '';
 			string = string.replace(new RegExp('\\[%' + param + '%\\]', 'g'), paramValue);
-		}
-		for(var key in settings) {
-			
 		}
 		return string;
 	}

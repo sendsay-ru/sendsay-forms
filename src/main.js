@@ -6,13 +6,39 @@ import {Form} from "./classes/Form.js";
 
 	
 	var activatePopup  = function(url, options) {
-		var connector = new Connector(url);
-		var form = new Form(Popup, connector);
+		loadCss();
+		var onLoad = function() {
+			var connector = new Connector(url);
+			var form = new Form(Popup, connector);
+			window.removeEventListener('load', onLoad);
+		};
+
+		if (document.readyState === "complete") {
+			onLoad();
+		} else {
+			window.addEventListener('load', onLoad)
+		}
 	};
 
 	var showPopup = function(data, options) {
+		//loadCss();
 		let popup = new Popup(data);
 		popup.activate(options);
+	}
+
+	var loadCss = function() {
+		var cssId = '_sendsay-styles';  // you could encode the css path itself to generate id..
+		if (!document.getElementById(cssId))
+		{
+		    var head  = document.getElementsByTagName('head')[0];
+		    var link  = document.createElement('link');
+		    link.id   = cssId;
+		    link.rel  = 'stylesheet';
+		    link.type = 'text/css';
+		    link.href = 'https://dl.dropbox.com/s/hq9cw3paj4tcube/sendsayforms.css';
+		    link.media = 'all';
+		    head.appendChild(link);
+		}
 	} 
 	window.SENDSAY = {
 		activatePopup: activatePopup,

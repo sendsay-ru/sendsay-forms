@@ -3,6 +3,11 @@ import {Field} from "./Field.js";
 import {NumberField} from "./NumberField.js";
 import {Button} from "./Button.js";
 import {Text} from "./Text.js";
+import {Spacer} from "./Spacer.js";
+import {ImageElement} from "./ImageElement.js";
+import {SingleChoiseField} from "./SingleChoiseField.js";
+import {MultipleChoiseField} from "./MultipleChoiseField.js";
+import {Cookies} from "./Cookies.js";
 
 
 
@@ -10,11 +15,16 @@ export class Popup extends DOMObject {
 
 	constructor(data, parent) {
 		super(data, parent);
-		this.template = '<div class = "sendsay-wrapper [%wrapperClasses%]">' +
+	}
+
+	initialize() {
+		this.noWrapper = false;
+		this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]">' : '') +
 						'<div class = "[%classes%]" style="[%style%]"">' +
+						'<div class = "sendsay-close">×</div>' +
 						'' +
-						'</div>' +
-						'</div>';
+						'</div>'+
+						(!this.noWrapper ? '</div>' : '');
 
 		this.baseClass = 'sendsay-popup';
 		this.applicableStyles = {
@@ -25,18 +35,16 @@ export class Popup extends DOMObject {
 			'padding-left': { param: 'paddingLeft', postfix: 'px'},
 			'padding-right': { param: 'paddingRight', postfix: 'px'}
 		};
-		this.makeEndDialogData();
-		if(data.active)
-			this.render();
+		this.data.position = this.data.position || 'center';
+		this.makeEndDialogData();		
 	}
 
 	build() {
-		if(!this.data.active)
-			return false;
+
 		super.build();
 		this.elements = [];
 		let factory = new ElementFactory();
-		let popupBody = this.el.querySelector('.sendsay-popup');
+		let popupBody = this.el.classList.contains('sendsay-popup') ? this.el : this.el.querySelector('.sendsay-popup');
 		if(this.data.elements) {
 			let elements = this.data.elements;
 			for(var i=0; i < elements.length; i++) {
@@ -57,16 +65,28 @@ export class Popup extends DOMObject {
 
 	addEvents() {
 		if(this.el) {
-			this.el.addEventListener('click', this.handleWrapperClick.bind(this));
-			this.el.querySelector('.sendsay-popup').addEventListener('click', this.handlePopupClick.bind(this));
+			var popup = this.el.classList.contains('sendsay-popup') ? this.el : this.el.querySelector('.sendsay-popup');
+			if(!this.noWrapper) {
+				this.el.addEventListener('click', this.handleWrapperClick.bind(this));
+				this.el.addEventListener('wheel', this.handleWrapperWheel.bind(this));
+				this.el.addEventListener('DOMMouseScroll', this.handleWrapperWheel.bind(this));
+			}
+			popup.addEventListener('click', this.handlePopupClick.bind(this));
+			this.el.querySelector('.sendsay-close').addEventListener('click', this.handleClose.bind(this));
 			document.addEventListener('keyup', this.handleKeyPress.bind(this));
 		}
 	}
 
 	removeEvents() {
 		if(this.el) {
-			this.el.removeEventListener('click', this.handleWrapperClick.bind(this));
-			this.el.querySelector('.sendsay-popup').removeEventListener('click', this.handlePopupClick.bind(this));
+			var popup = this.el.classList.contains('sendsay-popup') ? this.el : this.el.querySelector('.sendsay-popup');
+			if(!this.noWrapper) {
+				this.el.removeEventListener('click', this.handleWrapperClick.bind(this));
+				this.el.removeEventListener('wheel', this.handleWrapperWheel.bind(this));
+				this.el.removeEventListener('DOMMouseScroll', this.handleWrapperWheel.bind(this));
+				
+			}
+			popup.removeEventListener('click', this.handlePopupClick.bind(this));
 			document.removeEventListener('keyup', this.handleKeyPress.bind(this));
 		}
 	}
@@ -80,11 +100,14 @@ export class Popup extends DOMObject {
 	makeClasses() {
 		let classes = super.makeClasses();
 		classes += this.data.endDialog ? ' sendsay-enddialog' : '';
+		if(this.data.position)
+			classes += ' sendsay-'+this.data.position;
 		return classes;
 	}
 
 	activate(options) {
 		this.demo = options && options.demo;
+		this.ignoreKeyboard = options && options.ignoreKeyboard;
 		if(this.data.active) {
 			if(!options || !options.instant) {
 				setTimeout(this.show.bind(this, options), this.data.displaySettings && this.data.displaySettings.delay || 1000 );
@@ -121,16 +144,24 @@ export class Popup extends DOMObject {
 	}
 
 	showEndDialog() {
+		this.isSubmitted = true;
 		this.data = this.submitData;
 		this.render();
 	}
 
-	show(options) {
+	onSubmitFail() {
 
+
+	}
+
+	show(options) {
+		Cookies.set('__sendsay_forms', 'true', 60*60);
 		if(!options || !options.el)
 			document.querySelector('body').appendChild(this.el);
 		else {
 			this.el.style.position = 'absolute';
+			if(!this.noWrapper)
+				this.el.querySelector('.sendsay-popup').style.position = 'absolute';
 			options.el.appendChild(this.el); 
 		}
 	}
@@ -145,25 +176,62 @@ export class Popup extends DOMObject {
 		let elements = this.elements;
 		let isValid = true,
 			data = {}
-
+		let button;
 		if(elements) {
 			for(let i = 0; i < elements.length; i++) {
 				let element = elements[i];
 				if(element instanceof Field ) {
+
 					data[element.data.name] = element.getValue();
+
+
+					data[element.data.qid] = element.getValue();
+
 					isValid = element.validate() && isValid;
+				}
+				if(element instanceof Button) {
+					button = element;
 				}
 			}
 		}
-		this.isSubmitted = isValid;
 		if(isValid) {
+			button.el.querySelector('input').classList.add('sendsay-loading');
 			this.trigger('sendsay-success', data);
+
 		}
 		return isValid;
 	}
 
+	onSubmitFail() {
+		let elements = this.elements;
+		if(elements) {
+			for(let i = 0; i < elements.length; i++) {
+				let element = elements[i];
+				if(element instanceof Button) {
+					element.el.querySelector('input').classList.remove('sendsay-loading');
+				}
+			}
+		}
+	}
+
+	showErrorFor(qid, message) {
+		let elements = this.elements;
+		for(let i = 0; i < elements.length; i++) {
+			let element = elements[i];
+			if(element.data.qid == qid ) {
+				element.showErrorMessage(message);
+			}
+		}
+	}
+
 	handleWrapperClick() {
-		this.hide();
+		//this.hide();
+	}
+
+	handleWrapperWheel(event) {
+
+		event.preventDefault();
+		return false;
 	}
 
 	handlePopupClick(event) {
@@ -180,6 +248,8 @@ export class Popup extends DOMObject {
 	}
 
 	handleKeyPress(event) {
+		if(!this.ignoreKeyboard)
+			return;
 		switch(event.keyCode) {
 			case 13: //Enter
 				if(this.isSubmitted)
@@ -193,6 +263,10 @@ export class Popup extends DOMObject {
 				this.hide();
 				break;
 		}
+	}
+
+	handleClose(event) {
+		this.hide();
 	}
 }
 
@@ -216,14 +290,30 @@ class ElementFactory extends Factory {
 		switch(data.type) {
 			case 'text':
 				return new Text(data, parent);
-			case 'number':
+			case 'intField':
+				return new NumberField(data, parent);
+			case 'textField':
+				return new Field(data, parent);
+			case 'radioField':
+				return new SingleChoiseField(data, parent);
+			case 'checkboxField':
+				return new MultipleChoiseField(data, parent);
+			case 'int':
 				return new NumberField(data, parent);
 			case 'free':
 				return new Field(data, parent);
+			case 'image':
+				return new ImageElement(data, parent);
+			case 'spacer':
+				return new Spacer(data, parent);
 			case 'field':
 				switch(data.subtype) {
 					case 'int': 
 						return new NumberField(data, parent);
+					case '1m':
+						return new SingleChoiseField(data, parent);
+					case 'nm':
+						return new MultipleChoiseField(data, parent);
 					case 'free':
 					default:
 						return new Field(data, parent);	
