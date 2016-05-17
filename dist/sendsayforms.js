@@ -63,14 +63,14 @@ var Button = exports.Button = function (_DOMObject) {
 		key: 'makeStyles',
 		value: function makeStyles() {
 			var styleObj = _get(Object.getPrototypeOf(Button.prototype), 'makeStyles', this).call(this),
-			    data = this.data;
+			    data = this.data.appearance || {};
 			if (data.align === 'justify') styleObj.width = '100%';
 			return styleObj;
 		}
 	}, {
 		key: 'makeSettings',
 		value: function makeSettings() {
-			var data = this.data,
+			var data = this.data.content || {},
 			    settings = _get(Object.getPrototypeOf(Button.prototype), 'makeSettings', this).call(this);
 			settings.text = data.text || 'Unknown';
 			settings.wrapperstyle = this.makeWrapperStyle();
@@ -80,7 +80,7 @@ var Button = exports.Button = function (_DOMObject) {
 		key: 'makeWrapperStyle',
 		value: function makeWrapperStyle() {
 			var style = {},
-			    data = this.data;
+			    data = this.data.appearance || {};
 
 			if (data.align !== 'justify') style['text-align'] = data.align;
 
@@ -123,7 +123,8 @@ var CheckBox = exports.CheckBox = function (_DOMObject) {
 	_createClass(CheckBox, [{
 		key: 'initialize',
 		value: function initialize() {
-			this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<input [%checked%] name="[%qid%]" value="[%value%]" type="checkbox" class="sendsay-checkinput"/>' + (this.data.label ? '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' : '') + '</div>';
+
+			this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<input [%checked%] name="[%qid%]" value="[%value%]" type="checkbox" class="sendsay-checkinput"/>' + (this.data.content.label ? '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' : '') + '</div>';
 			this.baseClass = 'sendsay-checkbox';
 			this.handleChange = this.handleChange.bind(this);
 			this.handleClick = this.handleClick.bind(this);
@@ -136,14 +137,17 @@ var CheckBox = exports.CheckBox = function (_DOMObject) {
 	}, {
 		key: 'makeSettings',
 		value: function makeSettings() {
-			var data = this.data,
+
+			var content = this.data.content || {},
+			    field = this.data.field || {},
+			    appearance = this.data.appearance || {},
 			    settings = _get(Object.getPrototypeOf(CheckBox.prototype), 'makeSettings', this).call(this);
 
-			settings.label = data.label || data.name || '';
-			settings.qid = data.qid || data.name || '';
-			settings.value = data.value || '';
-			settings.checked = data.checked ? 'checked' : '';
-			if (data.hidden) {
+			settings.label = content.label || content.name || '';
+			settings.qid = field.qid || field.name || '';
+			settings.value = content.value || '';
+			settings.checked = content.checked ? 'checked' : '';
+			if (appearance.hidden) {
 				settings.classes += ' sendsay-field-hidden';
 			}
 			return settings;
@@ -153,7 +157,9 @@ var CheckBox = exports.CheckBox = function (_DOMObject) {
 		value: function addEvents() {
 			if (this.el) {
 				this.el.querySelector('input').addEventListener('change', this.handleChange);
-				this.el.querySelector('label').addEventListener('click', this.handleClick);
+				if (this.el.querySelector('label')) {
+					this.el.querySelector('label').addEventListener('click', this.handleClick);
+				}
 			}
 		}
 	}, {
@@ -161,7 +167,9 @@ var CheckBox = exports.CheckBox = function (_DOMObject) {
 		value: function removeEvents() {
 			if (this.el) {
 				this.el.querySelector('input').removeEventListener('change', this.handleChange);
-				this.el.querySelector('label').removeEventListener('click', this.handleClick);
+				if (this.el.querySelector('label')) {
+					this.el.querySelector('label').removeEventListener('click', this.handleClick);
+				}
 			}
 		}
 	}, {
@@ -261,18 +269,31 @@ var Connector = exports.Connector = function () {
 					if (field.type !== 'submit') {
 						this.data.elements.push({
 							type: field.type == 'text' ? 'field' : field.type,
-							qid: field.name,
-							name: field.name,
-							label: field.label,
-							subtype: field['data_type'],
-							required: field.required == '1'
+							field: {
+								id: field.name,
+								required: field.required == '1',
+								answers: field.answers,
+								order: field.order
+							},
+							content: {
+								label: field.label
+							},
+							appearance: {
+								hidden: field.hidden
+							},
+							subtype: field['data_type']
+
 						});
 					}
 				}
 				this.data.elements.push({
 					type: 'button',
-					text: 'Подписаться',
-					align: 'justify'
+					content: {
+						text: 'Подписаться'
+					},
+					appearance: {
+						align: 'justify'
+					}
 				});
 			}
 			if (json.name) this.data.title = json.name;
@@ -458,7 +479,8 @@ var DOMObject = exports.DOMObject = function () {
 		key: 'applyStyles',
 		value: function applyStyles(mapping) {
 			var styles = {},
-			    data = this.data;
+			    data = this.data.appearance || {};
+
 			for (var key in mapping) {
 				var val = mapping[key];
 				if (data[val.param] !== undefined) {
@@ -586,17 +608,19 @@ var Field = exports.Field = function (_DOMObject) {
 	}, {
 		key: 'makeSettings',
 		value: function makeSettings() {
-			var data = this.data,
+			var field = this.data.field || {},
+			    content = this.data.content || {},
+			    appearance = this.data.appearance || {},
 			    settings = _get(Object.getPrototypeOf(Field.prototype), 'makeSettings', this).call(this);
-			settings.name = data.name || '';
-			settings.label = data.label || data.name || '';
-			settings.placeholder = data.placeholder || '';
-			settings.qid = data.qid || data.name || '';
-			settings.value = data.default || '';
-			if (data.hidden) {
+
+			settings.label = content.label || '';
+			settings.placeholder = content.placeholder || '';
+			settings.qid = field.id || field.qid || '';
+			settings.value = field.default || '';
+			if (appearance.hidden) {
 				settings.classes += ' sendsay-field-hidden';
 			}
-			if (data.required) {
+			if (field.required) {
 				settings.label += '*';
 			}
 
@@ -744,16 +768,15 @@ var ImageElement = exports.ImageElement = function (_DOMObject) {
 		key: 'makeStyles',
 		value: function makeStyles() {
 			var styleObj = _get(Object.getPrototypeOf(ImageElement.prototype), 'makeStyles', this).call(this),
-			    data = this.data;
+			    data = this.data.appearance || {};
 			if (data.extended) styleObj.width = '100%';else styleObj['max-width'] = '100%';
 			return styleObj;
 		}
 	}, {
 		key: 'makeSettings',
 		value: function makeSettings() {
-			var data = this.data,
+			var data = this.data.content || {},
 			    settings = _get(Object.getPrototypeOf(ImageElement.prototype), 'makeSettings', this).call(this);
-			settings.text = data.text || 'Unknown';
 			settings.wrapperstyle = this.makeWrapperStyle();
 			settings.url = data.url;
 			return settings;
@@ -762,7 +785,7 @@ var ImageElement = exports.ImageElement = function (_DOMObject) {
 		key: 'makeWrapperStyle',
 		value: function makeWrapperStyle() {
 			var style = {},
-			    data = this.data;
+			    data = this.data.appearance || {};
 
 			style['text-align'] = data.align;
 
@@ -808,7 +831,7 @@ var MultipleChoiseField = exports.MultipleChoiseField = function (_Field) {
 		key: "initialize",
 		value: function initialize() {
 			this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
-			this.curValues = this.data.default || [];
+			this.curValues = this.data.field.default || [];
 			this.handleChangeValue = this.handleChangeValue.bind(this);
 		}
 	}, {
@@ -817,14 +840,21 @@ var MultipleChoiseField = exports.MultipleChoiseField = function (_Field) {
 			_get(Object.getPrototypeOf(MultipleChoiseField.prototype), "build", this).call(this);
 			this.elements = [];
 			var body = this.el;
-			if (this.data.answers) {
-				var answers = this.data.answers;
+			var field = this.data.field || {};
+
+			if (this.data.field.answers) {
+				var answers = field.answers;
 				for (var key in answers) {
+
 					var newEl = new _CheckBox.CheckBox({
-						qid: this.data.qid || '',
-						label: answers[key],
-						value: key,
-						checked: this.curValues.indexOf(key) !== -1
+						field: {
+							qid: field.id || field.qid || ''
+						},
+						content: {
+							label: answers[key],
+							value: key,
+							checked: this.curValues.indexOf(key) !== -1
+						}
 					}, this);
 					if (newEl) {
 						newEl.el.addEventListener('sendsay-change', this.handleChangeValue);
@@ -854,7 +884,7 @@ var MultipleChoiseField = exports.MultipleChoiseField = function (_Field) {
 		key: "validate",
 		value: function validate() {
 			this.removeErrorMessage();
-			if (this.data.required && this.getValue().length > 0) {
+			if (this.data.field.required && this.getValue().length > 0) {
 				this.showErrorMessage("Обязательное поле");
 				return false;
 			}
@@ -960,6 +990,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 	_createClass(Popup, [{
 		key: "initialize",
 		value: function initialize() {
+			var appearance = this.data.appearance || {};
 			this.noWrapper = false;
 			this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]">' : '') + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '' + '</div>' + (!this.noWrapper ? '</div>' : '');
 
@@ -972,7 +1003,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 				'padding-left': { param: 'paddingLeft', postfix: 'px' },
 				'padding-right': { param: 'paddingRight', postfix: 'px' }
 			};
-			this.data.position = this.data.position || 'center';
+			appearance.position = appearance.position || 'center';
 			this.makeEndDialogData();
 		}
 	}, {
@@ -1037,9 +1068,10 @@ var Popup = exports.Popup = function (_DOMObject) {
 	}, {
 		key: "makeClasses",
 		value: function makeClasses() {
+			var appearance = this.data.appearance || {};
 			var classes = _get(Object.getPrototypeOf(Popup.prototype), "makeClasses", this).call(this);
 			classes += this.data.endDialog ? ' sendsay-enddialog' : '';
-			if (this.data.position) classes += ' sendsay-' + this.data.position;
+			if (appearance.position) classes += ' sendsay-' + appearance.position;
 			return classes;
 		}
 	}, {
@@ -1069,14 +1101,18 @@ var Popup = exports.Popup = function (_DOMObject) {
 				var element = data.elements[i];
 				if (element.type == 'button') {
 					button = this.extend({}, element);
-					button.text = 'Закрыть';
+					button.content.text = 'Закрыть';
 				}
 			}
 			this.submitData.elements = [{
 				type: 'text',
-				text: data.endDialogMessage || 'Спасибо за заполнение формы',
-				paddingTop: '10',
-				paddingBottom: '20'
+				content: {
+					text: data.endDialogMessage || 'Спасибо за заполнение формы'
+				},
+				appearance: {
+					paddingTop: '10',
+					paddingBottom: '20'
+				}
 			}, button];
 		}
 	}, {
@@ -1116,7 +1152,8 @@ var Popup = exports.Popup = function (_DOMObject) {
 					var element = elements[i];
 					if (element instanceof _Field.Field) {
 
-						data[element.data.qid] = element.getValue();
+						data[element.data.field.id || element.data.field.qid] = element.getValue();
+
 						isValid = element.validate() && isValid;
 					}
 					if (element instanceof _Button.Button) {
@@ -1305,7 +1342,7 @@ var RadioButton = exports.RadioButton = function (_DOMObject) {
 	_createClass(RadioButton, [{
 		key: 'initialize',
 		value: function initialize() {
-			this.template = '<div class = "[%classes%]" style="[%style%]">' + '<input [%checked%] name="[%qid%]" value="[%value%]" type="radio" class="sendsay-radioinput"/>' + (this.data.label ? '<label for="[%qid%]" class = "sendsay-label">[%label%]</label>' : '') + '</div>';
+			this.template = '<div class = "[%classes%]" style="[%style%]">' + '<input [%checked%] name="[%qid%]" value="[%value%]" type="radio" class="sendsay-radioinput"/>' + (this.data.content.label ? '<label for="[%qid%]" class = "sendsay-label">[%label%]</label>' : '') + '</div>';
 			this.baseClass = 'sendsay-radio';
 			this.handleChange = this.handleChange.bind(this);
 			this.handleClick = this.handleClick.bind(this);
@@ -1320,12 +1357,15 @@ var RadioButton = exports.RadioButton = function (_DOMObject) {
 		value: function makeSettings() {
 			var data = this.data,
 			    settings = _get(Object.getPrototypeOf(RadioButton.prototype), 'makeSettings', this).call(this);
+			var content = data.content || {},
+			    field = data.field || {},
+			    appearance = data.appearance || {};
 
-			settings.label = data.label || data.name || '';
-			settings.qid = data.qid || data.name || '';
-			settings.value = data.value || '';
-			settings.checked = data.checked ? 'checked' : '';
-			if (data.hidden) {
+			settings.label = content.label || '';
+			settings.qid = field.qid || '';
+			settings.value = content.value || '';
+			settings.checked = content.checked ? 'checked' : '';
+			if (appearance.hidden) {
 				settings.classes += ' sendsay-field-hidden';
 			}
 			return settings;
@@ -1335,7 +1375,7 @@ var RadioButton = exports.RadioButton = function (_DOMObject) {
 		value: function addEvents() {
 			if (this.el) {
 				this.el.querySelector('input').addEventListener('change', this.handleChange);
-				this.el.querySelector('label').addEventListener('click', this.handleClick);
+				if (this.data.content.label) this.el.querySelector('label').addEventListener('click', this.handleClick);
 			}
 		}
 	}, {
@@ -1343,7 +1383,7 @@ var RadioButton = exports.RadioButton = function (_DOMObject) {
 		value: function removeEvents() {
 			if (this.el) {
 				this.el.querySelector('input').removeEventListener('change', this.handleChange);
-				this.el.querySelector('label').removeEventListener('click', this.handleClick);
+				if (this.data.content.label) this.el.querySelector('label').removeEventListener('click', this.handleClick);
 			}
 		}
 	}, {
@@ -1412,7 +1452,8 @@ var SingleChoiseField = exports.SingleChoiseField = function (_Field) {
 		key: "initialize",
 		value: function initialize() {
 			this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
-			this.curValue = this.data.default || '';
+			var field = this.data.field || {};
+			this.curValue = field.default || '';
 			this.handleChangeValue = this.handleChangeValue.bind(this);
 		}
 	}, {
@@ -1420,15 +1461,20 @@ var SingleChoiseField = exports.SingleChoiseField = function (_Field) {
 		value: function build() {
 			_get(Object.getPrototypeOf(SingleChoiseField.prototype), "build", this).call(this);
 			this.elements = [];
+			var field = this.data.field || {};
 			var body = this.el;
-			if (this.data.answers) {
-				var answers = this.data.answers;
+			if (field.answers) {
+				var answers = field.answers;
 				for (var key in answers) {
 					var newEl = new _RadioButton.RadioButton({
-						qid: this.data.qid || '',
-						label: answers[key],
-						value: key,
-						checked: key === this.curValue
+						field: {
+							qid: field.id || field.qid || ''
+						},
+						content: {
+							label: answers[key],
+							value: key,
+							checked: key === this.curValue
+						}
 
 					}, this);
 					if (newEl) {
@@ -1550,9 +1596,9 @@ var Text = exports.Text = function (_DOMObject) {
 	}, {
 		key: 'makeSettings',
 		value: function makeSettings() {
-			var data = this.data,
+			var content = this.data.content || {},
 			    settings = _get(Object.getPrototypeOf(Text.prototype), 'makeSettings', this).call(this);
-			settings.text = data.text || '';
+			settings.text = content.text || '';
 			return settings;
 		}
 	}, {

@@ -68,8 +68,8 @@ export class Connector {
 						},
 						appearance: {
 							hidden: field.hidden
-						}
-						subtype: field['data_type'],
+						},
+						subtype: field['data_type']
 						
 					});
 				}
