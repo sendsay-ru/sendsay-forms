@@ -57,18 +57,31 @@ export class Connector {
 				if(field.type !== 'submit') {
 					this.data.elements.push({
 						type: field.type == 'text' ? 'field' : field.type,
-						qid: field.name,
-						name: field.name,
-						label: field.label,
+						field: {
+							id: field.name,
+							required: field.required == '1',
+							answers: field.answers,
+							order: field.order
+						},
+						content: {
+							label: field.label
+						},
+						appearance: {
+							hidden: field.hidden
+						}
 						subtype: field['data_type'],
-						required: field.required == '1'
+						
 					});
 				}
 			}
 			this.data.elements.push({
 					type: 'button',
-					text: 'Подписаться',
-					align: 'justify'
+					content: {
+						text: 'Подписаться',
+					},
+					appearance: {
+						align: 'justify'
+					}
 				});
 		}
 		if(json.name)
