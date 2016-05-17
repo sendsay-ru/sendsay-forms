@@ -38,14 +38,14 @@ export class Button extends DOMObject {
 
 	makeStyles() {
 		let styleObj = super.makeStyles(),
-			data = this.data;
+			data = this.data.appearance || {};
 		if(data.align === 'justify')
 			styleObj.width = '100%';
 		return styleObj;
 	}
 
 	makeSettings() {
-		let data = this.data,
+		let data = this.data.content || {},
 			settings = super.makeSettings();
 		settings.text = data.text || 'Unknown';
 		settings.wrapperstyle = this.makeWrapperStyle();
@@ -54,7 +54,7 @@ export class Button extends DOMObject {
 
 	makeWrapperStyle() {
 		let style = {},
-			data = this.data;
+			data = this.data.appearance || {};
 
 		if(data.align !== 'justify')
 			style['text-align'] = data.align;

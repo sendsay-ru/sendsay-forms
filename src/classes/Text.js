@@ -27,9 +27,9 @@ export class Text extends DOMObject {
 	}
 
 	makeSettings() {
-		let data = this.data,
+		let content = this.data.content || {},
 			settings = super.makeSettings();
-		settings.text = data.text || '';
+		settings.text = content.text || '';
 		return settings;
 	}
 

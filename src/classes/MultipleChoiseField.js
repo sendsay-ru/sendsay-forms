@@ -13,7 +13,7 @@ export class MultipleChoiseField extends Field {
 						'<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + 
 						'<div type="text" class="sendsay-error"></div>' + 
 						'</div>';
-		this.curValues = this.data.default || [];
+		this.curValues = this.data.field.default || [];
 		this.handleChangeValue = this.handleChangeValue.bind(this);		
 	}
 
@@ -21,14 +21,21 @@ export class MultipleChoiseField extends Field {
 		super.build();
 		this.elements = [];
 		let body = this.el;
-		if(this.data.answers) {
-			let answers = this.data.answers;
+		let field = this.data.field || {};
+
+		if(this.data.field.answers) {
+			let answers = field.answers;
 			for(var key in answers) {
+
 				let newEl = new CheckBox({
-					qid: this.data.qid || '', 
-					label: answers[key],
-					value: key,
-					checked: this.curValues.indexOf(key) !== -1
+					field: {
+						qid: field.id || field.qid || ''
+					},
+					content: {
+						label: answers[key],
+						value: key,
+						checked: this.curValues.indexOf(key) !== -1
+					}
 				}, this);
 				if(newEl) {
 					newEl.el.addEventListener('sendsay-change', this.handleChangeValue);
@@ -57,7 +64,7 @@ export class MultipleChoiseField extends Field {
 
 	validate() {
 		this.removeErrorMessage();
-		if(this.data.required && this.getValue().length > 0) {
+		if(this.data.field.required && this.getValue().length > 0) {
 			this.showErrorMessage("Обязательное поле")
 			return false;
 		}

@@ -38,7 +38,8 @@ export class DOMObject {
 
 	applyStyles(mapping) {
 		let styles = {},
-			data = this.data;
+			data = this.data.appearance || {};
+	
 		for(var key in mapping) {
 			let val = mapping[key];
 			if(data[val.param] !== undefined) {

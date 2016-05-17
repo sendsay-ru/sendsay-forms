@@ -18,17 +18,19 @@ export class Field extends DOMObject {
 
 	
 	makeSettings() {
-		let data = this.data,
+		let field = this.data.field || {},
+			content = this.data.content || {},
+			appearance = this.data.appearance || {},
 			settings = super.makeSettings();
-		settings.name = data.name || '';
-		settings.label = data.label || data.name || '';
-		settings.placeholder = data.placeholder || '';
-		settings.qid = data.qid || data.name || '';
-		settings.value = data.default || '';
-		if(data.hidden) {
+
+		settings.label = content.label || '';
+		settings.placeholder = content.placeholder || '';
+		settings.qid = field.id || field.qid || '';
+		settings.value = field.default || '';
+		if(appearance.hidden) {
 			settings.classes += ' sendsay-field-hidden';
 		}
-		if(data.required) {
+		if(field.required) {
 			settings.label += '*';
 		}
 		

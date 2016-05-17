@@ -5,15 +5,19 @@ import {NumberField} from "../../src/classes/NumberField.js";
 describe("NumberField.spec.js", function() {
 
 	var json = {  
-                 "qid":"q349",
-                 "aid":"a596",
-                 "required":false,
-                 "label":"Возраст",
-                 "hidden":false,
-                 "id":"q46",
-                 "type":"intField",
-                 "placeholder":""
-              };
+           "type":"intField",
+           "field":{  
+              "aid":"a596",
+              "qid":"q349"
+           },
+           "content":{  
+              "placeholder":"",
+              "label":"Возраст"
+           },
+           "appearance":{  
+              "hidden":false
+           }
+        };
 
 	it('Cheking NumberField render' , function() {
     	var dom = new NumberField(json);

@@ -5,22 +5,26 @@ import {SingleChoiseField} from "../../src/classes/SingleChoiseField.js";
 describe("SingleChoiseField.spec.js", function() {
 
 	var json = {  
-                 "aid":"a596",
-                 "qid":"q575",
-                 "required":false,
-                 "order":[  
-                    1,
-                    2
-                 ],
-                 "type":"radioField",
-                 "id":"q489",
-                 "hidden":false,
-                 "label":"Пол",
-                 "answers":{  
-                    "1":"Мужчина",
-                    "2":"Женщина"
-                 }
-              };
+           "type":"radioField",
+           "field":{  
+              "aid":"a596",
+              "qid":"q575",
+              "answers":{  
+                 "1":"Мужчина",
+                 "2":"Женщина"
+              },
+              "order":[  
+                 1,
+                 2
+              ]
+           },
+           "appearance":{  
+              "hidden":false
+           },
+           "content":{  
+              "label":"Пол"
+           }
+        };
 
 	it('Cheking SingleChoiseField render' , function() {
     	var dom = new SingleChoiseField(json);

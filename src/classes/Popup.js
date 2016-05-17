@@ -18,6 +18,7 @@ export class Popup extends DOMObject {
 	}
 
 	initialize() {
+		let appearance = this.data.appearance || {};
 		this.noWrapper = false;
 		this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]">' : '') +
 						'<div class = "[%classes%]" style="[%style%]"">' +
@@ -35,7 +36,7 @@ export class Popup extends DOMObject {
 			'padding-left': { param: 'paddingLeft', postfix: 'px'},
 			'padding-right': { param: 'paddingRight', postfix: 'px'}
 		};
-		this.data.position = this.data.position || 'center';
+		appearance.position = appearance.position || 'center';
 		this.makeEndDialogData();		
 	}
 
@@ -98,10 +99,11 @@ export class Popup extends DOMObject {
 	}
 
 	makeClasses() {
+		let appearance = this.data.appearance || {};
 		let classes = super.makeClasses();
 		classes += this.data.endDialog ? ' sendsay-enddialog' : '';
-		if(this.data.position)
-			classes += ' sendsay-'+this.data.position;
+		if(appearance.position)
+			classes += ' sendsay-'+ appearance.position;
 		return classes;
 	}
 
@@ -129,15 +131,19 @@ export class Popup extends DOMObject {
 			let element = data.elements[i];
 			if(element.type == 'button') {	
 				button = this.extend({}, element);
-				button.text = 'Закрыть';
+				button.content.text = 'Закрыть';
 			}
 		}
 		this.submitData.elements = [
 			{
 				type: 'text',
-				text: data.endDialogMessage || 'Спасибо за заполнение формы',
-				paddingTop: '10',
-				paddingBottom: '20'
+				content: {
+					text: data.endDialogMessage || 'Спасибо за заполнение формы',
+				},
+				appearance: {
+					paddingTop: '10',
+					paddingBottom: '20'
+				}
 			},
 			button
 		];
@@ -182,10 +188,8 @@ export class Popup extends DOMObject {
 				let element = elements[i];
 				if(element instanceof Field ) {
 
-					data[element.data.name] = element.getValue();
 
-
-					data[element.data.qid] = element.getValue();
+					data[element.data.field.id || element.data.field.qid] = element.getValue();
 
 					isValid = element.validate() && isValid;
 				}

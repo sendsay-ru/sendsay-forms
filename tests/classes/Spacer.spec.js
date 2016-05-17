@@ -6,7 +6,9 @@ describe("Spacer.spec.js", function() {
 
     var json = {  
                  "type":"spacer",
-                 "height":38
+                 "appearance": {
+	                 "height":38
+	             }
               };
 
 	it('Cheking Spacer render' , function() {

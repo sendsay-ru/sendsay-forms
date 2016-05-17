@@ -5,16 +5,21 @@ import {Field} from "../../src/classes/Field.js";
 describe("Field.spec.js", function() {
 
 	var json = {  
-                 "width":30,
-                 "qid":"q538",
-                 "aid":"a596",
-                 "required":false,
-                 "label":"Имя",
-                 "hidden":false,
-                 "id":"q133",
-                 "type":"textField",
-                 "placeholder":""
-              }
+           "type":"textField",
+           "content":{  
+              "label":"Адрес подписчика",
+              "placeholder":""
+           },
+           "appearance":{  
+              "hidden":false
+           },
+           "field":{  
+              "qid":"_member_email",
+              "aid":"member",
+              "required":true,
+              "default":""
+           }
+        };
 	it('Cheking Field render' , function() {
     	var dom = new Field(json);
         dom.render();

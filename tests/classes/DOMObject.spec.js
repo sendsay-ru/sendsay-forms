@@ -4,17 +4,15 @@ import {DOMObject} from "../../src/classes/DOMObject.js";
 
 describe("DOMObject.spec.js", function() {
 	it('Cheking render' , function() {
-    	var dom = new DOMObject({ "type":"text",
-                                  "text":"<b>Form title</b>", 
-                                  "align": "left"});
+    	var dom = new DOMObject({ "type":"foo" });
         dom.render();
     });
     it('Cheking makeStyles' , function() {
-    	var dom = new DOMObject({"type":"text",
-                                 "text":"<b>Form title</b>", 
-                                 "align": "left",
-                                 "param1": 200,
-                                 "param2": "test"
+    	var dom = new DOMObject({"type":"foo",
+                                 appearance: {
+                                     "param1": 200,
+                                     "param2": "test"
+                                 }
                                 });
         dom.applicableStyles = {
             'converted1': { param: 'param1', postfix: 'px'},
@@ -31,8 +29,10 @@ describe("DOMObject.spec.js", function() {
 
     it('Cheking applyStyles with all types of params' , function() {
         var dom = new DOMObject({
-                                 "param1": 200,
-                                 "param2": "test"
+                                    appearance: {
+                                         "param1": 200,
+                                         "param2": "test"
+                                     }
                                 });
         var applicableStyles = {
             'converted1': { param: 'param1', postfix: 'px'},

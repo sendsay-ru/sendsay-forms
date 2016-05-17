@@ -12,22 +12,28 @@ export class SingleChoiseField extends Field {
 				'<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + 
 				'<div type="text" class="sendsay-error"></div>' + 
 				'</div>';
-		this.curValue = this.data.default || '';
+		let field = this.data.field || {};
+		this.curValue = field.default || '';
 		this.handleChangeValue = this.handleChangeValue.bind(this);
 	}
 
 	build() {
 		super.build();
 		this.elements = [];
+		let field = this.data.field || {};
 		let body = this.el;
-		if(this.data.answers) {
-			let answers = this.data.answers;
+		if(field.answers) {
+			let answers = field.answers;
 			for(var key in answers) {
 				let newEl = new RadioButton({
-					qid: this.data.qid || '', 
-					label: answers[key],
-					value: key,
-					checked: key === this.curValue
+					field: {
+						qid: field.id || field.qid || ''
+					},
+					content: { 
+						label: answers[key],
+						value: key,
+						checked: key === this.curValue
+					}
 
 				}, this);
 				if(newEl) {

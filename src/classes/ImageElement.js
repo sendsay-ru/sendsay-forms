@@ -16,7 +16,7 @@ export class ImageElement extends DOMObject {
 
 	makeStyles() {
 		let styleObj = super.makeStyles(),
-			data = this.data;
+			data = this.data.appearance || {};
 		if(data.extended) 
 			styleObj.width = '100%';
 		else
@@ -25,9 +25,8 @@ export class ImageElement extends DOMObject {
 	}
 
 	makeSettings() {
-		let data = this.data,
+		let data = this.data.content || {},
 			settings = super.makeSettings();
-		settings.text = data.text || 'Unknown';
 		settings.wrapperstyle = this.makeWrapperStyle();
 		settings.url = data.url;
 		return settings;
@@ -35,7 +34,7 @@ export class ImageElement extends DOMObject {
 
 	makeWrapperStyle() {
 		let style = {},
-			data = this.data;
+			data = this.data.appearance || {};
 
 		style['text-align'] = data.align;
 

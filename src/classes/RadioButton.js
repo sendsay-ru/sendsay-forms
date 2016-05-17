@@ -10,7 +10,7 @@ export class RadioButton extends DOMObject {
 	initialize() {
 		this.template = '<div class = "[%classes%]" style="[%style%]">' +						
 							'<input [%checked%] name="[%qid%]" value="[%value%]" type="radio" class="sendsay-radioinput"/>' +
-							(this.data.label ? '<label for="[%qid%]" class = "sendsay-label">[%label%]</label>' : '') +
+							(this.data.content.label ? '<label for="[%qid%]" class = "sendsay-label">[%label%]</label>' : '') +
 						'</div>';
 		this.baseClass = 'sendsay-radio';
 		this.handleChange = this.handleChange.bind(this);
@@ -23,12 +23,16 @@ export class RadioButton extends DOMObject {
 	makeSettings() {
 		let data = this.data,
 			settings = super.makeSettings();
+		let content = data.content || {},
+			field = data.field || {},
+			appearance = data.appearance || {};
 
-		settings.label = data.label || data.name || '';
-		settings.qid = data.qid || data.name || '';
-		settings.value = data.value || '';
-		settings.checked = data.checked ? 'checked' : '';
-		if(data.hidden) {
+
+		settings.label = content.label || '';
+		settings.qid = field.qid || '';
+		settings.value = content.value || '';
+		settings.checked = content.checked ? 'checked' : '';
+		if(appearance.hidden) {
 			settings.classes += ' sendsay-field-hidden';
 		}
 		return settings;
@@ -37,14 +41,16 @@ export class RadioButton extends DOMObject {
 	addEvents() {
 		if(this.el) {
 			this.el.querySelector('input').addEventListener('change', this.handleChange);
-			this.el.querySelector('label').addEventListener('click', this.handleClick);
+			if(this.data.content.label)
+				this.el.querySelector('label').addEventListener('click', this.handleClick);
 		}
 	}
 
 	removeEvents() {
 		if(this.el) {
 			this.el.querySelector('input').removeEventListener('change', this.handleChange);
-			this.el.querySelector('label').removeEventListener('click', this.handleClick);
+			if(this.data.content.label)
+				this.el.querySelector('label').removeEventListener('click', this.handleClick);
 		}
 	}
 

@@ -4,7 +4,12 @@ import {Text} from "../../src/classes/Text.js";
 
 describe("Text.spec.js", function() {
 
-    var json = {"type":"text","text":"<b>Form title</b>", "align": "left"};
+    var json = {  
+           "type":"text",
+           "content":{  
+              "text":"<b style=\"font-size: 16 px;\">Подписка на рассылку</b>"
+           }
+        };
 
 	it('Cheking text render' , function() {
     	var dom = new Text(json);

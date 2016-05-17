@@ -8,9 +8,10 @@ export class CheckBox extends DOMObject {
 	}
 
 	initialize() {
+
 		this.template = '<div class = "[%classes%]" style="[%style%]"">' +						
 							'<input [%checked%] name="[%qid%]" value="[%value%]" type="checkbox" class="sendsay-checkinput"/>' +
-							(this.data.label ? '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' : '') +
+							(this.data.content.label ? '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' : '') +
 						'</div>';
 		this.baseClass = 'sendsay-checkbox';
 		this.handleChange = this.handleChange.bind(this);
@@ -21,14 +22,17 @@ export class CheckBox extends DOMObject {
 		return super.build();
 	}
 	makeSettings() {
-		let data = this.data,
+
+		let content = this.data.content || {},
+			field = this.data.field || {},
+			appearance = this.data.appearance || {},
 			settings = super.makeSettings();
 
-		settings.label = data.label || data.name || '';
-		settings.qid = data.qid || data.name || '';
-		settings.value = data.value || '';
-		settings.checked = data.checked ? 'checked' : '';
-		if(data.hidden) {
+		settings.label = content.label || content.name || '';
+		settings.qid = field.qid || field.name || '';
+		settings.value = content.value || '';
+		settings.checked = content.checked ? 'checked' : '';
+		if(appearance.hidden) {
 			settings.classes += ' sendsay-field-hidden';
 		}
 		return settings;
@@ -37,14 +41,18 @@ export class CheckBox extends DOMObject {
 	addEvents() {
 		if(this.el) {
 			this.el.querySelector('input').addEventListener('change', this.handleChange);
-			this.el.querySelector('label').addEventListener('click', this.handleClick);
+			if(this.el.querySelector('label')) {
+				this.el.querySelector('label').addEventListener('click', this.handleClick);
+			}
 		}
 	}
 
 	removeEvents() {
 		if(this.el) {
 			this.el.querySelector('input').removeEventListener('change', this.handleChange);
-			this.el.querySelector('label').removeEventListener('click', this.handleClick);
+			if(this.el.querySelector('label')) {
+				this.el.querySelector('label').removeEventListener('click', this.handleClick);
+			}
 		}
 	}
 
