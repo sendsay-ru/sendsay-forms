@@ -15,7 +15,6 @@ export class Popup extends DOMObject {
 
 	constructor(data, parent) {
 		super(data, parent);
-		console.log(this.data);
 	}
 
 	initialize() {
@@ -204,7 +203,6 @@ export class Popup extends DOMObject {
 		if(isValid) {
 			button.el.querySelector('input').classList.add('sendsay-loading');
 			this.trigger('sendsay-success', data);
-
 		}
 		return isValid;
 	}

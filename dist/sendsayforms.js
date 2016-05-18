@@ -642,7 +642,7 @@ var Field = exports.Field = function (_DOMObject) {
 		key: 'validate',
 		value: function validate() {
 			this.removeErrorMessage();
-			if (this.data.required && this.getValue() == '') {
+			if (this.data.field.required && this.getValue() == '') {
 				this.showErrorMessage("Обязательное поле");
 				return false;
 			}
@@ -989,10 +989,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 	function Popup(data, parent) {
 		_classCallCheck(this, Popup);
 
-		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Popup).call(this, data, parent));
-
-		console.log(_this.data);
-		return _this;
+		return _possibleConstructorReturn(this, Object.getPrototypeOf(Popup).call(this, data, parent));
 	}
 
 	_createClass(Popup, [{

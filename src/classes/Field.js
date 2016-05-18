@@ -47,7 +47,7 @@ export class Field extends DOMObject {
 
 	validate() {
 		this.removeErrorMessage();
-		if(this.data.required && this.getValue() == '') {
+		if(this.data.field.required && this.getValue() == '') {
 			this.showErrorMessage("Обязательное поле")
 			return false;
 		}

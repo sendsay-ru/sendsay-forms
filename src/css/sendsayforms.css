@@ -19,6 +19,12 @@
         background-position: 0 0;
     }
 }
+.sendsay-popup * {
+    box-sizing: border-box;
+    background: none;
+    background-image: none;
+    height: auto;
+}
 
 
 
@@ -98,12 +104,6 @@
 
 }
 
-.sendsay-popup * {
-    box-sizing: border-box;
-    background: none;
-    background-image: none;
-    height: auto;
-}
 
 .sendsay-field-hidden {
     display: none;
