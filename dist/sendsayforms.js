@@ -252,7 +252,11 @@ var Connector = exports.Connector = function () {
 	}, {
 		key: 'transformAnswer',
 		value: function transformAnswer(json) {
-
+			if (json.settings) {
+				this.data = json.settings;
+				if (json.state && +json.state === 1) this.data.active = true;
+				return;
+			};
 			this.data = {
 				endDialogMessage: 'Спасибо за заполнение формы!',
 				elements: [{
@@ -631,7 +635,7 @@ var Field = exports.Field = function (_DOMObject) {
 		value: function makeStyles() {
 			var styleObj = _get(Object.getPrototypeOf(Field.prototype), 'makeStyles', this).call(this),
 			    data = this.data;
-			if (this.parent && this.parent.data && this.parent.data.textColor) styleObj.color = this.parent.data.textColor;
+			if (this.parent && this.parent.data.appearance && this.parent.data.appearance.textColor) styleObj.color = this.parent.data.appearance.textColor;
 			return styleObj;
 		}
 	}, {
@@ -985,7 +989,10 @@ var Popup = exports.Popup = function (_DOMObject) {
 	function Popup(data, parent) {
 		_classCallCheck(this, Popup);
 
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(Popup).call(this, data, parent));
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Popup).call(this, data, parent));
+
+		console.log(_this.data);
+		return _this;
 	}
 
 	_createClass(Popup, [{
@@ -1610,7 +1617,7 @@ var Text = exports.Text = function (_DOMObject) {
 		value: function makeStyles() {
 			var styleObj = _get(Object.getPrototypeOf(Text.prototype), 'makeStyles', this).call(this),
 			    data = this.data;
-			if (this.parent && this.parent.data && this.parent.data.textColor) styleObj.color = this.parent.data.textColor;
+			if (this.parent && this.parent.data.appearance && this.parent.data.appearance.textColor) styleObj.color = this.parent.data.appearance.textColor;
 			return styleObj;
 		}
 	}]);

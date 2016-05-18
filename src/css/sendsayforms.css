@@ -56,7 +56,7 @@
 .sendsay-wrapper * {
 	box-sizing: border-box;
 }
-.sendsay-popup.sendsay-leftbottom {
+.sendsay-popup.sendsay-left {
     bottom: 50px;
     left: 50px;
     animation: sendsay-popup-animate;
@@ -64,7 +64,7 @@
     animation-timing-function: cubic-bezier(.175,.885,.32,1.275);
 }
 
-.sendsay-popup.sendsay-rightbottom {
+.sendsay-popup.sendsay-right {
     bottom: 50px;
     right: 50px;
     animation: sendsay-popup-animate;

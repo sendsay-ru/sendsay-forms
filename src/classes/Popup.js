@@ -15,6 +15,7 @@ export class Popup extends DOMObject {
 
 	constructor(data, parent) {
 		super(data, parent);
+		console.log(this.data);
 	}
 
 	initialize() {

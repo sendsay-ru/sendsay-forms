@@ -38,7 +38,12 @@ export class Connector {
 
 
 	transformAnswer(json) {
-
+		if(json.settings) {
+			this.data = json.settings;
+			if(json.state && +json.state === 1)
+				this.data.active = true;
+			return;
+		};
 		this.data = {
 			endDialogMessage: 'Спасибо за заполнение формы!',
 			elements: [

@@ -36,8 +36,8 @@ export class Text extends DOMObject {
 	makeStyles() {
 		let styleObj = super.makeStyles(),
 			data = this.data;
-		if(this.parent && this.parent.data && this.parent.data.textColor)
-			styleObj.color = this.parent.data.textColor;
+		if(this.parent && this.parent.data.appearance && this.parent.data.appearance.textColor)
+			styleObj.color = this.parent.data.appearance.textColor;
 		return styleObj;
 	}
 }
