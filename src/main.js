@@ -6,18 +6,10 @@ import {Form} from "./classes/Form.js";
 
 	
 	var activatePopup  = function(url, options) {
-		loadCss();
-		var onLoad = function() {
+		loadCss(function() {
 			var connector = new Connector(url);
-			var form = new Form(Popup, connector);
-			window.removeEventListener('load', onLoad);
-		};
-
-		if (document.readyState === "complete") {
-			onLoad();
-		} else {
-			window.addEventListener('load', onLoad)
-		}
+			var form = new Form(Popup, connector, options);
+		});	
 	};
 
 	var showPopup = function(data, options) {
@@ -26,7 +18,7 @@ import {Form} from "./classes/Form.js";
 		popup.activate(options);
 	}
 
-	var loadCss = function() {
+	var loadCss = function(callback) {
 		var cssId = '_sendsay-styles';  // you could encode the css path itself to generate id..
 		if (!document.getElementById(cssId))
 		{
@@ -38,6 +30,7 @@ import {Form} from "./classes/Form.js";
 		    link.href = 'https://dl.dropbox.com/s/hq9cw3paj4tcube/sendsayforms.css';
 		    link.media = 'all';
 		    head.appendChild(link);
+		    link.addEventListener('load', callback);
 		}
 	} 
 	window.SENDSAY = {

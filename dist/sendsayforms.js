@@ -681,10 +681,11 @@ var _Cookies = require('./Cookies.js');
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Form = exports.Form = function () {
-	function Form(domConstructor, connector) {
+	function Form(domConstructor, connector, options) {
 		_classCallCheck(this, Form);
 
-		if (!_Cookies.Cookies.has('__sendsay_forms')) {
+		this.options = options || {};
+		if (this.options.ignoreCookie || !_Cookies.Cookies.has('__sendsay_forms')) {
 			this.domConstructor = domConstructor;
 			this.connector = connector;
 			var promise = connector.load();
@@ -697,7 +698,7 @@ var Form = exports.Form = function () {
 		value: function handleSuccess() {
 
 			this.domObj = new this.domConstructor(this.connector.data);
-			this.domObj.activate();
+			this.domObj.activate(this.options);
 			this.domObj.el.addEventListener('sendsay-success', this.handleSubmit.bind(this));
 		}
 	}, {
@@ -706,7 +707,7 @@ var Form = exports.Form = function () {
 	}, {
 		key: 'handleSubmit',
 		value: function handleSubmit(event) {
-
+			if (this.options.fakeSubmit) return this.handleSuccessSubmit();
 			var params = event.detail.extra;
 			var promise = this.connector.submit(params);
 			if (promise) promise.then(this.handleSuccessSubmit.bind(this), this.handleFailSubmit.bind(this));
@@ -1071,7 +1072,8 @@ var Popup = exports.Popup = function (_DOMObject) {
 			var appearance = this.data.appearance || {};
 			var classes = _get(Object.getPrototypeOf(Popup.prototype), "makeClasses", this).call(this);
 			classes += this.data.endDialog ? ' sendsay-enddialog' : '';
-			if (appearance.position) classes += ' sendsay-' + appearance.position;
+
+			classes += ' sendsay-' + (appearance.position || 'center');
 			return classes;
 		}
 	}, {
@@ -1626,18 +1628,10 @@ var _Form = require("./classes/Form.js");
 (function () {
 
 	var activatePopup = function activatePopup(url, options) {
-		loadCss();
-		var onLoad = function onLoad() {
+		loadCss(function () {
 			var connector = new _Connector.Connector(url);
-			var form = new _Form.Form(_Popup.Popup, connector);
-			window.removeEventListener('load', onLoad);
-		};
-
-		if (document.readyState === "complete") {
-			onLoad();
-		} else {
-			window.addEventListener('load', onLoad);
-		}
+			var form = new _Form.Form(_Popup.Popup, connector, options);
+		});
 	};
 
 	var showPopup = function showPopup(data, options) {
@@ -1646,7 +1640,7 @@ var _Form = require("./classes/Form.js");
 		popup.activate(options);
 	};
 
-	var loadCss = function loadCss() {
+	var loadCss = function loadCss(callback) {
 		var cssId = '_sendsay-styles'; // you could encode the css path itself to generate id..
 		if (!document.getElementById(cssId)) {
 			var head = document.getElementsByTagName('head')[0];
@@ -1657,6 +1651,7 @@ var _Form = require("./classes/Form.js");
 			link.href = 'https://dl.dropbox.com/s/hq9cw3paj4tcube/sendsayforms.css';
 			link.media = 'all';
 			head.appendChild(link);
+			link.addEventListener('load', callback);
 		}
 	};
 	window.SENDSAY = {

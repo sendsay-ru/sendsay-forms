@@ -2,8 +2,9 @@ import {Cookies} from "./Cookies.js";
 
 export class Form {
 
-	constructor(domConstructor, connector) {
-		if(!Cookies.has('__sendsay_forms')) {
+	constructor(domConstructor, connector, options) {
+		this.options = options || {};
+		if(this.options.ignoreCookie || !Cookies.has('__sendsay_forms')) {
 			this.domConstructor = domConstructor;
 			this.connector = connector;
 			let promise = connector.load();
@@ -15,7 +16,7 @@ export class Form {
 	handleSuccess() {
 
 		this.domObj = new (this.domConstructor)(this.connector.data);
-		this.domObj.activate();
+		this.domObj.activate(this.options);
 		this.domObj.el.addEventListener('sendsay-success', this.handleSubmit.bind(this));
 	}
 
@@ -24,7 +25,8 @@ export class Form {
 	}
 
 	handleSubmit(event) {
-
+		if(this.options.fakeSubmit)
+			return this.handleSuccessSubmit();
 		var params = event.detail.extra;
 		let promise = this.connector.submit(params);
 		if(promise)

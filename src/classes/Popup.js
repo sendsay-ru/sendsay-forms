@@ -102,8 +102,8 @@ export class Popup extends DOMObject {
 		let appearance = this.data.appearance || {};
 		let classes = super.makeClasses();
 		classes += this.data.endDialog ? ' sendsay-enddialog' : '';
-		if(appearance.position)
-			classes += ' sendsay-'+ appearance.position;
+
+		classes += ' sendsay-'+ (appearance.position || 'center');
 		return classes;
 	}
 
