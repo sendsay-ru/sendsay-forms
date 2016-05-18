@@ -1103,7 +1103,9 @@ var Popup = exports.Popup = function (_DOMObject) {
 				var element = data.elements[i];
 				if (element.type == 'button') {
 					button = this.extend({}, element);
-					button.content.text = 'Закрыть';
+					button.content = {
+						text: 'Закрыть'
+					};
 				}
 			}
 			this.submitData.elements = [{

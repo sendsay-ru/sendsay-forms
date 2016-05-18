@@ -131,7 +131,9 @@ export class Popup extends DOMObject {
 			let element = data.elements[i];
 			if(element.type == 'button') {	
 				button = this.extend({}, element);
-				button.content.text = 'Закрыть';
+				button.content = {
+					text: 'Закрыть'
+				};
 			}
 		}
 		this.submitData.elements = [
