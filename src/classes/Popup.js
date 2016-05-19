@@ -39,7 +39,7 @@ export class Popup extends DOMObject {
 		appearance.position = appearance.position || 'centered';
 		this.makeEndDialogData();	
 
-		this.handleWindowResize = this.handleWindowResize.bind(this);	
+
 	}
 
 	build() {
@@ -78,7 +78,7 @@ export class Popup extends DOMObject {
 			popup.addEventListener('click', this.handlePopupClick.bind(this));
 			this.el.querySelector('.sendsay-close').addEventListener('click', this.handleClose.bind(this));
 			document.addEventListener('keyup', this.handleKeyPress.bind(this));
-			window.addEventListener('resize', this.handleWindowResize);
+
 		}
 	}
 
@@ -92,7 +92,6 @@ export class Popup extends DOMObject {
 			this.el.removeEventListener('wheel', this.handleWheel.bind(this));
 			this.el.removeEventListener('DOMMouseScroll', this.handleWheel.bind(this));	
 			this.el.removeEventListener('wheel', this.handleWheel.bind(this));
-
 			popup.removeEventListener('click', this.handlePopupClick.bind(this));
 			document.removeEventListener('keyup', this.handleKeyPress.bind(this));
 		}
@@ -171,7 +170,7 @@ export class Popup extends DOMObject {
 
 	show(options) {
 		Cookies.set('__sendsay_forms', 'true', 60*60);
-		this.handleWindowResize();
+
 		if(!this.container)
 			document.querySelector('body').appendChild(this.el);
 		else {
@@ -285,11 +284,6 @@ export class Popup extends DOMObject {
 		this.hide();
 	}
 
-	handleWindowResize(event) {
-		var height = !this.container ? window.innerHeight : this.container.clientHeight;
-		var el = !this.noWrapper ? this.el.querySelector('.sendsay-popup') : this.el;
-		el.style.maxHeight = (height - 100) + 'px';
-	}
 }
 
 

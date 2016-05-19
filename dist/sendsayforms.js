@@ -1010,8 +1010,6 @@ var Popup = exports.Popup = function (_DOMObject) {
 			};
 			appearance.position = appearance.position || 'centered';
 			this.makeEndDialogData();
-
-			this.handleWindowResize = this.handleWindowResize.bind(this);
 		}
 	}, {
 		key: "build",
@@ -1049,7 +1047,6 @@ var Popup = exports.Popup = function (_DOMObject) {
 				popup.addEventListener('click', this.handlePopupClick.bind(this));
 				this.el.querySelector('.sendsay-close').addEventListener('click', this.handleClose.bind(this));
 				document.addEventListener('keyup', this.handleKeyPress.bind(this));
-				window.addEventListener('resize', this.handleWindowResize);
 			}
 		}
 	}, {
@@ -1063,7 +1060,6 @@ var Popup = exports.Popup = function (_DOMObject) {
 				this.el.removeEventListener('wheel', this.handleWheel.bind(this));
 				this.el.removeEventListener('DOMMouseScroll', this.handleWheel.bind(this));
 				this.el.removeEventListener('wheel', this.handleWheel.bind(this));
-
 				popup.removeEventListener('click', this.handlePopupClick.bind(this));
 				document.removeEventListener('keyup', this.handleKeyPress.bind(this));
 			}
@@ -1143,7 +1139,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 		key: "show",
 		value: function show(options) {
 			_Cookies.Cookies.set('__sendsay_forms', 'true', 60 * 60);
-			this.handleWindowResize();
+
 			if (!this.container) document.querySelector('body').appendChild(this.el);else {
 				this.el.style.position = 'absolute';
 				if (!this.noWrapper) this.el.querySelector('.sendsay-popup').style.position = 'absolute';
@@ -1254,13 +1250,6 @@ var Popup = exports.Popup = function (_DOMObject) {
 		key: "handleClose",
 		value: function handleClose(event) {
 			this.hide();
-		}
-	}, {
-		key: "handleWindowResize",
-		value: function handleWindowResize(event) {
-			var height = !this.container ? window.innerHeight : this.container.clientHeight;
-			var el = !this.noWrapper ? this.el.querySelector('.sendsay-popup') : this.el;
-			el.style.maxHeight = height - 100 + 'px';
 		}
 	}]);
 
