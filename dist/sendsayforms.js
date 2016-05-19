@@ -1043,8 +1043,6 @@ var Popup = exports.Popup = function (_DOMObject) {
 				var popup = this.el.classList.contains('sendsay-popup') ? this.el : this.el.querySelector('.sendsay-popup');
 				if (!this.noWrapper) {
 					this.el.addEventListener('click', this.handleWrapperClick.bind(this));
-					this.el.querySelector('.sendsay-popup').addEventListener('wheel', this.handleWheel.bind(this));
-					this.el.querySelector('.sendsay-popup').addEventListener('DOMMouseScroll', this.handleWheel.bind(this));
 				}
 				this.el.addEventListener('wheel', this.handleWheel.bind(this));
 				this.el.addEventListener('DOMMouseScroll', this.handleWheel.bind(this));
@@ -1061,13 +1059,11 @@ var Popup = exports.Popup = function (_DOMObject) {
 				var popup = this.el.classList.contains('sendsay-popup') ? this.el : this.el.querySelector('.sendsay-popup');
 				if (!this.noWrapper) {
 					this.el.removeEventListener('click', this.handleWrapperClick.bind(this));
-					this.el.querySelector('.sendsay-popup').removeEventListener('wheel', this.handleWheel.bind(this));
-					this.el.querySelector('.sendsay-popup').removeEventListener('DOMMouseScroll', this.handleWheel.bind(this));
 				}
-				this.el.querySelector('.sendsay-popup').removeEventListener('wheel', this.handleWheel.bind(this));
-				this.el.querySelector('.sendsay-popup').removeEventListener('DOMMouseScroll', this.handleWheel.bind(this));
 				this.el.removeEventListener('wheel', this.handleWheel.bind(this));
 				this.el.removeEventListener('DOMMouseScroll', this.handleWheel.bind(this));
+				this.el.removeEventListener('wheel', this.handleWheel.bind(this));
+
 				popup.removeEventListener('click', this.handlePopupClick.bind(this));
 				document.removeEventListener('keyup', this.handleKeyPress.bind(this));
 			}
@@ -1262,7 +1258,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 	}, {
 		key: "handleWindowResize",
 		value: function handleWindowResize(event) {
-			var height = !this.container ? window.innerHeight : this.container.innerHeight;
+			var height = !this.container ? window.innerHeight : this.container.clientHeight;
 			var el = !this.noWrapper ? this.el.querySelector('.sendsay-popup') : this.el;
 			el.style.maxHeight = height - 100 + 'px';
 		}
