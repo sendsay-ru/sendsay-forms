@@ -1010,6 +1010,8 @@ var Popup = exports.Popup = function (_DOMObject) {
 			};
 			appearance.position = appearance.position || 'centered';
 			this.makeEndDialogData();
+
+			this.handleWindowResize = this.handleWindowResize.bind(this);
 		}
 	}, {
 		key: "build",
@@ -1041,12 +1043,15 @@ var Popup = exports.Popup = function (_DOMObject) {
 				var popup = this.el.classList.contains('sendsay-popup') ? this.el : this.el.querySelector('.sendsay-popup');
 				if (!this.noWrapper) {
 					this.el.addEventListener('click', this.handleWrapperClick.bind(this));
-					this.el.addEventListener('wheel', this.handleWrapperWheel.bind(this));
-					this.el.addEventListener('DOMMouseScroll', this.handleWrapperWheel.bind(this));
+					this.el.querySelector('.sendsay-popup').addEventListener('wheel', this.handleWheel.bind(this));
+					this.el.querySelector('.sendsay-popup').addEventListener('DOMMouseScroll', this.handleWheel.bind(this));
 				}
+				this.el.addEventListener('wheel', this.handleWheel.bind(this));
+				this.el.addEventListener('DOMMouseScroll', this.handleWheel.bind(this));
 				popup.addEventListener('click', this.handlePopupClick.bind(this));
 				this.el.querySelector('.sendsay-close').addEventListener('click', this.handleClose.bind(this));
 				document.addEventListener('keyup', this.handleKeyPress.bind(this));
+				window.addEventListener('resize', this.handleWindowResize);
 			}
 		}
 	}, {
@@ -1056,9 +1061,13 @@ var Popup = exports.Popup = function (_DOMObject) {
 				var popup = this.el.classList.contains('sendsay-popup') ? this.el : this.el.querySelector('.sendsay-popup');
 				if (!this.noWrapper) {
 					this.el.removeEventListener('click', this.handleWrapperClick.bind(this));
-					this.el.removeEventListener('wheel', this.handleWrapperWheel.bind(this));
-					this.el.removeEventListener('DOMMouseScroll', this.handleWrapperWheel.bind(this));
+					this.el.querySelector('.sendsay-popup').removeEventListener('wheel', this.handleWheel.bind(this));
+					this.el.querySelector('.sendsay-popup').removeEventListener('DOMMouseScroll', this.handleWheel.bind(this));
 				}
+				this.el.querySelector('.sendsay-popup').removeEventListener('wheel', this.handleWheel.bind(this));
+				this.el.querySelector('.sendsay-popup').removeEventListener('DOMMouseScroll', this.handleWheel.bind(this));
+				this.el.removeEventListener('wheel', this.handleWheel.bind(this));
+				this.el.removeEventListener('DOMMouseScroll', this.handleWheel.bind(this));
 				popup.removeEventListener('click', this.handlePopupClick.bind(this));
 				document.removeEventListener('keyup', this.handleKeyPress.bind(this));
 			}
@@ -1084,6 +1093,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 		key: "activate",
 		value: function activate(options) {
 			this.demo = options && options.demo;
+			this.container = options.el;
 			this.ignoreKeyboard = options && options.ignoreKeyboard;
 			if (this.data.active) {
 				if (!options || !options.instant) {
@@ -1137,10 +1147,11 @@ var Popup = exports.Popup = function (_DOMObject) {
 		key: "show",
 		value: function show(options) {
 			_Cookies.Cookies.set('__sendsay_forms', 'true', 60 * 60);
-			if (!options || !options.el) document.querySelector('body').appendChild(this.el);else {
+			this.handleWindowResize();
+			if (!this.container) document.querySelector('body').appendChild(this.el);else {
 				this.el.style.position = 'absolute';
 				if (!this.noWrapper) this.el.querySelector('.sendsay-popup').style.position = 'absolute';
-				options.el.appendChild(this.el);
+				this.container.appendChild(this.el);
 			}
 		}
 	}, {
@@ -1203,10 +1214,15 @@ var Popup = exports.Popup = function (_DOMObject) {
 			//this.hide();
 		}
 	}, {
-		key: "handleWrapperWheel",
-		value: function handleWrapperWheel(event) {
-
-			event.preventDefault();
+		key: "handleWheel",
+		value: function handleWheel(event) {
+			var delta = Math.sign(event.wheelDelta);
+			if (event.target.classList.contains('sendsay-wrapper')) {
+				event.preventDefault();
+			} else {
+				var el = this.noWrapper ? this.el : this.el.querySelector('.sendsay-popup');
+				if (delta == -1 && el.clientHeight + el.scrollTop == el.scrollHeight || delta == 1 && el.scrollTop == 0) event.preventDefault();
+			}
 			return false;
 		}
 	}, {
@@ -1242,6 +1258,13 @@ var Popup = exports.Popup = function (_DOMObject) {
 		key: "handleClose",
 		value: function handleClose(event) {
 			this.hide();
+		}
+	}, {
+		key: "handleWindowResize",
+		value: function handleWindowResize(event) {
+			var height = !this.container ? window.innerHeight : this.container.innerHeight;
+			var el = !this.noWrapper ? this.el.querySelector('.sendsay-popup') : this.el;
+			el.style.maxHeight = height - 100 + 'px';
 		}
 	}]);
 
