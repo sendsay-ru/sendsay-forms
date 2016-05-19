@@ -1008,7 +1008,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 				'padding-left': { param: 'paddingLeft', postfix: 'px' },
 				'padding-right': { param: 'paddingRight', postfix: 'px' }
 			};
-			appearance.position = appearance.position || 'center';
+			appearance.position = appearance.position || 'centered';
 			this.makeEndDialogData();
 		}
 	}, {
@@ -1159,9 +1159,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 				for (var i = 0; i < elements.length; i++) {
 					var element = elements[i];
 					if (element instanceof _Field.Field) {
-
 						data[element.data.field.id || element.data.field.qid] = element.getValue();
-
 						isValid = element.validate() && isValid;
 					}
 					if (element instanceof _Button.Button) {
@@ -1194,7 +1192,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 			var elements = this.elements;
 			for (var i = 0; i < elements.length; i++) {
 				var element = elements[i];
-				if (element.data.qid == qid) {
+				if (element.data.field && element.data.field.qid == qid) {
 					element.showErrorMessage(message);
 				}
 			}

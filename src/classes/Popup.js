@@ -36,8 +36,10 @@ export class Popup extends DOMObject {
 			'padding-left': { param: 'paddingLeft', postfix: 'px'},
 			'padding-right': { param: 'paddingRight', postfix: 'px'}
 		};
-		appearance.position = appearance.position || 'center';
-		this.makeEndDialogData();		
+		appearance.position = appearance.position || 'centered';
+		this.makeEndDialogData();	
+
+		this.handleWindowResize = this.handleWindowResize.bind(this);	
 	}
 
 	build() {
@@ -69,12 +71,16 @@ export class Popup extends DOMObject {
 			var popup = this.el.classList.contains('sendsay-popup') ? this.el : this.el.querySelector('.sendsay-popup');
 			if(!this.noWrapper) {
 				this.el.addEventListener('click', this.handleWrapperClick.bind(this));
-				this.el.addEventListener('wheel', this.handleWrapperWheel.bind(this));
-				this.el.addEventListener('DOMMouseScroll', this.handleWrapperWheel.bind(this));
+				this.el.querySelector('.sendsay-popup').addEventListener('wheel', this.handleWheel.bind(this));
+				this.el.querySelector('.sendsay-popup').addEventListener('DOMMouseScroll', this.handleWheel.bind(this));
+				
 			}
+			this.el.addEventListener('wheel', this.handleWheel.bind(this));
+			this.el.addEventListener('DOMMouseScroll', this.handleWheel.bind(this));
 			popup.addEventListener('click', this.handlePopupClick.bind(this));
 			this.el.querySelector('.sendsay-close').addEventListener('click', this.handleClose.bind(this));
 			document.addEventListener('keyup', this.handleKeyPress.bind(this));
+			window.addEventListener('resize', this.handleWindowResize);
 		}
 	}
 
@@ -83,10 +89,13 @@ export class Popup extends DOMObject {
 			var popup = this.el.classList.contains('sendsay-popup') ? this.el : this.el.querySelector('.sendsay-popup');
 			if(!this.noWrapper) {
 				this.el.removeEventListener('click', this.handleWrapperClick.bind(this));
-				this.el.removeEventListener('wheel', this.handleWrapperWheel.bind(this));
-				this.el.removeEventListener('DOMMouseScroll', this.handleWrapperWheel.bind(this));
-				
+				this.el.querySelector('.sendsay-popup').removeEventListener('wheel', this.handleWheel.bind(this));
+				this.el.querySelector('.sendsay-popup').removeEventListener('DOMMouseScroll', this.handleWheel.bind(this));			
 			}
+			this.el.querySelector('.sendsay-popup').removeEventListener('wheel', this.handleWheel.bind(this));
+			this.el.querySelector('.sendsay-popup').removeEventListener('DOMMouseScroll', this.handleWheel.bind(this));	
+			this.el.removeEventListener('wheel', this.handleWheel.bind(this));
+			this.el.removeEventListener('DOMMouseScroll', this.handleWheel.bind(this));
 			popup.removeEventListener('click', this.handlePopupClick.bind(this));
 			document.removeEventListener('keyup', this.handleKeyPress.bind(this));
 		}
@@ -109,6 +118,7 @@ export class Popup extends DOMObject {
 
 	activate(options) {
 		this.demo = options && options.demo;
+		this.container = options.el;
 		this.ignoreKeyboard = options && options.ignoreKeyboard;
 		if(this.data.active) {
 			if(!options || !options.instant) {
@@ -164,13 +174,14 @@ export class Popup extends DOMObject {
 
 	show(options) {
 		Cookies.set('__sendsay_forms', 'true', 60*60);
-		if(!options || !options.el)
+		this.handleWindowResize();
+		if(!this.container)
 			document.querySelector('body').appendChild(this.el);
 		else {
 			this.el.style.position = 'absolute';
 			if(!this.noWrapper)
 				this.el.querySelector('.sendsay-popup').style.position = 'absolute';
-			options.el.appendChild(this.el); 
+			this.container.appendChild(this.el); 
 		}
 	}
 
@@ -189,10 +200,7 @@ export class Popup extends DOMObject {
 			for(let i = 0; i < elements.length; i++) {
 				let element = elements[i];
 				if(element instanceof Field ) {
-
-
 					data[element.data.field.id || element.data.field.qid] = element.getValue();
-
 					isValid = element.validate() && isValid;
 				}
 				if(element instanceof Button) {
@@ -223,7 +231,7 @@ export class Popup extends DOMObject {
 		let elements = this.elements;
 		for(let i = 0; i < elements.length; i++) {
 			let element = elements[i];
-			if(element.data.qid == qid ) {
+			if(element.data.field && element.data.field.qid == qid ) {
 				element.showErrorMessage(message);
 			}
 		}
@@ -233,9 +241,15 @@ export class Popup extends DOMObject {
 		//this.hide();
 	}
 
-	handleWrapperWheel(event) {
-
-		event.preventDefault();
+	handleWheel(event) {
+		var delta = Math.sign(event.wheelDelta);
+		if(event.target.classList.contains('sendsay-wrapper')) {
+			event.preventDefault();
+		} else {
+			var el = this.noWrapper ? this.el : this.el.querySelector('.sendsay-popup');
+			if(delta == -1 && (el.clientHeight + el.scrollTop == el.scrollHeight) || delta == 1 && el.scrollTop == 0)
+				event.preventDefault();
+		}
 		return false;
 	}
 
@@ -272,6 +286,12 @@ export class Popup extends DOMObject {
 
 	handleClose(event) {
 		this.hide();
+	}
+
+	handleWindowResize(event) {
+		var height = !this.container ? window.innerHeight : this.container.innerHeight;
+		var el = !this.noWrapper ? this.el.querySelector('.sendsay-popup') : this.el;
+		el.style.maxHeight = (height - 100) + 'px';
 	}
 }
 

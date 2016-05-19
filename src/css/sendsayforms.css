@@ -90,6 +90,7 @@
 .sendsay-popup {
     background: none;
     background-image: none;
+    overflow-y: auto;
     height: auto;
     text-align: left;
     font-family: 'Open Sans', 'Arial', sans-serif;
