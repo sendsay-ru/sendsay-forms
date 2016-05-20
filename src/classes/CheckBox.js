@@ -69,6 +69,10 @@ export class CheckBox extends DOMObject {
 		event.stopPropagation();
 		let input = this.el.querySelector('input');
 		input.checked = !input.checked;
+		this.trigger('sendsay-change', {
+			checked: input.checked,
+			value: input.value
+		});
 
 	}
 

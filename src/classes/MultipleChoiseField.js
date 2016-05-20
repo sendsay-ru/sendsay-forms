@@ -59,7 +59,13 @@ export class MultipleChoiseField extends Field {
 	}
 
 	getValue() {
-		return this.curValues;
+		var res = '';
+		for(var i=0; i < this.curValues.length; i++ ) {
+			if(i > 0)
+				res += ' ';
+			res += this.curValues[i];
+		}
+		return res;
 	}
 
 	validate() {

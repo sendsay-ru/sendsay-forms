@@ -188,6 +188,10 @@ var CheckBox = exports.CheckBox = function (_DOMObject) {
 			event.stopPropagation();
 			var input = this.el.querySelector('input');
 			input.checked = !input.checked;
+			this.trigger('sendsay-change', {
+				checked: input.checked,
+				value: input.value
+			});
 		}
 	}, {
 		key: 'makeStyles',
@@ -883,7 +887,12 @@ var MultipleChoiseField = exports.MultipleChoiseField = function (_Field) {
 	}, {
 		key: "getValue",
 		value: function getValue() {
-			return this.curValues;
+			var res = '';
+			for (var i = 0; i < this.curValues.length; i++) {
+				if (i > 0) res += ' ';
+				res += this.curValues[i];
+			}
+			return res;
 		}
 	}, {
 		key: "validate",
@@ -1031,7 +1040,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 					}
 				}
 			}
-			if (this.demo) this.el.style.position = 'absolute';
+			if (this.demo || this.container) this.el.style.position = 'absolute';
 			return this.el;
 		}
 	}, {
@@ -1412,10 +1421,13 @@ var RadioButton = exports.RadioButton = function (_DOMObject) {
 	}, {
 		key: 'handleClick',
 		value: function handleClick(event) {
-
 			event.stopPropagation();
 			var input = this.el.querySelector('input');
 			input.checked = true;
+			this.trigger('sendsay-change', {
+				checked: input.checked,
+				value: input.value
+			});
 		}
 	}, {
 		key: 'makeStyles',
