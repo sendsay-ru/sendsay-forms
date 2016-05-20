@@ -118,6 +118,10 @@
     border-color: red;
 }
 
+.sendsay-field.sendsay-field-invalid  > .sendsay-label {
+    color: red;
+}
+
 .sendsay-error {
     font-size: 12px;
     display: none;

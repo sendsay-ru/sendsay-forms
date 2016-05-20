@@ -38,7 +38,7 @@ describe("MultipleChoiseField.spec.js", function() {
 
     it('Cheking MultipleChoiseField getValue from defaults' , function() {
         var dom = new MultipleChoiseField(json);
-        expect(dom.getValue()).toEqual(["1", "3"]);
+        expect(dom.getValue()).toEqual('1 3');
     });
 
  

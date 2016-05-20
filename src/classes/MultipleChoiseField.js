@@ -10,17 +10,19 @@ export class MultipleChoiseField extends Field {
 
 	initialize() {
 		this.template = '<div class = "[%classes%]" style="[%style%]"">' +
-						'<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + 
+						'<label for="[%label%]" class = "sendsay-label">[%label%]</label>' +
+						'<div class = "sendsay-container"></div>' +
 						'<div type="text" class="sendsay-error"></div>' + 
 						'</div>';
 		this.curValues = this.data.field.default || [];
+		this.baseClass = 'sendsay-field';
 		this.handleChangeValue = this.handleChangeValue.bind(this);		
 	}
 
 	build() {
 		super.build();
 		this.elements = [];
-		let body = this.el;
+		let body = this.el.querySelector('.sendsay-container');
 		let field = this.data.field || {};
 
 		if(this.data.field.answers) {

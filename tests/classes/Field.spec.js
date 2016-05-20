@@ -25,24 +25,24 @@ describe("Field.spec.js", function() {
         dom.render();
     });
 
-    it('Cheking not required Field validation' , function() {
-        json.required = false;
-        var dom = new Field(json);
-        
-        expect(dom.validate()).toEqual(true);
-    });
+  it('Cheking not required Field validation' , function() {
+      json.field.required = false;
+      var dom = new Field(json);
+      
+      expect(dom.validate()).toEqual(true);
+  });
 
-    it('Cheking required empty Field validation' , function() {
-        json.required = true;
-        var dom = new Field(json);
-        
-        expect(dom.validate()).toEqual(false);
-    });
+  it('Cheking required empty Field validation' , function() {
+      json.field.required = true;
+      var dom = new Field(json);
+      
+      expect(dom.validate()).toEqual(false);
+  });
 
-    it('Cheking required not empty Field validation' , function() {
-        json.required = true;
-        var dom = new Field(json);
-        dom.el.querySelector('input').value = 'test';    
-        expect(dom.validate()).toEqual(true);
-    });  
+  it('Cheking required not empty Field validation' , function() {
+      json.field.required = true;
+      var dom = new Field(json);
+      dom.el.querySelector('input').value = 'test';    
+      expect(dom.validate()).toEqual(true);
+  });  
 });

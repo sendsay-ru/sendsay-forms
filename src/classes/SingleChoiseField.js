@@ -10,10 +10,12 @@ export class SingleChoiseField extends Field {
 	initialize() {
 		this.template = '<div class = "[%classes%]" style="[%style%]"">' +
 				'<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + 
+				'<div class = "sendsay-container"></div>' +
 				'<div type="text" class="sendsay-error"></div>' + 
 				'</div>';
 		let field = this.data.field || {};
 		this.curValue = field.default || '';
+		this.baseClass = 'sendsay-field';
 		this.handleChangeValue = this.handleChangeValue.bind(this);
 	}
 
@@ -21,7 +23,7 @@ export class SingleChoiseField extends Field {
 		super.build();
 		this.elements = [];
 		let field = this.data.field || {};
-		let body = this.el;
+		let body = this.el.querySelector('.sendsay-container');
 		if(field.answers) {
 			let answers = field.answers;
 			for(var key in answers) {

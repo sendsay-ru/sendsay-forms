@@ -114,7 +114,7 @@ export class Popup extends DOMObject {
 
 	activate(options) {
 		this.demo = options && options.demo;
-		this.container = options.el;
+		this.container = options && options.el;
 		this.ignoreKeyboard = options && options.ignoreKeyboard;
 		if(this.data.active) {
 			if(!options || !options.instant) {
