@@ -61,8 +61,10 @@ export class Popup extends DOMObject {
 				} 
 			}
 		}
-		if(this.demo || this.container)
+		if(this.demo || this.container) {
+			var el = this.noWrapper ? this.el : this.el.querySelector('.sendsay-popup');
 			this.el.style.position = 'absolute';
+		}
 		return this.el; 
 	}
 

@@ -646,6 +646,7 @@ var Field = exports.Field = function (_DOMObject) {
 		key: 'validate',
 		value: function validate() {
 			this.removeErrorMessage();
+
 			if (this.data.field.required && this.getValue() == '') {
 				this.showErrorMessage("Обязательное поле");
 				return false;
@@ -839,8 +840,9 @@ var MultipleChoiseField = exports.MultipleChoiseField = function (_Field) {
 	_createClass(MultipleChoiseField, [{
 		key: "initialize",
 		value: function initialize() {
-			this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
+			this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + '<div class = "sendsay-container"></div>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
 			this.curValues = this.data.field.default || [];
+			this.baseClass = 'sendsay-field';
 			this.handleChangeValue = this.handleChangeValue.bind(this);
 		}
 	}, {
@@ -848,7 +850,7 @@ var MultipleChoiseField = exports.MultipleChoiseField = function (_Field) {
 		value: function build() {
 			_get(Object.getPrototypeOf(MultipleChoiseField.prototype), "build", this).call(this);
 			this.elements = [];
-			var body = this.el;
+			var body = this.el.querySelector('.sendsay-container');
 			var field = this.data.field || {};
 
 			if (this.data.field.answers) {
@@ -1040,7 +1042,10 @@ var Popup = exports.Popup = function (_DOMObject) {
 					}
 				}
 			}
-			if (this.demo || this.container) this.el.style.position = 'absolute';
+			if (this.demo || this.container) {
+				var el = this.noWrapper ? this.el : this.el.querySelector('.sendsay-popup');
+				this.el.style.position = 'absolute';
+			}
 			return this.el;
 		}
 	}, {
@@ -1094,7 +1099,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 		key: "activate",
 		value: function activate(options) {
 			this.demo = options && options.demo;
-			this.container = options.el;
+			this.container = options && options.el;
 			this.ignoreKeyboard = options && options.ignoreKeyboard;
 			if (this.data.active) {
 				if (!options || !options.instant) {
@@ -1477,9 +1482,10 @@ var SingleChoiseField = exports.SingleChoiseField = function (_Field) {
 	_createClass(SingleChoiseField, [{
 		key: "initialize",
 		value: function initialize() {
-			this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
+			this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + '<div class = "sendsay-container"></div>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
 			var field = this.data.field || {};
 			this.curValue = field.default || '';
+			this.baseClass = 'sendsay-field';
 			this.handleChangeValue = this.handleChangeValue.bind(this);
 		}
 	}, {
@@ -1488,7 +1494,7 @@ var SingleChoiseField = exports.SingleChoiseField = function (_Field) {
 			_get(Object.getPrototypeOf(SingleChoiseField.prototype), "build", this).call(this);
 			this.elements = [];
 			var field = this.data.field || {};
-			var body = this.el;
+			var body = this.el.querySelector('.sendsay-container');
 			if (field.answers) {
 				var answers = field.answers;
 				for (var key in answers) {
