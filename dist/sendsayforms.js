@@ -72,7 +72,7 @@ var Button = exports.Button = function (_DOMObject) {
 		value: function makeSettings() {
 			var data = this.data.content || {},
 			    settings = _get(Object.getPrototypeOf(Button.prototype), 'makeSettings', this).call(this);
-			settings.text = data.text || 'Unknown';
+			settings.text = this.escapeHTML(data.text || 'Unknown');
 			settings.wrapperstyle = this.makeWrapperStyle();
 			return settings;
 		}
@@ -143,7 +143,7 @@ var CheckBox = exports.CheckBox = function (_DOMObject) {
 			    appearance = this.data.appearance || {},
 			    settings = _get(Object.getPrototypeOf(CheckBox.prototype), 'makeSettings', this).call(this);
 
-			settings.label = content.label || content.name || '';
+			settings.label = this.escapeHTML(content.label || content.name || '');
 			settings.qid = field.qid || field.name || '';
 			settings.value = content.value || '';
 			settings.checked = content.checked ? 'checked' : '';
@@ -453,8 +453,16 @@ var DOMObject = exports.DOMObject = function () {
 	}
 
 	_createClass(DOMObject, [{
+		key: 'escapeHTML',
+		value: function escapeHTML(html) {
+			var escape = document.createElement('textarea');
+			escape.textContent = html;
+			return escape.innerHTML;
+		}
+	}, {
 		key: 'initialize',
 		value: function initialize() {
+
 			this.template = '<div></div>';
 			this.baseClass = 'sendsay-main';
 			this.applicableStyles = {};
@@ -621,8 +629,8 @@ var Field = exports.Field = function (_DOMObject) {
 			    appearance = this.data.appearance || {},
 			    settings = _get(Object.getPrototypeOf(Field.prototype), 'makeSettings', this).call(this);
 
-			settings.label = content.label || '';
-			settings.placeholder = content.placeholder || '';
+			settings.label = this.escapeHTML(content.label || '');
+			settings.placeholder = this.escapeHTML(content.placeholder || '');
 			settings.qid = field.id || field.qid || '';
 			settings.value = field.default || '';
 			if (appearance.hidden) {
@@ -1390,7 +1398,7 @@ var RadioButton = exports.RadioButton = function (_DOMObject) {
 			    field = data.field || {},
 			    appearance = data.appearance || {};
 
-			settings.label = content.label || '';
+			settings.label = this.escapeHTML(content.label || '');
 			settings.qid = field.qid || '';
 			settings.value = content.value || '';
 			settings.checked = content.checked ? 'checked' : '';

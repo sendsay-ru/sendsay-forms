@@ -28,7 +28,7 @@ export class CheckBox extends DOMObject {
 			appearance = this.data.appearance || {},
 			settings = super.makeSettings();
 
-		settings.label = content.label || content.name || '';
+		settings.label = this.escapeHTML(content.label || content.name || '');
 		settings.qid = field.qid || field.name || '';
 		settings.value = content.value || '';
 		settings.checked = content.checked ? 'checked' : '';

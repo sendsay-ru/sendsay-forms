@@ -28,7 +28,7 @@ export class RadioButton extends DOMObject {
 			appearance = data.appearance || {};
 
 
-		settings.label = content.label || '';
+		settings.label = this.escapeHTML(content.label || '');
 		settings.qid = field.qid || '';
 		settings.value = content.value || '';
 		settings.checked = content.checked ? 'checked' : '';

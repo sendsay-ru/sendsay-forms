@@ -1,13 +1,23 @@
 
 export class DOMObject {
+
 	constructor(data, parent) {
 		this.data = data;
 		this.parent = parent || null;
 		this.initialize();
 		this.render();
+
+	}
+
+
+	escapeHTML(html) {
+		let escape = document.createElement('textarea');
+	    escape.textContent = html;
+	    return escape.innerHTML;
 	}
 
 	initialize() {
+
 		this.template = '<div></div>';
 		this.baseClass = 'sendsay-main';
 		this.applicableStyles = {

@@ -23,8 +23,8 @@ export class Field extends DOMObject {
 			appearance = this.data.appearance || {},
 			settings = super.makeSettings();
 
-		settings.label = content.label || '';
-		settings.placeholder = content.placeholder || '';
+		settings.label = this.escapeHTML(content.label || '');
+		settings.placeholder = this.escapeHTML(content.placeholder || '');
 		settings.qid = field.id || field.qid || '';
 		settings.value = field.default || '';
 		if(appearance.hidden) {

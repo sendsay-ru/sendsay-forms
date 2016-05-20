@@ -47,7 +47,7 @@ export class Button extends DOMObject {
 	makeSettings() {
 		let data = this.data.content || {},
 			settings = super.makeSettings();
-		settings.text = data.text || 'Unknown';
+		settings.text = this.escapeHTML(data.text || 'Unknown');
 		settings.wrapperstyle = this.makeWrapperStyle();
 		return settings;
 	}
