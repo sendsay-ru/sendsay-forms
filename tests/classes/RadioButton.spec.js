@@ -1,4 +1,4 @@
-import {RadioButton} from "../../src/classes/RadioButton.js";
+import {RadioButton} from "../../src/classes/elements/RadioButton.js";
 
 
 

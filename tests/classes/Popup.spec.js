@@ -1,4 +1,4 @@
-import {Popup} from "../../src/classes/Popup.js";
+import {Popup} from "../../src/classes/elements/Popup.js";
 
 
 

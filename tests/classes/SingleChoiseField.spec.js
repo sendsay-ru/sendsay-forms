@@ -1,4 +1,4 @@
-import {SingleChoiseField} from "../../src/classes/SingleChoiseField.js";
+import {SingleChoiseField} from "../../src/classes/elements/SingleChoiseField.js";
 
 
 

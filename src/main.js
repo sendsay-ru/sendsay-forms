@@ -1,5 +1,5 @@
 
-import {Popup} from "./classes/Popup.js";
+import {Popup} from "./classes/elements/Popup.js";
 import {Connector} from "./classes/Connector.js";
 import {Form} from "./classes/Form.js";
 (function() {

@@ -7,7 +7,7 @@ import {Spacer} from "./Spacer.js";
 import {ImageElement} from "./ImageElement.js";
 import {SingleChoiseField} from "./SingleChoiseField.js";
 import {MultipleChoiseField} from "./MultipleChoiseField.js";
-import {Cookies} from "./Cookies.js";
+import {Cookies} from "./../Cookies.js";
 
 
 

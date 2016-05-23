@@ -1,4 +1,4 @@
-import {Spacer} from "../../src/classes/Spacer.js";
+import {Spacer} from "../../src/classes/elements/Spacer.js";
 
 
 

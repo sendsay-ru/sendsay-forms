@@ -1,4 +1,4 @@
-import {CheckBox} from "../../src/classes/CheckBox.js";
+import {CheckBox} from "../../src/classes/elements/CheckBox.js";
 
 
 

@@ -1,4 +1,4 @@
-import {ImageElement} from "../../src/classes/ImageElement.js";
+import {ImageElement} from "../../src/classes/elements/ImageElement.js";
 
 
 

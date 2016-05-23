@@ -1,4 +1,4 @@
-import {Field} from "../../src/classes/Field.js";
+import {Field} from "../../src/classes/elements/Field.js";
 
 
 

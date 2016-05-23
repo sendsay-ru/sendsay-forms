@@ -1,4 +1,4 @@
-import {Button} from "../../src/classes/Button.js";
+import {Button} from "../../src/classes/elements/Button.js";
 
 
 

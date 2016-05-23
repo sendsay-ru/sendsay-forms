@@ -61,18 +61,12 @@ export class MultipleChoiseField extends Field {
 	}
 
 	getValue() {
-		var res = '';
-		for(var i=0; i < this.curValues.length; i++ ) {
-			if(i > 0)
-				res += ' ';
-			res += this.curValues[i];
-		}
-		return res;
+		return this.curValues;
 	}
 
 	validate() {
 		this.removeErrorMessage();
-		if(this.data.field.required && this.getValue().length > 0) {
+		if(this.data.field.required && this.getValue().length == 0) {
 			this.showErrorMessage("Обязательное поле")
 			return false;
 		}

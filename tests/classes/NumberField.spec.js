@@ -1,4 +1,4 @@
-import {NumberField} from "../../src/classes/NumberField.js";
+import {NumberField} from "../../src/classes/elements/NumberField.js";
 
 
 
