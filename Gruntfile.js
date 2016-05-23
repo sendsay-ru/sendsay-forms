@@ -29,7 +29,7 @@ module.exports = function(grunt) {
                ]
             },
             files: {
-              "./dist/sendsayforms.js": ["./src/*.js", "./src/classes/*.js"]
+              "./dist/sendsayforms.js": ["./src/*.js", "./src/classes/**/*.js"]
             }
          },
          dev: {
@@ -42,7 +42,7 @@ module.exports = function(grunt) {
                ]
              },
              files: {
-                "./test-dist/sendsayforms.js": ["./src/*.js", "./src/classes/*.js", "./tests/classes/*.js"]
+                "./test-dist/sendsayforms.js": ["./src/*.js", "./src/classes/**/*.js", "./tests/classes/*.js"]
              }
          }
       },
