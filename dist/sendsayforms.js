@@ -1020,7 +1020,8 @@ var Popup = exports.Popup = function (_DOMObject) {
 				'padding-bottom': { param: 'paddingBottom', postfix: 'px' },
 				'padding-top': { param: 'paddingTop', postfix: 'px' },
 				'padding-left': { param: 'paddingLeft', postfix: 'px' },
-				'padding-right': { param: 'paddingRight', postfix: 'px' }
+				'padding-right': { param: 'paddingRight', postfix: 'px' },
+				'width': { param: 'width', postfix: 'px' }
 			};
 			appearance.position = appearance.position || 'centered';
 			this.makeEndDialogData();
@@ -1695,4 +1696,4 @@ var _Form = require("./classes/Form.js");
 	};
 })();
 
-},{"./classes/Connector.js":1,"./classes/Form.js":3,"./classes/elements/Popup.js":11}]},{},[16,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
+},{"./classes/Connector.js":1,"./classes/Form.js":3,"./classes/elements/Popup.js":11}]},{},[16,1,2,4,5,6,7,8,9,10,11,12,13,14,15,3]);

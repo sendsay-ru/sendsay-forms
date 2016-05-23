@@ -11,7 +11,8 @@ describe("Popup.spec.js", function() {
         "paddingRight":20,
         "paddingBottom":20,
         "backgroundColor":"#fff",
-        "textColor":"#000"
+        "textColor":"#000",
+        "width": 400
      },
      "content":{  
         "endDialogMessage":"Спасибо за заполнение формы!"
