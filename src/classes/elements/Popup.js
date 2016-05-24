@@ -54,9 +54,6 @@ export class Popup extends DOMObject {
 			for(var i=0; i < elements.length; i++) {
 				let newEl = factory.make(elements[i], this);
 				if(newEl) {
-					if(newEl.data.type == 'button') 
-						newEl.el.addEventListener('sendsay-click', this.handleButtonClick.bind(this));
-
 					this.elements.push(newEl);
 					popupBody.appendChild(newEl.el);
 				} 
@@ -78,6 +75,7 @@ export class Popup extends DOMObject {
 				this.el.addEventListener('click', this.handleWrapperClick.bind(this));
 				
 			}
+			this.el.querySelector('.sendsay-button').addEventListener('sendsay-click', this.handleButtonClick.bind(this));
 			this.el.addEventListener('wheel', this.handleWheel.bind(this));
 			this.el.addEventListener('DOMMouseScroll', this.handleWheel.bind(this));
 			popup.addEventListener('click', this.handlePopupClick.bind(this));
