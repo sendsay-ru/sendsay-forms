@@ -1,4 +1,5 @@
 import {Cookies} from "./Cookies.js";
+import {ConditionWatcher} from "./ConditionWatcher.js";
 
 export class Form {
 
@@ -15,9 +16,16 @@ export class Form {
 
 	handleSuccess() {
 
-		this.domObj = new (this.domConstructor)(this.connector.data);
-		this.domObj.activate(this.options);
-		this.domObj.el.addEventListener('sendsay-success', this.handleSubmit.bind(this));
+		let conditions = this.connector.data.settings;
+		let watcher = new ConditionWatcher(conditions);
+		let self = this;
+		watcher.watch().then(function() {
+			console.log('condition satisfied');
+			self.domObj = new (self.domConstructor)(self.connector.data);
+			self.domObj.activate(self.options);
+			self.domObj.el.addEventListener('sendsay-success', self.handleSubmit.bind(self));	
+		});
+
 	}
 
 	handleFail() {
