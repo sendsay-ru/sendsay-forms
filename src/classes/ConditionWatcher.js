@@ -1,10 +1,12 @@
-
+import {Cookies} from "./Cookies.js";
 
 export class ConditionWatcher {
 
-	constructor(rawConditions) {
+	constructor(rawConditions, formID) {
+		this.globCond = rawConditions;
 		let conditions = this.conditions = rawConditions.showCondition;
-		console.log(conditions);
+		this.id = formID;
+
 		this.instant = conditions.instant != undefined ? conditions.instant : true;
 		this.pageScroll = +conditions.onPageScroll || 0;
 		this.onLeave = conditions.onLeave || false;
@@ -22,8 +24,13 @@ export class ConditionWatcher {
 		this.resolve = resolve;
 		this.reject = reject;
 		this.isDone = false;
-		if(this.instant) {
 
+		if(this.isRejectByCookie()) {
+			reject();
+			return;
+		}
+
+		if(this.instant) {
 			resolve();
 			return;
 		}
@@ -38,9 +45,18 @@ export class ConditionWatcher {
 		if(this.onLeave) {
 			document.addEventListener('mouseout', this.leaveWatcher);
 		}
-		console.log(this.delay * 1000);
-		this.timeoutID = setTimeout(this.delayWatcher.bind(this), this.delay * 1000);
 
+		this.timeoutID = setTimeout(this.delayWatcher.bind(this), this.delay * 1000);
+	}
+
+	isRejectByCookie() {
+		if(this.globCond.ignoreCookie) {
+			return false;
+		}
+		if(Cookies.has('__sendsay_forms_' + this.id)) {
+			return true;
+		}
+		return false;	
 	}
 
 	scrollWatcher(event) {

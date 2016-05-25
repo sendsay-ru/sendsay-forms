@@ -2,6 +2,16 @@ export class Connector {
 
 	constructor(url) {
 		this.url = url;
+		this.id = this.extractID(this.url) || '';
+	}
+
+	extractID(url) {
+		let res = url.match(/[^/s\/]*\/[^/s\/]*\/?$/)
+		if(res) {
+			let parts = res[0].split('/');
+			return parts[0] + '-' + parts[1];
+		}
+
 	}
 
 
@@ -40,6 +50,7 @@ export class Connector {
 	transformAnswer(json) {
 		if(json.settings) {
 			this.data = json.settings;
+			this.data.id = this.id;
 			if(json.state && +json.state === 1)
 				this.data.active = true;
 			return;
@@ -51,7 +62,8 @@ export class Connector {
 					type: 'text',
 					text: '<div style="font-size: 16px; padding-bottom: 10px; font-weight: bold;">Подписка на рассылку</div>'
 				}
-			]
+			],
+			id: this.id
 		};
 
 		this.data.active = json.state == '1' || false;

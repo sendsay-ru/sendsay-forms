@@ -1,31 +1,47 @@
-import {Cookies} from "./Cookies.js";
+
 import {ConditionWatcher} from "./ConditionWatcher.js";
+import {Cookies} from "./Cookies.js";
 
 export class Form {
 
 	constructor(domConstructor, connector, options) {
 		this.options = options || {};
-		if(this.options.ignoreCookie || !Cookies.has('__sendsay_forms')) {
-			this.domConstructor = domConstructor;
-			this.connector = connector;
-			let promise = connector.load();
-			if(promise)
-				promise.then(this.handleSuccess.bind(this), this.handleFail.bind(this));
-		}
+		this.domConstructor = domConstructor;
+		this.connector = connector;
+		let promise = connector.load();
+		if(promise)
+			promise.then(this.handleSuccess.bind(this), this.handleFail.bind(this));
 	}
 
-	handleSuccess() {
+	processConditionsSettings() {
+		let conditions = JSON.parse(JSON.stringify(this.connector.data.settings));
+		if(this.options.instant)
+			conditions.showConditions.instant = true;
+		if(this.options.ignoreState)
+			conditions.ignoreState = true;
+		if(this.options.ignoreCookie)
+			conditions.ignoreCookie = true;
+		conditions.active = this.connector.data.active;
+		return conditions;
+	}
 
-		let conditions = this.connector.data.settings;
-		let watcher = new ConditionWatcher(conditions);
-		let self = this;
+
+	handleSuccess() {
+		let self = this,
+			id = self.connector.data.id;
+		let conditions = this.processConditionsSettings();
+		let watcher = new ConditionWatcher(conditions, id);
+
 		watcher.watch().then(function() {
-			console.log('condition satisfied');
+
 			self.domObj = new (self.domConstructor)(self.connector.data);
 			self.domObj.activate(self.options);
-			self.domObj.el.addEventListener('sendsay-success', self.handleSubmit.bind(self));	
-		});
+			self.domObj.el.addEventListener('sendsay-success', self.handleSubmit.bind(self));
 
+			Cookies.set('__sendsay_forms_' + id, 'true', 60*60);	
+		}, function() {
+			console.log('rejected');
+		});
 	}
 
 	handleFail() {

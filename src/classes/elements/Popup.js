@@ -119,15 +119,7 @@ export class Popup extends DOMObject {
 		this.demo = options && options.demo;
 		this.container = options && options.el;
 		this.ignoreKeyboard = options && options.ignoreKeyboard;
-		if(options && options.ignoreState)
-			this.data.active = true;
-		if(this.data.active) {
-			if(!options || !options.instant) {
-				setTimeout(this.show.bind(this, options), this.data.displaySettings && this.data.displaySettings.delay || 1000 );
-			} else {
-				this.show(options);
-			}
-		}
+		this.show(options);
 	}
 
 	makeEndDialogData() {
@@ -174,8 +166,6 @@ export class Popup extends DOMObject {
 	}
 
 	show(options) {
-		Cookies.set('__sendsay_forms', 'true', 60*60);
-
 		if(!this.container)
 			document.querySelector('body').appendChild(this.el);
 		else {
