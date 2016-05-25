@@ -4,7 +4,6 @@ export class ConditionWatcher {
 
 	constructor(rawConditions, formID) {
 		this.globCond = rawConditions;
-
 		let conditions = this.conditions = rawConditions.showCondition;
 		this.id = formID;
 
@@ -44,10 +43,10 @@ export class ConditionWatcher {
 		}
 
 		if(this.onLeave) {
-			document.addEventListener('mouseout', this.leaveWatcher);
+			document.addEventListener('mouseleave', this.leaveWatcher);
 		}
-
-		this.timeoutID = setTimeout(this.delayWatcher.bind(this), this.delay * 1000);
+		if(this.delay)
+			this.timeoutID = setTimeout(this.delayWatcher.bind(this), this.delay * 1000);
 	}
 
 	isRejectByCookie() {
@@ -55,7 +54,14 @@ export class ConditionWatcher {
 			return false;
 		}
 		if(Cookies.has('__sendsay_forms_' + this.id)) {
-			return true;
+			if(Cookies.get('__sendsay_forms_' + this.id) == this.globCond.frequency)
+				return true
+			else if(this.globCond.frequency) {
+				Cookies.set('__sendsay_forms_' + this.id, this.globCond.frequency, this.globCond.frequency);
+				return true;
+			} else {
+				Cookies.remove('__sendsay_forms_' + this.id);
+			}
 		}
 		return false;	
 	}
@@ -87,7 +93,7 @@ export class ConditionWatcher {
 
 	stopWatch() {
 		document.removeEventListener('scroll', this.scrollWatcher);
-		document.removeEventListener('mouseout', this.leaveWatcher);
+		document.removeEventListener('mouseleave', this.leaveWatcher);
 		if(this.timeoutID)
 			clearTimeout(this.timeoutID);
 	}

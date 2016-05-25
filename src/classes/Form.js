@@ -16,14 +16,22 @@ export class Form {
 	processConditionsSettings() {
 		let settings = this.connector.data.settings || {};
 		let conditions = JSON.parse(JSON.stringify(settings));
+		conditions.showCondition = conditions.showCondition || {}; 
 		if(this.options.instant)
-			conditions.showConditions.instant = true;
+			conditions.showCondition.instant = true;
 		if(this.options.ignoreState)
 			conditions.ignoreState = true;
 		if(this.options.ignoreCookie)
 			conditions.ignoreCookie = true;
 		conditions.active = this.connector.data.active;
 		return conditions;
+	}
+
+	setFrequencyCookie(data) {
+		if(!data)
+			return;
+		if(data && data.settings && data.settings.frequency)
+			Cookies.set('__sendsay_forms_' + data.id, data.settings.frequency, data.settings.frequency);
 	}
 
 
@@ -39,7 +47,7 @@ export class Form {
 			self.domObj.activate(self.options);
 			self.domObj.el.addEventListener('sendsay-success', self.handleSubmit.bind(self));
 
-			Cookies.set('__sendsay_forms_' + id, 'true', 60*60);	
+			self.setFrequencyCookie(self.connector.data);
 		}, function() {
 			console.log('rejected');
 		});

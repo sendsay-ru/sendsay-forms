@@ -17,7 +17,6 @@ var ConditionWatcher = exports.ConditionWatcher = function () {
 		_classCallCheck(this, ConditionWatcher);
 
 		this.globCond = rawConditions;
-
 		var conditions = this.conditions = rawConditions.showCondition;
 		this.id = formID;
 
@@ -59,10 +58,9 @@ var ConditionWatcher = exports.ConditionWatcher = function () {
 			}
 
 			if (this.onLeave) {
-				document.addEventListener('mouseout', this.leaveWatcher);
+				document.addEventListener('mouseleave', this.leaveWatcher);
 			}
-
-			this.timeoutID = setTimeout(this.delayWatcher.bind(this), this.delay * 1000);
+			if (this.delay) this.timeoutID = setTimeout(this.delayWatcher.bind(this), this.delay * 1000);
 		}
 	}, {
 		key: 'isRejectByCookie',
@@ -71,7 +69,12 @@ var ConditionWatcher = exports.ConditionWatcher = function () {
 				return false;
 			}
 			if (_Cookies.Cookies.has('__sendsay_forms_' + this.id)) {
-				return true;
+				if (_Cookies.Cookies.get('__sendsay_forms_' + this.id) == this.globCond.frequency) return true;else if (this.globCond.frequency) {
+					_Cookies.Cookies.set('__sendsay_forms_' + this.id, this.globCond.frequency, this.globCond.frequency);
+					return true;
+				} else {
+					_Cookies.Cookies.remove('__sendsay_forms_' + this.id);
+				}
 			}
 			return false;
 		}
@@ -108,7 +111,7 @@ var ConditionWatcher = exports.ConditionWatcher = function () {
 		key: 'stopWatch',
 		value: function stopWatch() {
 			document.removeEventListener('scroll', this.scrollWatcher);
-			document.removeEventListener('mouseout', this.leaveWatcher);
+			document.removeEventListener('mouseleave', this.leaveWatcher);
 			if (this.timeoutID) clearTimeout(this.timeoutID);
 		}
 	}]);
@@ -384,11 +387,18 @@ var Form = exports.Form = function () {
 		value: function processConditionsSettings() {
 			var settings = this.connector.data.settings || {};
 			var conditions = JSON.parse(JSON.stringify(settings));
-			if (this.options.instant) conditions.showConditions.instant = true;
+			conditions.showCondition = conditions.showCondition || {};
+			if (this.options.instant) conditions.showCondition.instant = true;
 			if (this.options.ignoreState) conditions.ignoreState = true;
 			if (this.options.ignoreCookie) conditions.ignoreCookie = true;
 			conditions.active = this.connector.data.active;
 			return conditions;
+		}
+	}, {
+		key: "setFrequencyCookie",
+		value: function setFrequencyCookie(data) {
+			if (!data) return;
+			if (data && data.settings && data.settings.frequency) _Cookies.Cookies.set('__sendsay_forms_' + data.id, data.settings.frequency, data.settings.frequency);
 		}
 	}, {
 		key: "handleSuccess",
@@ -404,7 +414,7 @@ var Form = exports.Form = function () {
 				self.domObj.activate(self.options);
 				self.domObj.el.addEventListener('sendsay-success', self.handleSubmit.bind(self));
 
-				_Cookies.Cookies.set('__sendsay_forms_' + id, 'true', 60 * 60);
+				self.setFrequencyCookie(self.connector.data);
 			}, function () {
 				console.log('rejected');
 			});
