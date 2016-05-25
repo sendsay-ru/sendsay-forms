@@ -14,7 +14,8 @@ export class Form {
 	}
 
 	processConditionsSettings() {
-		let conditions = JSON.parse(JSON.stringify(this.connector.data.settings));
+		let settings = this.connector.data.settings || {};
+		let conditions = JSON.parse(JSON.stringify(settings));
 		if(this.options.instant)
 			conditions.showConditions.instant = true;
 		if(this.options.ignoreState)

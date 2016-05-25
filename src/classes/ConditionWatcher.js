@@ -4,6 +4,7 @@ export class ConditionWatcher {
 
 	constructor(rawConditions, formID) {
 		this.globCond = rawConditions;
+
 		let conditions = this.conditions = rawConditions.showCondition;
 		this.id = formID;
 
