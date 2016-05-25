@@ -4,6 +4,124 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+exports.ConditionWatcher = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Cookies = require('./Cookies.js');
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ConditionWatcher = exports.ConditionWatcher = function () {
+	function ConditionWatcher(rawConditions, formID) {
+		_classCallCheck(this, ConditionWatcher);
+
+		this.globCond = rawConditions;
+
+		var conditions = this.conditions = rawConditions.showCondition;
+		this.id = formID;
+
+		this.instant = conditions.instant != undefined ? conditions.instant : true;
+		this.pageScroll = +conditions.onPageScroll || 0;
+		this.onLeave = conditions.onLeave || false;
+		this.delay = +conditions.delay || 0;
+
+		this.leaveWatcher = this.leaveWatcher.bind(this);
+		this.scrollWatcher = this.scrollWatcher.bind(this);
+	}
+
+	_createClass(ConditionWatcher, [{
+		key: 'watch',
+		value: function watch() {
+			return new Promise(this.promiseCore.bind(this));
+		}
+	}, {
+		key: 'promiseCore',
+		value: function promiseCore(resolve, reject) {
+			this.resolve = resolve;
+			this.reject = reject;
+			this.isDone = false;
+
+			if (this.isRejectByCookie()) {
+				reject();
+				return;
+			}
+
+			if (this.instant) {
+				resolve();
+				return;
+			}
+
+			if (this.pageScroll) {
+				document.addEventListener('scroll', this.scrollWatcher);
+				this.scrollWatcher();
+				if (this.isDone) return;
+			}
+
+			if (this.onLeave) {
+				document.addEventListener('mouseout', this.leaveWatcher);
+			}
+
+			this.timeoutID = setTimeout(this.delayWatcher.bind(this), this.delay * 1000);
+		}
+	}, {
+		key: 'isRejectByCookie',
+		value: function isRejectByCookie() {
+			if (this.globCond.ignoreCookie) {
+				return false;
+			}
+			if (_Cookies.Cookies.has('__sendsay_forms_' + this.id)) {
+				return true;
+			}
+			return false;
+		}
+	}, {
+		key: 'scrollWatcher',
+		value: function scrollWatcher(event) {
+			var curScroll = document.documentElement.scrollTop || window.pageYOffset,
+			    maxScroll = document.documentElement.scrollHeight - document.documentElement.clientHeight,
+			    showScroll = this.pageScroll;
+			if (maxScroll <= 0 || showScroll <= curScroll / maxScroll * 100) {
+				this.satisfyCondition();
+			}
+		}
+	}, {
+		key: 'leaveWatcher',
+		value: function leaveWatcher(event) {
+			this.satisfyCondition();
+		}
+	}, {
+		key: 'delayWatcher',
+		value: function delayWatcher() {
+			this.satisfyCondition();
+		}
+	}, {
+		key: 'satisfyCondition',
+		value: function satisfyCondition() {
+			this.isDone = true;
+
+			this.stopWatch();
+
+			this.resolve();
+		}
+	}, {
+		key: 'stopWatch',
+		value: function stopWatch() {
+			document.removeEventListener('scroll', this.scrollWatcher);
+			document.removeEventListener('mouseout', this.leaveWatcher);
+			if (this.timeoutID) clearTimeout(this.timeoutID);
+		}
+	}]);
+
+	return ConditionWatcher;
+}();
+
+},{"./Cookies.js":3}],2:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -14,9 +132,19 @@ var Connector = exports.Connector = function () {
 		_classCallCheck(this, Connector);
 
 		this.url = url;
+		this.id = this.extractID(this.url) || '';
 	}
 
 	_createClass(Connector, [{
+		key: 'extractID',
+		value: function extractID(url) {
+			var res = url.match(/[^/s\/]*\/[^/s\/]*\/?$/);
+			if (res) {
+				var parts = res[0].split('/');
+				return parts[0] + '-' + parts[1];
+			}
+		}
+	}, {
 		key: 'promiseHandler',
 		value: function promiseHandler(resolve, reject) {
 			var self = this;
@@ -49,6 +177,7 @@ var Connector = exports.Connector = function () {
 		value: function transformAnswer(json) {
 			if (json.settings) {
 				this.data = json.settings;
+				this.data.id = this.id;
 				if (json.state && +json.state === 1) this.data.active = true;
 				return;
 			};
@@ -57,7 +186,8 @@ var Connector = exports.Connector = function () {
 				elements: [{
 					type: 'text',
 					text: '<div style="font-size: 16px; padding-bottom: 10px; font-weight: bold;">Подписка на рассылку</div>'
-				}]
+				}],
+				id: this.id
 			};
 
 			this.data.active = json.state == '1' || false;
@@ -144,7 +274,7 @@ var Connector = exports.Connector = function () {
 	return Connector;
 }();
 
-},{}],2:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -222,8 +352,8 @@ var Cookies = exports.Cookies = function () {
     return Cookies;
 }();
 
-},{}],3:[function(require,module,exports){
-'use strict';
+},{}],4:[function(require,module,exports){
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
@@ -232,7 +362,9 @@ exports.Form = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Cookies = require('./Cookies.js');
+var _ConditionWatcher = require("./ConditionWatcher.js");
+
+var _Cookies = require("./Cookies.js");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -241,27 +373,47 @@ var Form = exports.Form = function () {
 		_classCallCheck(this, Form);
 
 		this.options = options || {};
-		if (this.options.ignoreCookie || !_Cookies.Cookies.has('__sendsay_forms')) {
-			this.domConstructor = domConstructor;
-			this.connector = connector;
-			var promise = connector.load();
-			if (promise) promise.then(this.handleSuccess.bind(this), this.handleFail.bind(this));
-		}
+		this.domConstructor = domConstructor;
+		this.connector = connector;
+		var promise = connector.load();
+		if (promise) promise.then(this.handleSuccess.bind(this), this.handleFail.bind(this));
 	}
 
 	_createClass(Form, [{
-		key: 'handleSuccess',
-		value: function handleSuccess() {
-
-			this.domObj = new this.domConstructor(this.connector.data);
-			this.domObj.activate(this.options);
-			this.domObj.el.addEventListener('sendsay-success', this.handleSubmit.bind(this));
+		key: "processConditionsSettings",
+		value: function processConditionsSettings() {
+			var settings = this.connector.data.settings || {};
+			var conditions = JSON.parse(JSON.stringify(settings));
+			if (this.options.instant) conditions.showConditions.instant = true;
+			if (this.options.ignoreState) conditions.ignoreState = true;
+			if (this.options.ignoreCookie) conditions.ignoreCookie = true;
+			conditions.active = this.connector.data.active;
+			return conditions;
 		}
 	}, {
-		key: 'handleFail',
+		key: "handleSuccess",
+		value: function handleSuccess() {
+			var self = this,
+			    id = self.connector.data.id;
+			var conditions = this.processConditionsSettings();
+			var watcher = new _ConditionWatcher.ConditionWatcher(conditions, id);
+
+			watcher.watch().then(function () {
+
+				self.domObj = new self.domConstructor(self.connector.data);
+				self.domObj.activate(self.options);
+				self.domObj.el.addEventListener('sendsay-success', self.handleSubmit.bind(self));
+
+				_Cookies.Cookies.set('__sendsay_forms_' + id, 'true', 60 * 60);
+			}, function () {
+				console.log('rejected');
+			});
+		}
+	}, {
+		key: "handleFail",
 		value: function handleFail() {}
 	}, {
-		key: 'handleSubmit',
+		key: "handleSubmit",
 		value: function handleSubmit(event) {
 			if (this.options.fakeSubmit) return this.handleSuccessSubmit();
 			var params = event.detail.extra;
@@ -269,12 +421,12 @@ var Form = exports.Form = function () {
 			if (promise) promise.then(this.handleSuccessSubmit.bind(this), this.handleFailSubmit.bind(this));
 		}
 	}, {
-		key: 'handleSuccessSubmit',
+		key: "handleSuccessSubmit",
 		value: function handleSuccessSubmit() {
 			this.domObj.showEndDialog();
 		}
 	}, {
-		key: 'handleFailSubmit',
+		key: "handleFailSubmit",
 		value: function handleFailSubmit() {
 			this.domObj.onSubmitFail();
 			var error = this.connector.error;
@@ -285,7 +437,7 @@ var Form = exports.Form = function () {
 	return Form;
 }();
 
-},{"./Cookies.js":2}],4:[function(require,module,exports){
+},{"./ConditionWatcher.js":1,"./Cookies.js":3}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -378,7 +530,7 @@ var Button = exports.Button = function (_DOMObject) {
 	return Button;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":6}],5:[function(require,module,exports){
+},{"./DOMObject.js":7}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -494,7 +646,7 @@ var CheckBox = exports.CheckBox = function (_DOMObject) {
 	return CheckBox;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":6}],6:[function(require,module,exports){
+},{"./DOMObject.js":7}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -649,7 +801,7 @@ var DOMObject = exports.DOMObject = function () {
 	return DOMObject;
 }();
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -746,7 +898,7 @@ var Field = exports.Field = function (_DOMObject) {
 	return Field;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":6}],8:[function(require,module,exports){
+},{"./DOMObject.js":7}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -814,7 +966,7 @@ var ImageElement = exports.ImageElement = function (_DOMObject) {
 	return ImageElement;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":6}],9:[function(require,module,exports){
+},{"./DOMObject.js":7}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -914,7 +1066,7 @@ var MultipleChoiseField = exports.MultipleChoiseField = function (_Field) {
 	return MultipleChoiseField;
 }(_Field2.Field);
 
-},{"./CheckBox.js":5,"./Field.js":7}],10:[function(require,module,exports){
+},{"./CheckBox.js":6,"./Field.js":8}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -959,7 +1111,7 @@ var NumberField = exports.NumberField = function (_Field) {
 	return NumberField;
 }(_Field2.Field);
 
-},{"./Field.js":7}],11:[function(require,module,exports){
+},{"./Field.js":8}],12:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1039,8 +1191,6 @@ var Popup = exports.Popup = function (_DOMObject) {
 				for (var i = 0; i < elements.length; i++) {
 					var newEl = factory.make(elements[i], this);
 					if (newEl) {
-						if (newEl.data.type == 'button') newEl.el.addEventListener('sendsay-click', this.handleButtonClick.bind(this));
-
 						this.elements.push(newEl);
 						popupBody.appendChild(newEl.el);
 					}
@@ -1061,6 +1211,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 				if (!this.noWrapper) {
 					this.el.addEventListener('click', this.handleWrapperClick.bind(this));
 				}
+				this.el.querySelector('.sendsay-button').addEventListener('sendsay-click', this.handleButtonClick.bind(this));
 				this.el.addEventListener('wheel', this.handleWheel.bind(this));
 				this.el.addEventListener('DOMMouseScroll', this.handleWheel.bind(this));
 				popup.addEventListener('click', this.handlePopupClick.bind(this));
@@ -1106,14 +1257,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 			this.demo = options && options.demo;
 			this.container = options && options.el;
 			this.ignoreKeyboard = options && options.ignoreKeyboard;
-			if (options && options.ignoreState) this.data.active = true;
-			if (this.data.active) {
-				if (!options || !options.instant) {
-					setTimeout(this.show.bind(this, options), this.data.displaySettings && this.data.displaySettings.delay || 1000);
-				} else {
-					this.show(options);
-				}
-			}
+			this.show(options);
 		}
 	}, {
 		key: "makeEndDialogData",
@@ -1158,8 +1302,6 @@ var Popup = exports.Popup = function (_DOMObject) {
 	}, {
 		key: "show",
 		value: function show(options) {
-			_Cookies.Cookies.set('__sendsay_forms', 'true', 60 * 60);
-
 			if (!this.container) document.querySelector('body').appendChild(this.el);else {
 				this.el.style.position = 'absolute';
 				if (!this.noWrapper) this.el.querySelector('.sendsay-popup').style.position = 'absolute';
@@ -1344,7 +1486,7 @@ var ElementFactory = function (_Factory) {
 	return ElementFactory;
 }(Factory);
 
-},{"./../Cookies.js":2,"./Button.js":4,"./DOMObject.js":6,"./Field.js":7,"./ImageElement.js":8,"./MultipleChoiseField.js":9,"./NumberField.js":10,"./SingleChoiseField.js":13,"./Spacer.js":14,"./Text.js":15}],12:[function(require,module,exports){
+},{"./../Cookies.js":3,"./Button.js":5,"./DOMObject.js":7,"./Field.js":8,"./ImageElement.js":9,"./MultipleChoiseField.js":10,"./NumberField.js":11,"./SingleChoiseField.js":14,"./Spacer.js":15,"./Text.js":16}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1454,7 +1596,7 @@ var RadioButton = exports.RadioButton = function (_DOMObject) {
 	return RadioButton;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":6}],13:[function(require,module,exports){
+},{"./DOMObject.js":7}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1540,7 +1682,7 @@ var SingleChoiseField = exports.SingleChoiseField = function (_Field) {
 	return SingleChoiseField;
 }(_Field2.Field);
 
-},{"./Field.js":7,"./RadioButton.js":12}],14:[function(require,module,exports){
+},{"./Field.js":8,"./RadioButton.js":13}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1582,7 +1724,7 @@ var Spacer = exports.Spacer = function (_DOMObject) {
 	return Spacer;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":6}],15:[function(require,module,exports){
+},{"./DOMObject.js":7}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1652,7 +1794,7 @@ var Text = exports.Text = function (_DOMObject) {
 	return Text;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":6}],16:[function(require,module,exports){
+},{"./DOMObject.js":7}],17:[function(require,module,exports){
 "use strict";
 
 var _Popup = require("./classes/elements/Popup.js");
@@ -1696,4 +1838,4 @@ var _Form = require("./classes/Form.js");
 	};
 })();
 
-},{"./classes/Connector.js":1,"./classes/Form.js":3,"./classes/elements/Popup.js":11}]},{},[16,1,2,4,5,6,7,8,9,10,11,12,13,14,15,3]);
+},{"./classes/Connector.js":2,"./classes/Form.js":4,"./classes/elements/Popup.js":12}]},{},[17,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]);
