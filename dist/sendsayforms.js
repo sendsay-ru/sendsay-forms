@@ -826,7 +826,7 @@ var Column = exports.Column = function (_DOMObject) {
 		key: "initialize",
 		value: function initialize() {
 			var appearance = this.data.appearance || {};
-			this.template = '<div class = "[%classes%]" style="[%style%]"">' + '</div>';
+			this.template = '<div style = "width:100%">' + '<div class = "[%classes%]" style="[%style%]"">' + '</div></div>';
 			this.baseClass = 'sendsay-column';
 			this.applicableStyles = {
 				'background-color': { param: 'backgroundColor' },
@@ -843,7 +843,7 @@ var Column = exports.Column = function (_DOMObject) {
 			_get(Object.getPrototypeOf(Column.prototype), "build", this).call(this);
 			this.elements = [];
 			var factory = new _ElementFactory.ElementFactory();
-			var popupBody = this.el;
+			var popupBody = this.el.querySelector('.sendsay-column');
 			if (this.data.elements) {
 				var elements = this.data.elements;
 				for (var i = 0; i < elements.length; i++) {

@@ -13,8 +13,9 @@ export class Column extends DOMObject {
 
 	initialize() {
 		let appearance = this.data.appearance || {};
-		this.template = '<div class = "[%classes%]" style="[%style%]"">' +
-						'</div>';
+		this.template = '<div style = "width:100%">' +
+						'<div class = "[%classes%]" style="[%style%]"">' +
+						'</div></div>';
 		this.baseClass = 'sendsay-column';
 		this.applicableStyles = {
 			'background-color': { param: 'backgroundColor' },
@@ -30,7 +31,7 @@ export class Column extends DOMObject {
 		super.build();
 		this.elements = [];
 		let factory = new ElementFactory();
-		let popupBody = this.el;
+		let popupBody = this.el.querySelector('.sendsay-column');
 		if(this.data.elements) {
 			let elements = this.data.elements;
 			for(var i=0; i < elements.length; i++) {
