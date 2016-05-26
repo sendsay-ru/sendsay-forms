@@ -615,6 +615,12 @@ var Button = exports.Button = function (_DOMObject) {
 				'color': { param: 'textColor' },
 				'line-height': { param: 'lineHeighFt', default: 'normal' }
 			};
+			this.wrapperApplStyles = {
+				'padding-bottom': { param: 'paddingBottom', postfix: 'px' },
+				'padding-top': { param: 'paddingTop', postfix: 'px' },
+				'padding-left': { param: 'paddingLeft', postfix: 'px' },
+				'padding-right': { param: 'paddingRight', postfix: 'px' }
+			};
 		}
 	}, {
 		key: 'addEvents',
@@ -659,7 +665,7 @@ var Button = exports.Button = function (_DOMObject) {
 			    data = this.data.appearance || {};
 
 			if (data.align !== 'justify') style['text-align'] = data.align;
-
+			style = this.extend(style, this.applyStyles(this.wrapperApplStyles));
 			return this.convertStyles(style);
 		}
 	}]);
@@ -1044,6 +1050,12 @@ var Field = exports.Field = function (_DOMObject) {
 		value: function initialize() {
 			this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + '<input name="[%qid%]" placeholder="[%placeholder%]" value="[%value%]" type="text" class="sendsay-input"/>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
 			this.baseClass = 'sendsay-field';
+			this.applicableStyles = {
+				'padding-bottom': { param: 'paddingBottom', postfix: 'px' },
+				'padding-top': { param: 'paddingTop', postfix: 'px' },
+				'padding-left': { param: 'paddingLeft', postfix: 'px' },
+				'padding-right': { param: 'paddingRight', postfix: 'px' }
+			};
 		}
 	}, {
 		key: 'makeSettings',
@@ -1140,6 +1152,12 @@ var ImageElement = exports.ImageElement = function (_DOMObject) {
 		key: 'initialize',
 		value: function initialize() {
 			this.template = '<div class = "[%classes%]" style="[%wrapperstyle%]">' + '<img src="[%url%]" style="[%style%]/>" />' + '</div>';
+			this.wrapperApplStyles = {
+				'padding-bottom': { param: 'paddingBottom', postfix: 'px' },
+				'padding-top': { param: 'paddingTop', postfix: 'px' },
+				'padding-left': { param: 'paddingLeft', postfix: 'px' },
+				'padding-right': { param: 'paddingRight', postfix: 'px' }
+			};
 
 			this.baseClass = 'sendsay-image';
 		}
@@ -1167,7 +1185,7 @@ var ImageElement = exports.ImageElement = function (_DOMObject) {
 			    data = this.data.appearance || {};
 
 			style['text-align'] = data.align;
-
+			style = this.extend(style, this.applyStyles(this.wrapperApplStyles));
 			return this.convertStyles(style);
 		}
 	}]);
@@ -1209,6 +1227,7 @@ var MultipleChoiseField = exports.MultipleChoiseField = function (_Field) {
 	_createClass(MultipleChoiseField, [{
 		key: "initialize",
 		value: function initialize() {
+			_get(Object.getPrototypeOf(MultipleChoiseField.prototype), "initialize", this).call(this);
 			this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + '<div class = "sendsay-container"></div>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
 			this.curValues = this.data.field.default || [];
 			this.baseClass = 'sendsay-field';
@@ -1785,6 +1804,7 @@ var SingleChoiseField = exports.SingleChoiseField = function (_Field) {
 	_createClass(SingleChoiseField, [{
 		key: "initialize",
 		value: function initialize() {
+			_get(Object.getPrototypeOf(SingleChoiseField.prototype), "initialize", this).call(this);
 			this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + '<div class = "sendsay-container"></div>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
 			var field = this.data.field || {};
 			this.curValue = field.default || '';
