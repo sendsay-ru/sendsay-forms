@@ -31,9 +31,13 @@ export class Popup extends DOMObject {
 			'padding-top': { param: 'paddingTop', postfix: 'px'},
 			'padding-left': { param: 'paddingLeft', postfix: 'px'},
 			'padding-right': { param: 'paddingRight', postfix: 'px'},
-			'width': { param: 'width', postfix: 'px'}
+			'width': { param: 'width', postfix: 'px'},
+			'color': { param: 'textColor'}
 		};
 		appearance.position = appearance.position || 'centered';
+		this.general = {};
+		this.general.appearance = {}
+		this.general.appearance.textColor = this.data.appearance.textColor;
 		this.makeEndDialogData();	
 
 

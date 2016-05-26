@@ -17,7 +17,8 @@ export class Text extends DOMObject {
 			'padding-bottom': { param: 'paddingBottom', postfix: 'px'},
 			'padding-top': { param: 'paddingTop', postfix: 'px'},
 			'padding-left': { param: 'paddingLeft', postfix: 'px'},
-			'padding-right': { param: 'paddingRight', postfix: 'px'}
+			'padding-right': { param: 'paddingRight', postfix: 'px'},
+			'color': { param: 'textColor'}
 
 		}		
 	}
@@ -31,13 +32,5 @@ export class Text extends DOMObject {
 			settings = super.makeSettings();
 		settings.text = content.text || '';
 		return settings;
-	}
-
-	makeStyles() {
-		let styleObj = super.makeStyles(),
-			data = this.data;
-		if(this.parent && this.parent.data.appearance && this.parent.data.appearance.textColor)
-			styleObj.color = this.parent.data.appearance.textColor;
-		return styleObj;
 	}
 }

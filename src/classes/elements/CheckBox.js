@@ -15,7 +15,10 @@ export class CheckBox extends DOMObject {
 						'</div>';
 		this.baseClass = 'sendsay-checkbox';
 		this.handleChange = this.handleChange.bind(this);
-		this.handleClick = this.handleClick.bind(this);		
+		this.handleClick = this.handleClick.bind(this);
+		this.applicableStyles = {
+			'color': { param: 'textColor'}
+		};	
 	}
 
 	build() {

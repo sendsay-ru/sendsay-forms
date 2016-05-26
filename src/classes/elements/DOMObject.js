@@ -4,6 +4,8 @@ export class DOMObject {
 	constructor(data, parent) {
 		this.data = data;
 		this.parent = parent || null;
+		if(parent && parent.general)
+		 	this.general = this.extend({}, parent.general);
 		this.initialize();
 		this.render();
 
@@ -48,12 +50,13 @@ export class DOMObject {
 
 	applyStyles(mapping) {
 		let styles = {},
-			data = this.data.appearance || {};
+			data = this.data.appearance || {},
+			general = this.general && this.general.appearance || {};
 	
 		for(var key in mapping) {
 			let val = mapping[key];
-			if(data[val.param] !== undefined) {
-				styles[key] = data[val.param] + (val.postfix ? val.postfix : '');
+			if(data[val.param] !== undefined || general[val.param] != undefined) {
+				styles[key] = (data[val.param] || general[val.param]) + (val.postfix ? val.postfix : '');
 			} else if(val.default) {
 				styles[key] = val.default;
 			}
@@ -124,8 +127,13 @@ export class DOMObject {
 	}
 
 	extend(dest, source) {
+		dest = dest || {};
+		source = source || {};
 		for(let key in source) {
-			dest[key] = source[key];
+			if((dest[key] instanceof Object) && (source[key] instanceof Object))
+				dest[key] = this.extend(dest[key], source[key]);
+			else
+				dest[key] = source[key];
 		}
 		return dest;
 	}

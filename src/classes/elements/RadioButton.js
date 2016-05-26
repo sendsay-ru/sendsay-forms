@@ -14,7 +14,10 @@ export class RadioButton extends DOMObject {
 						'</div>';
 		this.baseClass = 'sendsay-radio';
 		this.handleChange = this.handleChange.bind(this);
-		this.handleClick = this.handleClick.bind(this);		
+		this.handleClick = this.handleClick.bind(this);
+		this.applicableStyles = {
+			'color': { param: 'textColor'}
+		};	
 	}
 
 	build() {
@@ -71,14 +74,6 @@ export class RadioButton extends DOMObject {
 			value: input.value
 		});
 
-	}
-
-	makeStyles() {
-		let styleObj = super.makeStyles();
-		// 	data = this.data;
-		// if(this.parent && this.parent.data && this.parent.data.textColor)
-		// 	styleObj.color = this.parent.data.textColor;
-		return styleObj;
 	}
 
 }
