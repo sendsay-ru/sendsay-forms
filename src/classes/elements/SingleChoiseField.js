@@ -8,6 +8,7 @@ export class SingleChoiseField extends Field {
 	}
 
 	initialize() {
+		super.initialize();
 		this.template = '<div class = "[%classes%]" style="[%style%]"">' +
 				'<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + 
 				'<div class = "sendsay-container"></div>' +

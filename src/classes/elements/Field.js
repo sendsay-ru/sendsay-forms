@@ -14,6 +14,12 @@ export class Field extends DOMObject {
 				'<div type="text" class="sendsay-error"></div>' +  
 				'</div>';
 		this.baseClass = 'sendsay-field';
+		this.applicableStyles = {
+			'padding-bottom': { param: 'paddingBottom', postfix: 'px'},
+			'padding-top': { param: 'paddingTop', postfix: 'px'},
+			'padding-left': { param: 'paddingLeft', postfix: 'px'},
+			'padding-right': { param: 'paddingRight', postfix: 'px'}
+		};
 	}
 
 	

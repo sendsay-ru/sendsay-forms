@@ -10,6 +10,12 @@ export class ImageElement extends DOMObject {
 		this.template = '<div class = "[%classes%]" style="[%wrapperstyle%]">' +
 							'<img src="[%url%]" style="[%style%]/>" />' + 
 						'</div>';
+		this.wrapperApplStyles = {
+			'padding-bottom': { param: 'paddingBottom', postfix: 'px'},
+			'padding-top': { param: 'paddingTop', postfix: 'px'},
+			'padding-left': { param: 'paddingLeft', postfix: 'px'},
+			'padding-right': { param: 'paddingRight', postfix: 'px'}
+		};	
 
 		this.baseClass = 'sendsay-image';		
 	}
@@ -37,7 +43,7 @@ export class ImageElement extends DOMObject {
 			data = this.data.appearance || {};
 
 		style['text-align'] = data.align;
-
+		style = this.extend(style, this.applyStyles(this.wrapperApplStyles));
 		return this.convertStyles(style)
 	}
 

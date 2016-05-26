@@ -17,6 +17,12 @@ export class Button extends DOMObject {
 			'border-radius': { param: 'borderRadius', postfix: 'px' },
 			'color': { param: 'textColor'},
 			'line-height': { param: 'lineHeighFt' ,default: 'normal'}
+		};
+		this.wrapperApplStyles = {
+			'padding-bottom': { param: 'paddingBottom', postfix: 'px'},
+			'padding-top': { param: 'paddingTop', postfix: 'px'},
+			'padding-left': { param: 'paddingLeft', postfix: 'px'},
+			'padding-right': { param: 'paddingRight', postfix: 'px'}
 		};		
 	}
 
@@ -58,7 +64,7 @@ export class Button extends DOMObject {
 
 		if(data.align !== 'justify')
 			style['text-align'] = data.align;
-
+		style = this.extend(style, this.applyStyles(this.wrapperApplStyles));
 		return this.convertStyles(style)
 	}
 
