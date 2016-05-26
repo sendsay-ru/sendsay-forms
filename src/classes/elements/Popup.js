@@ -1,13 +1,6 @@
 import {DOMObject} from "./DOMObject.js";
-import {Field} from "./Field.js";
-import {NumberField} from "./NumberField.js";
-import {Button} from "./Button.js";
-import {Text} from "./Text.js";
-import {Spacer} from "./Spacer.js";
-import {ImageElement} from "./ImageElement.js";
-import {SingleChoiseField} from "./SingleChoiseField.js";
-import {MultipleChoiseField} from "./MultipleChoiseField.js";
 import {Cookies} from "./../Cookies.js";
+import {ElementFactory} from "./../ElementFactory.js"
 
 
 
@@ -279,59 +272,4 @@ export class Popup extends DOMObject {
 		this.hide();
 	}
 
-}
-
-
-class Factory {
-	constructor() {
-
-	}
-
-	make() {
-		return {};
-	}
-}
-
-class ElementFactory extends Factory {
-	constructor() {
-		super();
-	}
-
-	make(data, parent) {
-		switch(data.type) {
-			case 'text':
-				return new Text(data, parent);
-			case 'intField':
-				return new NumberField(data, parent);
-			case 'textField':
-				return new Field(data, parent);
-			case 'radioField':
-				return new SingleChoiseField(data, parent);
-			case 'checkboxField':
-				return new MultipleChoiseField(data, parent);
-			case 'int':
-				return new NumberField(data, parent);
-			case 'free':
-				return new Field(data, parent);
-			case 'image':
-				return new ImageElement(data, parent);
-			case 'spacer':
-				return new Spacer(data, parent);
-			case 'field':
-				switch(data.subtype) {
-					case 'int': 
-						return new NumberField(data, parent);
-					case '1m':
-						return new SingleChoiseField(data, parent);
-					case 'nm':
-						return new MultipleChoiseField(data, parent);
-					case 'free':
-					default:
-						return new Field(data, parent);	
-				}
-				break;
-			case 'button':
-				return new Button(data, parent);
-		}
-	} 
 }
