@@ -63,6 +63,16 @@ export class ConditionWatcher {
 				Cookies.remove('__sendsay_forms_' + this.id);
 			}
 		}
+
+		if(this.conditions.multipleSubmit != undefined && !this.conditions.multipleSubmit) {
+			if(Cookies.has('__sendsay_forms_submitted_' + this.id))
+				return true;
+		}
+
+		if(this.conditions.maxCount) {
+			if(Cookies.has('__sendsay_forms_count_' + this.id) && +Cookies.get('__sendsay_forms_count_' + this.id) >= +this.conditions.maxCount)
+				return true;
+		}
 		return false;	
 	}
 

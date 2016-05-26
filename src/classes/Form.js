@@ -34,6 +34,23 @@ export class Form {
 			Cookies.set('__sendsay_forms_' + data.id, data.settings.frequency, data.settings.frequency);
 	}
 
+	setCountCookie(data) {
+		if(!data)
+			return;
+		var count = +Cookies.get('__sendsay_forms_count_' + data.id) || 0;
+		if(data) {
+			 Cookies.set('__sendsay_forms_count_' + data.id, count+1, 94608000);
+		}
+	}
+
+	setSubmitCookie(data) {
+		if(!data)
+			return;
+		if(data) {
+			 Cookies.set('__sendsay_forms_submit_' + data.id, true, 94608000);
+		}
+	}
+
 
 	handleSuccess() {
 		let self = this,
@@ -48,6 +65,7 @@ export class Form {
 			self.domObj.el.addEventListener('sendsay-success', self.handleSubmit.bind(self));
 
 			self.setFrequencyCookie(self.connector.data);
+			self.setCountCookie(self.connector.data);
 		}, function() {
 			console.log('rejected');
 		});
@@ -69,6 +87,7 @@ export class Form {
 
 	handleSuccessSubmit() {
 		this.domObj.showEndDialog();
+		this.setSubmitCookie(this.connector.data);
 	}
 
 	handleFailSubmit() {
