@@ -1,6 +1,9 @@
 import {DOMObject} from "./DOMObject.js";
 import {Cookies} from "./../Cookies.js";
 import {ElementFactory} from "./../ElementFactory.js"
+import {Column} from "./Column.js"
+import {Field} from "./Field.js";
+import {Button} from "./Button.js";
 
 
 
@@ -39,15 +42,15 @@ export class Popup extends DOMObject {
 	build() {
 
 		super.build();
-		this.elements = [];
-		let factory = new ElementFactory();
+		this.columns = [];
 		let popupBody = this.el.classList.contains('sendsay-popup') ? this.el : this.el.querySelector('.sendsay-popup');
-		if(this.data.elements) {
-			let elements = this.data.elements;
-			for(var i=0; i < elements.length; i++) {
-				let newEl = factory.make(elements[i], this);
+		if(this.data.columns) {
+			let columns = this.data.columns;
+			for(var i=0; i < columns.length; i++) {
+				let newEl = new Column(columns[i], this);
 				if(newEl) {
-					this.elements.push(newEl);
+
+					this.columns.push(newEl);
 					popupBody.appendChild(newEl.el);
 				} 
 			}
@@ -58,6 +61,7 @@ export class Popup extends DOMObject {
 			if(el)
 				el.style.position = 'absolute';
 		}
+
 		return this.el; 
 	}
 
@@ -115,6 +119,21 @@ export class Popup extends DOMObject {
 		this.show(options);
 	}
 
+	searchForElements(comparator, inData) {
+		let found = [];
+		if(!comparator || typeof comparator !== 'function')
+			return found;
+		let columns =  inData ? this.data.columns : this.columns;
+		for(let i=0; i < columns.length; i++) {
+			let column = columns[i],
+				elements = column.elements;
+			for(let j=0; j < elements.length; j++) {
+				comparator(elements[j]) && found.push(elements[j]);
+			}
+		}
+		return found;
+	}
+
 	makeEndDialogData() {
 		let data = this.data;
 		this.submitData = this.extend({ 
@@ -123,28 +142,32 @@ export class Popup extends DOMObject {
 		}, data);
 		delete this.submitData.elements;
 		let button;
-		for(let i=0; i < data.elements.length; i++) {
-			let element = data.elements[i];
-			if(element.type == 'button') {	
-				button = this.extend({}, element);
-				button.content = {
-					text: 'Закрыть'
-				};
-			}
+		let found = this.searchForElements(function(elem) {
+			return elem instanceof Field;
+		}, true);
+		if(found[0]) {
+			button = this.extend({}, found[0].data);
+		} else {
+			button = { type:"button", content: {}}
 		}
-		this.submitData.elements = [
-			{
-				type: 'text',
-				content: {
-					text: data.endDialogMessage || 'Спасибо за заполнение формы',
+		button.content = {
+			text: 'Закрыть'
+		};
+		this.submitData.columns = [{
+			elements: [{
+					type: 'text',
+					content: {
+						text: data.endDialogMessage || 'Спасибо за заполнение формы',
+					},
+					appearance: {
+						paddingTop: '10',
+						paddingBottom: '20'
+					}
 				},
-				appearance: {
-					paddingTop: '10',
-					paddingBottom: '20'
-				}
-			},
-			button
-		];
+				button
+			],
+			appearance: {}
+		}];
 	}
 
 	showEndDialog() {
@@ -176,10 +199,14 @@ export class Popup extends DOMObject {
 	}
 
 	submit() {
-		let elements = this.elements;
+		let elements = this.searchForElements(function(element) {
+
+			return (element instanceof Field || element instanceof Button);
+		});
 		let isValid = true,
 			data = {}
 		let button;
+
 		if(elements) {
 			for(let i = 0; i < elements.length; i++) {
 				let element = elements[i];
@@ -200,14 +227,11 @@ export class Popup extends DOMObject {
 	}
 
 	onSubmitFail() {
-		let elements = this.elements;
-		if(elements) {
-			for(let i = 0; i < elements.length; i++) {
-				let element = elements[i];
-				if(element instanceof Button) {
-					element.el.querySelector('input').classList.remove('sendsay-loading');
-				}
-			}
+		let elements = this.searchForElements(function(element) {
+			return (element instanceof Button);
+		});
+		if(elements[0]) {
+			elements[0].el.querySelector('input').classList.remove('sendsay-loading');
 		}
 	}
 
