@@ -710,6 +710,9 @@ var CheckBox = exports.CheckBox = function (_DOMObject) {
 			this.baseClass = 'sendsay-checkbox';
 			this.handleChange = this.handleChange.bind(this);
 			this.handleClick = this.handleClick.bind(this);
+			this.applicableStyles = {
+				'color': { param: 'textColor' }
+			};
 		}
 	}, {
 		key: 'build',
@@ -878,6 +881,7 @@ var DOMObject = exports.DOMObject = function () {
 
 		this.data = data;
 		this.parent = parent || null;
+		if (parent && parent.general) this.general = this.extend({}, parent.general);
 		this.initialize();
 		this.render();
 	}
@@ -925,12 +929,13 @@ var DOMObject = exports.DOMObject = function () {
 		key: 'applyStyles',
 		value: function applyStyles(mapping) {
 			var styles = {},
-			    data = this.data.appearance || {};
+			    data = this.data.appearance || {},
+			    general = this.general && this.general.appearance || {};
 
 			for (var key in mapping) {
 				var val = mapping[key];
-				if (data[val.param] !== undefined) {
-					styles[key] = data[val.param] + (val.postfix ? val.postfix : '');
+				if (data[val.param] !== undefined || general[val.param] != undefined) {
+					styles[key] = (data[val.param] || general[val.param]) + (val.postfix ? val.postfix : '');
 				} else if (val.default) {
 					styles[key] = val.default;
 				}
@@ -1006,8 +1011,10 @@ var DOMObject = exports.DOMObject = function () {
 	}, {
 		key: 'extend',
 		value: function extend(dest, source) {
+			dest = dest || {};
+			source = source || {};
 			for (var key in source) {
-				dest[key] = source[key];
+				if (dest[key] instanceof Object && source[key] instanceof Object) dest[key] = this.extend(dest[key], source[key]);else dest[key] = source[key];
 			}
 			return dest;
 		}
@@ -1054,7 +1061,8 @@ var Field = exports.Field = function (_DOMObject) {
 				'padding-bottom': { param: 'paddingBottom', postfix: 'px' },
 				'padding-top': { param: 'paddingTop', postfix: 'px' },
 				'padding-left': { param: 'paddingLeft', postfix: 'px' },
-				'padding-right': { param: 'paddingRight', postfix: 'px' }
+				'padding-right': { param: 'paddingRight', postfix: 'px' },
+				'color': { param: 'textColor' }
 			};
 		}
 	}, {
@@ -1077,14 +1085,6 @@ var Field = exports.Field = function (_DOMObject) {
 			}
 
 			return settings;
-		}
-	}, {
-		key: 'makeStyles',
-		value: function makeStyles() {
-			var styleObj = _get(Object.getPrototypeOf(Field.prototype), 'makeStyles', this).call(this),
-			    data = this.data;
-			if (this.parent && this.parent.data.appearance && this.parent.data.appearance.textColor) styleObj.color = this.parent.data.appearance.textColor;
-			return styleObj;
 		}
 	}, {
 		key: 'validate',
@@ -1393,9 +1393,13 @@ var Popup = exports.Popup = function (_DOMObject) {
 				'padding-top': { param: 'paddingTop', postfix: 'px' },
 				'padding-left': { param: 'paddingLeft', postfix: 'px' },
 				'padding-right': { param: 'paddingRight', postfix: 'px' },
-				'width': { param: 'width', postfix: 'px' }
+				'width': { param: 'width', postfix: 'px' },
+				'color': { param: 'textColor' }
 			};
 			appearance.position = appearance.position || 'centered';
+			this.general = {};
+			this.general.appearance = {};
+			this.general.appearance.textColor = this.data.appearance.textColor;
 			this.makeEndDialogData();
 		}
 	}, {
@@ -1696,6 +1700,9 @@ var RadioButton = exports.RadioButton = function (_DOMObject) {
 			this.baseClass = 'sendsay-radio';
 			this.handleChange = this.handleChange.bind(this);
 			this.handleClick = this.handleClick.bind(this);
+			this.applicableStyles = {
+				'color': { param: 'textColor' }
+			};
 		}
 	}, {
 		key: 'build',
@@ -1755,15 +1762,6 @@ var RadioButton = exports.RadioButton = function (_DOMObject) {
 				checked: input.checked,
 				value: input.value
 			});
-		}
-	}, {
-		key: 'makeStyles',
-		value: function makeStyles() {
-			var styleObj = _get(Object.getPrototypeOf(RadioButton.prototype), 'makeStyles', this).call(this);
-			// 	data = this.data;
-			// if(this.parent && this.parent.data && this.parent.data.textColor)
-			// 	styleObj.color = this.parent.data.textColor;
-			return styleObj;
 		}
 	}]);
 
@@ -1939,7 +1937,8 @@ var Text = exports.Text = function (_DOMObject) {
 				'padding-bottom': { param: 'paddingBottom', postfix: 'px' },
 				'padding-top': { param: 'paddingTop', postfix: 'px' },
 				'padding-left': { param: 'paddingLeft', postfix: 'px' },
-				'padding-right': { param: 'paddingRight', postfix: 'px' }
+				'padding-right': { param: 'paddingRight', postfix: 'px' },
+				'color': { param: 'textColor' }
 
 			};
 		}
@@ -1955,14 +1954,6 @@ var Text = exports.Text = function (_DOMObject) {
 			    settings = _get(Object.getPrototypeOf(Text.prototype), 'makeSettings', this).call(this);
 			settings.text = content.text || '';
 			return settings;
-		}
-	}, {
-		key: 'makeStyles',
-		value: function makeStyles() {
-			var styleObj = _get(Object.getPrototypeOf(Text.prototype), 'makeStyles', this).call(this),
-			    data = this.data;
-			if (this.parent && this.parent.data.appearance && this.parent.data.appearance.textColor) styleObj.color = this.parent.data.appearance.textColor;
-			return styleObj;
 		}
 	}]);
 
