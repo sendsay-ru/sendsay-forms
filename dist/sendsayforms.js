@@ -76,6 +76,14 @@ var ConditionWatcher = exports.ConditionWatcher = function () {
 					_Cookies.Cookies.remove('__sendsay_forms_' + this.id);
 				}
 			}
+
+			if (this.conditions.multipleSubmit != undefined && !this.conditions.multipleSubmit) {
+				if (_Cookies.Cookies.has('__sendsay_forms_submitted_' + this.id)) return true;
+			}
+
+			if (this.conditions.maxCount) {
+				if (_Cookies.Cookies.has('__sendsay_forms_count_' + this.id) && +_Cookies.Cookies.get('__sendsay_forms_count_' + this.id) >= +this.conditions.maxCount) return true;
+			}
 			return false;
 		}
 	}, {
@@ -361,6 +369,106 @@ var Cookies = exports.Cookies = function () {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+exports.ElementFactory = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Field = require("./elements/Field.js");
+
+var _NumberField = require("./elements/NumberField.js");
+
+var _Button = require("./elements/Button.js");
+
+var _Text = require("./elements/Text.js");
+
+var _Spacer = require("./elements/Spacer.js");
+
+var _ImageElement = require("./elements/ImageElement.js");
+
+var _SingleChoiseField = require("./elements/SingleChoiseField.js");
+
+var _MultipleChoiseField = require("./elements/MultipleChoiseField.js");
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Factory = function () {
+	function Factory() {
+		_classCallCheck(this, Factory);
+	}
+
+	_createClass(Factory, [{
+		key: "make",
+		value: function make() {
+			return {};
+		}
+	}]);
+
+	return Factory;
+}();
+
+var ElementFactory = exports.ElementFactory = function (_Factory) {
+	_inherits(ElementFactory, _Factory);
+
+	function ElementFactory() {
+		_classCallCheck(this, ElementFactory);
+
+		return _possibleConstructorReturn(this, Object.getPrototypeOf(ElementFactory).call(this));
+	}
+
+	_createClass(ElementFactory, [{
+		key: "make",
+		value: function make(data, parent) {
+			switch (data.type) {
+				case 'text':
+					return new _Text.Text(data, parent);
+				case 'intField':
+					return new _NumberField.NumberField(data, parent);
+				case 'textField':
+					return new _Field.Field(data, parent);
+				case 'radioField':
+					return new _SingleChoiseField.SingleChoiseField(data, parent);
+				case 'checkboxField':
+					return new _MultipleChoiseField.MultipleChoiseField(data, parent);
+				case 'int':
+					return new _NumberField.NumberField(data, parent);
+				case 'free':
+					return new _Field.Field(data, parent);
+				case 'image':
+					return new _ImageElement.ImageElement(data, parent);
+				case 'spacer':
+					return new _Spacer.Spacer(data, parent);
+				case 'field':
+					switch (data.subtype) {
+						case 'int':
+							return new _NumberField.NumberField(data, parent);
+						case '1m':
+							return new _SingleChoiseField.SingleChoiseField(data, parent);
+						case 'nm':
+							return new _MultipleChoiseField.MultipleChoiseField(data, parent);
+						case 'free':
+						default:
+							return new _Field.Field(data, parent);
+					}
+					break;
+				case 'button':
+					return new _Button.Button(data, parent);
+			}
+		}
+	}]);
+
+	return ElementFactory;
+}(Factory);
+
+},{"./elements/Button.js":6,"./elements/Field.js":10,"./elements/ImageElement.js":11,"./elements/MultipleChoiseField.js":12,"./elements/NumberField.js":13,"./elements/SingleChoiseField.js":16,"./elements/Spacer.js":17,"./elements/Text.js":18}],5:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
 exports.Form = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -401,6 +509,23 @@ var Form = exports.Form = function () {
 			if (data && data.settings && data.settings.frequency) _Cookies.Cookies.set('__sendsay_forms_' + data.id, data.settings.frequency, data.settings.frequency);
 		}
 	}, {
+		key: "setCountCookie",
+		value: function setCountCookie(data) {
+			if (!data) return;
+			var count = +_Cookies.Cookies.get('__sendsay_forms_count_' + data.id) || 0;
+			if (data) {
+				_Cookies.Cookies.set('__sendsay_forms_count_' + data.id, count + 1, 94608000);
+			}
+		}
+	}, {
+		key: "setSubmitCookie",
+		value: function setSubmitCookie(data) {
+			if (!data) return;
+			if (data) {
+				_Cookies.Cookies.set('__sendsay_forms_submit_' + data.id, true, 94608000);
+			}
+		}
+	}, {
 		key: "handleSuccess",
 		value: function handleSuccess() {
 			var self = this,
@@ -415,6 +540,7 @@ var Form = exports.Form = function () {
 				self.domObj.el.addEventListener('sendsay-success', self.handleSubmit.bind(self));
 
 				self.setFrequencyCookie(self.connector.data);
+				self.setCountCookie(self.connector.data);
 			}, function () {
 				console.log('rejected');
 			});
@@ -434,6 +560,7 @@ var Form = exports.Form = function () {
 		key: "handleSuccessSubmit",
 		value: function handleSuccessSubmit() {
 			this.domObj.showEndDialog();
+			this.setSubmitCookie(this.connector.data);
 		}
 	}, {
 		key: "handleFailSubmit",
@@ -447,7 +574,7 @@ var Form = exports.Form = function () {
 	return Form;
 }();
 
-},{"./ConditionWatcher.js":1,"./Cookies.js":3}],5:[function(require,module,exports){
+},{"./ConditionWatcher.js":1,"./Cookies.js":3}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -540,7 +667,7 @@ var Button = exports.Button = function (_DOMObject) {
 	return Button;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":7}],6:[function(require,module,exports){
+},{"./DOMObject.js":9}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -656,7 +783,79 @@ var CheckBox = exports.CheckBox = function (_DOMObject) {
 	return CheckBox;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":7}],7:[function(require,module,exports){
+},{"./DOMObject.js":9}],8:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.Column = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _DOMObject2 = require("./DOMObject.js");
+
+var _Cookies = require("./../Cookies.js");
+
+var _ElementFactory = require("./../ElementFactory.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Column = exports.Column = function (_DOMObject) {
+	_inherits(Column, _DOMObject);
+
+	function Column(data, parent) {
+		_classCallCheck(this, Column);
+
+		return _possibleConstructorReturn(this, Object.getPrototypeOf(Column).call(this, data, parent));
+	}
+
+	_createClass(Column, [{
+		key: "initialize",
+		value: function initialize() {
+			var appearance = this.data.appearance || {};
+			this.template = '<div class = "[%classes%]" style="[%style%]"">' + '</div>';
+			this.baseClass = 'sendsay-column';
+			this.applicableStyles = {
+				'background-color': { param: 'backgroundColor' },
+				'padding-bottom': { param: 'paddingBottom', postfix: 'px' },
+				'padding-top': { param: 'paddingTop', postfix: 'px' },
+				'padding-left': { param: 'paddingLeft', postfix: 'px' },
+				'padding-right': { param: 'paddingRight', postfix: 'px' }
+			};
+		}
+	}, {
+		key: "build",
+		value: function build() {
+
+			_get(Object.getPrototypeOf(Column.prototype), "build", this).call(this);
+			this.elements = [];
+			var factory = new _ElementFactory.ElementFactory();
+			var popupBody = this.el;
+			if (this.data.elements) {
+				var elements = this.data.elements;
+				for (var i = 0; i < elements.length; i++) {
+					var newEl = factory.make(elements[i], this);
+					if (newEl) {
+						this.elements.push(newEl);
+						popupBody.appendChild(newEl.el);
+					}
+				}
+			}
+			return this.el;
+		}
+	}]);
+
+	return Column;
+}(_DOMObject2.DOMObject);
+
+},{"./../Cookies.js":3,"./../ElementFactory.js":4,"./DOMObject.js":9}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -811,7 +1010,7 @@ var DOMObject = exports.DOMObject = function () {
 	return DOMObject;
 }();
 
-},{}],8:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -908,7 +1107,7 @@ var Field = exports.Field = function (_DOMObject) {
 	return Field;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":7}],9:[function(require,module,exports){
+},{"./DOMObject.js":9}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -976,7 +1175,7 @@ var ImageElement = exports.ImageElement = function (_DOMObject) {
 	return ImageElement;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":7}],10:[function(require,module,exports){
+},{"./DOMObject.js":9}],12:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1076,7 +1275,7 @@ var MultipleChoiseField = exports.MultipleChoiseField = function (_Field) {
 	return MultipleChoiseField;
 }(_Field2.Field);
 
-},{"./CheckBox.js":6,"./Field.js":8}],11:[function(require,module,exports){
+},{"./CheckBox.js":7,"./Field.js":10}],13:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1121,7 +1320,7 @@ var NumberField = exports.NumberField = function (_Field) {
 	return NumberField;
 }(_Field2.Field);
 
-},{"./Field.js":8}],12:[function(require,module,exports){
+},{"./Field.js":10}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1135,23 +1334,15 @@ var _get = function get(object, property, receiver) { if (object === null) objec
 
 var _DOMObject2 = require("./DOMObject.js");
 
+var _Cookies = require("./../Cookies.js");
+
+var _ElementFactory = require("./../ElementFactory.js");
+
+var _Column = require("./Column.js");
+
 var _Field = require("./Field.js");
 
-var _NumberField = require("./NumberField.js");
-
 var _Button = require("./Button.js");
-
-var _Text = require("./Text.js");
-
-var _Spacer = require("./Spacer.js");
-
-var _ImageElement = require("./ImageElement.js");
-
-var _SingleChoiseField = require("./SingleChoiseField.js");
-
-var _MultipleChoiseField = require("./MultipleChoiseField.js");
-
-var _Cookies = require("./../Cookies.js");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1193,15 +1384,15 @@ var Popup = exports.Popup = function (_DOMObject) {
 		value: function build() {
 
 			_get(Object.getPrototypeOf(Popup.prototype), "build", this).call(this);
-			this.elements = [];
-			var factory = new ElementFactory();
+			this.columns = [];
 			var popupBody = this.el.classList.contains('sendsay-popup') ? this.el : this.el.querySelector('.sendsay-popup');
-			if (this.data.elements) {
-				var elements = this.data.elements;
-				for (var i = 0; i < elements.length; i++) {
-					var newEl = factory.make(elements[i], this);
+			if (this.data.columns) {
+				var columns = this.data.columns;
+				for (var i = 0; i < columns.length; i++) {
+					var newEl = new _Column.Column(columns[i], this);
 					if (newEl) {
-						this.elements.push(newEl);
+
+						this.columns.push(newEl);
 						popupBody.appendChild(newEl.el);
 					}
 				}
@@ -1211,6 +1402,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 				this.el.style.position = 'absolute';
 				if (el) el.style.position = 'absolute';
 			}
+
 			return this.el;
 		}
 	}, {
@@ -1270,6 +1462,21 @@ var Popup = exports.Popup = function (_DOMObject) {
 			this.show(options);
 		}
 	}, {
+		key: "searchForElements",
+		value: function searchForElements(comparator, inData) {
+			var found = [];
+			if (!comparator || typeof comparator !== 'function') return found;
+			var columns = inData ? this.data.columns : this.columns;
+			for (var i = 0; i < columns.length; i++) {
+				var column = columns[i],
+				    elements = column.elements;
+				for (var j = 0; j < elements.length; j++) {
+					comparator(elements[j]) && found.push(elements[j]);
+				}
+			}
+			return found;
+		}
+	}, {
 		key: "makeEndDialogData",
 		value: function makeEndDialogData() {
 			var data = this.data;
@@ -1279,25 +1486,30 @@ var Popup = exports.Popup = function (_DOMObject) {
 			}, data);
 			delete this.submitData.elements;
 			var button = void 0;
-			for (var i = 0; i < data.elements.length; i++) {
-				var element = data.elements[i];
-				if (element.type == 'button') {
-					button = this.extend({}, element);
-					button.content = {
-						text: 'Закрыть'
-					};
-				}
+			var found = this.searchForElements(function (elem) {
+				return elem instanceof _Field.Field;
+			}, true);
+			if (found[0]) {
+				button = this.extend({}, found[0].data);
+			} else {
+				button = { type: "button", content: {} };
 			}
-			this.submitData.elements = [{
-				type: 'text',
-				content: {
-					text: data.endDialogMessage || 'Спасибо за заполнение формы'
-				},
-				appearance: {
-					paddingTop: '10',
-					paddingBottom: '20'
-				}
-			}, button];
+			button.content = {
+				text: 'Закрыть'
+			};
+			this.submitData.columns = [{
+				elements: [{
+					type: 'text',
+					content: {
+						text: data.endDialogMessage || 'Спасибо за заполнение формы'
+					},
+					appearance: {
+						paddingTop: '10',
+						paddingBottom: '20'
+					}
+				}, button],
+				appearance: {}
+			}];
 		}
 	}, {
 		key: "showEndDialog",
@@ -1326,10 +1538,14 @@ var Popup = exports.Popup = function (_DOMObject) {
 	}, {
 		key: "submit",
 		value: function submit() {
-			var elements = this.elements;
+			var elements = this.searchForElements(function (element) {
+
+				return element instanceof _Field.Field || element instanceof _Button.Button;
+			});
 			var isValid = true,
 			    data = {};
 			var button = void 0;
+
 			if (elements) {
 				for (var i = 0; i < elements.length; i++) {
 					var element = elements[i];
@@ -1351,14 +1567,11 @@ var Popup = exports.Popup = function (_DOMObject) {
 	}, {
 		key: "onSubmitFail",
 		value: function onSubmitFail() {
-			var elements = this.elements;
-			if (elements) {
-				for (var i = 0; i < elements.length; i++) {
-					var element = elements[i];
-					if (element instanceof _Button.Button) {
-						element.el.querySelector('input').classList.remove('sendsay-loading');
-					}
-				}
+			var elements = this.searchForElements(function (element) {
+				return element instanceof _Button.Button;
+			});
+			if (elements[0]) {
+				elements[0].el.querySelector('input').classList.remove('sendsay-loading');
 			}
 		}
 	}, {
@@ -1428,75 +1641,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 	return Popup;
 }(_DOMObject2.DOMObject);
 
-var Factory = function () {
-	function Factory() {
-		_classCallCheck(this, Factory);
-	}
-
-	_createClass(Factory, [{
-		key: "make",
-		value: function make() {
-			return {};
-		}
-	}]);
-
-	return Factory;
-}();
-
-var ElementFactory = function (_Factory) {
-	_inherits(ElementFactory, _Factory);
-
-	function ElementFactory() {
-		_classCallCheck(this, ElementFactory);
-
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(ElementFactory).call(this));
-	}
-
-	_createClass(ElementFactory, [{
-		key: "make",
-		value: function make(data, parent) {
-			switch (data.type) {
-				case 'text':
-					return new _Text.Text(data, parent);
-				case 'intField':
-					return new _NumberField.NumberField(data, parent);
-				case 'textField':
-					return new _Field.Field(data, parent);
-				case 'radioField':
-					return new _SingleChoiseField.SingleChoiseField(data, parent);
-				case 'checkboxField':
-					return new _MultipleChoiseField.MultipleChoiseField(data, parent);
-				case 'int':
-					return new _NumberField.NumberField(data, parent);
-				case 'free':
-					return new _Field.Field(data, parent);
-				case 'image':
-					return new _ImageElement.ImageElement(data, parent);
-				case 'spacer':
-					return new _Spacer.Spacer(data, parent);
-				case 'field':
-					switch (data.subtype) {
-						case 'int':
-							return new _NumberField.NumberField(data, parent);
-						case '1m':
-							return new _SingleChoiseField.SingleChoiseField(data, parent);
-						case 'nm':
-							return new _MultipleChoiseField.MultipleChoiseField(data, parent);
-						case 'free':
-						default:
-							return new _Field.Field(data, parent);
-					}
-					break;
-				case 'button':
-					return new _Button.Button(data, parent);
-			}
-		}
-	}]);
-
-	return ElementFactory;
-}(Factory);
-
-},{"./../Cookies.js":3,"./Button.js":5,"./DOMObject.js":7,"./Field.js":8,"./ImageElement.js":9,"./MultipleChoiseField.js":10,"./NumberField.js":11,"./SingleChoiseField.js":14,"./Spacer.js":15,"./Text.js":16}],13:[function(require,module,exports){
+},{"./../Cookies.js":3,"./../ElementFactory.js":4,"./Button.js":6,"./Column.js":8,"./DOMObject.js":9,"./Field.js":10}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1606,7 +1751,7 @@ var RadioButton = exports.RadioButton = function (_DOMObject) {
 	return RadioButton;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":7}],14:[function(require,module,exports){
+},{"./DOMObject.js":9}],16:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1692,7 +1837,7 @@ var SingleChoiseField = exports.SingleChoiseField = function (_Field) {
 	return SingleChoiseField;
 }(_Field2.Field);
 
-},{"./Field.js":8,"./RadioButton.js":13}],15:[function(require,module,exports){
+},{"./Field.js":10,"./RadioButton.js":15}],17:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1734,7 +1879,7 @@ var Spacer = exports.Spacer = function (_DOMObject) {
 	return Spacer;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":7}],16:[function(require,module,exports){
+},{"./DOMObject.js":9}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1804,7 +1949,7 @@ var Text = exports.Text = function (_DOMObject) {
 	return Text;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":7}],17:[function(require,module,exports){
+},{"./DOMObject.js":9}],19:[function(require,module,exports){
 "use strict";
 
 var _Popup = require("./classes/elements/Popup.js");
@@ -1848,4 +1993,4 @@ var _Form = require("./classes/Form.js");
 	};
 })();
 
-},{"./classes/Connector.js":2,"./classes/Form.js":4,"./classes/elements/Popup.js":12}]},{},[17,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]);
+},{"./classes/Connector.js":2,"./classes/Form.js":5,"./classes/elements/Popup.js":14}]},{},[19,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]);
