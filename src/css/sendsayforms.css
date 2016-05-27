@@ -261,7 +261,7 @@
 }
 
 
-@media (min-width:320px) and  (max-width:400px){
+@media screen and (min-width: 320px) and (max-width: 400px) {
     .sendsay-popup {
         width: 300px;
     } 
@@ -273,7 +273,7 @@
         animation: sendsay-popup-animate-center;
         animation-duration: 300ms;
         animation-timing-function: cubic-bezier(.175,.885,.32,1.275);
-}
+    }
 
     .sendsay-popup.sendsay-right {
         top: 50%;
