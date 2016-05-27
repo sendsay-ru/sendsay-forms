@@ -1492,7 +1492,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 			var appearance = this.data.appearance || {};
 			var classes = _get(Object.getPrototypeOf(Popup.prototype), "makeClasses", this).call(this);
 			classes += this.data.endDialog ? ' sendsay-enddialog' : '';
-
+			classes += ' sendsay-animation-' + (appearance.animation || 'none');
 			classes += ' sendsay-' + (appearance.position || 'center');
 			return classes;
 		}
