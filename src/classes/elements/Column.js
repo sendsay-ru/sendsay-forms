@@ -13,7 +13,7 @@ export class Column extends DOMObject {
 
 	initialize() {
 		let appearance = this.data.appearance || {};
-		this.template = '<div style = "width:100%">' +
+		this.template = '<div style = "width:100%; [%wrapperstyle%]">' +
 						'<div class = "[%classes%]" style="[%style%]"">' +
 						'</div></div>';
 		this.baseClass = 'sendsay-column';
@@ -24,6 +24,10 @@ export class Column extends DOMObject {
 			'padding-left': { param: 'paddingLeft', postfix: 'px'},
 			'padding-right': { param: 'paddingRight', postfix: 'px'}
 		};
+
+		this.wrapperApplStyles = {
+			'flex': {param: 'flex'}
+		}
 	}
 
 	build() {
@@ -43,6 +47,20 @@ export class Column extends DOMObject {
 			}
 		}
 		return this.el; 
+	}
+
+	makeSettings() {
+		let data = this.data.content || {},
+			settings = super.makeSettings();
+		settings.wrapperstyle = this.makeWrapperStyle();
+		return settings;
+	}
+
+	makeWrapperStyle() {
+		let style = {},
+			data = this.data.appearance || {};
+		style = this.extend(style, this.applyStyles(this.wrapperApplStyles));
+		return this.convertStyles(style)
 	}
 
 }

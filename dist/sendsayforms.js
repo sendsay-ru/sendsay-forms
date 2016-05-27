@@ -829,7 +829,7 @@ var Column = exports.Column = function (_DOMObject) {
 		key: "initialize",
 		value: function initialize() {
 			var appearance = this.data.appearance || {};
-			this.template = '<div style = "width:100%">' + '<div class = "[%classes%]" style="[%style%]"">' + '</div></div>';
+			this.template = '<div style = "width:100%; [%wrapperstyle%]">' + '<div class = "[%classes%]" style="[%style%]"">' + '</div></div>';
 			this.baseClass = 'sendsay-column';
 			this.applicableStyles = {
 				'background-color': { param: 'backgroundColor' },
@@ -837,6 +837,10 @@ var Column = exports.Column = function (_DOMObject) {
 				'padding-top': { param: 'paddingTop', postfix: 'px' },
 				'padding-left': { param: 'paddingLeft', postfix: 'px' },
 				'padding-right': { param: 'paddingRight', postfix: 'px' }
+			};
+
+			this.wrapperApplStyles = {
+				'flex': { param: 'flex' }
 			};
 		}
 	}, {
@@ -858,6 +862,22 @@ var Column = exports.Column = function (_DOMObject) {
 				}
 			}
 			return this.el;
+		}
+	}, {
+		key: "makeSettings",
+		value: function makeSettings() {
+			var data = this.data.content || {},
+			    settings = _get(Object.getPrototypeOf(Column.prototype), "makeSettings", this).call(this);
+			settings.wrapperstyle = this.makeWrapperStyle();
+			return settings;
+		}
+	}, {
+		key: "makeWrapperStyle",
+		value: function makeWrapperStyle() {
+			var style = {},
+			    data = this.data.appearance || {};
+			style = this.extend(style, this.applyStyles(this.wrapperApplStyles));
+			return this.convertStyles(style);
 		}
 	}]);
 
