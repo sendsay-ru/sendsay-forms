@@ -1456,6 +1456,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 				if (!this.noWrapper) {
 					this.el.addEventListener('click', this.handleWrapperClick.bind(this));
 				}
+				console.log('test', this.el);
 				this.el.querySelector('.sendsay-button').addEventListener('sendsay-click', this.handleButtonClick.bind(this));
 				this.el.addEventListener('wheel', this.handleWheel.bind(this));
 				this.el.addEventListener('DOMMouseScroll', this.handleWheel.bind(this));
@@ -1527,19 +1528,23 @@ var Popup = exports.Popup = function (_DOMObject) {
 				noAnimation: true,
 				endDialog: true
 			}, data);
+			console.log(this.submitData, this.data);
 			delete this.submitData.elements;
 			var button = void 0;
 			var found = this.searchForElements(function (elem) {
-				return elem instanceof _Field.Field;
+				return elem.type == 'button';
 			}, true);
+
 			if (found[0]) {
-				button = this.extend({}, found[0].data);
+
+				button = this.extend({}, found[0]);
 			} else {
 				button = { type: "button", content: {} };
 			}
 			button.content = {
 				text: 'Закрыть'
 			};
+
 			this.submitData.columns = [{
 				elements: [{
 					type: 'text',
