@@ -76,6 +76,7 @@ export class Popup extends DOMObject {
 				this.el.addEventListener('click', this.handleWrapperClick.bind(this));
 				
 			}
+			console.log('test', this.el);
 			this.el.querySelector('.sendsay-button').addEventListener('sendsay-click', this.handleButtonClick.bind(this));
 			this.el.addEventListener('wheel', this.handleWheel.bind(this));
 			this.el.addEventListener('DOMMouseScroll', this.handleWheel.bind(this));
@@ -144,19 +145,23 @@ export class Popup extends DOMObject {
 			noAnimation: true,
 			endDialog: true
 		}, data);
+		console.log(this.submitData, this.data);
 		delete this.submitData.elements;
 		let button;
 		let found = this.searchForElements(function(elem) {
-			return elem instanceof Field;
+			return elem.type == 'button';
 		}, true);
+
 		if(found[0]) {
-			button = this.extend({}, found[0].data);
+
+			button = this.extend({}, found[0]);
 		} else {
 			button = { type:"button", content: {}}
 		}
 		button.content = {
 			text: 'Закрыть'
 		};
+
 		this.submitData.columns = [{
 			elements: [{
 					type: 'text',
@@ -240,10 +245,12 @@ export class Popup extends DOMObject {
 	}
 
 	showErrorFor(qid, message) {
-		let elements = this.elements;
+		let elements = this.searchForElements(function(element) {
+			return element instanceof Field;
+		});
 		for(let i = 0; i < elements.length; i++) {
 			let element = elements[i];
-			if(element.data.field && element.data.field.qid == qid ) {
+			if(element.data.field && (element.data.field.qid == qid  || element.data.field.id == qid) ) {
 				element.showErrorMessage(message);
 			}
 		}

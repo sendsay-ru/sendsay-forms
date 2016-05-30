@@ -122,25 +122,26 @@ export class Connector {
 
 	handleSubmitResult() {
 
-		let el = document.createElement('div');
+		let el = document.createElement('div'),
+			json;
 		el.innerHTML = this.request.responseText;
-		let infoEls = el.querySelectorAll('#container div span');
-		let info = {
-					general: infoEls[0] && infoEls[0].innerHTML && infoEls[0].innerHTML.trim(),
-					specific: infoEls[1] && infoEls[1].innerHTML && infoEls[1].innerHTML.trim()
-				}
-		if(!info.general || info.general === 'Благодарим за заполнение формы') {
-			return true;
-		} else {
-			this.error =info;
-			return false; 
+		try {
+			json = JSON.parse(this.request.responseText);
+		} catch(e) {
+			console.log(e);
+			return false;
 		}
+		this.error = json;
+		if(json.id)
+			return false;
+
+		return true;
 
 	}
 
 	handleLoadSuccess() {
 
-		var rawJson = this.request.responseText; 
+		var rawJson = this.request.responseText;
 		var json = JSON.parse(rawJson);
 		this.transformAnswer(json);
 	}

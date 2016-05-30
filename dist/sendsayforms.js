@@ -78,7 +78,7 @@ var ConditionWatcher = exports.ConditionWatcher = function () {
 			}
 
 			if (this.conditions.multipleSubmit != undefined && !this.conditions.multipleSubmit) {
-				if (_Cookies.Cookies.has('__sendsay_forms_submitted_' + this.id)) return true;
+				if (_Cookies.Cookies.has('__sendsay_forms_submit_' + this.id)) return true;
 			}
 
 			if (this.conditions.maxCount) {
@@ -255,19 +255,19 @@ var Connector = exports.Connector = function () {
 		key: 'handleSubmitResult',
 		value: function handleSubmitResult() {
 
-			var el = document.createElement('div');
+			var el = document.createElement('div'),
+			    json = void 0;
 			el.innerHTML = this.request.responseText;
-			var infoEls = el.querySelectorAll('#container div span');
-			var info = {
-				general: infoEls[0] && infoEls[0].innerHTML && infoEls[0].innerHTML.trim(),
-				specific: infoEls[1] && infoEls[1].innerHTML && infoEls[1].innerHTML.trim()
-			};
-			if (!info.general || info.general === 'Благодарим за заполнение формы') {
-				return true;
-			} else {
-				this.error = info;
+			try {
+				json = JSON.parse(this.request.responseText);
+			} catch (e) {
+				console.log(e);
 				return false;
 			}
+			this.error = json;
+			if (json.id) return false;
+
+			return true;
 		}
 	}, {
 		key: 'handleLoadSuccess',
@@ -567,7 +567,7 @@ var Form = exports.Form = function () {
 		value: function handleFailSubmit() {
 			this.domObj.onSubmitFail();
 			var error = this.connector.error;
-			if (error.specific && error.specific === 'Неправильно заполнено поле email.') this.domObj.showErrorFor('_member_email', 'Неверный формат email адреса');
+			if (error && error.id === 'wrong_member_email') this.domObj.showErrorFor('_member_email', 'Неверный формат email адреса');
 		}
 	}]);
 
@@ -1620,10 +1620,12 @@ var Popup = exports.Popup = function (_DOMObject) {
 	}, {
 		key: "showErrorFor",
 		value: function showErrorFor(qid, message) {
-			var elements = this.elements;
+			var elements = this.searchForElements(function (element) {
+				return element instanceof _Field.Field;
+			});
 			for (var i = 0; i < elements.length; i++) {
 				var element = elements[i];
-				if (element.data.field && element.data.field.qid == qid) {
+				if (element.data.field && (element.data.field.qid == qid || element.data.field.id == qid)) {
 					element.showErrorMessage(message);
 				}
 			}

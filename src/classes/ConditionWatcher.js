@@ -65,7 +65,7 @@ export class ConditionWatcher {
 		}
 
 		if(this.conditions.multipleSubmit != undefined && !this.conditions.multipleSubmit) {
-			if(Cookies.has('__sendsay_forms_submitted_' + this.id))
+			if(Cookies.has('__sendsay_forms_submit_' + this.id))
 				return true;
 		}
 

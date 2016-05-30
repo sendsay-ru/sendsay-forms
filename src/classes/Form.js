@@ -93,7 +93,7 @@ export class Form {
 	handleFailSubmit() {
 		this.domObj.onSubmitFail();
 		let error = this.connector.error;
-		if(error.specific && error.specific === 'Неправильно заполнено поле email.')
+		if(error && error.id === 'wrong_member_email')
 			this.domObj.showErrorFor('_member_email', 'Неверный формат email адреса');
 	}
 
