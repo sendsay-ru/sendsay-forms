@@ -1,5 +1,6 @@
 import {DOMObject} from "./DOMObject.js";
 import {Cookies} from "./../Cookies.js";
+import {MediaQuery} from "./../MediaQuery.js";
 import {ElementFactory} from "./../ElementFactory.js"
 import {Column} from "./Column.js"
 import {Field} from "./Field.js";
@@ -34,6 +35,36 @@ export class Popup extends DOMObject {
 			'width': { param: 'width', postfix: 'px'},
 			'color': { param: 'textColor'}
 		};
+		let width = this.data.appearance.width;
+		console.log('test');
+		let mediaQuery = new MediaQuery({
+			conditions: ['screen', '(min-width: 320px)', '(max-width:' + (+width + 100) + 'px)'],
+			selectors: {
+				'.sendsay-popup': {
+					 'width': '300px !important',
+					'-webkit-flex-direction': 'column',
+					'-ms-flex-direction': 'column',
+					'flex-direction': 'column'
+				},
+				'.sendsay-popup.sendsay-left': {
+					'top': '50%',
+					'left': '50%',
+					'transform': 'translate(-50%, -50%)',
+					'animation': 'sendsay-popup-animate-center',
+					'animation-duration': '300ms',
+					'animation-timing-function': 'cubic-bezier(.175,.885,.32,1.275)'
+				},
+				'.sendsay-popup.sendsay-right': {
+					'top': '50%',
+					'left': '50%',
+					'transform': 'translate(-50%, -50%)',
+					'animation': 'sendsay-popup-animate-center',
+					'animation-duration': '300ms',
+					'animation-timing-function': 'cubic-bezier(.175,.885,.32,1.275)'
+				}
+			}
+		});
+		this.mediaQuery = mediaQuery;
 		appearance.position = appearance.position || 'centered';
 		this.general = {};
 		this.general.appearance = {}
