@@ -36,7 +36,7 @@ export class Popup extends DOMObject {
 			'color': { param: 'textColor'}
 		};
 		let width = this.data.appearance.width;
-		console.log('test');
+
 		let mediaQuery = new MediaQuery({
 			conditions: ['screen', '(min-width: 320px)', '(max-width:' + (+width + 100) + 'px)'],
 			selectors: {
@@ -66,6 +66,7 @@ export class Popup extends DOMObject {
 		});
 		this.mediaQuery = mediaQuery;
 		appearance.position = appearance.position || 'centered';
+
 		this.general = {};
 		this.general.appearance = {}
 		this.general.appearance.textColor = this.data.appearance.textColor;
@@ -101,7 +102,13 @@ export class Popup extends DOMObject {
 	}
 
 	addEvents() {
+		let self = this;
 		if(this.el) {
+			this.el.addEventListener('DOMNodeRemovedFromDocument', function() {
+				if(self.mediaQuery) {
+					document.head.removeChild(self.mediaQuery.el);
+				}
+			});
 			var popup = this.el.classList.contains('sendsay-popup') ? this.el : this.el.querySelector('.sendsay-popup');
 			if(!this.noWrapper) {
 				this.el.addEventListener('click', this.handleWrapperClick.bind(this));
@@ -114,6 +121,7 @@ export class Popup extends DOMObject {
 			popup.addEventListener('click', this.handlePopupClick.bind(this));
 			this.el.querySelector('.sendsay-close').addEventListener('click', this.handleClose.bind(this));
 			document.addEventListener('keyup', this.handleKeyPress.bind(this));
+
 
 		}
 	}

@@ -606,7 +606,7 @@ var MediaQuery = exports.MediaQuery = function () {
                 content += this.makeSelectorRule(key, rules);
             }
             content += ' }';
-            console.log(content);
+
             var styleEl = document.createElement('style');
             styleEl.type = 'text/css';
             if (styleEl.styleSheet) {
@@ -1486,7 +1486,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 				'color': { param: 'textColor' }
 			};
 			var width = this.data.appearance.width;
-			console.log('test');
+
 			var mediaQuery = new _MediaQuery.MediaQuery({
 				conditions: ['screen', '(min-width: 320px)', '(max-width:' + (+width + 100) + 'px)'],
 				selectors: {
@@ -1516,6 +1516,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 			});
 			this.mediaQuery = mediaQuery;
 			appearance.position = appearance.position || 'centered';
+
 			this.general = {};
 			this.general.appearance = {};
 			this.general.appearance.textColor = this.data.appearance.textColor;
@@ -1550,7 +1551,13 @@ var Popup = exports.Popup = function (_DOMObject) {
 	}, {
 		key: "addEvents",
 		value: function addEvents() {
+			var self = this;
 			if (this.el) {
+				this.el.addEventListener('DOMNodeRemovedFromDocument', function () {
+					if (self.mediaQuery) {
+						document.head.removeChild(self.mediaQuery.el);
+					}
+				});
 				var popup = this.el.classList.contains('sendsay-popup') ? this.el : this.el.querySelector('.sendsay-popup');
 				if (!this.noWrapper) {
 					this.el.addEventListener('click', this.handleWrapperClick.bind(this));

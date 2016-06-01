@@ -16,7 +16,7 @@ export class MediaQuery {
     		content += this.makeSelectorRule(key, rules);
     	}
     	content += ' }';
-    	console.log(content);
+
     	let styleEl = document.createElement('style');
     	styleEl.type = 'text/css';
     	if (styleEl.styleSheet){
