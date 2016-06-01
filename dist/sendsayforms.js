@@ -463,7 +463,7 @@ var ElementFactory = exports.ElementFactory = function (_Factory) {
 	return ElementFactory;
 }(Factory);
 
-},{"./elements/Button.js":6,"./elements/Field.js":10,"./elements/ImageElement.js":11,"./elements/MultipleChoiseField.js":12,"./elements/NumberField.js":13,"./elements/SingleChoiseField.js":16,"./elements/Spacer.js":17,"./elements/Text.js":18}],5:[function(require,module,exports){
+},{"./elements/Button.js":7,"./elements/Field.js":11,"./elements/ImageElement.js":12,"./elements/MultipleChoiseField.js":13,"./elements/NumberField.js":14,"./elements/SingleChoiseField.js":17,"./elements/Spacer.js":18,"./elements/Text.js":19}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -578,6 +578,73 @@ var Form = exports.Form = function () {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var MediaQuery = exports.MediaQuery = function () {
+    function MediaQuery(data, options) {
+        _classCallCheck(this, MediaQuery);
+
+        this.data = data;
+        this.options = options;
+        this.makeStyle(data);
+    }
+
+    _createClass(MediaQuery, [{
+        key: 'makeStyle',
+        value: function makeStyle(data) {
+            var content = '',
+                conditions = this.data.conditions,
+                selectors = this.data.selectors;
+            content += this.makeMediaCondition(conditions) + '{';
+            for (var key in selectors) {
+                var rules = selectors[key];
+                content += this.makeSelectorRule(key, rules);
+            }
+            content += ' }';
+            console.log(content);
+            var styleEl = document.createElement('style');
+            styleEl.type = 'text/css';
+            if (styleEl.styleSheet) {
+                styleEl.styleSheet.cssText = content;
+            } else {
+                styleEl.appendChild(document.createTextNode(content));
+            }
+            document.head.appendChild(styleEl);
+            this.el = styleEl;
+        }
+    }, {
+        key: 'makeMediaCondition',
+        value: function makeMediaCondition(conditions) {
+            var condition = '@media ';
+            for (var i = 0; i < conditions.length; i++) {
+                condition += ' ' + (i == 0 ? '' : 'and') + ' ' + conditions[i];
+            }
+            return condition;
+        }
+    }, {
+        key: 'makeSelectorRule',
+        value: function makeSelectorRule(selector, rules) {
+            var result = ' ' + selector + ' { ';
+            for (var key in rules) {
+                var rule = rules[key];
+                result += ' ' + key + ':' + rule + ';';
+            }
+            return result;
+        }
+    }]);
+
+    return MediaQuery;
+}();
+
+},{}],7:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 exports.Button = undefined;
@@ -673,7 +740,7 @@ var Button = exports.Button = function (_DOMObject) {
 	return Button;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":9}],7:[function(require,module,exports){
+},{"./DOMObject.js":10}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -792,7 +859,7 @@ var CheckBox = exports.CheckBox = function (_DOMObject) {
 	return CheckBox;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":9}],8:[function(require,module,exports){
+},{"./DOMObject.js":10}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -884,7 +951,7 @@ var Column = exports.Column = function (_DOMObject) {
 	return Column;
 }(_DOMObject2.DOMObject);
 
-},{"./../Cookies.js":3,"./../ElementFactory.js":4,"./DOMObject.js":9}],9:[function(require,module,exports){
+},{"./../Cookies.js":3,"./../ElementFactory.js":4,"./DOMObject.js":10}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1043,7 +1110,7 @@ var DOMObject = exports.DOMObject = function () {
 	return DOMObject;
 }();
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1139,7 +1206,7 @@ var Field = exports.Field = function (_DOMObject) {
 	return Field;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":9}],11:[function(require,module,exports){
+},{"./DOMObject.js":10}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1213,7 +1280,7 @@ var ImageElement = exports.ImageElement = function (_DOMObject) {
 	return ImageElement;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":9}],12:[function(require,module,exports){
+},{"./DOMObject.js":10}],13:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1314,7 +1381,7 @@ var MultipleChoiseField = exports.MultipleChoiseField = function (_Field) {
 	return MultipleChoiseField;
 }(_Field2.Field);
 
-},{"./CheckBox.js":7,"./Field.js":10}],13:[function(require,module,exports){
+},{"./CheckBox.js":8,"./Field.js":11}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1359,7 +1426,7 @@ var NumberField = exports.NumberField = function (_Field) {
 	return NumberField;
 }(_Field2.Field);
 
-},{"./Field.js":10}],14:[function(require,module,exports){
+},{"./Field.js":11}],15:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1374,6 +1441,8 @@ var _get = function get(object, property, receiver) { if (object === null) objec
 var _DOMObject2 = require("./DOMObject.js");
 
 var _Cookies = require("./../Cookies.js");
+
+var _MediaQuery = require("./../MediaQuery.js");
 
 var _ElementFactory = require("./../ElementFactory.js");
 
@@ -1416,6 +1485,36 @@ var Popup = exports.Popup = function (_DOMObject) {
 				'width': { param: 'width', postfix: 'px' },
 				'color': { param: 'textColor' }
 			};
+			var width = this.data.appearance.width;
+			console.log('test');
+			var mediaQuery = new _MediaQuery.MediaQuery({
+				conditions: ['screen', '(min-width: 320px)', '(max-width:' + (+width + 100) + 'px)'],
+				selectors: {
+					'.sendsay-popup': {
+						'width': '300px !important',
+						'-webkit-flex-direction': 'column',
+						'-ms-flex-direction': 'column',
+						'flex-direction': 'column'
+					},
+					'.sendsay-popup.sendsay-left': {
+						'top': '50%',
+						'left': '50%',
+						'transform': 'translate(-50%, -50%)',
+						'animation': 'sendsay-popup-animate-center',
+						'animation-duration': '300ms',
+						'animation-timing-function': 'cubic-bezier(.175,.885,.32,1.275)'
+					},
+					'.sendsay-popup.sendsay-right': {
+						'top': '50%',
+						'left': '50%',
+						'transform': 'translate(-50%, -50%)',
+						'animation': 'sendsay-popup-animate-center',
+						'animation-duration': '300ms',
+						'animation-timing-function': 'cubic-bezier(.175,.885,.32,1.275)'
+					}
+				}
+			});
+			this.mediaQuery = mediaQuery;
 			appearance.position = appearance.position || 'centered';
 			this.general = {};
 			this.general.appearance = {};
@@ -1691,7 +1790,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 	return Popup;
 }(_DOMObject2.DOMObject);
 
-},{"./../Cookies.js":3,"./../ElementFactory.js":4,"./Button.js":6,"./Column.js":8,"./DOMObject.js":9,"./Field.js":10}],15:[function(require,module,exports){
+},{"./../Cookies.js":3,"./../ElementFactory.js":4,"./../MediaQuery.js":6,"./Button.js":7,"./Column.js":9,"./DOMObject.js":10,"./Field.js":11}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1795,7 +1894,7 @@ var RadioButton = exports.RadioButton = function (_DOMObject) {
 	return RadioButton;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":9}],16:[function(require,module,exports){
+},{"./DOMObject.js":10}],17:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1882,7 +1981,7 @@ var SingleChoiseField = exports.SingleChoiseField = function (_Field) {
 	return SingleChoiseField;
 }(_Field2.Field);
 
-},{"./Field.js":10,"./RadioButton.js":15}],17:[function(require,module,exports){
+},{"./Field.js":11,"./RadioButton.js":16}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1924,7 +2023,7 @@ var Spacer = exports.Spacer = function (_DOMObject) {
 	return Spacer;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":9}],18:[function(require,module,exports){
+},{"./DOMObject.js":10}],19:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1987,7 +2086,7 @@ var Text = exports.Text = function (_DOMObject) {
 	return Text;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":9}],19:[function(require,module,exports){
+},{"./DOMObject.js":10}],20:[function(require,module,exports){
 "use strict";
 
 var _Popup = require("./classes/elements/Popup.js");
@@ -2031,4 +2130,4 @@ var _Form = require("./classes/Form.js");
 	};
 })();
 
-},{"./classes/Connector.js":2,"./classes/Form.js":5,"./classes/elements/Popup.js":14}]},{},[19,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]);
+},{"./classes/Connector.js":2,"./classes/Form.js":5,"./classes/elements/Popup.js":15}]},{},[20,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]);
