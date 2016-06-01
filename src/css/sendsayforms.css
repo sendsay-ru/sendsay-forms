@@ -841,14 +841,14 @@
     -webkit-animation-name: sendsay-fadeInUp;
   animation-name: sendsay-fadeInUp; 
   animation-duration: 300ms;
-    animation-timing-function: cubic-bezier(.175,.885,.32,1.275); 
+ 
 }
 
 .sendsay-centered.sendsay-animation-fadeUp {
     -webkit-animation-name: sendsay-fadeInUp-centered;
   animation-name: sendsay-fadeInUp-centered; 
   animation-duration: 300ms;
-    animation-timing-function: cubic-bezier(.175,.885,.32,1.275); 
+
 }
 
 @keyframes sendsay-fadeInUp {
@@ -913,7 +913,7 @@
     -webkit-animation-name: sendsay-fadeInDown-centered;
   animation-name: sendsay-fadeInDown-centered; 
   animation-duration: 300ms;
-    animation-timing-function: cubic-bezier(.175,.885,.32,1.275); 
+
 }
 
 @keyframes sendsay-fadeInDown-centered {
@@ -948,7 +948,7 @@
     -webkit-animation-name: sendsay-fadeInLeft;
   animation-name: sendsay-fadeInLeft; 
   animation-duration: 300ms;
-    animation-timing-function: cubic-bezier(.175,.885,.32,1.275); 
+
 }
 
 @keyframes sendsay-fadeInLeft {
