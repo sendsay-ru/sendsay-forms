@@ -254,6 +254,9 @@
 @media screen and (min-width: 320px) and (max-width: 400px) {
     .sendsay-popup {
         width: 300px !important;
+        -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+        flex-direction: column;
     } 
 
     .sendsay-popup.sendsay-left {
@@ -263,6 +266,7 @@
         animation: sendsay-popup-animate-center;
         animation-duration: 300ms;
         animation-timing-function: cubic-bezier(.175,.885,.32,1.275);
+        
     }
 
     .sendsay-popup.sendsay-right {
