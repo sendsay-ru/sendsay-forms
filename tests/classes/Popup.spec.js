@@ -17,6 +17,7 @@ describe("Popup.spec.js", function() {
      "content":{  
         "endDialogMessage":"Спасибо за заполнение формы!"
      },
+     "columns": [ {
      "elements":[  
         {  
            "type":"text",
@@ -128,7 +129,9 @@ describe("Popup.spec.js", function() {
               "align":"justify"
            }
         }
-     ],
+     ]
+      }
+      ],
      "active":true
   }
 
