@@ -255,7 +255,7 @@
     -webkit-animation-name: sendsay-bounce;
     animation-name: sendsay-bounce;
  
-    animation-duration: 300ms;
+    animation-duration: 400ms;
     animation-timing-function: cubic-bezier(.175,.885,.32,1.275); 
 }
 
@@ -263,7 +263,7 @@
     -webkit-animation-name: sendsay-bounce-centered;
     animation-name: sendsay-bounce-centered;
  
-    animation-duration: 300ms;
+    animation-duration: 400ms;
     animation-timing-function: cubic-bezier(.175,.885,.32,1.275); 
 }
 
@@ -431,7 +431,7 @@
     -webkit-animation-name: sendsay-bounceUp;
     animation-name: sendsay-bounceUp;
  
-    animation-duration: 300ms;
+    animation-duration: 400ms;
     animation-timing-function: cubic-bezier(.175,.885,.32,1.275); 
 }
 
@@ -439,7 +439,7 @@
     -webkit-animation-name: sendsay-bounceUp-centered;
     animation-name: sendsay-bounceUp-centered;
  
-    animation-duration: 300ms;
+    animation-duration: 400ms;
     animation-timing-function: cubic-bezier(.175,.885,.32,1.275); 
 }
 
@@ -555,8 +555,8 @@
 
   from {
     opacity: 0;
-    -webkit-transform: translate3d(0, 3000px, 0);
-    transform: translate3d(0, 3000px, 0);
+    -webkit-transform: translate3d(-50%, 3000px, 0);
+    transform: translate3d(-50%, 3000px, 0);
   }
 
   60% {
@@ -585,7 +585,7 @@
     -webkit-animation-name: sendsay-bounceInDown-centered;
     animation-name: sendsay-bounceInDown-centered;
  
-    animation-duration: 300ms;
+    animation-duration: 400ms;
 
 }
 
@@ -661,7 +661,7 @@
 .sendsay-animation-bounceLeft {
     -webkit-animation-name: sendsay-bounceInLeft;
   animation-name: sendsay-bounceInLeft; 
-  animation-duration: 300ms;
+  animation-duration: 400ms;
     animation-timing-function: cubic-bezier(.175,.885,.32,1.275); 
 }
 
@@ -736,7 +736,7 @@
 .sendsay-animation-bounceRight {
     -webkit-animation-name: sendsay-bounceInRight;
   animation-name: sendsay-bounceInRight; 
-  animation-duration: 300ms;
+  animation-duration: 400ms;
     animation-timing-function: cubic-bezier(.175,.885,.32,1.275); 
 }
 
@@ -813,7 +813,7 @@
 .sendsay-animation-fade {
     -webkit-animation-name: sendsay-fadeIn;
   animation-name: sendsay-fadeIn;  
-  animation-duration: 300ms;
+  animation-duration: 400ms;
     animation-timing-function: cubic-bezier(.175,.885,.32,1.275);
 }
 
@@ -840,14 +840,14 @@
 .sendsay-animation-fadeUp {
     -webkit-animation-name: sendsay-fadeInUp;
   animation-name: sendsay-fadeInUp; 
-  animation-duration: 300ms;
+  animation-duration: 400ms;
  
 }
 
 .sendsay-centered.sendsay-animation-fadeUp {
     -webkit-animation-name: sendsay-fadeInUp-centered;
   animation-name: sendsay-fadeInUp-centered; 
-  animation-duration: 300ms;
+  animation-duration: 400ms;
 
 }
 
@@ -912,7 +912,7 @@
 .sendsay-centered.sendsay-animation-fadeDown {
     -webkit-animation-name: sendsay-fadeInDown-centered;
   animation-name: sendsay-fadeInDown-centered; 
-  animation-duration: 300ms;
+  animation-duration: 400ms;
 
 }
 
@@ -947,7 +947,7 @@
 .sendsay-animation-fadeLeft {
     -webkit-animation-name: sendsay-fadeInLeft;
   animation-name: sendsay-fadeInLeft; 
-  animation-duration: 300ms;
+  animation-duration: 400ms;
 
 }
 
@@ -982,7 +982,7 @@
 .sendsay-animation-fadeRight {
     -webkit-animation-name: sendsay-fadeInRight;
   animation-name: sendsay-fadeInRight;  
-  animation-duration: 300ms;
+  animation-duration: 400ms;
     animation-timing-function: cubic-bezier(.175,.885,.32,1.275);
 }
 
@@ -1014,17 +1014,17 @@
   }
 }
 
-.sendsay-animation-zoom{
+.sendsay-animation-zoom {
     -webkit-animation-name: sendsay-zoomIn;
   animation-name: sendsay-zoomIn; 
-  animation-duration: 300ms;
+  animation-duration: 400ms;
     animation-timing-function: cubic-bezier(.175,.885,.32,1.275); 
 }
 
-.sendsay-centered.sendsay-animation-zoom{
+.sendsay-centered.sendsay-animation-zoom {
     -webkit-animation-name: sendsay-zoomIn-centered;
   animation-name: sendsay-zoomIn-centered; 
-  animation-duration: 300ms;
+  animation-duration: 400ms;
     animation-timing-function: cubic-bezier(.175,.885,.32,1.275); 
 }
 
@@ -1079,7 +1079,7 @@
 .sendsay-animation-swing{
     -webkit-animation-name: sendsay-swing;
   animation-name: sendsay-swing;
-  animation-duration: 300ms;
+  animation-duration: 400ms;
     animation-timing-function: cubic-bezier(.175,.885,.32,1.275);
 }
 

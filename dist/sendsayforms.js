@@ -1502,13 +1502,15 @@ var Popup = exports.Popup = function (_DOMObject) {
 						'top': '50%',
 						'left': '50%',
 						'transform': 'translate(-50%, -50%)',
-						'animation': 'none'
+						'animation': 'none',
+						'bottom': 'initial'
 					},
 					'.sendsay-popup.sendsay-right': {
 						'top': '50%',
 						'left': '50%',
 						'transform': 'translate(-50%, -50%)',
-						'animation': 'none'
+						'animation': 'none',
+						'bottom': 'initial'
 					}
 				}
 			});
