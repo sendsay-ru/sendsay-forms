@@ -634,6 +634,7 @@ var MediaQuery = exports.MediaQuery = function () {
                 var rule = rules[key];
                 result += ' ' + key + ':' + rule + ';';
             }
+            result += ' } ';
             return result;
         }
     }]);
@@ -1494,23 +1495,20 @@ var Popup = exports.Popup = function (_DOMObject) {
 						'width': '300px !important',
 						'-webkit-flex-direction': 'column',
 						'-ms-flex-direction': 'column',
-						'flex-direction': 'column'
+						'flex-direction': 'column',
+						'animation': 'none'
 					},
 					'.sendsay-popup.sendsay-left': {
 						'top': '50%',
 						'left': '50%',
 						'transform': 'translate(-50%, -50%)',
-						'animation': 'sendsay-popup-animate-center',
-						'animation-duration': '300ms',
-						'animation-timing-function': 'cubic-bezier(.175,.885,.32,1.275)'
+						'animation': 'none'
 					},
 					'.sendsay-popup.sendsay-right': {
 						'top': '50%',
 						'left': '50%',
 						'transform': 'translate(-50%, -50%)',
-						'animation': 'sendsay-popup-animate-center',
-						'animation-duration': '300ms',
-						'animation-timing-function': 'cubic-bezier(.175,.885,.32,1.275)'
+						'animation': 'none'
 					}
 				}
 			});

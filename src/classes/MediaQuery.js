@@ -42,6 +42,7 @@ export class MediaQuery {
     		let rule = rules[key];
     		result += ' ' + key + ':' + rule + ';'
     	}
+    	result += ' } ';
     	return result;
     }
 }
