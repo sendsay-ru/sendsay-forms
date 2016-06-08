@@ -3,5 +3,5 @@ node_modules/
 compiled/
 coverage/
 test-dist/
-ascend.sh/
+ascend.sh
 

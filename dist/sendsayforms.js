@@ -897,7 +897,7 @@ var Column = exports.Column = function (_DOMObject) {
 		key: "initialize",
 		value: function initialize() {
 			var appearance = this.data.appearance || {};
-			this.template = '<div style = "width:100%; [%wrapperstyle%]">' + '<div class = "[%classes%]" style="[%style%]"">' + '</div></div>';
+			this.template = '<div class = "sendsay-columnwrapper" style = "width:100%; [%wrapperstyle%]">' + '<div class = "[%classes%]" style="[%style%]"">' + '</div></div>';
 			this.baseClass = 'sendsay-column';
 			this.applicableStyles = {
 				'background-color': { param: 'backgroundColor' },
@@ -2118,6 +2118,7 @@ var _Form = require("./classes/Form.js");
 	};
 
 	var loadCss = function loadCss(callback) {
+		return callback();
 		var cssId = '_sendsay-styles'; // you could encode the css path itself to generate id..
 		if (!document.getElementById(cssId)) {
 			var head = document.getElementsByTagName('head')[0];
