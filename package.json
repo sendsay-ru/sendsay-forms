@@ -33,6 +33,9 @@
     "karma-chrome-launcher": "~0.2.3",
     "karma-mocha-reporter": "~2.0.2",
     "systemjs": "~0.19.26",
-    "traceur": "0.0.108"
+    "traceur": "0.0.108",
+    "grunt-contrib-less": "~1.3.0",
+    "less-plugin-autoprefix": "~1.5.1",
+    "grunt-contrib-watch": "~1.0.0"
   }
 }

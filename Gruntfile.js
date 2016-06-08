@@ -1,5 +1,4 @@
 module.exports = function(grunt) {
-
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -58,8 +57,37 @@ module.exports = function(grunt) {
             'dist/sendsayforms.min.js': ['dist/sendsayforms.js']
           }
         }
+      },
+      less: {
+        dev: {
+          files: {
+            'src/css/sendsayforms.css': ['src/css/less/general.less',
+                                         'src/css/less/bar.less',
+                                         'src/css/less/animations.less']
+          }
+        },
+        dist: {
+          options: {
+            plugins: [
+              new (require('less-plugin-autoprefix'))(),
+            ]
+          },
+          files: {
+            'dist/sendsayforms.css': ['src/css/less/general.less',
+                                      'src/css/less/bar.less',
+                                      'src/css/less/animations.less']
+          }
+        }
+      },
+      watch: {
+        scripts: {
+          files: 'src/css/**/*.less',
+          tasks: ['less:dev'],
+          options: {
+            interrupt: true,
+          }
+        },
       }
-
   });
 
 
@@ -67,10 +95,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-connect');
   grunt.loadNpmTasks("grunt-browserify");
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   // Default task(s).
   grunt.registerTask('default', ['babel', 'browserify', 'uglify']);
-  grunt.registerTask('build', ['browserify', 'uglify']);
+  grunt.registerTask('build', ['browserify', 'uglify', 'less:dist']);
 
 
 };
