@@ -538,7 +538,7 @@ var Form = exports.Form = function () {
 			var watcher = new _ConditionWatcher.ConditionWatcher(conditions, id);
 
 			watcher.watch().then(function () {
-				self.domConstructor = ['bar'].indexOf(data.appearance.position) != -1 ? _PopupBar.PopupBar : _Popup.Popup;
+				self.domConstructor = ['barUp', 'barDown'].indexOf(data.appearance.position) != -1 ? _PopupBar.PopupBar : _Popup.Popup;
 				self.domObj = new self.domConstructor(self.connector.data);
 				self.domObj.activate(self.options);
 				self.domObj.el.addEventListener('sendsay-success', self.handleSubmit.bind(self));
@@ -1845,7 +1845,7 @@ var PopupBar = exports.PopupBar = function (_Popup) {
 				'color': { param: 'textColor' }
 			};
 
-			var width = 960;
+			var width = 800;
 
 			var mediaQuery = new _MediaQuery.MediaQuery({
 				conditions: ['screen', '(min-width: 320px)', '(max-width:' + (+width + 100) + 'px)'],
@@ -1857,7 +1857,7 @@ var PopupBar = exports.PopupBar = function (_Popup) {
 						'flex-direction': 'column',
 						'animation': 'none'
 					},
-					'.sendsay-popup.sendsay-bar': {
+					'.sendsay-popup.sendsay-barUp, .sendsay-popup.sendsay-barDown': {
 						'top': '50%',
 						'left': '50%',
 						'transform': 'translate(-50%, -50%)',
@@ -1868,7 +1868,7 @@ var PopupBar = exports.PopupBar = function (_Popup) {
 						'height': 'auto !important',
 						'flex-direction': 'column'
 					},
-					'.sendsay-popup.sendsay-bar  .sendsay-column > *': {
+					'.sendsay-popup.sendsay-barUp  .sendsay-column > *, .sendsay-popup.sendsay-barDown .sendsay-column > *': {
 						'padding-bottom': '20px',
 						'padding-left': '0px'
 					}
@@ -2205,7 +2205,7 @@ var _Form = require("./classes/Form.js");
 
 	var showPopup = function showPopup(data, options) {
 		//loadCss();
-		var domConstructor = ['bar'].indexOf(data.appearance.position) != -1 ? _PopupBar.PopupBar : _Popup.Popup;
+		var domConstructor = ['barUp', 'barDown'].indexOf(data.appearance.position) != -1 ? _PopupBar.PopupBar : _Popup.Popup;
 		var popup = new domConstructor(data);
 		popup.activate(options);
 	};

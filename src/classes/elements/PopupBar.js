@@ -33,7 +33,7 @@ export class PopupBar extends Popup {
 
 		let width =  800;
 
-		let mediaQuery = new MediaQuery({
+		let mediaQuery = new MediaQuery({  
 			conditions: ['screen', '(min-width: 320px)', '(max-width:' + (+width + 100) + 'px)'],
 			selectors: {
 				'.sendsay-popup': {
@@ -43,7 +43,7 @@ export class PopupBar extends Popup {
 					'flex-direction': 'column',
 					'animation': 'none'
 				},
-				'.sendsay-popup.sendsay-bar': {
+				'.sendsay-popup.sendsay-barUp, .sendsay-popup.sendsay-barDown': {
 					'top': '50%',
 					'left': '50%',
 					'transform': 'translate(-50%, -50%)',
@@ -54,7 +54,7 @@ export class PopupBar extends Popup {
 					'height': 'auto !important',
 					'flex-direction': 'column'
 				},
-				'.sendsay-popup.sendsay-bar  .sendsay-column > *': {
+				'.sendsay-popup.sendsay-barUp  .sendsay-column > *, .sendsay-popup.sendsay-barDown .sendsay-column > *': {
 					'padding-bottom': '20px',
 					'padding-left': '0px'
 				}

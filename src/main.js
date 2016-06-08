@@ -15,7 +15,7 @@ import {Form} from "./classes/Form.js";
 
 	var showPopup = function(data, options) {
 		//loadCss();
-		var domConstructor = ['bar'].indexOf(data.appearance.position) != -1 ? PopupBar : Popup;
+		var domConstructor = ['barUp', 'barDown'].indexOf(data.appearance.position) != -1 ? PopupBar : Popup;
 		let popup = new domConstructor(data);
 		popup.activate(options);
 	}
