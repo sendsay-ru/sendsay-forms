@@ -13,7 +13,7 @@ export class Column extends DOMObject {
 
 	initialize() {
 		let appearance = this.data.appearance || {};
-		this.template = '<div style = "width:100%; [%wrapperstyle%]">' +
+		this.template = '<div class = "sendsay-columnwrapper" style = "width:100%; [%wrapperstyle%]">' +
 						'<div class = "[%classes%]" style="[%style%]"">' +
 						'</div></div>';
 		this.baseClass = 'sendsay-column';

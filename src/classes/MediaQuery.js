@@ -24,7 +24,9 @@ export class MediaQuery {
 		} else {
 		  styleEl.appendChild(document.createTextNode(content));
 		}
-    	document.head.appendChild(styleEl);
+        var children = document.head.querySelectorAll('*');
+        document.head.insertBefore(styleEl, children[children.length - 1])
+
     	this.el = styleEl;
     }
 
