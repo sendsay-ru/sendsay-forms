@@ -1,12 +1,13 @@
 
 import {ConditionWatcher} from "./ConditionWatcher.js";
 import {Cookies} from "./Cookies.js";
+import {Popup} from "./elements/Popup.js";
+import {PopupBar} from "./elements/PopupBar.js";
 
 export class Form {
 
-	constructor(domConstructor, connector, options) {
+	constructor(connector, options) {
 		this.options = options || {};
-		this.domConstructor = domConstructor;
 		this.connector = connector;
 		let promise = connector.load();
 		if(promise)
@@ -54,12 +55,13 @@ export class Form {
 
 	handleSuccess() {
 		let self = this,
-			id = self.connector.data.id;
+			id = self.connector.data.id,
+			data = self.connector.data;
 		let conditions = this.processConditionsSettings();
 		let watcher = new ConditionWatcher(conditions, id);
 
 		watcher.watch().then(function() {
-
+			self.domConstructor = ['bar'].indexOf(data.appearance.position) != -1 ? PopupBar : Popup;
 			self.domObj = new (self.domConstructor)(self.connector.data);
 			self.domObj.activate(self.options);
 			self.domObj.el.addEventListener('sendsay-success', self.handleSubmit.bind(self));

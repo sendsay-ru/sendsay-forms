@@ -463,7 +463,7 @@ var ElementFactory = exports.ElementFactory = function (_Factory) {
 	return ElementFactory;
 }(Factory);
 
-},{"./elements/Button.js":7,"./elements/Field.js":11,"./elements/ImageElement.js":12,"./elements/MultipleChoiseField.js":13,"./elements/NumberField.js":14,"./elements/SingleChoiseField.js":17,"./elements/Spacer.js":18,"./elements/Text.js":19}],5:[function(require,module,exports){
+},{"./elements/Button.js":7,"./elements/Field.js":11,"./elements/ImageElement.js":12,"./elements/MultipleChoiseField.js":13,"./elements/NumberField.js":14,"./elements/SingleChoiseField.js":18,"./elements/Spacer.js":19,"./elements/Text.js":20}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -477,14 +477,17 @@ var _ConditionWatcher = require("./ConditionWatcher.js");
 
 var _Cookies = require("./Cookies.js");
 
+var _Popup = require("./elements/Popup.js");
+
+var _PopupBar = require("./elements/PopupBar.js");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Form = exports.Form = function () {
-	function Form(domConstructor, connector, options) {
+	function Form(connector, options) {
 		_classCallCheck(this, Form);
 
 		this.options = options || {};
-		this.domConstructor = domConstructor;
 		this.connector = connector;
 		var promise = connector.load();
 		if (promise) promise.then(this.handleSuccess.bind(this), this.handleFail.bind(this));
@@ -529,12 +532,13 @@ var Form = exports.Form = function () {
 		key: "handleSuccess",
 		value: function handleSuccess() {
 			var self = this,
-			    id = self.connector.data.id;
+			    id = self.connector.data.id,
+			    data = self.connector.data;
 			var conditions = this.processConditionsSettings();
 			var watcher = new _ConditionWatcher.ConditionWatcher(conditions, id);
 
 			watcher.watch().then(function () {
-
+				self.domConstructor = ['bar'].indexOf(data.appearance.position) != -1 ? _PopupBar.PopupBar : _Popup.Popup;
 				self.domObj = new self.domConstructor(self.connector.data);
 				self.domObj.activate(self.options);
 				self.domObj.el.addEventListener('sendsay-success', self.handleSubmit.bind(self));
@@ -574,7 +578,7 @@ var Form = exports.Form = function () {
 	return Form;
 }();
 
-},{"./ConditionWatcher.js":1,"./Cookies.js":3}],6:[function(require,module,exports){
+},{"./ConditionWatcher.js":1,"./Cookies.js":3,"./elements/Popup.js":15,"./elements/PopupBar.js":16}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -614,7 +618,10 @@ var MediaQuery = exports.MediaQuery = function () {
             } else {
                 styleEl.appendChild(document.createTextNode(content));
             }
-            document.head.appendChild(styleEl);
+            var children = document.head.querySelectorAll('*');
+            styleEl.id = 'sendsay-generated-sheet';
+            document.head.appendChild(styleEl, children[children.length - 1]);
+
             this.el = styleEl;
         }
     }, {
@@ -1486,7 +1493,8 @@ var Popup = exports.Popup = function (_DOMObject) {
 				'width': { param: 'width', postfix: 'px' },
 				'color': { param: 'textColor' }
 			};
-			var width = this.data.appearance.width;
+
+			var width = appearance.width;
 
 			var mediaQuery = new _MediaQuery.MediaQuery({
 				conditions: ['screen', '(min-width: 320px)', '(max-width:' + (+width + 100) + 'px)'],
@@ -1498,14 +1506,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 						'flex-direction': 'column',
 						'animation': 'none'
 					},
-					'.sendsay-popup.sendsay-left': {
-						'top': '50%',
-						'left': '50%',
-						'transform': 'translate(-50%, -50%)',
-						'animation': 'none',
-						'bottom': 'initial'
-					},
-					'.sendsay-popup.sendsay-right': {
+					'.sendsay-popup.sendsay-left, .sendsay-popup.sendsay-right': {
 						'top': '50%',
 						'left': '50%',
 						'transform': 'translate(-50%, -50%)',
@@ -1634,7 +1635,6 @@ var Popup = exports.Popup = function (_DOMObject) {
 				noAnimation: true,
 				endDialog: true
 			}, data);
-			console.log(this.submitData, this.data);
 			delete this.submitData.elements;
 			var button = void 0;
 			var found = this.searchForElements(function (elem) {
@@ -1798,6 +1798,96 @@ var Popup = exports.Popup = function (_DOMObject) {
 }(_DOMObject2.DOMObject);
 
 },{"./../Cookies.js":3,"./../ElementFactory.js":4,"./../MediaQuery.js":6,"./Button.js":7,"./Column.js":9,"./DOMObject.js":10,"./Field.js":11}],16:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.PopupBar = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Popup2 = require("./Popup.js");
+
+var _MediaQuery = require("./../MediaQuery.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var PopupBar = exports.PopupBar = function (_Popup) {
+	_inherits(PopupBar, _Popup);
+
+	function PopupBar(data, parent) {
+		_classCallCheck(this, PopupBar);
+
+		return _possibleConstructorReturn(this, Object.getPrototypeOf(PopupBar).call(this, data, parent));
+	}
+
+	_createClass(PopupBar, [{
+		key: "initialize",
+		value: function initialize() {
+			var appearance = this.data.appearance || {};
+			this.noWrapper = false;
+			this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]">' : '') + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '' + '</div>' + (!this.noWrapper ? '</div>' : '');
+
+			this.baseClass = 'sendsay-popup';
+
+			this.applicableStyles = {
+				'background-color': { param: 'backgroundColor' },
+				'border-radius': { param: 'borderRadius', postfix: 'px' },
+				'padding-bottom': { param: 'paddingBottom', postfix: 'px' },
+				'padding-top': { param: 'paddingTop', postfix: 'px' },
+				'padding-left': { param: 'paddingLeft', postfix: 'px' },
+				'padding-right': { param: 'paddingRight', postfix: 'px' },
+				'color': { param: 'textColor' }
+			};
+
+			var width = 960;
+
+			var mediaQuery = new _MediaQuery.MediaQuery({
+				conditions: ['screen', '(min-width: 320px)', '(max-width:' + (+width + 100) + 'px)'],
+				selectors: {
+					'.sendsay-popup': {
+						'width': '300px !important',
+						'-webkit-flex-direction': 'column',
+						'-ms-flex-direction': 'column',
+						'flex-direction': 'column',
+						'animation': 'none'
+					},
+					'.sendsay-popup.sendsay-bar': {
+						'top': '50%',
+						'left': '50%',
+						'transform': 'translate(-50%, -50%)',
+						'animation': 'none',
+						'bottom': 'initial'
+					},
+					'.sendsay-column': {
+						'height': 'auto !important',
+						'flex-direction': 'column'
+					},
+					'.sendsay-popup.sendsay-bar  .sendsay-column > *': {
+						'padding-bottom': '20px',
+						'padding-left': '0px'
+					}
+				}
+			});
+			this.mediaQuery = mediaQuery;
+			appearance.position = appearance.position || 'centered';
+
+			this.general = {};
+			this.general.appearance = {};
+			this.general.appearance.textColor = this.data.appearance.textColor;
+			this.makeEndDialogData();
+		}
+	}]);
+
+	return PopupBar;
+}(_Popup2.Popup);
+
+},{"./../MediaQuery.js":6,"./Popup.js":15}],17:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1901,7 +1991,7 @@ var RadioButton = exports.RadioButton = function (_DOMObject) {
 	return RadioButton;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":10}],17:[function(require,module,exports){
+},{"./DOMObject.js":10}],18:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1988,7 +2078,7 @@ var SingleChoiseField = exports.SingleChoiseField = function (_Field) {
 	return SingleChoiseField;
 }(_Field2.Field);
 
-},{"./Field.js":11,"./RadioButton.js":16}],18:[function(require,module,exports){
+},{"./Field.js":11,"./RadioButton.js":17}],19:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2030,7 +2120,7 @@ var Spacer = exports.Spacer = function (_DOMObject) {
 	return Spacer;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":10}],19:[function(require,module,exports){
+},{"./DOMObject.js":10}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2093,10 +2183,12 @@ var Text = exports.Text = function (_DOMObject) {
 	return Text;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":10}],20:[function(require,module,exports){
+},{"./DOMObject.js":10}],21:[function(require,module,exports){
 "use strict";
 
 var _Popup = require("./classes/elements/Popup.js");
+
+var _PopupBar = require("./classes/elements/PopupBar.js");
 
 var _Connector = require("./classes/Connector.js");
 
@@ -2107,18 +2199,18 @@ var _Form = require("./classes/Form.js");
 	var activatePopup = function activatePopup(url, options) {
 		loadCss(function () {
 			var connector = new _Connector.Connector(url);
-			var form = new _Form.Form(_Popup.Popup, connector, options);
+			var form = new _Form.Form(connector, options);
 		});
 	};
 
 	var showPopup = function showPopup(data, options) {
 		//loadCss();
-		var popup = new _Popup.Popup(data);
+		var domConstructor = ['bar'].indexOf(data.appearance.position) != -1 ? _PopupBar.PopupBar : _Popup.Popup;
+		var popup = new domConstructor(data);
 		popup.activate(options);
 	};
 
 	var loadCss = function loadCss(callback) {
-		return callback();
 		var cssId = '_sendsay-styles'; // you could encode the css path itself to generate id..
 		if (!document.getElementById(cssId)) {
 			var head = document.getElementsByTagName('head')[0];
@@ -2128,7 +2220,13 @@ var _Form = require("./classes/Form.js");
 			link.type = 'text/css';
 			link.href = 'https://dl.dropbox.com/s/hq9cw3paj4tcube/sendsayforms.css';
 			link.media = 'all';
-			head.appendChild(link);
+
+			var sibling = document.querySelector('#sendsay-generated-sheet');
+			if (sibling) {
+				document.head.insertBefore(link, sibling);
+			} else {
+				document.head.appendChild(link);
+			}
 			link.addEventListener('load', callback);
 		}
 	};
@@ -2138,4 +2236,4 @@ var _Form = require("./classes/Form.js");
 	};
 })();
 
-},{"./classes/Connector.js":2,"./classes/Form.js":5,"./classes/elements/Popup.js":15}]},{},[20,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]);
+},{"./classes/Connector.js":2,"./classes/Form.js":5,"./classes/elements/Popup.js":15,"./classes/elements/PopupBar.js":16}]},{},[21,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]);

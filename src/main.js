@@ -1,5 +1,6 @@
 
 import {Popup} from "./classes/elements/Popup.js";
+import {PopupBar} from "./classes/elements/PopupBar.js";
 import {Connector} from "./classes/Connector.js";
 import {Form} from "./classes/Form.js";
 (function() {
@@ -8,13 +9,14 @@ import {Form} from "./classes/Form.js";
 	var activatePopup  = function(url, options) {
 		loadCss(function() {
 			var connector = new Connector(url);
-			var form = new Form(Popup, connector, options);
+			var form = new Form(connector, options);
 		});	
 	};
 
 	var showPopup = function(data, options) {
 		//loadCss();
-		let popup = new Popup(data);
+		var domConstructor = ['bar'].indexOf(data.appearance.position) != -1 ? PopupBar : Popup;
+		let popup = new domConstructor(data);
 		popup.activate(options);
 	}
 
@@ -29,7 +31,13 @@ import {Form} from "./classes/Form.js";
 		    link.type = 'text/css';
 		    link.href = 'https://dl.dropbox.com/s/hq9cw3paj4tcube/sendsayforms.css';
 		    link.media = 'all';
-		    head.appendChild(link);
+
+		    var sibling = document.querySelector('#sendsay-generated-sheet');
+		    if(sibling) {
+		    	document.head.insertBefore(link, sibling);
+		    } else {
+		    	document.head.appendChild(link);
+		    }
 		    link.addEventListener('load', callback);
 		}
 	} 

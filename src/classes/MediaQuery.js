@@ -25,7 +25,8 @@ export class MediaQuery {
 		  styleEl.appendChild(document.createTextNode(content));
 		}
         var children = document.head.querySelectorAll('*');
-        document.head.insertBefore(styleEl, children[children.length - 1])
+        styleEl.id = 'sendsay-generated-sheet';
+        document.head.appendChild(styleEl, children[children.length - 1])
 
     	this.el = styleEl;
     }

@@ -25,7 +25,6 @@ export class Popup extends DOMObject {
 						(!this.noWrapper ? '</div>' : '');
 
 		this.baseClass = 'sendsay-popup';
-		this.mode = ['bar'].indexOf(appearance.position) != -1 ? 'bar' : 'popup';
 		this.applicableStyles = {
 			'background-color': { param: 'backgroundColor' },
 			'border-radius': { param: 'borderRadius', postfix: 'px' },
@@ -36,10 +35,8 @@ export class Popup extends DOMObject {
 			'width': { param: 'width', postfix: 'px'},
 			'color': { param: 'textColor'}
 		};
-		if(this.mode === 'bar')
-			delete this.applicableStyles['width'];
-		console.log(this.mode, this.applicableStyles);
-		let width = this.mode == 'popup' ? appearance.width : 960;
+
+		let width = appearance.width;
 
 		let mediaQuery = new MediaQuery({
 			conditions: ['screen', '(min-width: 320px)', '(max-width:' + (+width + 100) + 'px)'],
@@ -51,20 +48,12 @@ export class Popup extends DOMObject {
 					'flex-direction': 'column',
 					'animation': 'none'
 				},
-				'.sendsay-popup.sendsay-left, .sendsay-popup.sendsay-right, .sendsay-popup.sendsay-bar': {
+				'.sendsay-popup.sendsay-left, .sendsay-popup.sendsay-right': {
 					'top': '50%',
 					'left': '50%',
 					'transform': 'translate(-50%, -50%)',
 					'animation': 'none',
 					'bottom': 'initial'
-				},
-				'.sendsay-column': {
-					'height': 'auto !important',
-					'flex-direction': 'column'
-				},
-				'.sendsay-popup.sendsay-bar  .sendsay-column > *': {
-					'padding-bottom': '20px',
-					'padding-left': '0px'
 				}
 			}
 		});
@@ -75,8 +64,6 @@ export class Popup extends DOMObject {
 		this.general.appearance = {}
 		this.general.appearance.textColor = this.data.appearance.textColor;
 		this.makeEndDialogData();	
-
-
 	}
 
 	build() {
@@ -188,7 +175,6 @@ export class Popup extends DOMObject {
 			noAnimation: true,
 			endDialog: true
 		}, data);
-		console.log(this.submitData, this.data);
 		delete this.submitData.elements;
 		let button;
 		let found = this.searchForElements(function(elem) {
