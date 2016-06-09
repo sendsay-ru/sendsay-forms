@@ -3,7 +3,7 @@ import {MediaQuery} from "./../MediaQuery.js";
 
 
 
-export class PopupBar extends Popup {
+export class ToggleablePopup extends Popup {
 
 	constructor(data, parent) {
 		super(data, parent);
@@ -14,9 +14,8 @@ export class PopupBar extends Popup {
 		this.noWrapper = false;
 		this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]">' : '') +
 						'<div class = "[%classes%]" style="[%style%]"">' +
-							'<div class = "sendsay-close">×</div>' +
-							'<div class = "sendsay-content">' +
-							'</div>' +
+						'<div class = "sendsay-close">×</div>' +
+						'' +
 						'</div>'+
 						(!this.noWrapper ? '</div>' : '');
 

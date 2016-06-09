@@ -191,6 +191,10 @@
   left: 0px;
   width: 100%;
 }
+.sendsay-popup.sendsay-barUp .sendsay-content,
+.sendsay-popup.sendsay-barDown .sendsay-content {
+  width: 100%;
+}
 .sendsay-popup.sendsay-barUp .sendsay-columnwrapper,
 .sendsay-popup.sendsay-barDown .sendsay-columnwrapper {
   display: flex;

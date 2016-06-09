@@ -19,8 +19,9 @@ export class Popup extends DOMObject {
 		this.noWrapper = false;
 		this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]">' : '') +
 						'<div class = "[%classes%]" style="[%style%]"">' +
-						'<div class = "sendsay-close">×</div>' +
-						'' +
+							'<div class = "sendsay-close">×</div>' +
+							'<div class = "sendsay-content">' +
+							'</div>' +
 						'</div>'+
 						(!this.noWrapper ? '</div>' : '');
 
@@ -70,7 +71,7 @@ export class Popup extends DOMObject {
 
 		super.build();
 		this.columns = [];
-		let popupBody = this.el.classList.contains('sendsay-popup') ? this.el : this.el.querySelector('.sendsay-popup');
+		let popupBody = this.el.querySelector('.sendsay-content');
 		if(this.data.columns) {
 			let columns = this.data.columns;
 			for(var i=0; i < columns.length; i++) {

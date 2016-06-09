@@ -3,6 +3,7 @@ import {ConditionWatcher} from "./ConditionWatcher.js";
 import {Cookies} from "./Cookies.js";
 import {Popup} from "./elements/Popup.js";
 import {PopupBar} from "./elements/PopupBar.js";
+import {ToggleablePopup} from "./elements/ToggleablePopup.js";
 
 export class Form {
 
@@ -62,6 +63,7 @@ export class Form {
 
 		watcher.watch().then(function() {
 			self.domConstructor = ['barUp', 'barDown'].indexOf(data.appearance.position) != -1 ? PopupBar : Popup;
+			// self.domConstructor = ToggleablePopup; 
 			self.domObj = new (self.domConstructor)(self.connector.data);
 			self.domObj.activate(self.options);
 			self.domObj.el.addEventListener('sendsay-success', self.handleSubmit.bind(self));
