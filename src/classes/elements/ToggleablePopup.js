@@ -12,12 +12,16 @@ export class ToggleablePopup extends Popup {
 	initialize() {
 		let appearance = this.data.appearance || {};
 		this.noWrapper = false;
+		this.data.appearance.position = 'toggleable';
 		this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]">' : '') +
 						'<div class = "[%classes%]" style="[%style%]"">' +
-						'<div class = "sendsay-close">×</div>' +
-						'' +
+							'<div class = "sendsay-close">×</div>' +
+							'<div class = "sendsay-toggler">[%maintext%]</div>' +
+							'<div class = "sendsay-content">' +
+							'</div>' +
 						'</div>'+
 						(!this.noWrapper ? '</div>' : '');
+
 
 		this.baseClass = 'sendsay-popup';
 
@@ -42,27 +46,46 @@ export class ToggleablePopup extends Popup {
 		let mediaQuery = new MediaQuery({  
 			conditions: ['screen', '(min-width: 320px)', '(max-width:' + (+width + 100) + 'px)'],
 			selectors: {
-				'.sendsay-popup': {
-					 'width': '300px !important',
+				'.sendsay-popup.sendsay-toggleable': {
+					 'width': '150px !important',
 					'-webkit-flex-direction': 'column',
 					'-ms-flex-direction': 'column',
 					'flex-direction': 'column',
-					'animation': 'none'
+					'animation': 'none',
+					'bottom': '50px',
+					'right': '50px'
 				},
-				'.sendsay-popup.sendsay-barUp, .sendsay-popup.sendsay-barDown': {
+				'.sendsay-popup.sendsay-toggleable .sendsay-toggler': {
+					'opacity': 0,
+					'overflow': 'hidden'
+				},
+				'.sendsay-popup.sendsay-toggleable .sendsay-toggler:before': {
+					'content': '"Hello world"'
+				},
+				'.sendsay-popup.sendsay-toggleable .sendsay-content': { 
+					'display': 'none',
+					'transition': 'none'
+				},
+				'.sendsay-popup.sendsay-toggleable.sendsay-opened': {
+					 'width': '150px !important',
+					'-webkit-flex-direction': 'column',
+					'-ms-flex-direction': 'column',
+					'flex-direction': 'column',
+					'animation': 'none',
+					'bottom': '50px',
+					'right': '50px'
+				},
+				'.sendsay-popup.sendsay-toggleable.sendsay-opened .sendsay-content': { 
+					'display': 'block',
+					'transition': 'none'
+				},
+				'.sendsay-popup.sendsay-toggleable.sendsay-opened': {
 					'top': '50%',
 					'left': '50%',
 					'transform': 'translate(-50%, -50%)',
-					'animation': 'none',
-					'bottom': 'initial'
-				},
-				'.sendsay-column': {
-					'height': 'auto !important',
-					'flex-direction': 'column'
-				},
-				'.sendsay-popup.sendsay-barUp  .sendsay-column > *, .sendsay-popup.sendsay-barDown .sendsay-column > *': {
-					'padding-bottom': '20px',
-					'padding-left': '0px'
+					'bottom': 'initial',
+					'right': 'initial',
+					'width': '300px !important',
 				}
 			}
 		});
@@ -75,16 +98,38 @@ export class ToggleablePopup extends Popup {
 		this.makeEndDialogData();	
 	}
 
-	build() {
-		var el = super.build();
-		var textEl = document.createElement('div');
-		textEl.style = this.convertStyles(this.applyStyles(this.maintextApplStyle));;
-		textEl.innerHTML = this.data.content.mainText;
-		textEl.className = 'sendsay-text';
-		let column = el.querySelector('.sendsay-column'),
-			firstChild = column.querySelector('*');
-		column.insertBefore(textEl, firstChild);
-		return el;
+	makeSettings() {
+		let settings = super.makeSettings();
+		settings.maintext = this.data.content.mainText;
+		return settings;
+	}
+
+	addEvents() {
+		super.addEvents();
+		if(this.el) {
+			this.el.querySelector('.sendsay-toggler').addEventListener('click', this.handleTogglerClick.bind(this));
+		}
+	}
+
+	removeEvents() {
+		super.addEvents();
+		if(this.el) {
+			this.el.querySelector('.sendsay-toggler').removeEventListener('click', this.handleTogglerClick.bind(this));
+		}
+	}
+
+	handleTogglerClick() {
+
+		let el = this.noWrapper ? this.el : this.el.querySelector('.sendsay-popup');
+		let contentEl = el.querySelector('.sendsay-content');
+
+		if(el.classList.contains('sendsay-opened')) {
+			el.classList.remove('sendsay-opened');
+			contentEl.style.maxHeight = 0 + 'px';
+		} else {
+			el.classList.add('sendsay-opened');
+			contentEl.style.maxHeight = contentEl.scrollHeight + 'px';
+		}
 	}
 
 

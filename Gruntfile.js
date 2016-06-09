@@ -63,6 +63,7 @@ module.exports = function(grunt) {
           files: {
             'src/css/sendsayforms.css': ['src/css/less/general.less',
                                          'src/css/less/bar.less',
+                                         'src/css/less/toggleable.less',
                                          'src/css/less/animations.less']
           }
         },
@@ -75,6 +76,7 @@ module.exports = function(grunt) {
           files: {
             'dist/sendsayforms.css': ['src/css/less/general.less',
                                       'src/css/less/bar.less',
+                                      'src/css/less/toggleable.less',
                                       'src/css/less/animations.less']
           }
         }

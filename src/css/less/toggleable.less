@@ -1,0 +1,44 @@
+.sendsay-popup.sendsay-toggleable{
+	position: fixed;
+	bottom: 0px;
+	right: 50px;
+	flex-direction: column;
+	max-height: 100%;
+
+
+	.sendsay-toggler {
+		height:50px;
+		line-height: 50px;
+		cursor: pointer;
+	}
+	.sendsay-content {
+		opacity: 0;
+		max-height: 0px;
+		overflow: hidden;
+		transition: max-height linear 1000ms, opacity linear 1000ms;
+	}
+	.sendsay-cross {
+		display: none;
+	}
+
+
+}
+
+
+.sendsay-popup.sendsay-toggleable.sendsay-opened{
+	
+
+
+	.sendsay-content {
+
+		
+		opacity: 1;
+		transition: max-height linear 1000ms, opacity linear 1000ms;
+	}
+	
+	.sendsay-cross {
+		display: none;
+	}
+
+
+}

@@ -21,6 +21,7 @@ import {Form} from "./classes/Form.js";
 	}
 
 	var loadCss = function(callback) {
+		return callback();
 		var cssId = '_sendsay-styles';  // you could encode the css path itself to generate id..
 		if (!document.getElementById(cssId))
 		{
