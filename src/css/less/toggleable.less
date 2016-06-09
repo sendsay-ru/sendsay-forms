@@ -11,13 +11,26 @@
 		line-height: 50px;
 		cursor: pointer;
 	}
+
+	.sendsay-toggler {
+
+		.sendsay-toggler-desktop {
+			display: block;
+		}
+
+		.sendsay-toggler-mobile {
+			display: none;	
+		}
+ 
+	}
+
 	.sendsay-content {
 		opacity: 0;
 		max-height: 0px;
 		overflow: hidden;
 		transition: max-height linear 1000ms, opacity linear 1000ms;
 	}
-	.sendsay-cross {
+	.sendsay-close {
 		display: none;
 	}
 
@@ -30,11 +43,11 @@
 
 
 	.sendsay-content {
-
-		
 		opacity: 1;
 		transition: max-height linear 1000ms, opacity linear 1000ms;
 	}
+
+	.sendsay
 	
 	.sendsay-cross {
 		display: none;

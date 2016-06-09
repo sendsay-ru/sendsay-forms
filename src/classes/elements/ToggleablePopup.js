@@ -16,7 +16,10 @@ export class ToggleablePopup extends Popup {
 		this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]">' : '') +
 						'<div class = "[%classes%]" style="[%style%]"">' +
 							'<div class = "sendsay-close">×</div>' +
-							'<div class = "sendsay-toggler">[%maintext%]</div>' +
+							'<div class = "sendsay-toggler">' +
+								'<span class="sendsay-toggler-desktop">[%maintext%]</span>' +
+								'<span class="sendsay-toggler-mobile">[%mobilemaintext%]</span>' +
+							'</div>' +
 							'<div class = "sendsay-content">' +
 							'</div>' +
 						'</div>'+
@@ -55,16 +58,15 @@ export class ToggleablePopup extends Popup {
 					'bottom': '50px',
 					'right': '50px'
 				},
-				'.sendsay-popup.sendsay-toggleable .sendsay-toggler': {
-					'opacity': 0,
-					'overflow': 'hidden'
-				},
-				'.sendsay-popup.sendsay-toggleable .sendsay-toggler:before': {
-					'content': '"Hello world"'
-				},
 				'.sendsay-popup.sendsay-toggleable .sendsay-content': { 
 					'display': 'none',
 					'transition': 'none'
+				},
+				'.sendsay-popup.sendsay-toggleable .sendsay-toggler .sendsay-toggler-mobile': { 
+					'display': 'block'
+				},
+				'.sendsay-popup.sendsay-toggleable .sendsay-toggler .sendsay-toggler-desktop': { 
+					'display': 'none'
 				},
 				'.sendsay-popup.sendsay-toggleable.sendsay-opened': {
 					 'width': '150px !important',
@@ -74,6 +76,12 @@ export class ToggleablePopup extends Popup {
 					'animation': 'none',
 					'bottom': '50px',
 					'right': '50px'
+				},
+				'.sendsay-popup.sendsay-toggleable .sendsay-toggler ': { 
+					'font-size': '14px !important'
+				},
+				'.sendsay-popup.sendsay-toggleable.sendsay-opened  .sendsay-toggler': { 
+					'display': 'none'
 				},
 				'.sendsay-popup.sendsay-toggleable.sendsay-opened .sendsay-content': { 
 					'display': 'block',
@@ -86,6 +94,9 @@ export class ToggleablePopup extends Popup {
 					'bottom': 'initial',
 					'right': 'initial',
 					'width': '300px !important',
+				},
+				'.sendsay-popup.sendsay-toggleable.sendsay-opened .sendsay-close': {
+					'display': 'block'
 				}
 			}
 		});
@@ -101,6 +112,7 @@ export class ToggleablePopup extends Popup {
 	makeSettings() {
 		let settings = super.makeSettings();
 		settings.maintext = this.data.content.mainText;
+		settings.mobilemaintext = this.data.content.mobilemainText || 'Телефон';
 		return settings;
 	}
 
@@ -129,6 +141,18 @@ export class ToggleablePopup extends Popup {
 		} else {
 			el.classList.add('sendsay-opened');
 			contentEl.style.maxHeight = contentEl.scrollHeight + 'px';
+		}
+	}
+
+	handleClose() {
+		let el = this.noWrapper ? this.el : this.el.querySelector('.sendsay-popup');
+		let contentEl = el.querySelector('.sendsay-content');
+
+		if(el.classList.contains('sendsay-opened')) {
+			el.classList.remove('sendsay-opened');
+			contentEl.style.maxHeight = 0 + 'px';
+		} else {
+			this.hide();
 		}
 	}
 
