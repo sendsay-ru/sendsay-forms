@@ -1807,6 +1807,8 @@ exports.PopupBar = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
 var _Popup2 = require("./Popup.js");
 
 var _MediaQuery = require("./../MediaQuery.js");
@@ -1845,6 +1847,12 @@ var PopupBar = exports.PopupBar = function (_Popup) {
 				'color': { param: 'textColor' }
 			};
 
+			this.maintextApplStyle = {
+				'font-family': { param: 'font' },
+				'font-size': { param: 'fontSize', postfix: 'px' },
+				'text-align': { param: 'text-align', postfix: 'px' }
+			};
+
 			var width = 800;
 
 			var mediaQuery = new _MediaQuery.MediaQuery({
@@ -1881,6 +1889,19 @@ var PopupBar = exports.PopupBar = function (_Popup) {
 			this.general.appearance = {};
 			this.general.appearance.textColor = this.data.appearance.textColor;
 			this.makeEndDialogData();
+		}
+	}, {
+		key: "build",
+		value: function build() {
+			var el = _get(Object.getPrototypeOf(PopupBar.prototype), "build", this).call(this);
+			var textEl = document.createElement('div');
+			textEl.style = this.convertStyles(this.applyStyles(this.maintextApplStyle));;
+			textEl.innerHTML = this.data.content.mainText;
+			textEl.className = 'sendsay-text';
+			var column = el.querySelector('.sendsay-column'),
+			    firstChild = column.querySelector('*');
+			column.insertBefore(textEl, firstChild);
+			return el;
 		}
 	}]);
 

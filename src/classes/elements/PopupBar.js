@@ -31,6 +31,12 @@ export class PopupBar extends Popup {
 			'color': { param: 'textColor'}
 		};
 
+		this.maintextApplStyle = {
+			'font-family': { param: 'font' },
+			'font-size': { param: 'fontSize', postfix: 'px' },
+			'text-align': { param: 'text-align', postfix: 'px'}
+		};
+
 		let width =  800;
 
 		let mediaQuery = new MediaQuery({  
@@ -68,5 +74,19 @@ export class PopupBar extends Popup {
 		this.general.appearance.textColor = this.data.appearance.textColor;
 		this.makeEndDialogData();	
 	}
+
+	build() {
+		var el = super.build();
+		var textEl = document.createElement('div');
+		textEl.style = this.convertStyles(this.applyStyles(this.maintextApplStyle));;
+		textEl.innerHTML = this.data.content.mainText;
+		textEl.className = 'sendsay-text';
+		let column = el.querySelector('.sendsay-column'),
+			firstChild = column.querySelector('*');
+		column.insertBefore(textEl, firstChild);
+		return el;
+	}
+
+
 
 }
