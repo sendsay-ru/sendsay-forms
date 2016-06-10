@@ -17,6 +17,11 @@ export class Popup extends DOMObject {
 	initialize() {
 		let appearance = this.data.appearance || {};
 		this.noWrapper = false;
+
+		this.steps = this.data.steps;
+		this.curStep = 0;
+		this.gainedData = {};
+
 		this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]">' : '') +
 						'<div class = "[%classes%]" style="[%style%]"">' +
 							'<div class = "sendsay-close">×</div>' +
@@ -64,16 +69,17 @@ export class Popup extends DOMObject {
 		this.general = {};
 		this.general.appearance = {}
 		this.general.appearance.textColor = this.data.appearance.textColor;
-		this.makeEndDialogData();	
+
 	}
 
 	build() {
 
 		super.build();
 		this.columns = [];
+		let curStep = this.steps[this.curStep];
 		let popupBody = this.el.querySelector('.sendsay-content');
-		if(this.data.columns) {
-			let columns = this.data.columns;
+		if(curStep.columns) {
+			let columns = curStep.columns;
 			for(var i=0; i < columns.length; i++) {
 				let newEl = new Column(columns[i], this);
 				if(newEl) {
@@ -95,42 +101,36 @@ export class Popup extends DOMObject {
 
 	addEvents() {
 		let self = this;
-		if(this.el) {
-			this.el.addEventListener('DOMNodeRemovedFromDocument', function() {
-				if(self.mediaQuery) {
-					document.head.removeChild(self.mediaQuery.el);
-				}
-			});
-			var popup = this.el.classList.contains('sendsay-popup') ? this.el : this.el.querySelector('.sendsay-popup');
-			if(!this.noWrapper) {
-				this.el.addEventListener('click', this.handleWrapperClick.bind(this));
-				
+
+		this.addEvent('DOMNodeRemovedFromDocument', function() {
+			if(self.mediaQuery) {
+				document.head.removeChild(self.mediaQuery.el);
 			}
-			console.log('test', this.el);
-			this.el.querySelector('.sendsay-button').addEventListener('sendsay-click', this.handleButtonClick.bind(this));
-			this.el.addEventListener('wheel', this.handleWheel.bind(this));
-			this.el.addEventListener('DOMMouseScroll', this.handleWheel.bind(this));
-			popup.addEventListener('click', this.handlePopupClick.bind(this));
-			this.el.querySelector('.sendsay-close').addEventListener('click', this.handleClose.bind(this));
-			document.addEventListener('keyup', this.handleKeyPress.bind(this));
-
-
-		}
+		});
+		if(!this.noWrapper) {
+			this.addEvent('click', this.handleWrapperClick.bind(this));
+			this.addEvent('click', '.sendsay-popup', this.handlePopupClick.bind(this));	
+		} else
+			this.addEvent('click', this.handlePopupClick.bind(this));	
+		this.addEvent('sendsay-click', '.sendsay-button', this.handleButtonClick.bind(this));
+		this.addEvent('wheel', this.handleWheel.bind(this));
+		this.addEvent('DOMMouseScroll', this.handleWheel.bind(this));
+		
+		this.addEvent('click', '.sendsay-close', this.handleClose.bind(this));
+		document.addEventListener('keyup', this.handleKeyPress.bind(this));
 	}
 
 	removeEvents() {
-		if(this.el) {
-			var popup = this.el.classList.contains('sendsay-popup') ? this.el : this.el.querySelector('.sendsay-popup');
-			if(!this.noWrapper) {
-				this.el.removeEventListener('click', this.handleWrapperClick.bind(this));
-		
-			}
-			this.el.removeEventListener('wheel', this.handleWheel.bind(this));
-			this.el.removeEventListener('DOMMouseScroll', this.handleWheel.bind(this));	
-			this.el.removeEventListener('wheel', this.handleWheel.bind(this));
-			popup.removeEventListener('click', this.handlePopupClick.bind(this));
-			document.removeEventListener('keyup', this.handleKeyPress.bind(this));
-		}
+		if(!this.noWrapper) {
+			this.removeEvent('click', this.handleWrapperClick.bind(this));
+			this.removeEvent('click', '.sendsay-popup', this.handlePopupClick.bind(this));	
+		} else
+			this.removeEvent('click', this.handlePopupClick.bind(this));	
+		this.removeEvent('sendsay-click', '.sendsay-button', this.handleButtonClick.bind(this));
+		this.removeEvent('wheel', this.handleWheel.bind(this));
+		this.removeEvent('DOMMouseScroll', this.handleWheel.bind(this));		
+		this.removeEvent('click', '.sendsay-close', this.handleClose.bind(this));
+		document.removeEventListener('keyup', this.handleKeyPress.bind(this));
 	}
 
 	makeSettings() {
@@ -155,11 +155,11 @@ export class Popup extends DOMObject {
 		this.show(options);
 	}
 
-	searchForElements(comparator, inData) {
+	searchForElements(comparator) {
 		let found = [];
 		if(!comparator || typeof comparator !== 'function')
 			return found;
-		let columns =  inData ? this.data.columns : this.columns;
+		let columns =  this.columns;
 		for(let i=0; i < columns.length; i++) {
 			let column = columns[i],
 				elements = column.elements;
@@ -170,49 +170,10 @@ export class Popup extends DOMObject {
 		return found;
 	}
 
-	makeEndDialogData() {
-		let data = this.data;
-		this.submitData = this.extend({ 
-			noAnimation: true,
-			endDialog: true
-		}, data);
-		delete this.submitData.elements;
-		let button;
-		let found = this.searchForElements(function(elem) {
-			return elem.type == 'button';
-		}, true);
-
-		if(found[0]) {
-
-			button = this.extend({}, found[0]);
-		} else {
-			button = { type:"button", content: {}}
-		}
-		button.content = {
-			text: 'Закрыть'
-		};
-
-		this.submitData.columns = [{
-			elements: [{
-					type: 'text',
-					content: {
-						text: data.endDialogMessage || 'Спасибо за заполнение формы',
-					},
-					appearance: {
-						paddingTop: '10',
-						paddingBottom: '20'
-					}
-				},
-				button
-			],
-			appearance: {}
-		}];
-	}
 
 	showEndDialog() {
 		this.isSubmitted = true;
-		this.data = this.submitData;
-		this.render();
+		this.proceedToNextStep();
 	}
 
 	onSubmitFail() {
@@ -259,10 +220,20 @@ export class Popup extends DOMObject {
 			}
 		}
 		if(isValid) {
-			button.el.querySelector('input').classList.add('sendsay-loading');
-			this.trigger('sendsay-success', data);
+			this.extend(this.gainedData, data);
+			if(this.steps.length - 2 !== this.curStep) {
+				this.proceedToNextStep();
+			} else {
+				button.el.querySelector('input').classList.add('sendsay-loading');
+				this.trigger('sendsay-success', this.gainedData);
+			}
 		}
 		return isValid;
+	}
+
+	proceedToNextStep() {
+		this.curStep++;
+		this.render();
 	}
 
 	onSubmitFail() {

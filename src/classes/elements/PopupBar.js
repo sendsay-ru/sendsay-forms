@@ -12,6 +12,11 @@ export class PopupBar extends Popup {
 	initialize() {
 		let appearance = this.data.appearance || {};
 		this.noWrapper = false;
+
+		this.steps = this.data.steps;
+		this.curStep = 0;
+		this.gainedData = {};
+
 		this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]">' : '') +
 						'<div class = "[%classes%]" style="[%style%]"">' +
 							'<div class = "sendsay-close">×</div>' +

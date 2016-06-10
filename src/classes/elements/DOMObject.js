@@ -109,8 +109,28 @@ export class DOMObject {
 
 	}
 
+	addEvent(event, selector, callback) {
+		this._eventAction(true, event, selector, callback);
+	}
+
 	removeEvents() {
 
+	}
+
+	removeEvent(event, selector, callback) {
+		this._eventAction(false, event, selector, callback);
+	}
+
+	_eventAction(toAdd, event, selector, callback) {
+		if(!this.el)
+			return;
+		if(callback === undefined && typeof selector === 'function') {
+			callback = selector;
+			selector = null;
+		}
+		let target = selector ? this.el.querySelector(selector) : this.el;
+		if(target)
+			toAdd ? target.addEventListener(event, callback) : target.removeEventListener(event, callback); 
 	}
 
 	trigger(eventName, data) {

@@ -11,6 +11,11 @@ export class ToggleablePopup extends Popup {
 
 	initialize() {
 		let appearance = this.data.appearance || {};
+
+		this.steps = this.data.steps;
+		this.curStep = 0;
+		this.gainedData = {};
+		
 		this.noWrapper = false;
 		this.data.appearance.position = 'toggleable';
 		this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]">' : '') +
