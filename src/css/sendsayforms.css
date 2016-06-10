@@ -83,17 +83,21 @@
   -ms-flex-direction: row;
   flex-direction: row;
 }
+.sendsay-popup .sendsay-content {
+  display: flex;
+  flex-direction: row;
+}
 .sendsay-field-hidden {
   display: none;
 }
 .sendsay-field {
   padding: 0px;
 }
+.sendsay-columnwrapper {
+  display: flex;
+}
 .sendsay-column {
-  -webkit-flex: 1;
-  -ms-flex: 1;
   flex: 1;
-  height: 100%;
 }
 .sendsay-field.sendsay-field-invalid .sendsay-input,
 .sendsay-field.sendsay-field-invalid .sendsay-input:focus {

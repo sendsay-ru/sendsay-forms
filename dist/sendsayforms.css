@@ -86,17 +86,30 @@
   -webkit-box-direction: normal;
           flex-direction: row;
 }
+.sendsay-popup .sendsay-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
 .sendsay-field-hidden {
   display: none;
 }
 .sendsay-field {
   padding: 0px;
 }
+.sendsay-columnwrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
 .sendsay-column {
-  -ms-flex: 1;
   -webkit-box-flex: 1;
+      -ms-flex: 1;
           flex: 1;
-  height: 100%;
 }
 .sendsay-field.sendsay-field-invalid .sendsay-input,
 .sendsay-field.sendsay-field-invalid .sendsay-input:focus {
