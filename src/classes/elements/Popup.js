@@ -16,13 +16,14 @@ export class Popup extends DOMObject {
 
 	initialize() {
 		let appearance = this.data.appearance || {};
-		this.noWrapper = false;
 
+		this.noWrapper = !appearance.overlayEnabled;
 		this.steps = this.data.steps;
 		this.curStep = 0;
 		this.gainedData = {};
 
-		this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]">' : '') +
+
+		this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]" style="[%overlayStyles%]">' : '') +
 						'<div class = "[%classes%]" style="[%style%]"">' +
 							'<div class = "sendsay-close">×</div>' +
 							'<div class = "sendsay-content">' +
@@ -40,6 +41,10 @@ export class Popup extends DOMObject {
 			'padding-right': { param: 'paddingRight', postfix: 'px'},
 			'width': { param: 'width', postfix: 'px'},
 			'color': { param: 'textColor'}
+		};
+
+		this.applOverlayStyles = {
+			'background-color': { param: 'overlayColor' }
 		};
 
 		let width = appearance.width;
@@ -136,6 +141,7 @@ export class Popup extends DOMObject {
 	makeSettings() {
 		let settings = super.makeSettings();
 		settings.wrapperClasses = this.data.noAnimation ? 'sendsay-noanimation' : '';
+		settings.overlayStyles = this.convertStyles(this.applyStyles(this.applOverlayStyles));
 		return settings;
 	}
 

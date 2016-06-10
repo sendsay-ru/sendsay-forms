@@ -1503,13 +1503,13 @@ var Popup = exports.Popup = function (_DOMObject) {
 		key: "initialize",
 		value: function initialize() {
 			var appearance = this.data.appearance || {};
-			this.noWrapper = false;
 
+			this.noWrapper = !appearance.overlayEnabled;
 			this.steps = this.data.steps;
 			this.curStep = 0;
 			this.gainedData = {};
 
-			this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]">' : '') + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '<div class = "sendsay-content">' + '</div>' + '</div>' + (!this.noWrapper ? '</div>' : '');
+			this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]" style="[%overlayStyles%]">' : '') + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '<div class = "sendsay-content">' + '</div>' + '</div>' + (!this.noWrapper ? '</div>' : '');
 
 			this.baseClass = 'sendsay-popup';
 			this.applicableStyles = {
@@ -1521,6 +1521,10 @@ var Popup = exports.Popup = function (_DOMObject) {
 				'padding-right': { param: 'paddingRight', postfix: 'px' },
 				'width': { param: 'width', postfix: 'px' },
 				'color': { param: 'textColor' }
+			};
+
+			this.applOverlayStyles = {
+				'background-color': { param: 'overlayColor' }
 			};
 
 			var width = appearance.width;
@@ -1617,6 +1621,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 		value: function makeSettings() {
 			var settings = _get(Object.getPrototypeOf(Popup.prototype), "makeSettings", this).call(this);
 			settings.wrapperClasses = this.data.noAnimation ? 'sendsay-noanimation' : '';
+			settings.overlayStyles = this.convertStyles(this.applyStyles(this.applOverlayStyles));
 			return settings;
 		}
 	}, {
@@ -1831,11 +1836,12 @@ var PopupBar = exports.PopupBar = function (_Popup) {
 			var appearance = this.data.appearance || {};
 			this.noWrapper = false;
 
+			this.noWrapper = !appearance.overlayEnabled;
 			this.steps = this.data.steps;
 			this.curStep = 0;
 			this.gainedData = {};
 
-			this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]">' : '') + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '<div class = "sendsay-content">' + '</div>' + '</div>' + (!this.noWrapper ? '</div>' : '');
+			this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]"  style="[%overlayStyles%]">' : '') + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '<div class = "sendsay-content">' + '</div>' + '</div>' + (!this.noWrapper ? '</div>' : '');
 
 			this.baseClass = 'sendsay-popup';
 
@@ -1853,6 +1859,10 @@ var PopupBar = exports.PopupBar = function (_Popup) {
 				'font-family': { param: 'font' },
 				'font-size': { param: 'fontSize', postfix: 'px' },
 				'text-align': { param: 'text-align', postfix: 'px' }
+			};
+
+			this.applOverlayStyles = {
+				'background-color': { param: 'overlayColor' }
 			};
 
 			var width = 800;
@@ -1890,7 +1900,6 @@ var PopupBar = exports.PopupBar = function (_Popup) {
 			this.general = {};
 			this.general.appearance = {};
 			this.general.appearance.textColor = this.data.appearance.textColor;
-			this.makeEndDialogData();
 		}
 	}, {
 		key: "build",
@@ -2246,13 +2255,14 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 
 			var appearance = this.data.appearance || {};
 
+			this.noWrapper = !appearance.overlayEnabled;
 			this.steps = this.data.steps;
 			this.curStep = 0;
 			this.gainedData = {};
 
 			this.noWrapper = false;
 			this.data.appearance.position = 'toggleable';
-			this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]">' : '') + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '<div class = "sendsay-toggler">' + '<span class="sendsay-toggler-desktop">[%maintext%]</span>' + '<span class="sendsay-toggler-mobile">[%mobilemaintext%]</span>' + '</div>' + '<div class = "sendsay-content">' + '</div>' + '</div>' + (!this.noWrapper ? '</div>' : '');
+			this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]"  style="[%overlayStyles%]">' : '') + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '<div class = "sendsay-toggler">' + '<span class="sendsay-toggler-desktop">[%maintext%]</span>' + '<span class="sendsay-toggler-mobile">[%mobilemaintext%]</span>' + '</div>' + '<div class = "sendsay-content">' + '</div>' + '</div>' + (!this.noWrapper ? '</div>' : '');
 
 			this.baseClass = 'sendsay-popup';
 
@@ -2270,6 +2280,10 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 				'font-family': { param: 'font' },
 				'font-size': { param: 'fontSize', postfix: 'px' },
 				'text-align': { param: 'text-align', postfix: 'px' }
+			};
+
+			this.applOverlayStyles = {
+				'background-color': { param: 'overlayColor' }
 			};
 
 			var width = 800;
@@ -2332,7 +2346,6 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 			this.general = {};
 			this.general.appearance = {};
 			this.general.appearance.textColor = this.data.appearance.textColor;
-			this.makeEndDialogData();
 		}
 	}, {
 		key: "makeSettings",

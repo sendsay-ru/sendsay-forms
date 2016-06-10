@@ -94,6 +94,7 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
+  width: 100%;
 }
 .sendsay-field-hidden {
   display: none;

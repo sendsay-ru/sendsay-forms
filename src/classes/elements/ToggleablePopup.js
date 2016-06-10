@@ -12,13 +12,14 @@ export class ToggleablePopup extends Popup {
 	initialize() {
 		let appearance = this.data.appearance || {};
 
+		this.noWrapper = !appearance.overlayEnabled;
 		this.steps = this.data.steps;
 		this.curStep = 0;
 		this.gainedData = {};
 		
 		this.noWrapper = false;
 		this.data.appearance.position = 'toggleable';
-		this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]">' : '') +
+		this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]"  style="[%overlayStyles%]">' : '') +
 						'<div class = "[%classes%]" style="[%style%]"">' +
 							'<div class = "sendsay-close">×</div>' +
 							'<div class = "sendsay-toggler">' +
@@ -47,6 +48,10 @@ export class ToggleablePopup extends Popup {
 			'font-family': { param: 'font' },
 			'font-size': { param: 'fontSize', postfix: 'px' },
 			'text-align': { param: 'text-align', postfix: 'px'}
+		};
+
+		this.applOverlayStyles = {
+			'background-color': { param: 'overlayColor' }
 		};
 
 		let width =  800;
@@ -111,7 +116,6 @@ export class ToggleablePopup extends Popup {
 		this.general = {};
 		this.general.appearance = {}
 		this.general.appearance.textColor = this.data.appearance.textColor;
-		this.makeEndDialogData();	
 	}
 
 	makeSettings() {
