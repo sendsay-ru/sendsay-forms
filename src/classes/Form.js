@@ -63,7 +63,18 @@ export class Form {
 
 		watcher.watch().then(function() {
 			self.domConstructor = ['barUp', 'barDown'].indexOf(data.appearance.position) != -1 ? PopupBar : Popup;
-			// self.domConstructor = ToggleablePopup; 
+			switch(data.type) {
+				case 'popup':
+					self.domConstructor = Popup;
+					break;
+				case 'bar':
+					self.domConstructor = PopupBar;
+					break;
+				case 'widget':
+					self.domConstructor = ToggleablePopup;
+					break;
+			}
+ 
 			self.domObj = new (self.domConstructor)(self.connector.data);
 			self.domObj.activate(self.options);
 			self.domObj.el.addEventListener('sendsay-success', self.handleSubmit.bind(self));

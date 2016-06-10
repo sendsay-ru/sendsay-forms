@@ -541,7 +541,18 @@ var Form = exports.Form = function () {
 
 			watcher.watch().then(function () {
 				self.domConstructor = ['barUp', 'barDown'].indexOf(data.appearance.position) != -1 ? _PopupBar.PopupBar : _Popup.Popup;
-				// self.domConstructor = ToggleablePopup;
+				switch (data.type) {
+					case 'popup':
+						self.domConstructor = _Popup.Popup;
+						break;
+					case 'bar':
+						self.domConstructor = _PopupBar.PopupBar;
+						break;
+					case 'widget':
+						self.domConstructor = _ToggleablePopup.ToggleablePopup;
+						break;
+				}
+
 				self.domObj = new self.domConstructor(self.connector.data);
 				self.domObj.activate(self.options);
 				self.domObj.el.addEventListener('sendsay-success', self.handleSubmit.bind(self));
@@ -1632,6 +1643,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 			classes += this.data.endDialog ? ' sendsay-enddialog' : '';
 			classes += ' sendsay-animation-' + (appearance.animation || 'none');
 			classes += ' sendsay-' + (appearance.position || 'center');
+			classes += ' sendsay-type-' + this.data.type;
 			return classes;
 		}
 	}, {
@@ -1877,7 +1889,7 @@ var PopupBar = exports.PopupBar = function (_Popup) {
 						'flex-direction': 'column',
 						'animation': 'none'
 					},
-					'.sendsay-popup.sendsay-barUp, .sendsay-popup.sendsay-barDown': {
+					'.sendsay-popup.sendsay-type-bar.sendsay-barUp, .sendsay-popup.sendsay-type-bar.sendsay-barDown': {
 						'top': '50%',
 						'left': '50%',
 						'transform': 'translate(-50%, -50%)',
@@ -1888,7 +1900,7 @@ var PopupBar = exports.PopupBar = function (_Popup) {
 						'height': 'auto !important',
 						'flex-direction': 'column'
 					},
-					'.sendsay-popup.sendsay-barUp  .sendsay-column > *, .sendsay-popup.sendsay-barDown .sendsay-column > *': {
+					'.sendsay-popup.sendsay-type-bar.sendsay-barUp  .sendsay-column > *, .sendsay-popup.sendsay-barDown .sendsay-column > *': {
 						'padding-bottom': '20px',
 						'padding-left': '0px'
 					}
@@ -2231,8 +2243,6 @@ var _Popup2 = require("./Popup.js");
 
 var _MediaQuery = require("./../MediaQuery.js");
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -2251,8 +2261,6 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 	_createClass(ToggleablePopup, [{
 		key: "initialize",
 		value: function initialize() {
-			var _selectors;
-
 			var appearance = this.data.appearance || {};
 
 			this.noWrapper = !appearance.overlayEnabled;
@@ -2290,8 +2298,8 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 
 			var mediaQuery = new _MediaQuery.MediaQuery({
 				conditions: ['screen', '(min-width: 320px)', '(max-width:' + (+width + 100) + 'px)'],
-				selectors: (_selectors = {
-					'.sendsay-popup.sendsay-toggleable': {
+				selectors: {
+					'.sendsay-popup.sendsay-type-widget': {
 						'width': '150px !important',
 						'-webkit-flex-direction': 'column',
 						'-ms-flex-direction': 'column',
@@ -2300,17 +2308,17 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 						'bottom': '50px',
 						'right': '50px'
 					},
-					'.sendsay-popup.sendsay-toggleable .sendsay-content': {
+					'.sendsay-popup.sendsay-type-widget .sendsay-content': {
 						'display': 'none',
 						'transition': 'none'
 					},
-					'.sendsay-popup.sendsay-toggleable .sendsay-toggler .sendsay-toggler-mobile': {
+					'.sendsay-popup.sendsay-type-widget .sendsay-toggler .sendsay-toggler-mobile': {
 						'display': 'block'
 					},
-					'.sendsay-popup.sendsay-toggleable .sendsay-toggler .sendsay-toggler-desktop': {
+					'.sendsay-popup.sendsay-type-widget .sendsay-toggler .sendsay-toggler-desktop': {
 						'display': 'none'
 					},
-					'.sendsay-popup.sendsay-toggleable.sendsay-opened': {
+					'.sendsay-popup.sendsay-type-widget.sendsay-opened': {
 						'width': '150px !important',
 						'-webkit-flex-direction': 'column',
 						'-ms-flex-direction': 'column',
@@ -2319,26 +2327,28 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 						'bottom': '50px',
 						'right': '50px'
 					},
-					'.sendsay-popup.sendsay-toggleable .sendsay-toggler ': {
+					'.sendsay-popup.sendsay-type-widget .sendsay-toggler ': {
 						'font-size': '14px !important'
 					},
-					'.sendsay-popup.sendsay-toggleable.sendsay-opened  .sendsay-toggler': {
+					'.sendsay-popup.sendsay-type-widget.sendsay-opened  .sendsay-toggler': {
 						'display': 'none'
 					},
-					'.sendsay-popup.sendsay-toggleable.sendsay-opened .sendsay-content': {
+					'.sendsay-popup.sendsay-type-widget.sendsay-opened .sendsay-content': {
 						'display': 'block',
 						'transition': 'none'
+					},
+					'.sendsay-popup.sendsay-toggleable.sendsay-opened': {
+						'top': '50%',
+						'left': '50%',
+						'transform': 'translate(-50%, -50%)',
+						'bottom': 'initial',
+						'right': 'initial',
+						'width': '300px !important'
+					},
+					'.sendsay-popup.sendsay-type-widget.sendsay-opened .sendsay-close': {
+						'display': 'block'
 					}
-				}, _defineProperty(_selectors, ".sendsay-popup.sendsay-toggleable.sendsay-opened", {
-					'top': '50%',
-					'left': '50%',
-					'transform': 'translate(-50%, -50%)',
-					'bottom': 'initial',
-					'right': 'initial',
-					'width': '300px !important'
-				}), _defineProperty(_selectors, '.sendsay-popup.sendsay-toggleable.sendsay-opened .sendsay-close', {
-					'display': 'block'
-				}), _selectors)
+				}
 			});
 			this.mediaQuery = mediaQuery;
 			appearance.position = appearance.position || 'centered';
@@ -2411,6 +2421,8 @@ var _Popup = require("./classes/elements/Popup.js");
 
 var _PopupBar = require("./classes/elements/PopupBar.js");
 
+var _ToggleablePopup = require("./classes/elements/ToggleablePopup.js");
+
 var _Connector = require("./classes/Connector.js");
 
 var _Form = require("./classes/Form.js");
@@ -2426,7 +2438,18 @@ var _Form = require("./classes/Form.js");
 
 	var showPopup = function showPopup(data, options) {
 		//loadCss();
-		var domConstructor = ['barUp', 'barDown'].indexOf(data.appearance.position) != -1 ? _PopupBar.PopupBar : _Popup.Popup;
+		var domConstructor;
+		switch (data.type) {
+			case 'popup':
+				domConstructor = _Popup.Popup;
+				break;
+			case 'bar':
+				domConstructor = _PopupBar.PopupBar;
+				break;
+			case 'widget':
+				domConstructor = _ToggleablePopup.ToggleablePopup;
+				break;
+		}
 		var popup = new domConstructor(data);
 		popup.activate(options);
 	};
@@ -2458,4 +2481,4 @@ var _Form = require("./classes/Form.js");
 	};
 })();
 
-},{"./classes/Connector.js":2,"./classes/Form.js":5,"./classes/elements/Popup.js":15,"./classes/elements/PopupBar.js":16}]},{},[22,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]);
+},{"./classes/Connector.js":2,"./classes/Form.js":5,"./classes/elements/Popup.js":15,"./classes/elements/PopupBar.js":16,"./classes/elements/ToggleablePopup.js":21}]},{},[22,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]);

@@ -151,6 +151,7 @@ export class Popup extends DOMObject {
 		classes += this.data.endDialog ? ' sendsay-enddialog' : '';
 		classes += ' sendsay-animation-' + (appearance.animation || 'none');
 		classes += ' sendsay-'+ (appearance.position || 'center');
+		classes += ' sendsay-type-'+ this.data.type;
 		return classes;
 	}
 

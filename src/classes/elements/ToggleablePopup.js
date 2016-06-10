@@ -59,7 +59,7 @@ export class ToggleablePopup extends Popup {
 		let mediaQuery = new MediaQuery({  
 			conditions: ['screen', '(min-width: 320px)', '(max-width:' + (+width + 100) + 'px)'],
 			selectors: {
-				'.sendsay-popup.sendsay-toggleable': {
+				'.sendsay-popup.sendsay-type-widget': {
 					 'width': '150px !important',
 					'-webkit-flex-direction': 'column',
 					'-ms-flex-direction': 'column',
@@ -68,17 +68,17 @@ export class ToggleablePopup extends Popup {
 					'bottom': '50px',
 					'right': '50px'
 				},
-				'.sendsay-popup.sendsay-toggleable .sendsay-content': { 
+				'.sendsay-popup.sendsay-type-widget .sendsay-content': { 
 					'display': 'none',
 					'transition': 'none'
 				},
-				'.sendsay-popup.sendsay-toggleable .sendsay-toggler .sendsay-toggler-mobile': { 
+				'.sendsay-popup.sendsay-type-widget .sendsay-toggler .sendsay-toggler-mobile': { 
 					'display': 'block'
 				},
-				'.sendsay-popup.sendsay-toggleable .sendsay-toggler .sendsay-toggler-desktop': { 
+				'.sendsay-popup.sendsay-type-widget .sendsay-toggler .sendsay-toggler-desktop': { 
 					'display': 'none'
 				},
-				'.sendsay-popup.sendsay-toggleable.sendsay-opened': {
+				'.sendsay-popup.sendsay-type-widget.sendsay-opened': {
 					 'width': '150px !important',
 					'-webkit-flex-direction': 'column',
 					'-ms-flex-direction': 'column',
@@ -87,13 +87,13 @@ export class ToggleablePopup extends Popup {
 					'bottom': '50px',
 					'right': '50px'
 				},
-				'.sendsay-popup.sendsay-toggleable .sendsay-toggler ': { 
+				'.sendsay-popup.sendsay-type-widget .sendsay-toggler ': { 
 					'font-size': '14px !important'
 				},
-				'.sendsay-popup.sendsay-toggleable.sendsay-opened  .sendsay-toggler': { 
+				'.sendsay-popup.sendsay-type-widget.sendsay-opened  .sendsay-toggler': { 
 					'display': 'none'
 				},
-				'.sendsay-popup.sendsay-toggleable.sendsay-opened .sendsay-content': { 
+				'.sendsay-popup.sendsay-type-widget.sendsay-opened .sendsay-content': { 
 					'display': 'block',
 					'transition': 'none'
 				},
@@ -105,7 +105,7 @@ export class ToggleablePopup extends Popup {
 					'right': 'initial',
 					'width': '300px !important',
 				},
-				'.sendsay-popup.sendsay-toggleable.sendsay-opened .sendsay-close': {
+				'.sendsay-popup.sendsay-type-widget.sendsay-opened .sendsay-close': {
 					'display': 'block'
 				}
 			}

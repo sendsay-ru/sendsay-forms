@@ -1,6 +1,7 @@
 
 import {Popup} from "./classes/elements/Popup.js";
 import {PopupBar} from "./classes/elements/PopupBar.js";
+import {ToggleablePopup} from "./classes/elements/ToggleablePopup.js";
 import {Connector} from "./classes/Connector.js";
 import {Form} from "./classes/Form.js";
 (function() {
@@ -15,7 +16,18 @@ import {Form} from "./classes/Form.js";
 
 	var showPopup = function(data, options) {
 		//loadCss();
-		var domConstructor = ['barUp', 'barDown'].indexOf(data.appearance.position) != -1 ? PopupBar : Popup;
+		var domConstructor;
+		switch(data.type) {
+			case 'popup':
+				domConstructor = Popup;
+				break;
+			case 'bar':
+				domConstructor = PopupBar;
+				break;
+			case 'widget':
+				domConstructor = ToggleablePopup;
+				break;
+		} 
 		let popup = new domConstructor(data);
 		popup.activate(options);
 	}
