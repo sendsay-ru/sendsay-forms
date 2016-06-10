@@ -481,6 +481,8 @@ var _Popup = require("./elements/Popup.js");
 
 var _PopupBar = require("./elements/PopupBar.js");
 
+var _ToggleablePopup = require("./elements/ToggleablePopup.js");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Form = exports.Form = function () {
@@ -539,6 +541,7 @@ var Form = exports.Form = function () {
 
 			watcher.watch().then(function () {
 				self.domConstructor = ['barUp', 'barDown'].indexOf(data.appearance.position) != -1 ? _PopupBar.PopupBar : _Popup.Popup;
+				// self.domConstructor = ToggleablePopup;
 				self.domObj = new self.domConstructor(self.connector.data);
 				self.domObj.activate(self.options);
 				self.domObj.el.addEventListener('sendsay-success', self.handleSubmit.bind(self));
@@ -578,7 +581,7 @@ var Form = exports.Form = function () {
 	return Form;
 }();
 
-},{"./ConditionWatcher.js":1,"./Cookies.js":3,"./elements/Popup.js":15,"./elements/PopupBar.js":16}],6:[function(require,module,exports){
+},{"./ConditionWatcher.js":1,"./Cookies.js":3,"./elements/Popup.js":15,"./elements/PopupBar.js":16,"./elements/ToggleablePopup.js":21}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1086,8 +1089,29 @@ var DOMObject = exports.DOMObject = function () {
 		key: 'addEvents',
 		value: function addEvents() {}
 	}, {
+		key: 'addEvent',
+		value: function addEvent(event, selector, callback) {
+			this._eventAction(true, event, selector, callback);
+		}
+	}, {
 		key: 'removeEvents',
 		value: function removeEvents() {}
+	}, {
+		key: 'removeEvent',
+		value: function removeEvent(event, selector, callback) {
+			this._eventAction(false, event, selector, callback);
+		}
+	}, {
+		key: '_eventAction',
+		value: function _eventAction(toAdd, event, selector, callback) {
+			if (!this.el) return;
+			if (callback === undefined && typeof selector === 'function') {
+				callback = selector;
+				selector = null;
+			}
+			var target = selector ? this.el.querySelector(selector) : this.el;
+			if (target) toAdd ? target.addEventListener(event, callback) : target.removeEventListener(event, callback);
+		}
 	}, {
 		key: 'trigger',
 		value: function trigger(eventName, data) {
@@ -1480,7 +1504,12 @@ var Popup = exports.Popup = function (_DOMObject) {
 		value: function initialize() {
 			var appearance = this.data.appearance || {};
 			this.noWrapper = false;
-			this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]">' : '') + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '' + '</div>' + (!this.noWrapper ? '</div>' : '');
+
+			this.steps = this.data.steps;
+			this.curStep = 0;
+			this.gainedData = {};
+
+			this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]">' : '') + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '<div class = "sendsay-content">' + '</div>' + '</div>' + (!this.noWrapper ? '</div>' : '');
 
 			this.baseClass = 'sendsay-popup';
 			this.applicableStyles = {
@@ -1521,7 +1550,6 @@ var Popup = exports.Popup = function (_DOMObject) {
 			this.general = {};
 			this.general.appearance = {};
 			this.general.appearance.textColor = this.data.appearance.textColor;
-			this.makeEndDialogData();
 		}
 	}, {
 		key: "build",
@@ -1529,9 +1557,10 @@ var Popup = exports.Popup = function (_DOMObject) {
 
 			_get(Object.getPrototypeOf(Popup.prototype), "build", this).call(this);
 			this.columns = [];
-			var popupBody = this.el.classList.contains('sendsay-popup') ? this.el : this.el.querySelector('.sendsay-popup');
-			if (this.data.columns) {
-				var columns = this.data.columns;
+			var curStep = this.steps[this.curStep];
+			var popupBody = this.el.querySelector('.sendsay-content');
+			if (curStep.columns) {
+				var columns = curStep.columns;
 				for (var i = 0; i < columns.length; i++) {
 					var newEl = new _Column.Column(columns[i], this);
 					if (newEl) {
@@ -1553,39 +1582,35 @@ var Popup = exports.Popup = function (_DOMObject) {
 		key: "addEvents",
 		value: function addEvents() {
 			var self = this;
-			if (this.el) {
-				this.el.addEventListener('DOMNodeRemovedFromDocument', function () {
-					if (self.mediaQuery) {
-						document.head.removeChild(self.mediaQuery.el);
-					}
-				});
-				var popup = this.el.classList.contains('sendsay-popup') ? this.el : this.el.querySelector('.sendsay-popup');
-				if (!this.noWrapper) {
-					this.el.addEventListener('click', this.handleWrapperClick.bind(this));
+
+			this.addEvent('DOMNodeRemovedFromDocument', function () {
+				if (self.mediaQuery) {
+					document.head.removeChild(self.mediaQuery.el);
 				}
-				console.log('test', this.el);
-				this.el.querySelector('.sendsay-button').addEventListener('sendsay-click', this.handleButtonClick.bind(this));
-				this.el.addEventListener('wheel', this.handleWheel.bind(this));
-				this.el.addEventListener('DOMMouseScroll', this.handleWheel.bind(this));
-				popup.addEventListener('click', this.handlePopupClick.bind(this));
-				this.el.querySelector('.sendsay-close').addEventListener('click', this.handleClose.bind(this));
-				document.addEventListener('keyup', this.handleKeyPress.bind(this));
-			}
+			});
+			if (!this.noWrapper) {
+				this.addEvent('click', this.handleWrapperClick.bind(this));
+				this.addEvent('click', '.sendsay-popup', this.handlePopupClick.bind(this));
+			} else this.addEvent('click', this.handlePopupClick.bind(this));
+			this.addEvent('sendsay-click', '.sendsay-button', this.handleButtonClick.bind(this));
+			this.addEvent('wheel', this.handleWheel.bind(this));
+			this.addEvent('DOMMouseScroll', this.handleWheel.bind(this));
+
+			this.addEvent('click', '.sendsay-close', this.handleClose.bind(this));
+			document.addEventListener('keyup', this.handleKeyPress.bind(this));
 		}
 	}, {
 		key: "removeEvents",
 		value: function removeEvents() {
-			if (this.el) {
-				var popup = this.el.classList.contains('sendsay-popup') ? this.el : this.el.querySelector('.sendsay-popup');
-				if (!this.noWrapper) {
-					this.el.removeEventListener('click', this.handleWrapperClick.bind(this));
-				}
-				this.el.removeEventListener('wheel', this.handleWheel.bind(this));
-				this.el.removeEventListener('DOMMouseScroll', this.handleWheel.bind(this));
-				this.el.removeEventListener('wheel', this.handleWheel.bind(this));
-				popup.removeEventListener('click', this.handlePopupClick.bind(this));
-				document.removeEventListener('keyup', this.handleKeyPress.bind(this));
-			}
+			if (!this.noWrapper) {
+				this.removeEvent('click', this.handleWrapperClick.bind(this));
+				this.removeEvent('click', '.sendsay-popup', this.handlePopupClick.bind(this));
+			} else this.removeEvent('click', this.handlePopupClick.bind(this));
+			this.removeEvent('sendsay-click', '.sendsay-button', this.handleButtonClick.bind(this));
+			this.removeEvent('wheel', this.handleWheel.bind(this));
+			this.removeEvent('DOMMouseScroll', this.handleWheel.bind(this));
+			this.removeEvent('click', '.sendsay-close', this.handleClose.bind(this));
+			document.removeEventListener('keyup', this.handleKeyPress.bind(this));
 		}
 	}, {
 		key: "makeSettings",
@@ -1614,10 +1639,10 @@ var Popup = exports.Popup = function (_DOMObject) {
 		}
 	}, {
 		key: "searchForElements",
-		value: function searchForElements(comparator, inData) {
+		value: function searchForElements(comparator) {
 			var found = [];
 			if (!comparator || typeof comparator !== 'function') return found;
-			var columns = inData ? this.data.columns : this.columns;
+			var columns = this.columns;
 			for (var i = 0; i < columns.length; i++) {
 				var column = columns[i],
 				    elements = column.elements;
@@ -1628,49 +1653,10 @@ var Popup = exports.Popup = function (_DOMObject) {
 			return found;
 		}
 	}, {
-		key: "makeEndDialogData",
-		value: function makeEndDialogData() {
-			var data = this.data;
-			this.submitData = this.extend({
-				noAnimation: true,
-				endDialog: true
-			}, data);
-			delete this.submitData.elements;
-			var button = void 0;
-			var found = this.searchForElements(function (elem) {
-				return elem.type == 'button';
-			}, true);
-
-			if (found[0]) {
-
-				button = this.extend({}, found[0]);
-			} else {
-				button = { type: "button", content: {} };
-			}
-			button.content = {
-				text: 'Закрыть'
-			};
-
-			this.submitData.columns = [{
-				elements: [{
-					type: 'text',
-					content: {
-						text: data.endDialogMessage || 'Спасибо за заполнение формы'
-					},
-					appearance: {
-						paddingTop: '10',
-						paddingBottom: '20'
-					}
-				}, button],
-				appearance: {}
-			}];
-		}
-	}, {
 		key: "showEndDialog",
 		value: function showEndDialog() {
 			this.isSubmitted = true;
-			this.data = this.submitData;
-			this.render();
+			this.proceedToNextStep();
 		}
 	}, {
 		key: "onSubmitFail",
@@ -1713,10 +1699,21 @@ var Popup = exports.Popup = function (_DOMObject) {
 				}
 			}
 			if (isValid) {
-				button.el.querySelector('input').classList.add('sendsay-loading');
-				this.trigger('sendsay-success', data);
+				this.extend(this.gainedData, data);
+				if (this.steps.length - 2 !== this.curStep) {
+					this.proceedToNextStep();
+				} else {
+					button.el.querySelector('input').classList.add('sendsay-loading');
+					this.trigger('sendsay-success', this.gainedData);
+				}
 			}
 			return isValid;
+		}
+	}, {
+		key: "proceedToNextStep",
+		value: function proceedToNextStep() {
+			this.curStep++;
+			this.render();
 		}
 	}, {
 		key: "onSubmitFail",
@@ -1833,7 +1830,12 @@ var PopupBar = exports.PopupBar = function (_Popup) {
 		value: function initialize() {
 			var appearance = this.data.appearance || {};
 			this.noWrapper = false;
-			this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]">' : '') + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '' + '</div>' + (!this.noWrapper ? '</div>' : '');
+
+			this.steps = this.data.steps;
+			this.curStep = 0;
+			this.gainedData = {};
+
+			this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]">' : '') + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '<div class = "sendsay-content">' + '</div>' + '</div>' + (!this.noWrapper ? '</div>' : '');
 
 			this.baseClass = 'sendsay-popup';
 
@@ -2207,6 +2209,191 @@ var Text = exports.Text = function (_DOMObject) {
 },{"./DOMObject.js":10}],21:[function(require,module,exports){
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.ToggleablePopup = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _Popup2 = require("./Popup.js");
+
+var _MediaQuery = require("./../MediaQuery.js");
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
+	_inherits(ToggleablePopup, _Popup);
+
+	function ToggleablePopup(data, parent) {
+		_classCallCheck(this, ToggleablePopup);
+
+		return _possibleConstructorReturn(this, Object.getPrototypeOf(ToggleablePopup).call(this, data, parent));
+	}
+
+	_createClass(ToggleablePopup, [{
+		key: "initialize",
+		value: function initialize() {
+			var _selectors;
+
+			var appearance = this.data.appearance || {};
+
+			this.steps = this.data.steps;
+			this.curStep = 0;
+			this.gainedData = {};
+
+			this.noWrapper = false;
+			this.data.appearance.position = 'toggleable';
+			this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]">' : '') + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '<div class = "sendsay-toggler">' + '<span class="sendsay-toggler-desktop">[%maintext%]</span>' + '<span class="sendsay-toggler-mobile">[%mobilemaintext%]</span>' + '</div>' + '<div class = "sendsay-content">' + '</div>' + '</div>' + (!this.noWrapper ? '</div>' : '');
+
+			this.baseClass = 'sendsay-popup';
+
+			this.applicableStyles = {
+				'background-color': { param: 'backgroundColor' },
+				'border-radius': { param: 'borderRadius', postfix: 'px' },
+				'padding-bottom': { param: 'paddingBottom', postfix: 'px' },
+				'padding-top': { param: 'paddingTop', postfix: 'px' },
+				'padding-left': { param: 'paddingLeft', postfix: 'px' },
+				'padding-right': { param: 'paddingRight', postfix: 'px' },
+				'color': { param: 'textColor' }
+			};
+
+			this.maintextApplStyle = {
+				'font-family': { param: 'font' },
+				'font-size': { param: 'fontSize', postfix: 'px' },
+				'text-align': { param: 'text-align', postfix: 'px' }
+			};
+
+			var width = 800;
+
+			var mediaQuery = new _MediaQuery.MediaQuery({
+				conditions: ['screen', '(min-width: 320px)', '(max-width:' + (+width + 100) + 'px)'],
+				selectors: (_selectors = {
+					'.sendsay-popup.sendsay-toggleable': {
+						'width': '150px !important',
+						'-webkit-flex-direction': 'column',
+						'-ms-flex-direction': 'column',
+						'flex-direction': 'column',
+						'animation': 'none',
+						'bottom': '50px',
+						'right': '50px'
+					},
+					'.sendsay-popup.sendsay-toggleable .sendsay-content': {
+						'display': 'none',
+						'transition': 'none'
+					},
+					'.sendsay-popup.sendsay-toggleable .sendsay-toggler .sendsay-toggler-mobile': {
+						'display': 'block'
+					},
+					'.sendsay-popup.sendsay-toggleable .sendsay-toggler .sendsay-toggler-desktop': {
+						'display': 'none'
+					},
+					'.sendsay-popup.sendsay-toggleable.sendsay-opened': {
+						'width': '150px !important',
+						'-webkit-flex-direction': 'column',
+						'-ms-flex-direction': 'column',
+						'flex-direction': 'column',
+						'animation': 'none',
+						'bottom': '50px',
+						'right': '50px'
+					},
+					'.sendsay-popup.sendsay-toggleable .sendsay-toggler ': {
+						'font-size': '14px !important'
+					},
+					'.sendsay-popup.sendsay-toggleable.sendsay-opened  .sendsay-toggler': {
+						'display': 'none'
+					},
+					'.sendsay-popup.sendsay-toggleable.sendsay-opened .sendsay-content': {
+						'display': 'block',
+						'transition': 'none'
+					}
+				}, _defineProperty(_selectors, ".sendsay-popup.sendsay-toggleable.sendsay-opened", {
+					'top': '50%',
+					'left': '50%',
+					'transform': 'translate(-50%, -50%)',
+					'bottom': 'initial',
+					'right': 'initial',
+					'width': '300px !important'
+				}), _defineProperty(_selectors, '.sendsay-popup.sendsay-toggleable.sendsay-opened .sendsay-close', {
+					'display': 'block'
+				}), _selectors)
+			});
+			this.mediaQuery = mediaQuery;
+			appearance.position = appearance.position || 'centered';
+
+			this.general = {};
+			this.general.appearance = {};
+			this.general.appearance.textColor = this.data.appearance.textColor;
+			this.makeEndDialogData();
+		}
+	}, {
+		key: "makeSettings",
+		value: function makeSettings() {
+			var settings = _get(Object.getPrototypeOf(ToggleablePopup.prototype), "makeSettings", this).call(this);
+			settings.maintext = this.data.content.mainText;
+			settings.mobilemaintext = this.data.content.mobilemainText || 'Телефон';
+			return settings;
+		}
+	}, {
+		key: "addEvents",
+		value: function addEvents() {
+			_get(Object.getPrototypeOf(ToggleablePopup.prototype), "addEvents", this).call(this);
+			if (this.el) {
+				this.el.querySelector('.sendsay-toggler').addEventListener('click', this.handleTogglerClick.bind(this));
+			}
+		}
+	}, {
+		key: "removeEvents",
+		value: function removeEvents() {
+			_get(Object.getPrototypeOf(ToggleablePopup.prototype), "addEvents", this).call(this);
+			if (this.el) {
+				this.el.querySelector('.sendsay-toggler').removeEventListener('click', this.handleTogglerClick.bind(this));
+			}
+		}
+	}, {
+		key: "handleTogglerClick",
+		value: function handleTogglerClick() {
+
+			var el = this.noWrapper ? this.el : this.el.querySelector('.sendsay-popup');
+			var contentEl = el.querySelector('.sendsay-content');
+
+			if (el.classList.contains('sendsay-opened')) {
+				el.classList.remove('sendsay-opened');
+				contentEl.style.maxHeight = 0 + 'px';
+			} else {
+				el.classList.add('sendsay-opened');
+				contentEl.style.maxHeight = contentEl.scrollHeight + 'px';
+			}
+		}
+	}, {
+		key: "handleClose",
+		value: function handleClose() {
+			var el = this.noWrapper ? this.el : this.el.querySelector('.sendsay-popup');
+			var contentEl = el.querySelector('.sendsay-content');
+
+			if (el.classList.contains('sendsay-opened')) {
+				el.classList.remove('sendsay-opened');
+				contentEl.style.maxHeight = 0 + 'px';
+			} else {
+				this.hide();
+			}
+		}
+	}]);
+
+	return ToggleablePopup;
+}(_Popup2.Popup);
+
+},{"./../MediaQuery.js":6,"./Popup.js":15}],22:[function(require,module,exports){
+"use strict";
+
 var _Popup = require("./classes/elements/Popup.js");
 
 var _PopupBar = require("./classes/elements/PopupBar.js");
@@ -2232,6 +2419,7 @@ var _Form = require("./classes/Form.js");
 	};
 
 	var loadCss = function loadCss(callback) {
+		return callback();
 		var cssId = '_sendsay-styles'; // you could encode the css path itself to generate id..
 		if (!document.getElementById(cssId)) {
 			var head = document.getElementsByTagName('head')[0];
@@ -2257,4 +2445,4 @@ var _Form = require("./classes/Form.js");
 	};
 })();
 
-},{"./classes/Connector.js":2,"./classes/Form.js":5,"./classes/elements/Popup.js":15,"./classes/elements/PopupBar.js":16}]},{},[21,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]);
+},{"./classes/Connector.js":2,"./classes/Form.js":5,"./classes/elements/Popup.js":15,"./classes/elements/PopupBar.js":16}]},{},[22,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]);

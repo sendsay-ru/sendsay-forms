@@ -195,6 +195,10 @@
   left: 0px;
   width: 100%;
 }
+.sendsay-popup.sendsay-barUp .sendsay-content,
+.sendsay-popup.sendsay-barDown .sendsay-content {
+  width: 100%;
+}
 .sendsay-popup.sendsay-barUp .sendsay-columnwrapper,
 .sendsay-popup.sendsay-barDown .sendsay-columnwrapper {
   display: -webkit-box;
@@ -237,6 +241,46 @@
 .sendsay-popup.sendsay-barUp {
   top: 0px;
   bottom: initial;
+}
+
+.sendsay-popup.sendsay-toggleable {
+  position: fixed;
+  bottom: 0px;
+  right: 50px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  max-height: 100%;
+}
+.sendsay-popup.sendsay-toggleable .sendsay-toggler {
+  height: 50px;
+  line-height: 50px;
+  cursor: pointer;
+}
+.sendsay-popup.sendsay-toggleable .sendsay-toggler .sendsay-toggler-desktop {
+  display: block;
+}
+.sendsay-popup.sendsay-toggleable .sendsay-toggler .sendsay-toggler-mobile {
+  display: none;
+}
+.sendsay-popup.sendsay-toggleable .sendsay-content {
+  opacity: 0;
+  max-height: 0px;
+  overflow: hidden;
+  -webkit-transition: max-height linear 1000ms, opacity linear 1000ms;
+  transition: max-height linear 1000ms, opacity linear 1000ms;
+}
+.sendsay-popup.sendsay-toggleable .sendsay-close {
+  display: none;
+}
+.sendsay-popup.sendsay-toggleable.sendsay-opened .sendsay-content {
+  opacity: 1;
+  -webkit-transition: max-height linear 1000ms, opacity linear 1000ms;
+  transition: max-height linear 1000ms, opacity linear 1000ms;
+}
+.sendsay-popup.sendsay-toggleable.sendsay-opened .sendsay .sendsay-cross {
+  display: none;
 }
 
 .sendsay-animation-bounce {
