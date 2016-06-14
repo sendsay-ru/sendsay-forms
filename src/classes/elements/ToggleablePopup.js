@@ -18,7 +18,6 @@ export class ToggleablePopup extends Popup {
 		this.gainedData = {};
 		
 		this.noWrapper = false;
-		this.data.appearance.position = 'toggleable';
 		this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]"  style="[%overlayStyles%]">' : '') +
 						'<div class = "[%classes%]" style="[%style%]"">' +
 							'<div class = "sendsay-close">×</div>' +
@@ -41,7 +40,8 @@ export class ToggleablePopup extends Popup {
 			'padding-top': { param: 'paddingTop', postfix: 'px'},
 			'padding-left': { param: 'paddingLeft', postfix: 'px'},
 			'padding-right': { param: 'paddingRight', postfix: 'px'},
-			'color': { param: 'textColor'}
+			'color': { param: 'textColor'},
+			'width': { param: 'width', prefix: 'px'}
 		};
 
 		this.maintextApplStyle = {
@@ -54,7 +54,7 @@ export class ToggleablePopup extends Popup {
 			'background-color': { param: 'overlayColor' }
 		};
 
-		let width =  800;
+		let width =  appearance.width;
 
 		let mediaQuery = new MediaQuery({  
 			conditions: ['screen', '(min-width: 320px)', '(max-width:' + (+width + 100) + 'px)'],
@@ -72,21 +72,6 @@ export class ToggleablePopup extends Popup {
 					'display': 'none',
 					'transition': 'none'
 				},
-				'.sendsay-popup.sendsay-type-widget .sendsay-toggler .sendsay-toggler-mobile': { 
-					'display': 'block'
-				},
-				'.sendsay-popup.sendsay-type-widget .sendsay-toggler .sendsay-toggler-desktop': { 
-					'display': 'none'
-				},
-				'.sendsay-popup.sendsay-type-widget.sendsay-opened': {
-					 'width': '150px !important',
-					'-webkit-flex-direction': 'column',
-					'-ms-flex-direction': 'column',
-					'flex-direction': 'column',
-					'animation': 'none',
-					'bottom': '50px',
-					'right': '50px'
-				},
 				'.sendsay-popup.sendsay-type-widget .sendsay-toggler ': { 
 					'font-size': '14px !important'
 				},
@@ -97,7 +82,7 @@ export class ToggleablePopup extends Popup {
 					'display': 'block',
 					'transition': 'none'
 				},
-				'.sendsay-popup.sendsay-toggleable.sendsay-opened': {
+				'.sendsay-popup.sendsay-type-widget.sendsay-opened': {
 					'top': '50%',
 					'left': '50%',
 					'transform': 'translate(-50%, -50%)',
@@ -107,7 +92,13 @@ export class ToggleablePopup extends Popup {
 				},
 				'.sendsay-popup.sendsay-type-widget.sendsay-opened .sendsay-close': {
 					'display': 'block'
-				}
+				},
+				'.sendsay-popup.sendsay-type-widget.sendsay-right .sendsay-toggler .sendsay-toggler-mobile, .sendsay-popup.sendsay-type-widget.sendsay-left .sendsay-toggler .sendsay-toggler-mobile': { 
+					'display': 'block'
+				},
+				'.sendsay-popup.sendsay-type-widget.sendsay-right .sendsay-toggler .sendsay-toggler-desktop, .sendsay-popup.sendsay-type-widget.sendsay-left .sendsay-toggler .sendsay-toggler-desktop': { 
+					'display': 'none'
+				},
 			}
 		});
 		this.mediaQuery = mediaQuery;

@@ -2269,7 +2269,6 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 			this.gainedData = {};
 
 			this.noWrapper = false;
-			this.data.appearance.position = 'toggleable';
 			this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]"  style="[%overlayStyles%]">' : '') + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '<div class = "sendsay-toggler">' + '<span class="sendsay-toggler-desktop">[%maintext%]</span>' + '<span class="sendsay-toggler-mobile">[%mobilemaintext%]</span>' + '</div>' + '<div class = "sendsay-content">' + '</div>' + '</div>' + (!this.noWrapper ? '</div>' : '');
 
 			this.baseClass = 'sendsay-popup';
@@ -2281,7 +2280,8 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 				'padding-top': { param: 'paddingTop', postfix: 'px' },
 				'padding-left': { param: 'paddingLeft', postfix: 'px' },
 				'padding-right': { param: 'paddingRight', postfix: 'px' },
-				'color': { param: 'textColor' }
+				'color': { param: 'textColor' },
+				'width': { param: 'width', prefix: 'px' }
 			};
 
 			this.maintextApplStyle = {
@@ -2294,7 +2294,7 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 				'background-color': { param: 'overlayColor' }
 			};
 
-			var width = 800;
+			var width = appearance.width;
 
 			var mediaQuery = new _MediaQuery.MediaQuery({
 				conditions: ['screen', '(min-width: 320px)', '(max-width:' + (+width + 100) + 'px)'],
@@ -2312,21 +2312,6 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 						'display': 'none',
 						'transition': 'none'
 					},
-					'.sendsay-popup.sendsay-type-widget .sendsay-toggler .sendsay-toggler-mobile': {
-						'display': 'block'
-					},
-					'.sendsay-popup.sendsay-type-widget .sendsay-toggler .sendsay-toggler-desktop': {
-						'display': 'none'
-					},
-					'.sendsay-popup.sendsay-type-widget.sendsay-opened': {
-						'width': '150px !important',
-						'-webkit-flex-direction': 'column',
-						'-ms-flex-direction': 'column',
-						'flex-direction': 'column',
-						'animation': 'none',
-						'bottom': '50px',
-						'right': '50px'
-					},
 					'.sendsay-popup.sendsay-type-widget .sendsay-toggler ': {
 						'font-size': '14px !important'
 					},
@@ -2337,7 +2322,7 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 						'display': 'block',
 						'transition': 'none'
 					},
-					'.sendsay-popup.sendsay-toggleable.sendsay-opened': {
+					'.sendsay-popup.sendsay-type-widget.sendsay-opened': {
 						'top': '50%',
 						'left': '50%',
 						'transform': 'translate(-50%, -50%)',
@@ -2347,6 +2332,12 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 					},
 					'.sendsay-popup.sendsay-type-widget.sendsay-opened .sendsay-close': {
 						'display': 'block'
+					},
+					'.sendsay-popup.sendsay-type-widget.sendsay-right .sendsay-toggler .sendsay-toggler-mobile, .sendsay-popup.sendsay-type-widget.sendsay-left .sendsay-toggler .sendsay-toggler-mobile': {
+						'display': 'block'
+					},
+					'.sendsay-popup.sendsay-type-widget.sendsay-right .sendsay-toggler .sendsay-toggler-desktop, .sendsay-popup.sendsay-type-widget.sendsay-left .sendsay-toggler .sendsay-toggler-desktop': {
+						'display': 'none'
 					}
 				}
 			});
@@ -2481,4 +2472,4 @@ var _Form = require("./classes/Form.js");
 	};
 })();
 
-},{"./classes/Connector.js":2,"./classes/Form.js":5,"./classes/elements/Popup.js":15,"./classes/elements/PopupBar.js":16,"./classes/elements/ToggleablePopup.js":21}]},{},[22,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]);
+},{"./classes/Connector.js":2,"./classes/Form.js":5,"./classes/elements/Popup.js":15,"./classes/elements/PopupBar.js":16,"./classes/elements/ToggleablePopup.js":21}]},{},[22,1,2,3,4,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,5,6]);
