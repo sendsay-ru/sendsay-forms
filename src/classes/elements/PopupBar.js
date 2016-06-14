@@ -60,7 +60,7 @@ export class PopupBar extends Popup {
 					'flex-direction': 'column',
 					'animation': 'none'
 				},
-				'.sendsay-popup.sendsay-type-bar.sendsay-barUp, .sendsay-popup.sendsay-type-bar.sendsay-barDown': {
+				'.sendsay-popup.sendsay-type-bar.sendsay-top, .sendsay-popup.sendsay-type-bar.sendsay-bottom': {
 					'top': '50%',
 					'left': '50%',
 					'transform': 'translate(-50%, -50%)',
@@ -71,7 +71,7 @@ export class PopupBar extends Popup {
 					'height': 'auto !important',
 					'flex-direction': 'column'
 				},
-				'.sendsay-popup.sendsay-type-bar.sendsay-barUp  .sendsay-column > *, .sendsay-popup.sendsay-barDown .sendsay-column > *': {
+				'.sendsay-popup.sendsay-type-bar.sendsay-top  .sendsay-column > *, .sendsay-popup.sendsay-bottom .sendsay-column > *': {
 					'padding-bottom': '20px',
 					'padding-left': '0px'
 				}
