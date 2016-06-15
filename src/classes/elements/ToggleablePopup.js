@@ -20,7 +20,7 @@ export class ToggleablePopup extends Popup {
 		this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]"  style="[%overlayStyles%]">' : '') +
 						'<div class = "[%classes%]" style="[%style%]"">' +
 							'<div class = "sendsay-close">×</div>' +
-							'<div class = "sendsay-toggler">' +
+							'<div class = "sendsay-toggler" style=[%togglerStyle%]>' +
 								'<span class="sendsay-toggler-desktop">[%maintext%]</span>' +
 								'<span class="sendsay-toggler-mobile">[%mobilemaintext%]</span>' +
 							'</div>' +
@@ -111,6 +111,7 @@ export class ToggleablePopup extends Popup {
 		let settings = super.makeSettings();
 		settings.maintext = this.data.content.mainText;
 		settings.mobilemaintext = this.data.content.mobilemainText || 'Телефон';
+		settings.togglerStyle = this.convertStyles(this.applyStyles(this.maintextApplStyle));
 		return settings;
 	}
 

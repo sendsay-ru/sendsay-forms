@@ -266,7 +266,7 @@
   opacity: 1;
   transition: max-height linear 300ms, opacity linear 300ms;
 }
-.sendsay-popup.sendsay-type-widget.sendsay-opened .sendsay .sendsay-cross {
+.sendsay-popup.sendsay-type-widget.sendsay-opened .sendsay-cross {
   display: none;
 }
 .sendsay-popup.sendsay-type-widget.sendsay-animation-none .sendsay-content {
