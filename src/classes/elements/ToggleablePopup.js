@@ -43,7 +43,7 @@ export class ToggleablePopup extends Popup {
 		};
 
 		this.maintextApplStyle = {
-			'font-family': { param: 'font' },
+			'font-family': { param: 'font-family' },
 			'font-size': { param: 'fontSize', postfix: 'px' },
 			'text-align': { param: 'text-align', postfix: 'px'}
 		};

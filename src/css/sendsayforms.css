@@ -269,6 +269,12 @@
 .sendsay-popup.sendsay-type-widget.sendsay-opened .sendsay .sendsay-cross {
   display: none;
 }
+.sendsay-popup.sendsay-type-widget.sendsay-animation-none .sendsay-content {
+  transition: none;
+}
+.sendsay-popup.sendsay-type-widget.sendsay-opened.sendsay-animation-none .sendsay-content {
+  transition: none;
+}
 
 .sendsay-animation-bounce {
   -webkit-animation-name: sendsay-bounce;

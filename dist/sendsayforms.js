@@ -1859,7 +1859,6 @@ var PopupBar = exports.PopupBar = function (_Popup) {
 
 			this.applicableStyles = {
 				'background-color': { param: 'backgroundColor' },
-				'border-radius': { param: 'borderRadius', postfix: 'px' },
 				'padding-bottom': { param: 'paddingBottom', postfix: 'px' },
 				'padding-top': { param: 'paddingTop', postfix: 'px' },
 				'padding-left': { param: 'paddingLeft', postfix: 'px' },
@@ -2274,7 +2273,6 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 
 			this.applicableStyles = {
 				'background-color': { param: 'backgroundColor' },
-				'border-radius': { param: 'borderRadius', postfix: 'px' },
 				'padding-bottom': { param: 'paddingBottom', postfix: 'px' },
 				'padding-top': { param: 'paddingTop', postfix: 'px' },
 				'padding-left': { param: 'paddingLeft', postfix: 'px' },

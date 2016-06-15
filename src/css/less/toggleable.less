@@ -32,15 +32,12 @@
 	.sendsay-close {
 		display: none;
 	}
-
-
 }
+
 
 
 .sendsay-popup.sendsay-type-widget.sendsay-opened{
 	
-
-
 	.sendsay-content {
 		opacity: 1;
 		transition: max-height linear 300ms, opacity linear 300ms;
@@ -51,6 +48,17 @@
 	.sendsay-cross {
 		display: none;
 	}
+}
+
+.sendsay-popup.sendsay-type-widget.sendsay-animation-none {
+	.sendsay-content {
+		transition: none;
+	}
+}
 
 
+.sendsay-popup.sendsay-type-widget.sendsay-opened.sendsay-animation-none {
+	.sendsay-content {
+		transition: none;
+	}
 }
