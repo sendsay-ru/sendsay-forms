@@ -120,6 +120,9 @@ export class ToggleablePopup extends Popup {
 		if(this.el) {
 			this.el.querySelector('.sendsay-toggler').addEventListener('click', this.handleTogglerClick.bind(this));
 		}
+		this.addEvent('resize', function() {
+			console.log('resize');
+		})
 	}
 
 	removeEvents() {
@@ -139,8 +142,25 @@ export class ToggleablePopup extends Popup {
 			contentEl.style.maxHeight = 0 + 'px';
 		} else {
 			el.classList.add('sendsay-opened');
-			contentEl.style.maxHeight = contentEl.scrollHeight + 'px';
+			this.setSaneMaxHeight();
 		}
+	}
+
+	submit() {
+		let temp = super.submit();
+		this.setSaneMaxHeight();
+		return temp;
+	}
+
+	setSaneMaxHeight() {
+		let el = this.noWrapper ? this.el : this.el.querySelector('.sendsay-popup');
+		let contentEl = el.querySelector('.sendsay-content');
+		contentEl.style.maxHeight = contentEl.scrollHeight + 'px';
+	}
+
+	showErrorFor(qid, message) {
+		super.showErrorFor(qid, message);
+		this.setSaneMaxHeight();
 	}
 
 	handleClose() {

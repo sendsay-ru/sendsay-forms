@@ -2362,6 +2362,9 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 			if (this.el) {
 				this.el.querySelector('.sendsay-toggler').addEventListener('click', this.handleTogglerClick.bind(this));
 			}
+			this.addEvent('resize', function () {
+				console.log('resize');
+			});
 		}
 	}, {
 		key: "removeEvents",
@@ -2383,8 +2386,28 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 				contentEl.style.maxHeight = 0 + 'px';
 			} else {
 				el.classList.add('sendsay-opened');
-				contentEl.style.maxHeight = contentEl.scrollHeight + 'px';
+				this.setSaneMaxHeight();
 			}
+		}
+	}, {
+		key: "submit",
+		value: function submit() {
+			var temp = _get(Object.getPrototypeOf(ToggleablePopup.prototype), "submit", this).call(this);
+			this.setSaneMaxHeight();
+			return temp;
+		}
+	}, {
+		key: "setSaneMaxHeight",
+		value: function setSaneMaxHeight() {
+			var el = this.noWrapper ? this.el : this.el.querySelector('.sendsay-popup');
+			var contentEl = el.querySelector('.sendsay-content');
+			contentEl.style.maxHeight = contentEl.scrollHeight + 'px';
+		}
+	}, {
+		key: "showErrorFor",
+		value: function showErrorFor(qid, message) {
+			_get(Object.getPrototypeOf(ToggleablePopup.prototype), "showErrorFor", this).call(this, qid, message);
+			this.setSaneMaxHeight();
 		}
 	}, {
 		key: "handleClose",
@@ -2445,7 +2468,6 @@ var _Form = require("./classes/Form.js");
 	};
 
 	var loadCss = function loadCss(callback) {
-		return callback();
 		var cssId = '_sendsay-styles'; // you could encode the css path itself to generate id..
 		if (!document.getElementById(cssId)) {
 			var head = document.getElementsByTagName('head')[0];
