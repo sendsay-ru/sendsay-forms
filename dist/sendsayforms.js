@@ -2236,6 +2236,8 @@ var _get = function get(object, property, receiver) { if (object === null) objec
 
 var _Popup2 = require("./Popup.js");
 
+var _Text = require("./Text.js");
+
 var _MediaQuery = require("./../MediaQuery.js");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -2263,7 +2265,7 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 			this.curStep = 0;
 			this.gainedData = {};
 
-			this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]"  style="[%overlayStyles%]">' : '') + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '<div class = "sendsay-toggler" style=[%togglerStyle%]>' + '<span class="sendsay-toggler-desktop">[%maintext%]</span>' + '<span class="sendsay-toggler-mobile">[%mobilemaintext%]</span>' + '</div>' + '<div class = "sendsay-content">' + '</div>' + '</div>' + (!this.noWrapper ? '</div>' : '');
+			this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]"  style="[%overlayStyles%]">' : '') + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '<div class = "sendsay-toggler">' + '<span class="sendsay-toggler-desktop">[%toggle%]</span>' + '<span class="sendsay-toggler-mobile">[%toggle%]</span>' + '</div>' + '<div class = "sendsay-content">' + '</div>' + '</div>' + (!this.noWrapper ? '</div>' : '');
 
 			this.baseClass = 'sendsay-popup';
 
@@ -2345,9 +2347,9 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 		key: "makeSettings",
 		value: function makeSettings() {
 			var settings = _get(Object.getPrototypeOf(ToggleablePopup.prototype), "makeSettings", this).call(this);
-			settings.maintext = this.data.content.mainText;
-			settings.mobilemaintext = this.data.content.mobilemainText || 'Телефон';
-			settings.togglerStyle = this.convertStyles(this.applyStyles(this.maintextApplStyle));
+
+			settings.toggle = new _Text.Text(this.data.toggle).build().outerHTML;
+
 			return settings;
 		}
 	}, {
@@ -2422,7 +2424,7 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 	return ToggleablePopup;
 }(_Popup2.Popup);
 
-},{"./../MediaQuery.js":6,"./Popup.js":15}],22:[function(require,module,exports){
+},{"./../MediaQuery.js":6,"./Popup.js":15,"./Text.js":20}],22:[function(require,module,exports){
 "use strict";
 
 var _Popup = require("./classes/elements/Popup.js");
