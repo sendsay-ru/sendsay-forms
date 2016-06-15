@@ -258,6 +258,22 @@
   top: 0px;
   bottom: initial;
 }
+.sendsay-popup.sendsay-type-bar.sendsay-top.sendsay-animation-slidetop {
+  -webkit-animation-name: sendsay-slidetop;
+          animation-name: sendsay-slidetop;
+  -webkit-animation-duration: 400ms;
+          animation-duration: 400ms;
+  -webkit-animation-timing-function: linear;
+          animation-timing-function: linear;
+}
+.sendsay-popup.sendsay-type-bar.sendsay-bottom.sendsay-animation-slidebottom {
+  -webkit-animation-name: sendsay-slidebottom;
+          animation-name: sendsay-slidebottom;
+  -webkit-animation-duration: 400ms;
+          animation-duration: 400ms;
+  -webkit-animation-timing-function: linear;
+          animation-timing-function: linear;
+}
 
 .sendsay-popup.sendsay-type-widget {
   position: fixed;
@@ -297,7 +313,7 @@
   -webkit-transition: max-height linear 300ms, opacity linear 300ms;
   transition: max-height linear 300ms, opacity linear 300ms;
 }
-.sendsay-popup.sendsay-type-widget.sendsay-opened .sendsay .sendsay-cross {
+.sendsay-popup.sendsay-type-widget.sendsay-opened .sendsay-cross {
   display: none;
 }
 .sendsay-popup.sendsay-type-widget.sendsay-animation-none .sendsay-content {
@@ -1122,4 +1138,44 @@
 .sendsay-animation-none {
   -webkit-animation-name: none;
   animation-name: none;
+}
+@-webkit-keyframes sendsay-slidetop {
+  0% {
+    -webkit-transform: translate(0%, -100%);
+            transform: translate(0%, -100%);
+  }
+  to {
+    -webkit-transform: translate(0%, 0%);
+            transform: translate(0%, 0%);
+  }
+}
+@keyframes sendsay-slidetop {
+  0% {
+    -webkit-transform: translate(0%, -100%);
+            transform: translate(0%, -100%);
+  }
+  to {
+    -webkit-transform: translate(0%, 0%);
+            transform: translate(0%, 0%);
+  }
+}
+@-webkit-keyframes sendsay-slidebottom {
+  0% {
+    -webkit-transform: translate(0%, 100%);
+            transform: translate(0%, 100%);
+  }
+  to {
+    -webkit-transform: translate(0%, 0%);
+            transform: translate(0%, 0%);
+  }
+}
+@keyframes sendsay-slidebottom {
+  0% {
+    -webkit-transform: translate(0%, 100%);
+            transform: translate(0%, 100%);
+  }
+  to {
+    -webkit-transform: translate(0%, 0%);
+            transform: translate(0%, 0%);
+  }
 }

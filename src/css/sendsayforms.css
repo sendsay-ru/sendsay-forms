@@ -232,6 +232,16 @@
   top: 0px;
   bottom: initial;
 }
+.sendsay-popup.sendsay-type-bar.sendsay-top.sendsay-animation-slidetop {
+  animation-name: sendsay-slidetop;
+  animation-duration: 400ms;
+  animation-timing-function: linear;
+}
+.sendsay-popup.sendsay-type-bar.sendsay-bottom.sendsay-animation-slidebottom {
+  animation-name: sendsay-slidebottom;
+  animation-duration: 400ms;
+  animation-timing-function: linear;
+}
 
 .sendsay-popup.sendsay-type-widget {
   position: fixed;
@@ -1062,4 +1072,20 @@
 .sendsay-animation-none {
   -webkit-animation-name: none;
   animation-name: none;
+}
+@keyframes sendsay-slidetop {
+  0% {
+    transform: translate(0%, -100%);
+  }
+  to {
+    transform: translate(0%, 0%);
+  }
+}
+@keyframes sendsay-slidebottom {
+  0% {
+    transform: translate(0%, 100%);
+  }
+  to {
+    transform: translate(0%, 0%);
+  }
 }

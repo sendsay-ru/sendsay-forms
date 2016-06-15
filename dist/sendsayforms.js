@@ -1867,7 +1867,7 @@ var PopupBar = exports.PopupBar = function (_Popup) {
 			};
 
 			this.maintextApplStyle = {
-				'font-family': { param: 'font' },
+				'font-family': { param: 'font-family' },
 				'font-size': { param: 'fontSize', postfix: 'px' },
 				'text-align': { param: 'text-align', postfix: 'px' }
 			};
@@ -1902,6 +1902,12 @@ var PopupBar = exports.PopupBar = function (_Popup) {
 					'.sendsay-popup.sendsay-type-bar.sendsay-top  .sendsay-column > *, .sendsay-popup.sendsay-bottom .sendsay-column > *': {
 						'padding-bottom': '20px',
 						'padding-left': '0px'
+					},
+					'.sendsay-popup.sendsay-type-bar.sendsay-top.sendsay-animation-slidetop': {
+						'animation': 'none'
+					},
+					'.sendsay-popup.sendsay-type-bar.sendsay-bottom.sendsay-animation-slidebottom': {
+						'animation': 'none'
 					}
 				}
 			});
@@ -1917,7 +1923,7 @@ var PopupBar = exports.PopupBar = function (_Popup) {
 		value: function build() {
 			var el = _get(Object.getPrototypeOf(PopupBar.prototype), "build", this).call(this);
 			var textEl = document.createElement('div');
-			textEl.style = this.convertStyles(this.applyStyles(this.maintextApplStyle));;
+			textEl.style = this.convertStyles(this.applyStyles(this.maintextApplStyle));
 			textEl.innerHTML = this.data.content.mainText;
 			textEl.className = 'sendsay-text';
 			var column = el.querySelector('.sendsay-column'),
@@ -2267,7 +2273,7 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 			this.curStep = 0;
 			this.gainedData = {};
 
-			this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]"  style="[%overlayStyles%]">' : '') + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '<div class = "sendsay-toggler">' + '<span class="sendsay-toggler-desktop">[%maintext%]</span>' + '<span class="sendsay-toggler-mobile">[%mobilemaintext%]</span>' + '</div>' + '<div class = "sendsay-content">' + '</div>' + '</div>' + (!this.noWrapper ? '</div>' : '');
+			this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]"  style="[%overlayStyles%]">' : '') + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '<div class = "sendsay-toggler" style=[%togglerStyle%]>' + '<span class="sendsay-toggler-desktop">[%maintext%]</span>' + '<span class="sendsay-toggler-mobile">[%mobilemaintext%]</span>' + '</div>' + '<div class = "sendsay-content">' + '</div>' + '</div>' + (!this.noWrapper ? '</div>' : '');
 
 			this.baseClass = 'sendsay-popup';
 
@@ -2282,7 +2288,7 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 			};
 
 			this.maintextApplStyle = {
-				'font-family': { param: 'font' },
+				'font-family': { param: 'font-family' },
 				'font-size': { param: 'fontSize', postfix: 'px' },
 				'text-align': { param: 'text-align', postfix: 'px' }
 			};
@@ -2351,6 +2357,7 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 			var settings = _get(Object.getPrototypeOf(ToggleablePopup.prototype), "makeSettings", this).call(this);
 			settings.maintext = this.data.content.mainText;
 			settings.mobilemaintext = this.data.content.mobilemainText || 'Телефон';
+			settings.togglerStyle = this.convertStyles(this.applyStyles(this.maintextApplStyle));
 			return settings;
 		}
 	}, {

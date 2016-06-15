@@ -73,6 +73,12 @@ export class PopupBar extends Popup {
 				'.sendsay-popup.sendsay-type-bar.sendsay-top  .sendsay-column > *, .sendsay-popup.sendsay-bottom .sendsay-column > *': {
 					'padding-bottom': '20px',
 					'padding-left': '0px'
+				},
+				'.sendsay-popup.sendsay-type-bar.sendsay-top.sendsay-animation-slidetop': {
+					'animation': 'none'
+				},
+				'.sendsay-popup.sendsay-type-bar.sendsay-bottom.sendsay-animation-slidebottom': {
+					'animation': 'none'
 				}
 			}
 		});
@@ -88,7 +94,7 @@ export class PopupBar extends Popup {
 	build() {
 		var el = super.build();
 		var textEl = document.createElement('div');
-		textEl.style = this.convertStyles(this.applyStyles(this.maintextApplStyle));;
+		textEl.style = this.convertStyles(this.applyStyles(this.maintextApplStyle));
 		textEl.innerHTML = this.data.content.mainText;
 		textEl.className = 'sendsay-text';
 		let column = el.querySelector('.sendsay-column'),
