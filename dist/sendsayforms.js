@@ -2268,7 +2268,6 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 			this.curStep = 0;
 			this.gainedData = {};
 
-			this.noWrapper = false;
 			this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]"  style="[%overlayStyles%]">' : '') + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '<div class = "sendsay-toggler">' + '<span class="sendsay-toggler-desktop">[%maintext%]</span>' + '<span class="sendsay-toggler-mobile">[%mobilemaintext%]</span>' + '</div>' + '<div class = "sendsay-content">' + '</div>' + '</div>' + (!this.noWrapper ? '</div>' : '');
 
 			this.baseClass = 'sendsay-popup';

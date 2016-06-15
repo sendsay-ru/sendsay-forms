@@ -16,8 +16,7 @@ export class ToggleablePopup extends Popup {
 		this.steps = this.data.steps;
 		this.curStep = 0;
 		this.gainedData = {};
-		
-		this.noWrapper = false;
+	
 		this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]"  style="[%overlayStyles%]">' : '') +
 						'<div class = "[%classes%]" style="[%style%]"">' +
 							'<div class = "sendsay-close">×</div>' +
