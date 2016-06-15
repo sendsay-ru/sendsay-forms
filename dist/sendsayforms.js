@@ -1556,6 +1556,11 @@ var Popup = exports.Popup = function (_DOMObject) {
 						'transform': 'translate(-50%, -50%)',
 						'animation': 'none',
 						'bottom': 'initial'
+					},
+					'.sendsay-popup .sendsay-content': {
+						'-webkit-flex-direction': 'column',
+						'-ms-flex-direction': 'column',
+						'flex-direction': 'column'
 					}
 				}
 			});
