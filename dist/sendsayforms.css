@@ -78,13 +78,7 @@
   background-color: #fff;
   box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
-  display: -ms-flexbox;
-  display: -webkit-box;
-  display: flex;
-  -ms-flex-direction: row;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-          flex-direction: row;
+  display: block;
 }
 .sendsay-popup .sendsay-content {
   display: -webkit-box;
@@ -291,6 +285,7 @@
   height: 50px;
   line-height: 50px;
   cursor: pointer;
+  overflow: hidden;
 }
 .sendsay-popup.sendsay-type-widget .sendsay-toggler .sendsay-toggler-desktop {
   display: block;

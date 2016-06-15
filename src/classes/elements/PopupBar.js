@@ -91,18 +91,6 @@ export class PopupBar extends Popup {
 
 	}
 
-	build() {
-		var el = super.build();
-		var textEl = document.createElement('div');
-		textEl.style = this.convertStyles(this.applyStyles(this.maintextApplStyle));
-		textEl.innerHTML = this.data.content.mainText;
-		textEl.className = 'sendsay-text';
-		let column = el.querySelector('.sendsay-column'),
-			firstChild = column.querySelector('*');
-		column.insertBefore(textEl, firstChild);
-		return el;
-	}
-
 
 
 }
