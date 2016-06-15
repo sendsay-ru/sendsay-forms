@@ -282,8 +282,6 @@
   border-radius: 0px;
 }
 .sendsay-popup.sendsay-type-widget .sendsay-toggler {
-  height: 50px;
-  line-height: 50px;
   cursor: pointer;
   overflow: hidden;
 }
