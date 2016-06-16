@@ -186,10 +186,10 @@ var Connector = exports.Connector = function () {
 	}, {
 		key: 'transformAnswer',
 		value: function transformAnswer(json) {
-			if (json.settings) {
-				this.data = json.settings;
+			if (json.obj && json.obj.settings) {
+				this.data = json.obj.settings;
 				this.data.id = this.id;
-				if (json.state && +json.state === 1) this.data.active = true;
+				if (json.obj.state && +json.obj.state === 1) this.data.active = true;
 				return;
 			};
 			this.data = {
@@ -264,8 +264,8 @@ var Connector = exports.Connector = function () {
 				console.log(e);
 				return false;
 			}
-			this.error = json;
-			if (json.id) return false;
+			this.error = json.errors;
+			if (json.errors) return false;
 
 			return true;
 		}
@@ -540,7 +540,6 @@ var Form = exports.Form = function () {
 			var watcher = new _ConditionWatcher.ConditionWatcher(conditions, id);
 
 			watcher.watch().then(function () {
-				self.domConstructor = ['barUp', 'barDown'].indexOf(data.appearance.position) != -1 ? _PopupBar.PopupBar : _Popup.Popup;
 				switch (data.type) {
 					case 'popup':
 						self.domConstructor = _Popup.Popup;
@@ -584,8 +583,18 @@ var Form = exports.Form = function () {
 		key: "handleFailSubmit",
 		value: function handleFailSubmit() {
 			this.domObj.onSubmitFail();
+			console.log('fail');
+
 			var error = this.connector.error;
-			if (error && error.id === 'wrong_member_email') this.domObj.showErrorFor('_member_email', 'Неверный формат email адреса');
+			if (error && this.findInErrors(error, 'wrong_member_email')) this.domObj.showErrorFor('_member_email', 'Неверный формат email адреса');
+		}
+	}, {
+		key: "findInErrors",
+		value: function findInErrors(errors, errorId) {
+			for (var i = 0; i < errors.length; i++) {
+				if (errors[i].id == errorId) return true;
+			}
+			return false;
 		}
 	}]);
 
@@ -1095,7 +1104,11 @@ var DOMObject = exports.DOMObject = function () {
 			this.build();
 			this.addEvents();
 			if (oldEl && oldEl.parentNode) oldEl.parentNode.replaceChild(this.el, oldEl);
+			this.afterRender();
 		}
+	}, {
+		key: 'afterRender',
+		value: function afterRender() {}
 	}, {
 		key: 'addEvents',
 		value: function addEvents() {}
@@ -1735,6 +1748,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 		key: "proceedToNextStep",
 		value: function proceedToNextStep() {
 			this.curStep++;
+			if (this.curStep != 0) this.data.appearance.animation = 'none';
 			this.render();
 		}
 	}, {
@@ -2418,6 +2432,20 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 			} else {
 				this.hide();
 			}
+		}
+	}, {
+		key: "makeClasses",
+		value: function makeClasses() {
+			var classes = _get(Object.getPrototypeOf(ToggleablePopup.prototype), "makeClasses", this).call(this);
+			if (this.curStep != 0) {
+				classes += ' sendsay-opened';
+			}
+			return classes;
+		}
+	}, {
+		key: "afterRender",
+		value: function afterRender() {
+			if (this.curStep != 0) this.setSaneMaxHeight();
 		}
 	}]);
 
