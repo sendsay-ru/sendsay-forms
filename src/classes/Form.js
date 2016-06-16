@@ -62,7 +62,6 @@ export class Form {
 		let watcher = new ConditionWatcher(conditions, id);
 
 		watcher.watch().then(function() {
-			self.domConstructor = ['barUp', 'barDown'].indexOf(data.appearance.position) != -1 ? PopupBar : Popup;
 			switch(data.type) {
 				case 'popup':
 					self.domConstructor = Popup;
@@ -107,9 +106,20 @@ export class Form {
 
 	handleFailSubmit() {
 		this.domObj.onSubmitFail();
+		console.log('fail');
+
 		let error = this.connector.error;
-		if(error && error.id === 'wrong_member_email')
+		if(error && this.findInErrors(error, 'wrong_member_email'))
 			this.domObj.showErrorFor('_member_email', 'Неверный формат email адреса');
+	}
+
+	findInErrors(errors, errorId) {
+		for(let i=0; i < errors.length; i++) {
+			if(errors[i].id == errorId)
+				return true;
+		}
+		return false;
+
 	}
 
 }

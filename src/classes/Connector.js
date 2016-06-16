@@ -48,10 +48,10 @@ export class Connector {
 
 
 	transformAnswer(json) {
-		if(json.settings) {
-			this.data = json.settings;
+		if(json.obj && json.obj.settings) {
+			this.data = json.obj.settings;
 			this.data.id = this.id;
-			if(json.state && +json.state === 1)
+			if(json.obj.state && +json.obj.state === 1)
 				this.data.active = true;
 			return;
 		};
@@ -131,8 +131,8 @@ export class Connector {
 			console.log(e);
 			return false;
 		}
-		this.error = json;
-		if(json.id)
+		this.error = json.errors;
+		if(json.errors)
 			return false;
 
 		return true;
