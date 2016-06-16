@@ -103,6 +103,11 @@ export class DOMObject {
 		this.addEvents();
 		if(oldEl && oldEl.parentNode)
 			oldEl.parentNode.replaceChild(this.el, oldEl);
+		this.afterRender();
+	}
+
+	afterRender() {
+
 	}
 
 	addEvents() {

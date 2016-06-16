@@ -176,6 +176,20 @@ export class ToggleablePopup extends Popup {
 		}
 	}
 
+	makeClasses() {
+		let classes = super.makeClasses();
+		if(this.curStep != 0) {
+			classes += ' sendsay-opened';
+		}
+		return classes;
+	}
+
+	afterRender() {
+		if(this.curStep != 0)
+			this.setSaneMaxHeight();
+	}
+
+
 
 
 }

@@ -245,6 +245,8 @@ export class Popup extends DOMObject {
 
 	proceedToNextStep() {
 		this.curStep++;
+		if(this.curStep != 0)
+			this.data.appearance.animation = 'none';
 		this.render();
 	}
 
