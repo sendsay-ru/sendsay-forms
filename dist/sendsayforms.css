@@ -303,6 +303,9 @@
 .sendsay-popup.sendsay-type-widget .sendsay-close {
   display: none;
 }
+.sendsay-popup.sendsay-type-widget.sendsay-laststep .sendsay-close {
+  display: block;
+}
 .sendsay-popup.sendsay-type-widget.sendsay-opened .sendsay-content {
   opacity: 1;
   -webkit-transition: max-height linear 300ms, opacity linear 300ms;

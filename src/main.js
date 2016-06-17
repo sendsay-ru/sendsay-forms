@@ -8,6 +8,7 @@ import {Form} from "./classes/Form.js";
 
 	
 	var activatePopup  = function(url, options) {
+
 		loadCss(function() {
 			var connector = new Connector(url);
 			var form = new Form(connector, options);
@@ -33,7 +34,8 @@ import {Form} from "./classes/Form.js";
 	}
 
 	var loadCss = function(callback) {
-		var cssId = '_sendsay-styles';  // you could encode the css path itself to generate id..
+		var cssId = '_sendsay-styles';
+		console.log('loadCss');
 		if (!document.getElementById(cssId))
 		{
 		    var head  = document.getElementsByTagName('head')[0];
@@ -51,6 +53,8 @@ import {Form} from "./classes/Form.js";
 		    	document.head.appendChild(link);
 		    }
 		    link.addEventListener('load', callback);
+		} else {
+			callback();
 		}
 	} 
 	window.SENDSAY = {

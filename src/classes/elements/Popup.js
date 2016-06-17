@@ -157,6 +157,8 @@ export class Popup extends DOMObject {
 		classes += ' sendsay-animation-' + (appearance.animation || 'none');
 		classes += ' sendsay-'+ (appearance.position || 'center');
 		classes += ' sendsay-type-'+ this.data.type;
+		if(this.steps.length -1 == this.curStep)
+			classes += ' sendsay-laststep';
 		return classes;
 	}
 
@@ -244,10 +246,17 @@ export class Popup extends DOMObject {
 	}
 
 	proceedToNextStep() {
+		let temp, self = this;
 		this.curStep++;
-		if(this.curStep != 0)
+		if(this.curStep != 0) {
+			temp = this.data.appearance.animation;
 			this.data.appearance.animation = 'none';
+		}
 		this.render();
+		setTimeout(function() {
+				self.data.appearance.animation = temp;
+				self.el.className = self.makeClasses();
+		}, 1);
 	}
 
 	onSubmitFail() {

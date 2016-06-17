@@ -1662,6 +1662,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 			classes += ' sendsay-animation-' + (appearance.animation || 'none');
 			classes += ' sendsay-' + (appearance.position || 'center');
 			classes += ' sendsay-type-' + this.data.type;
+			if (this.steps.length - 1 == this.curStep) classes += ' sendsay-laststep';
 			return classes;
 		}
 	}, {
@@ -1747,9 +1748,18 @@ var Popup = exports.Popup = function (_DOMObject) {
 	}, {
 		key: "proceedToNextStep",
 		value: function proceedToNextStep() {
+			var temp = void 0,
+			    self = this;
 			this.curStep++;
-			if (this.curStep != 0) this.data.appearance.animation = 'none';
+			if (this.curStep != 0) {
+				temp = this.data.appearance.animation;
+				this.data.appearance.animation = 'none';
+			}
 			this.render();
+			setTimeout(function () {
+				self.data.appearance.animation = temp;
+				self.el.className = self.makeClasses();
+			}, 1);
 		}
 	}, {
 		key: "onSubmitFail",
@@ -2426,7 +2436,7 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 			var el = this.noWrapper ? this.el : this.el.querySelector('.sendsay-popup');
 			var contentEl = el.querySelector('.sendsay-content');
 
-			if (el.classList.contains('sendsay-opened')) {
+			if (el.classList.contains('sendsay-opened') && this.steps.length - 1 !== this.curStep) {
 				el.classList.remove('sendsay-opened');
 				contentEl.style.maxHeight = 0 + 'px';
 			} else {
@@ -2468,7 +2478,7 @@ var _Form = require("./classes/Form.js");
 (function () {
 
 	var activatePopup = function activatePopup(url, options) {
-		console.log('activate');
+
 		loadCss(function () {
 			var connector = new _Connector.Connector(url);
 			var form = new _Form.Form(connector, options);

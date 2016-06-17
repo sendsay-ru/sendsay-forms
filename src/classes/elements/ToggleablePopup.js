@@ -168,7 +168,7 @@ export class ToggleablePopup extends Popup {
 		let el = this.noWrapper ? this.el : this.el.querySelector('.sendsay-popup');
 		let contentEl = el.querySelector('.sendsay-content');
 
-		if(el.classList.contains('sendsay-opened')) {
+		if(el.classList.contains('sendsay-opened') && this.steps.length -1 !== this.curStep) {
 			el.classList.remove('sendsay-opened');
 			contentEl.style.maxHeight = 0 + 'px';
 		} else {
