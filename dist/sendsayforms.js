@@ -2468,6 +2468,7 @@ var _Form = require("./classes/Form.js");
 (function () {
 
 	var activatePopup = function activatePopup(url, options) {
+		console.log('activate');
 		loadCss(function () {
 			var connector = new _Connector.Connector(url);
 			var form = new _Form.Form(connector, options);
@@ -2493,7 +2494,8 @@ var _Form = require("./classes/Form.js");
 	};
 
 	var loadCss = function loadCss(callback) {
-		var cssId = '_sendsay-styles'; // you could encode the css path itself to generate id..
+		var cssId = '_sendsay-styles';
+		console.log('loadCss');
 		if (!document.getElementById(cssId)) {
 			var head = document.getElementsByTagName('head')[0];
 			var link = document.createElement('link');
@@ -2510,6 +2512,8 @@ var _Form = require("./classes/Form.js");
 				document.head.appendChild(link);
 			}
 			link.addEventListener('load', callback);
+		} else {
+			callback();
 		}
 	};
 	window.SENDSAY = {

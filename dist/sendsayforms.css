@@ -143,6 +143,7 @@
   border-radius: 2px;
   outline: none;
   background-color: #fff;
+  margin: 0px;
 }
 .sendsay-input:focus {
   border-color: #007c99;
@@ -167,6 +168,7 @@
   font-size: 14px;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
+  width: auto;
 }
 .sendsay-text {
   word-break: break-word;
