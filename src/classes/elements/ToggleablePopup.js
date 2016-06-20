@@ -67,7 +67,8 @@ export class ToggleablePopup extends Popup {
 					'flex-direction': 'column',
 					'animation': 'none',
 					'bottom': '50px',
-					'right': '50px'
+					'right': '50px',
+					'border-radius': '0px'
 				},
 				'.sendsay-popup.sendsay-type-widget .sendsay-content': { 
 					'display': 'none',
