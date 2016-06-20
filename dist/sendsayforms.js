@@ -1921,7 +1921,7 @@ var PopupBar = exports.PopupBar = function (_Popup) {
 						'height': 'auto !important',
 						'flex-direction': 'column'
 					},
-					'.sendsay-popup.sendsay-type-bar.sendsay-top  .sendsay-column > *, .sendsay-popup.sendsay-bottom .sendsay-column > *': {
+					'.sendsay-popup.sendsay-type-bar.sendsay-top  .sendsay-column > *, .sendsay-popup.sendsay-type-bar.sendsay-bottom .sendsay-column > *': {
 						'padding-bottom': '20px',
 						'padding-left': '0px'
 					},
