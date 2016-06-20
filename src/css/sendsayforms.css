@@ -91,9 +91,14 @@
 }
 .sendsay-columnwrapper {
   display: flex;
+  min-width: 0px;
 }
 .sendsay-column {
   flex: 1;
+  min-width: 0px;
+}
+.sendsay-image {
+  min-width: 0px;
 }
 .sendsay-field.sendsay-field-invalid .sendsay-input,
 .sendsay-field.sendsay-field-invalid .sendsay-input:focus {
