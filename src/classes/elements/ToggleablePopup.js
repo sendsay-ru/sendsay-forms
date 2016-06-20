@@ -41,7 +41,8 @@ export class ToggleablePopup extends Popup {
 			'padding-left': { param: 'paddingLeft', postfix: 'px'},
 			'padding-right': { param: 'paddingRight', postfix: 'px'},
 			'color': { param: 'textColor'},
-			'width': { param: 'width', prefix: 'px'}
+			'width': { param: 'width', prefix: 'px'},
+			'border-radius': { param: 'borderRadius', template: '[%v%]px [%v%]px 0px 0px'}
 		};
 
 		this.maintextApplStyle = {

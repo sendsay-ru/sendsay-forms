@@ -1053,7 +1053,12 @@ var DOMObject = exports.DOMObject = function () {
 			for (var key in mapping) {
 				var val = mapping[key];
 				if (data[val.param] !== undefined || general[val.param] != undefined) {
-					styles[key] = (data[val.param] || general[val.param]) + (val.postfix ? val.postfix : '');
+					var value = data[val.param] || general[val.param];
+					if (!val.template) {
+						styles[key] = (data[val.param] || general[val.param]) + (val.postfix ? val.postfix : '');
+					} else {
+						styles[key] = this.processTemplate(val.template, { v: value });
+					}
 				} else if (val.default) {
 					styles[key] = val.default;
 				}
@@ -1078,8 +1083,13 @@ var DOMObject = exports.DOMObject = function () {
 	}, {
 		key: 'applySettings',
 		value: function applySettings(settings) {
+			return this.processTemplate(this.template, settings);
+		}
+	}, {
+		key: 'processTemplate',
+		value: function processTemplate(template, settings) {
 			settings = settings || {};
-			var string = this.template;
+			var string = template;
 			var templateParams = string.match(new RegExp('\\[% *[a-zA-Z0-9\\-]* *%\\]', 'g')) || [];
 			for (var i = 0; i < templateParams.length; i++) {
 				var param = templateParams[i];
@@ -2295,7 +2305,8 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 				'padding-left': { param: 'paddingLeft', postfix: 'px' },
 				'padding-right': { param: 'paddingRight', postfix: 'px' },
 				'color': { param: 'textColor' },
-				'width': { param: 'width', prefix: 'px' }
+				'width': { param: 'width', prefix: 'px' },
+				'border-radius': { param: 'borderRadius', template: '[%v%]px [%v%]px 0px 0px' }
 			};
 
 			this.maintextApplStyle = {

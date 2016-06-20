@@ -56,7 +56,13 @@ export class DOMObject {
 		for(var key in mapping) {
 			let val = mapping[key];
 			if(data[val.param] !== undefined || general[val.param] != undefined) {
-				styles[key] = (data[val.param] || general[val.param]) + (val.postfix ? val.postfix : '');
+				let value = data[val.param] || general[val.param];
+				if(!val.template) {
+					styles[key] = (data[val.param] || general[val.param]) + (val.postfix ? val.postfix : '');
+				} else {
+					styles[key] = this.processTemplate(val.template, { v: value })
+				}
+				
 			} else if(val.default) {
 				styles[key] = val.default;
 			}
@@ -78,8 +84,12 @@ export class DOMObject {
 	}
 
 	applySettings(settings) {
+		return this.processTemplate(this.template, settings);
+	}
+
+	processTemplate(template, settings) {
 		settings = settings || {};
-		let string = this.template;
+		let string = template;
 		let templateParams = string.match(new RegExp('\\[% *[a-zA-Z0-9\\-]* *%\\]', 'g')) || [];
 		for(let i=0; i<templateParams.length; i++) {
 			let param = templateParams[i];
