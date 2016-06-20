@@ -1,8 +1,6 @@
 import {Popup} from "./Popup.js";
 import {MediaQuery} from "./../MediaQuery.js";
 
-
-
 export class PopupBar extends Popup {
 
 	constructor(data, parent) {
@@ -90,7 +88,5 @@ export class PopupBar extends Popup {
 		this.general.appearance.textColor = this.data.appearance.textColor;
 
 	}
-
-
 
 }
