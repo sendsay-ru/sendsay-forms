@@ -21,7 +21,6 @@ export class ToggleablePopup extends Popup {
 		this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]"  style="[%overlayStyles%]">' : '') +
 						'<div class = "[%classes%]" style="[%style%]"">' +
 							'<div class = "sendsay-close">×</div>' +
-							'<div class = "sendsay-togglertest">' +
 							'<div class = "sendsay-toggler">' +
 								'<span class="sendsay-toggler-desktop">[%toggle%]</span>' +
 								'<span class="sendsay-toggler-mobile">[%toggle%]</span>' +
@@ -68,7 +67,7 @@ export class ToggleablePopup extends Popup {
 					'animation': 'none',
 					'bottom': '50px',
 					'right': '50px',
-					'border-radius': '0px'
+					'border-radius': '0px !important'
 				},
 				'.sendsay-popup.sendsay-type-widget .sendsay-content': { 
 					'display': 'none',

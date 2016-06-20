@@ -2331,7 +2331,8 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 						'flex-direction': 'column',
 						'animation': 'none',
 						'bottom': '50px',
-						'right': '50px'
+						'right': '50px',
+						'border-radius': '0px !important'
 					},
 					'.sendsay-popup.sendsay-type-widget .sendsay-content': {
 						'display': 'none',
