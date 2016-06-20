@@ -21,6 +21,7 @@ export class ToggleablePopup extends Popup {
 		this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]"  style="[%overlayStyles%]">' : '') +
 						'<div class = "[%classes%]" style="[%style%]"">' +
 							'<div class = "sendsay-close">×</div>' +
+							'<div class = "sendsay-togglertest">' +
 							'<div class = "sendsay-toggler">' +
 								'<span class="sendsay-toggler-desktop">[%toggle%]</span>' +
 								'<span class="sendsay-toggler-mobile">[%toggle%]</span>' +
@@ -118,19 +119,12 @@ export class ToggleablePopup extends Popup {
 
 	addEvents() {
 		super.addEvents();
-		if(this.el) {
-			this.el.querySelector('.sendsay-toggler').addEventListener('click', this.handleTogglerClick.bind(this));
-		}
-		this.addEvent('resize', function() {
-			console.log('resize');
-		})
+		this.addEvent('click', '.sendsay-toggler', this.handleTogglerClick.bind(this));
 	}
 
 	removeEvents() {
-		super.addEvents();
-		if(this.el) {
-			this.el.querySelector('.sendsay-toggler').removeEventListener('click', this.handleTogglerClick.bind(this));
-		}
+		super.removeEvents();
+		this.removeEvent('click', '.sendsay-toggler', this.handleTogglerClick.bind(this));
 	}
 
 	handleTogglerClick() {

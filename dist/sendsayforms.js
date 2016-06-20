@@ -2284,7 +2284,7 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 			this.curStep = 0;
 			this.gainedData = {};
 
-			this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]"  style="[%overlayStyles%]">' : '') + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '<div class = "sendsay-toggler">' + '<span class="sendsay-toggler-desktop">[%toggle%]</span>' + '<span class="sendsay-toggler-mobile">[%toggle%]</span>' + '</div>' + '<div class = "sendsay-content">' + '</div>' + '</div>' + (!this.noWrapper ? '</div>' : '');
+			this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]"  style="[%overlayStyles%]">' : '') + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '<div class = "sendsay-togglertest">' + '<div class = "sendsay-toggler">' + '<span class="sendsay-toggler-desktop">[%toggle%]</span>' + '<span class="sendsay-toggler-mobile">[%toggle%]</span>' + '</div>' + '<div class = "sendsay-content">' + '</div>' + '</div>' + (!this.noWrapper ? '</div>' : '');
 
 			this.baseClass = 'sendsay-popup';
 
@@ -2375,20 +2375,13 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 		key: "addEvents",
 		value: function addEvents() {
 			_get(Object.getPrototypeOf(ToggleablePopup.prototype), "addEvents", this).call(this);
-			if (this.el) {
-				this.el.querySelector('.sendsay-toggler').addEventListener('click', this.handleTogglerClick.bind(this));
-			}
-			this.addEvent('resize', function () {
-				console.log('resize');
-			});
+			this.addEvent('click', '.sendsay-toggler', this.handleTogglerClick.bind(this));
 		}
 	}, {
 		key: "removeEvents",
 		value: function removeEvents() {
-			_get(Object.getPrototypeOf(ToggleablePopup.prototype), "addEvents", this).call(this);
-			if (this.el) {
-				this.el.querySelector('.sendsay-toggler').removeEventListener('click', this.handleTogglerClick.bind(this));
-			}
+			_get(Object.getPrototypeOf(ToggleablePopup.prototype), "removeEvents", this).call(this);
+			this.removeEvent('click', '.sendsay-toggler', this.handleTogglerClick.bind(this));
 		}
 	}, {
 		key: "handleTogglerClick",
@@ -2451,6 +2444,22 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 		key: "afterRender",
 		value: function afterRender() {
 			if (this.curStep != 0) this.setSaneMaxHeight();
+		}
+	}, {
+		key: "proceedToNextStep",
+		value: function proceedToNextStep() {
+			var temp = void 0,
+			    self = this;
+			this.curStep++;
+			if (this.curStep != 0) {
+				temp = this.data.appearance.animation;
+				this.data.appearance.animation = 'none';
+			}
+			this.render();
+			setTimeout(function () {
+				self.data.appearance.animation = temp;
+				if (self.noWrapper) self.el.className = self.makeClasses();else self.el.querySelector('.sendsay-popup').className = self.makeClasses();
+			}, 100);
 		}
 	}]);
 

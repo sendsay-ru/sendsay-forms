@@ -20,6 +20,7 @@
   background: none;
   background-image: none;
   height: auto;
+  -webkit-font-smoothing: antialiased;
 }
 .sendsay-loading {
   -webkit-animation: sendsay-progress-bar-stripes 2s linear infinite;
@@ -47,6 +48,7 @@
 }
 .sendsay-wrapper * {
   box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
 }
 .sendsay-popup.sendsay-left {
   bottom: 50px;
@@ -137,6 +139,7 @@
   outline: none;
   background-color: #fff;
   margin: 0px;
+  -webkit-font-smoothing: antialiased;
 }
 .sendsay-input:focus {
   border-color: #007c99;
@@ -509,8 +512,8 @@
   }
   from {
     opacity: 0;
-    -webkit-transform: translate3d(0, 3000px, 0);
-    transform: translate3d(0, 3000px, 0);
+    -webkit-transform: translate3d(-50%, 3000px, 0);
+    transform: translate3d(-50%, 3000px, 0);
   }
   60% {
     opacity: 1;
