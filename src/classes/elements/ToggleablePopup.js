@@ -189,6 +189,23 @@ export class ToggleablePopup extends Popup {
 			this.setSaneMaxHeight();
 	}
 
+	proceedToNextStep() {
+		let temp, self = this;
+		this.curStep++;
+		if(this.curStep != 0) {
+			temp = this.data.appearance.animation;
+			this.data.appearance.animation = 'none';
+		}
+		this.render();
+		setTimeout(function() {
+				self.data.appearance.animation = temp;
+				if(self.noWrapper)
+					self.el.className = self.makeClasses();
+				else
+					self.el.querySelector('.sendsay-popup').className = self.makeClasses();
+		}, 100);
+	}
+
 
 
 

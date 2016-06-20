@@ -83,7 +83,6 @@ export class Popup extends DOMObject {
 	}
 
 	build() {
-
 		super.build();
 		this.columns = [];
 		let curStep = this.steps[this.curStep];
@@ -253,10 +252,6 @@ export class Popup extends DOMObject {
 			this.data.appearance.animation = 'none';
 		}
 		this.render();
-		setTimeout(function() {
-				self.data.appearance.animation = temp;
-				self.el.className = self.makeClasses();
-		}, 1);
 	}
 
 	onSubmitFail() {

@@ -1587,7 +1587,6 @@ var Popup = exports.Popup = function (_DOMObject) {
 	}, {
 		key: "build",
 		value: function build() {
-
 			_get(Object.getPrototypeOf(Popup.prototype), "build", this).call(this);
 			this.columns = [];
 			var curStep = this.steps[this.curStep];
@@ -1756,10 +1755,6 @@ var Popup = exports.Popup = function (_DOMObject) {
 				this.data.appearance.animation = 'none';
 			}
 			this.render();
-			setTimeout(function () {
-				self.data.appearance.animation = temp;
-				self.el.className = self.makeClasses();
-			}, 1);
 		}
 	}, {
 		key: "onSubmitFail",
