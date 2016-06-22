@@ -389,6 +389,8 @@ var _SingleChoiseField = require("./elements/SingleChoiseField.js");
 
 var _MultipleChoiseField = require("./elements/MultipleChoiseField.js");
 
+var _DateField = require("./elements/DateField.js");
+
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
@@ -433,6 +435,8 @@ var ElementFactory = exports.ElementFactory = function (_Factory) {
 					return new _SingleChoiseField.SingleChoiseField(data, parent);
 				case 'checkboxField':
 					return new _MultipleChoiseField.MultipleChoiseField(data, parent);
+				case 'dateField':
+					return new _DateField.DateField(data, parent);
 				case 'int':
 					return new _NumberField.NumberField(data, parent);
 				case 'free':
@@ -463,7 +467,7 @@ var ElementFactory = exports.ElementFactory = function (_Factory) {
 	return ElementFactory;
 }(Factory);
 
-},{"./elements/Button.js":7,"./elements/Field.js":11,"./elements/ImageElement.js":12,"./elements/MultipleChoiseField.js":13,"./elements/NumberField.js":14,"./elements/SingleChoiseField.js":18,"./elements/Spacer.js":19,"./elements/Text.js":20}],5:[function(require,module,exports){
+},{"./elements/Button.js":7,"./elements/DateField.js":11,"./elements/Field.js":12,"./elements/ImageElement.js":13,"./elements/MultipleChoiseField.js":14,"./elements/NumberField.js":15,"./elements/SingleChoiseField.js":19,"./elements/Spacer.js":20,"./elements/Text.js":21}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -601,7 +605,7 @@ var Form = exports.Form = function () {
 	return Form;
 }();
 
-},{"./ConditionWatcher.js":1,"./Cookies.js":3,"./elements/Popup.js":15,"./elements/PopupBar.js":16,"./elements/ToggleablePopup.js":21}],6:[function(require,module,exports){
+},{"./ConditionWatcher.js":1,"./Cookies.js":3,"./elements/Popup.js":16,"./elements/PopupBar.js":17,"./elements/ToggleablePopup.js":22}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1180,6 +1184,86 @@ var DOMObject = exports.DOMObject = function () {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.DateField = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _Field2 = require('./Field.js');
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var DateField = exports.DateField = function (_Field) {
+    _inherits(DateField, _Field);
+
+    function DateField(data, parent) {
+        _classCallCheck(this, DateField);
+
+        return _possibleConstructorReturn(this, Object.getPrototypeOf(DateField).call(this, data, parent));
+    }
+
+    _createClass(DateField, [{
+        key: 'initialize',
+        value: function initialize() {
+            this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + '<input name="[%qid%]" placeholder="[%placeholder%]" value="[%value%]" type="text" class="sendsay-input"/>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
+            this.baseClass = 'sendsay-field';
+            this.applicableStyles = {
+                'padding-bottom': { param: 'paddingBottom', postfix: 'px' },
+                'padding-top': { param: 'paddingTop', postfix: 'px' },
+                'padding-left': { param: 'paddingLeft', postfix: 'px' },
+                'padding-right': { param: 'paddingRight', postfix: 'px' },
+                'color': { param: 'textColor' }
+            };
+        }
+    }, {
+        key: 'makeSettings',
+        value: function makeSettings() {
+            var field = this.data.field || {},
+                content = this.data.content || {},
+                appearance = this.data.appearance || {},
+                settings = _get(Object.getPrototypeOf(DateField.prototype), 'makeSettings', this).call(this);
+
+            settings.label = this.escapeHTML(content.label || '');
+            settings.placeholder = this.escapeHTML(content.placeholder || '');
+            settings.qid = field.id || field.qid || '';
+            settings.value = field.default || '';
+
+            if (appearance.hidden) {
+                settings.classes += ' sendsay-field-hidden';
+            }
+            if (field.required) {
+                settings.label += '*';
+            }
+
+            return settings;
+        }
+    }, {
+        key: 'validate',
+        value: function validate() {
+            var isValid = _get(Object.getPrototypeOf(DateField.prototype), 'validate', this).call(this);
+            if (isValid) {
+                var value = this.getValue();
+                isValid = !value.match(/[\.xXeE]/) && !isNaN(+value);
+                if (!isValid) this.showErrorMessage("Неверный формат целого числа");
+            }
+            return isValid;
+        }
+    }]);
+
+    return DateField;
+}(_Field2.Field);
+
+},{"./Field.js":12}],12:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 exports.Field = undefined;
@@ -1272,7 +1356,7 @@ var Field = exports.Field = function (_DOMObject) {
 	return Field;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":10}],12:[function(require,module,exports){
+},{"./DOMObject.js":10}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1346,7 +1430,7 @@ var ImageElement = exports.ImageElement = function (_DOMObject) {
 	return ImageElement;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":10}],13:[function(require,module,exports){
+},{"./DOMObject.js":10}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1447,7 +1531,7 @@ var MultipleChoiseField = exports.MultipleChoiseField = function (_Field) {
 	return MultipleChoiseField;
 }(_Field2.Field);
 
-},{"./CheckBox.js":8,"./Field.js":11}],14:[function(require,module,exports){
+},{"./CheckBox.js":8,"./Field.js":12}],15:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1492,7 +1576,7 @@ var NumberField = exports.NumberField = function (_Field) {
 	return NumberField;
 }(_Field2.Field);
 
-},{"./Field.js":11}],15:[function(require,module,exports){
+},{"./Field.js":12}],16:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1845,7 +1929,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 	return Popup;
 }(_DOMObject2.DOMObject);
 
-},{"./../Cookies.js":3,"./../ElementFactory.js":4,"./../MediaQuery.js":6,"./Button.js":7,"./Column.js":9,"./DOMObject.js":10,"./Field.js":11}],16:[function(require,module,exports){
+},{"./../Cookies.js":3,"./../ElementFactory.js":4,"./../MediaQuery.js":6,"./Button.js":7,"./Column.js":9,"./DOMObject.js":10,"./Field.js":12}],17:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1955,7 +2039,7 @@ var PopupBar = exports.PopupBar = function (_Popup) {
 	return PopupBar;
 }(_Popup2.Popup);
 
-},{"./../MediaQuery.js":6,"./Popup.js":15}],17:[function(require,module,exports){
+},{"./../MediaQuery.js":6,"./Popup.js":16}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2059,7 +2143,7 @@ var RadioButton = exports.RadioButton = function (_DOMObject) {
 	return RadioButton;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":10}],18:[function(require,module,exports){
+},{"./DOMObject.js":10}],19:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2146,7 +2230,7 @@ var SingleChoiseField = exports.SingleChoiseField = function (_Field) {
 	return SingleChoiseField;
 }(_Field2.Field);
 
-},{"./Field.js":11,"./RadioButton.js":17}],19:[function(require,module,exports){
+},{"./Field.js":12,"./RadioButton.js":18}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2188,7 +2272,7 @@ var Spacer = exports.Spacer = function (_DOMObject) {
 	return Spacer;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":10}],20:[function(require,module,exports){
+},{"./DOMObject.js":10}],21:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2251,7 +2335,7 @@ var Text = exports.Text = function (_DOMObject) {
 	return Text;
 }(_DOMObject2.DOMObject);
 
-},{"./DOMObject.js":10}],21:[function(require,module,exports){
+},{"./DOMObject.js":10}],22:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2331,7 +2415,8 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 						'flex-direction': 'column',
 						'animation': 'none',
 						'bottom': '50px',
-						'right': '50px'
+						'right': '50px',
+						'border-radius': '0px'
 					},
 					'.sendsay-popup.sendsay-type-widget .sendsay-content': {
 						'display': 'none',
@@ -2477,7 +2562,7 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 	return ToggleablePopup;
 }(_Popup2.Popup);
 
-},{"./../MediaQuery.js":6,"./Popup.js":15,"./Text.js":20}],22:[function(require,module,exports){
+},{"./../MediaQuery.js":6,"./Popup.js":16,"./Text.js":21}],23:[function(require,module,exports){
 "use strict";
 
 var _Popup = require("./classes/elements/Popup.js");
@@ -2547,4 +2632,4 @@ var _Form = require("./classes/Form.js");
 	};
 })();
 
-},{"./classes/Connector.js":2,"./classes/Form.js":5,"./classes/elements/Popup.js":15,"./classes/elements/PopupBar.js":16,"./classes/elements/ToggleablePopup.js":21}]},{},[22,1,2,3,4,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,5,6]);
+},{"./classes/Connector.js":2,"./classes/Form.js":5,"./classes/elements/Popup.js":16,"./classes/elements/PopupBar.js":17,"./classes/elements/ToggleablePopup.js":22}]},{},[23,1,2,3,4,7,8,9,11,10,12,13,14,15,16,17,18,19,20,21,22,5,6]);

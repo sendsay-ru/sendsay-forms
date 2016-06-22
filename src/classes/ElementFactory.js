@@ -6,6 +6,7 @@ import {Spacer} from "./elements/Spacer.js";
 import {ImageElement} from "./elements/ImageElement.js";
 import {SingleChoiseField} from "./elements/SingleChoiseField.js";
 import {MultipleChoiseField} from "./elements/MultipleChoiseField.js";
+import {DateField} from "./elements/DateField.js";
 
 class Factory {
 	constructor() {
@@ -34,6 +35,8 @@ export class ElementFactory extends Factory {
 				return new SingleChoiseField(data, parent);
 			case 'checkboxField':
 				return new MultipleChoiseField(data, parent);
+			case 'dateField':
+				return new DateField(data, parent);
 			case 'int':
 				return new NumberField(data, parent);
 			case 'free':
