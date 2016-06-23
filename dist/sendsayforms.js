@@ -1223,28 +1223,6 @@ var DateField = exports.DateField = function (_Field) {
             };
         }
     }, {
-        key: 'makeSettings',
-        value: function makeSettings() {
-            var field = this.data.field || {},
-                content = this.data.content || {},
-                appearance = this.data.appearance || {},
-                settings = _get(Object.getPrototypeOf(DateField.prototype), 'makeSettings', this).call(this);
-
-            settings.label = this.escapeHTML(content.label || '');
-            settings.placeholder = this.escapeHTML(content.placeholder || '');
-            settings.qid = field.id || field.qid || '';
-            settings.value = field.default || '';
-
-            if (appearance.hidden) {
-                settings.classes += ' sendsay-field-hidden';
-            }
-            if (field.required) {
-                settings.label += '*';
-            }
-
-            return settings;
-        }
-    }, {
         key: 'validate',
         value: function validate() {
             var isValid = _get(Object.getPrototypeOf(DateField.prototype), 'validate', this).call(this);
@@ -2416,11 +2394,7 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 						'animation': 'none',
 						'bottom': '50px',
 						'right': '50px',
-<<<<<<< HEAD
 						'border-radius': '0px !important'
-=======
-						'border-radius': '0px'
->>>>>>> fec4e6ecb1a4b7d58343664a9883ce610b0ec199
 					},
 					'.sendsay-popup.sendsay-type-widget .sendsay-content': {
 						'display': 'none',
