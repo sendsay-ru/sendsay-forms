@@ -43,7 +43,7 @@ import {Form} from "./classes/Form.js";
 		    link.id   = cssId;
 		    link.rel  = 'stylesheet';
 		    link.type = 'text/css';
-		    link.href = 'https://dl.dropbox.com/s/hq9cw3paj4tcube/sendsayforms.css';
+		    link.href = 'https://rawgit.com/sendsay-ru/sendsay-forms/master/dist/sendsayforms.css';
 		    link.media = 'all';
 
 		    var sibling = document.querySelector('#sendsay-generated-sheet');
