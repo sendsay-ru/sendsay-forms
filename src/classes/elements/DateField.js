@@ -21,27 +21,6 @@ export class DateField extends Field {
         };
     }
 
-    makeSettings() {
-        let field = this.data.field || {},
-            content = this.data.content || {},
-            appearance = this.data.appearance || {},
-            settings = super.makeSettings();
-
-        settings.label = this.escapeHTML(content.label || '');
-        settings.placeholder = this.escapeHTML(content.placeholder || '');
-        settings.qid = field.id || field.qid || '';
-        settings.value = field.default || '';
-
-        if (appearance.hidden) {
-            settings.classes += ' sendsay-field-hidden';
-        }
-        if (field.required) {
-            settings.label += '*';
-        }
-
-        return settings;
-    }
-
     validate() {
         let isValid = super.validate();
         if (isValid) {
