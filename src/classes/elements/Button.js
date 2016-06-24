@@ -16,7 +16,9 @@ export class Button extends DOMObject {
 			'background-color': { param: 'backgroundColor' },
 			'border-radius': { param: 'borderRadius', postfix: 'px' },
 			'color': { param: 'textColor'},
-			'line-height': { param: 'lineHeighFt' ,default: 'normal'}
+			'line-height': { param: 'lineHeight', postfix: 'em' ,default: 'normal'},
+			'font-family': { param: 'fontFamily'},
+			'font-size': { param: 'fontSize', postfix: 'px'}
 		};
 		this.wrapperApplStyles = {
 			'padding-bottom': { param: 'paddingBottom', postfix: 'px'},
