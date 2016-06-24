@@ -19,33 +19,108 @@ export class DateField extends Field {
             'padding-right': { param: 'paddingRight', postfix: 'px' },
             'color': { param: 'textColor' }
         };
+        this.accuracy = this.data.content.accuracy;
         this.dateTemplate = 'dd/dd/dddd';
-        switch(this.data.content.accuracy) {
+        switch(this.accuracy) {
             case 'ys':
-                this.dateTemplate = 'dd/dd/dddd dd:dd:dd';
+                this.dateTemplate = 'dd/MM/yyyy hh:mm:ss';
                 break;
             case 'ym':
-                this.dateTemplate = 'dd/dd/dddd dd:dd';
+                this.dateTemplate = 'dd/MM/yyyy hh:mm';
                 break;
             case 'yh':
-                this.dateTemplate = 'dd/dd/dddd dd';
+                this.dateTemplate = 'dd/MM/yyyy hh';
                 break;
             case 'yd':
-                this.dateTemplate = 'dd/dd/dddd';
+                this.dateTemplate = 'dd/MM/yyyy';
                 break;
         }
 
+        this.types = ['d', 'M', 'm', 'y', 'h' ,'s'];
+
+    }
+
+    getValue() {
+        let dateObj = this.extractAndSeparateValue(),
+            accuracy = this.accuracy;
+        let date = '';
+        if(dateObj) {
+            date = this.normalizeValue(dateObj.year, 4) + '-' + this.normalizeValue(dateObj.month, 2) + '-' + this.normalizeValue(dateObj.day, 2);
+            if(accuracy == 'ys' || accuracy == 'ym' || accuracy == 'yh'){
+                date += ' ' + this.normalizeValue(dateObj.hour, 2);
+                if(accuracy == 'ys' || accuracy == 'ym') {
+                    date += ':' + this.normalizeValue(dateObj.minute, 2);
+                    if(accuracy == 'ys') {
+                        date += ':' + this.normalizeValue(dateObj.second, 2);
+                    }
+                }
+            }
+        }
+        return date;
+    }
+
+    normalizeValue(value, length) {
+        if(value === null)
+            return false;
+        let str = '' + value,
+            leng = str.length;
+        for(let i = 0; i < length - leng; i++)
+            str = '0' + str;
+        return str;
     }
 
     validate() {
         let isValid = super.validate();
-        if (isValid) {
-            let value = this.getValue();
-            isValid = !value.match(/[\.xXeE]/) && !isNaN(+value);
-            if (!isValid)
-                this.showErrorMessage("Неверный формат целого числа");
+        let dateObj = this.extractAndSeparateValue();
+        if(dateObj) {
+            let months = [31,29,31,30,31,30,31,31,30,31,30,31];
+            if(!dateObj.year)
+                isValid = false;
+            if(!dateObj.month || dateObj.month < 1 || dateObj.month > 12)
+                isValid = false;
+            if(isValid && (!dateObj.day || dateObj.day < 1 || dateObj.day > months[dateObj.month - 1]))
+                isValid = false;
+            if(['yh', 'ym', 'ys'].indexOf(this.accuracy) !== -1) {
+                if(!dateObj.hour === null || dateObj.hour < 0 || dateObj.hour > 23)
+                    isValid = false;
+                if(['ym', 'ys'].indexOf(this.accuracy) !== -1) {
+                    if(!dateObj.minute === null || dateObj.minute < 0 || dateObj.minute > 59)
+                        isValid = false;
+                    if(this.accuracy == 'ys') {
+                        if(!dateObj.second === null || dateObj.second < 0 || dateObj.second > 59)
+                            isValid = false;
+                    }
+                }
+            }
+        } else 
+            isValid = false;
+        if(!isValid) {
+            this.showErrorMessage("Введена неверная дата")    
         }
         return isValid;
+        
+    }
+
+    extractAndSeparateValue() {
+        let regexStr = this.dateTemplate.replace(/[mMdyhs]/g, '\\d');
+        let rawValue = this.el.querySelector('input').value;
+        if(!rawValue.match(new RegExp(regexStr))) 
+            return false;
+        let template = this.dateTemplate;
+        let year = template.match(/y+/),
+            month = template.match(/M+/),
+            day = template.match(/d+/),
+            hour = template.match(/h+/),
+            minute = template.match(/m+/),
+            second = template.match(/s+/);
+        let dateObj = {};
+        dateObj.year = year && +rawValue.substr(year.index, year[0].length);
+        dateObj.month = month && +rawValue.substr(month.index, month[0].length);
+        dateObj.day = day && +rawValue.substr(day.index, day[0].length);
+        dateObj.hour = hour && +rawValue.substr(hour.index, hour[0].length);
+        dateObj.minute = minute && +rawValue.substr(minute.index, minute[0].length);
+        dateObj.second = second && +rawValue.substr(second.index, second[0].length);
+        return dateObj;
     }
 
     addEvents() {
@@ -117,7 +192,7 @@ export class DateField extends Field {
         event.preventDefault();
         event.stopPropagation();
 
-        this.setCursor( isFull ? start : this.findCursorPosition(event.target.value.split(''), [key], start));
+        this.setCursor( isFull && start == end ? start : this.findCursorPosition(event.target.value.split(''), [key], start));
 
         return false;
     }
@@ -143,7 +218,7 @@ export class DateField extends Field {
         let applied = template;
         let i = 0;
         for(let j = 0; i < parts.length && j < digits.length; i++) {
-            if(parts[i] == 'd') {
+            if(this.types.indexOf(parts[i]) !== -1) {
                 parts[i] = digits[j];
                 j++;
             }
