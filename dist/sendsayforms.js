@@ -715,7 +715,9 @@ var Button = exports.Button = function (_DOMObject) {
 				'background-color': { param: 'backgroundColor' },
 				'border-radius': { param: 'borderRadius', postfix: 'px' },
 				'color': { param: 'textColor' },
-				'line-height': { param: 'lineHeighFt', default: 'normal' }
+				'line-height': { param: 'lineHeight', postfix: 'em', default: 'normal' },
+				'font-family': { param: 'fontFamily' },
+				'font-size': { param: 'fontSize', postfix: 'px' }
 			};
 			this.wrapperApplStyles = {
 				'padding-bottom': { param: 'paddingBottom', postfix: 'px' },
@@ -1221,17 +1223,256 @@ var DateField = exports.DateField = function (_Field) {
                 'padding-right': { param: 'paddingRight', postfix: 'px' },
                 'color': { param: 'textColor' }
             };
+            this.accuracy = this.data.content.accuracy;
+            this.dateTemplate = 'dd/dd/dddd';
+            switch (this.accuracy) {
+                case 'ys':
+                    this.dateTemplate = 'dd/MM/yyyy hh:mm:ss';
+                    break;
+                case 'ym':
+                    this.dateTemplate = 'dd/MM/yyyy hh:mm';
+                    break;
+                case 'yh':
+                    this.dateTemplate = 'dd/MM/yyyy hh';
+                    break;
+                case 'yd':
+                    this.dateTemplate = 'dd/MM/yyyy';
+                    break;
+            }
+
+            this.types = ['d', 'M', 'm', 'y', 'h', 's'];
+        }
+    }, {
+        key: 'getValue',
+        value: function getValue() {
+            var dateObj = this.extractAndSeparateValue(),
+                accuracy = this.accuracy;
+            var date = '';
+            if (dateObj) {
+                date = this.normalizeValue(dateObj.year, 4) + '-' + this.normalizeValue(dateObj.month, 2) + '-' + this.normalizeValue(dateObj.day, 2);
+                if (accuracy == 'ys' || accuracy == 'ym' || accuracy == 'yh') {
+                    date += ' ' + this.normalizeValue(dateObj.hour, 2);
+                    if (accuracy == 'ys' || accuracy == 'ym') {
+                        date += ':' + this.normalizeValue(dateObj.minute, 2);
+                        if (accuracy == 'ys') {
+                            date += ':' + this.normalizeValue(dateObj.second, 2);
+                        }
+                    }
+                }
+            }
+            return date;
+        }
+    }, {
+        key: 'normalizeValue',
+        value: function normalizeValue(value, length) {
+            if (value === null) return false;
+            var str = '' + value,
+                leng = str.length;
+            for (var i = 0; i < length - leng; i++) {
+                str = '0' + str;
+            }return str;
         }
     }, {
         key: 'validate',
         value: function validate() {
             var isValid = _get(Object.getPrototypeOf(DateField.prototype), 'validate', this).call(this);
-            if (isValid) {
-                var value = this.getValue();
-                isValid = !value.match(/[\.xXeE]/) && !isNaN(+value);
-                if (!isValid) this.showErrorMessage("Неверный формат целого числа");
+            var dateObj = this.extractAndSeparateValue();
+            if (dateObj) {
+                var months = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+                if (!dateObj.year) isValid = false;
+                if (!dateObj.month || dateObj.month < 1 || dateObj.month > 12) isValid = false;
+                if (isValid && (!dateObj.day || dateObj.day < 1 || dateObj.day > months[dateObj.month - 1])) isValid = false;
+                if (['yh', 'ym', 'ys'].indexOf(this.accuracy) !== -1) {
+                    if (!dateObj.hour === null || dateObj.hour < 0 || dateObj.hour > 23) isValid = false;
+                    if (['ym', 'ys'].indexOf(this.accuracy) !== -1) {
+                        if (!dateObj.minute === null || dateObj.minute < 0 || dateObj.minute > 59) isValid = false;
+                        if (this.accuracy == 'ys') {
+                            if (!dateObj.second === null || dateObj.second < 0 || dateObj.second > 59) isValid = false;
+                        }
+                    }
+                }
+            } else isValid = false;
+            if (!isValid) {
+                this.showErrorMessage("Введена неверная дата");
             }
             return isValid;
+        }
+    }, {
+        key: 'extractAndSeparateValue',
+        value: function extractAndSeparateValue() {
+            var regexStr = this.dateTemplate.replace(/[mMdyhs]/g, '\\d');
+            var rawValue = this.el.querySelector('input').value;
+            if (!rawValue.match(new RegExp(regexStr))) return false;
+            var template = this.dateTemplate;
+            var year = template.match(/y+/),
+                month = template.match(/M+/),
+                day = template.match(/d+/),
+                hour = template.match(/h+/),
+                minute = template.match(/m+/),
+                second = template.match(/s+/);
+            var dateObj = {};
+            dateObj.year = year && +rawValue.substr(year.index, year[0].length);
+            dateObj.month = month && +rawValue.substr(month.index, month[0].length);
+            dateObj.day = day && +rawValue.substr(day.index, day[0].length);
+            dateObj.hour = hour && +rawValue.substr(hour.index, hour[0].length);
+            dateObj.minute = minute && +rawValue.substr(minute.index, minute[0].length);
+            dateObj.second = second && +rawValue.substr(second.index, second[0].length);
+            return dateObj;
+        }
+    }, {
+        key: 'addEvents',
+        value: function addEvents() {
+            _get(Object.getPrototypeOf(DateField.prototype), 'addEvents', this).call(this);
+            this.addEvent('keypress', 'input', this.handleKeyPress.bind(this));
+            this.addEvent('keydown', 'input', this.handleKeyDown.bind(this));
+            this.addEvent('paste', 'input', this.handlePaste.bind(this));
+            this.addEvent('drop', 'input', this.handleDrop.bind(this));
+        }
+    }, {
+        key: 'handleKeyDown',
+        value: function handleKeyDown(event) {
+            if (event.keyCode !== 8 && event.keyCode !== 46) return true;
+            var valueArr = event.target.value.split('');
+            var start = this.getSelectionStart(),
+                end = this.getSelectionEnd(),
+                key = event.key;
+
+            if (key == 'Backspace') {
+                key = undefined;
+
+                if (start > 0 && start == end) start--;
+            } else if (key == 'Delete') {
+                key = undefined;
+                if (start == end) end++;
+            }
+
+            valueArr.splice(start, end - start);
+
+            this.updateInput(valueArr);
+            event.stopPropagation();
+            event.preventDefault();
+            this.setCursor(start);
+        }
+    }, {
+        key: 'handlePaste',
+        value: function handlePaste(event) {
+
+            var clipboardData, pastedData;
+            clipboardData = event.clipboardData || window.clipboardData;
+            pastedData = clipboardData.getData('Text');
+            var valueArr = event.target.value.split('');
+            var start = this.getSelectionStart(),
+                end = this.getSelectionEnd();
+            valueArr.splice.apply(valueArr, [start, end - start].concat(pastedData.split('')));
+            this.updateInput(valueArr);
+            var pastedArr = pastedData.replace(/[^\d]/g, '').split('');
+            this.setCursor(this.findCursorPosition(event.target.value.split(''), pastedArr, start));
+            event.stopPropagation();
+            event.preventDefault();
+        }
+    }, {
+        key: 'handleKeyPress',
+        value: function handleKeyPress(event) {
+            var isFull = event.target.value.length === this.dateTemplate.length;
+            var start = this.getSelectionStart(),
+                end = this.getSelectionEnd();
+            var valueArr = event.target.value.split(''),
+                key = event.key;
+
+            if (!event.key.match(/\d/)) {
+                key = undefined;
+            }
+
+            valueArr.splice(start, end - start, key);
+            this.updateInput(valueArr);
+            event.preventDefault();
+            event.stopPropagation();
+
+            this.setCursor(isFull && start == end ? start : this.findCursorPosition(event.target.value.split(''), [key], start));
+
+            return false;
+        }
+    }, {
+        key: 'handleDrop',
+        value: function handleDrop(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            return false;
+        }
+    }, {
+        key: 'updateInput',
+        value: function updateInput(formattedArr) {
+            var input = this.el.querySelector('input');
+            var tempValue = formattedArr.join('').replace(/[^\d]/g, ''),
+                res = this.applyDateTemplate(this.dateTemplate, tempValue),
+                delta = res.length - tempValue.length;
+            input.value = res;
+        }
+    }, {
+        key: 'applyDateTemplate',
+        value: function applyDateTemplate(template, rawNumber) {
+            var digits = rawNumber.split('');
+            var parts = template.split('');
+            var applied = template;
+            var i = 0;
+            for (var j = 0; i < parts.length && j < digits.length; i++) {
+                if (this.types.indexOf(parts[i]) !== -1) {
+                    parts[i] = digits[j];
+                    j++;
+                }
+            }
+            parts.splice(i, 1000);
+            return parts.join('');
+        }
+    }, {
+        key: 'countBefore',
+        value: function countBefore(array, regex, index) {
+
+            var count = 0;
+            if (index == undefined) index = 100000;
+            for (var i = 0; i < index && i < array.length; i++) {
+                if (array[i].match(regex)) {
+                    count++;
+                }
+            }
+            return count;
+        }
+    }, {
+        key: 'findCursorPosition',
+        value: function findCursorPosition(valueArr, insertedArr, start) {
+            var i = void 0,
+                j = void 0;
+            for (i = start, j = 0; i < valueArr.length && j < insertedArr.length; i++) {
+                if (valueArr[i] == insertedArr[j]) j++;
+            }
+            return i;
+        }
+    }, {
+        key: 'setCursor',
+        value: function setCursor(position) {
+            var input = this.el.querySelector('input');
+            var value = input.value;
+            if (value.length >= position) {
+                input.setSelectionRange(position, position);
+            }
+        }
+    }, {
+        key: 'getSelectionEnd',
+        value: function getSelectionEnd() {
+            var input = this.el.querySelector('input');
+            return input.selectionEnd;
+        }
+    }, {
+        key: 'getSelectionStart',
+        value: function getSelectionStart() {
+            var input = this.el.querySelector('input');
+            return input.selectionStart;
+        }
+    }, {
+        key: 'selection',
+        value: function selection() {
+            var selection = window.getSelection() || document.getSelection();
         }
     }]);
 
