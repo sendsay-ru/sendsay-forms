@@ -1291,16 +1291,16 @@ var DateField = exports.DateField = function (_Field) {
             this.dateTemplate = 'dd/dd/dddd';
             switch (this.accuracy) {
                 case 'ys':
-                    this.dateTemplate = 'dd/MM/yyyy hh:mm:ss';
+                    this.dateTemplate = 'dd.MM.yyyy hh:mm:ss';
                     break;
                 case 'ym':
-                    this.dateTemplate = 'dd/MM/yyyy hh:mm';
+                    this.dateTemplate = 'dd.MM.yyyy hh:mm';
                     break;
                 case 'yh':
-                    this.dateTemplate = 'dd/MM/yyyy hh';
+                    this.dateTemplate = 'dd.MM.yyyy hh';
                     break;
                 case 'yd':
-                    this.dateTemplate = 'dd/MM/yyyy';
+                    this.dateTemplate = 'dd.MM.yyyy';
                     break;
             }
 
