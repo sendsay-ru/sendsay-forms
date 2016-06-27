@@ -1,3 +1,5 @@
+import {SendsayPromise} from "./SendsayPromise.js";
+
 export class Connector {
 
 	constructor(url) {
@@ -41,7 +43,7 @@ export class Connector {
 		this.request = new XMLHttpRequest();
 		this.request.open('GET', this.url, true);
 		this.request.setRequestHeader('Content-Type', 'application/json');
-		return (new Promise(this.promiseHandler.bind(this))).then(this.handleLoadSuccess.bind(this),
+		return (new SendsayPromise(this.promiseHandler.bind(this))).then(this.handleLoadSuccess.bind(this),
 																	this.handleLoadFail.bind(this));
 	}
 

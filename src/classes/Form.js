@@ -62,6 +62,7 @@ export class Form {
 		let watcher = new ConditionWatcher(conditions, id);
 
 		watcher.watch().then(function() {
+			console.log('showing');
 			switch(data.type) {
 				case 'popup':
 					self.domConstructor = Popup;

@@ -1,4 +1,5 @@
 import {Cookies} from "./Cookies.js";
+import {SendsayPromise} from "./SendsayPromise.js";
 
 export class ConditionWatcher {
 
@@ -17,7 +18,7 @@ export class ConditionWatcher {
 	}
 
 	watch() {
-		return (new Promise(this.promiseCore.bind(this)));
+		return (new SendsayPromise(this.promiseCore.bind(this)));
 	}
 
 	promiseCore(resolve, reject) {
