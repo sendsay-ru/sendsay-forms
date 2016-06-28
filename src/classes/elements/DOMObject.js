@@ -18,6 +18,10 @@ export class DOMObject {
 	    return escape.innerHTML;
 	}
 
+	escapeStyle(style) {
+		return style.replace(/"/g, "'");
+	}
+
 	initialize() {
 
 		this.template = '<div></div>';

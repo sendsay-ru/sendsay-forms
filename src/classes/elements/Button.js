@@ -45,8 +45,9 @@ export class Button extends DOMObject {
 	}
 
 	makeStyles() {
-		let styleObj = super.makeStyles(),
-			data = this.data.appearance || {};
+		let data = this.data.appearance || {};
+		data.fontFamily = this.escapeStyle(data.fontFamily);
+		let styleObj = super.makeStyles();
 		if(data.align === 'justify')
 			styleObj.width = '100%';
 		return styleObj;
