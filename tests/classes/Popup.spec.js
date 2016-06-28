@@ -17,6 +17,7 @@ describe("Popup.spec.js", function() {
      "content":{  
         "endDialogMessage":"Спасибо за заполнение формы!"
      },
+     "steps": [ {
      "columns": [ {
      "elements":[  
         {  
@@ -131,7 +132,7 @@ describe("Popup.spec.js", function() {
         }
      ]
       }
-      ],
+      ]}],
      "active":true
   }
 
