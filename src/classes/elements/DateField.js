@@ -43,6 +43,7 @@ export class DateField extends Field {
     getValue() {
         let dateObj = this.extractAndSeparateValue(),
             accuracy = this.accuracy;
+
         let date = '';
         if(dateObj) {
             date = this.normalizeValue(dateObj.year, 4) + '-' + this.normalizeValue(dateObj.month, 2) + '-' + this.normalizeValue(dateObj.day, 2);
@@ -61,7 +62,7 @@ export class DateField extends Field {
 
     normalizeValue(value, length) {
         if(value === null)
-            return false;
+            return '00';
         let str = '' + value,
             leng = str.length;
         for(let i = 0; i < length - leng; i++)
@@ -72,7 +73,10 @@ export class DateField extends Field {
     validate() {
         let isValid = super.validate();
         let dateObj = this.extractAndSeparateValue();
-        if(dateObj) {
+        let rawValue = this.el.querySelector('input').value;
+        if(!rawValue[rawValue.length-1].match(/[0-9]/))
+            isValid = false;
+        if(isValid && dateObj) {
             let months = [31,29,31,30,31,30,31,31,30,31,30,31];
             if(!dateObj.year)
                 isValid = false;
@@ -81,13 +85,13 @@ export class DateField extends Field {
             if(isValid && (!dateObj.day || dateObj.day < 1 || dateObj.day > months[dateObj.month - 1]))
                 isValid = false;
             if(['yh', 'ym', 'ys'].indexOf(this.accuracy) !== -1) {
-                if(!dateObj.hour === null || dateObj.hour < 0 || dateObj.hour > 23)
+                if(dateObj.hour !== null && (dateObj.hour < 0 || dateObj.hour > 23))
                     isValid = false;
                 if(['ym', 'ys'].indexOf(this.accuracy) !== -1) {
-                    if(!dateObj.minute === null || dateObj.minute < 0 || dateObj.minute > 59)
+                    if(dateObj.minute !== null && (dateObj.minute < 0 || dateObj.minute > 59))
                         isValid = false;
                     if(this.accuracy == 'ys') {
-                        if(!dateObj.second === null || dateObj.second < 0 || dateObj.second > 59)
+                        if(dateObj.second !== null && (dateObj.second < 0 || dateObj.second > 59))
                             isValid = false;
                     }
                 }
@@ -102,10 +106,7 @@ export class DateField extends Field {
     }
 
     extractAndSeparateValue() {
-        let regexStr = this.dateTemplate.replace(/[mMdyhs]/g, '\\d');
         let rawValue = this.el.querySelector('input').value;
-        if(!rawValue.match(new RegExp(regexStr))) 
-            return false;
         let template = this.dateTemplate;
         let year = template.match(/y+/),
             month = template.match(/M+/),
@@ -120,6 +121,8 @@ export class DateField extends Field {
         dateObj.hour = hour && +rawValue.substr(hour.index, hour[0].length);
         dateObj.minute = minute && +rawValue.substr(minute.index, minute[0].length);
         dateObj.second = second && +rawValue.substr(second.index, second[0].length);
+        for(let key in dateObj)
+            dateObj[key] = dateObj[key] || null; 
         return dateObj;
     }
 
