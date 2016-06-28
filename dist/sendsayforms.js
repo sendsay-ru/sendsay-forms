@@ -186,6 +186,7 @@ var Connector = exports.Connector = function () {
 			this.request = new XMLHttpRequest();
 			this.request.open('GET', this.url, true);
 			this.request.setRequestHeader('Content-Type', 'application/json');
+			this.request.setRequestHeader('Accept', 'application/json');
 			return new _SendsayPromise.SendsayPromise(this.promiseHandler.bind(this)).then(this.handleLoadSuccess.bind(this), this.handleLoadFail.bind(this));
 		}
 	}, {
@@ -250,6 +251,7 @@ var Connector = exports.Connector = function () {
 			this.request = new XMLHttpRequest();
 			this.request.open('POST', this.url, true);
 			this.request.setRequestHeader('Content-Type', 'application/json');
+			this.request.setRequestHeader('Accept', 'application/json');
 			this.request.onReady = this.handleSubmitResult;
 
 			this.params = JSON.stringify(params);
@@ -812,8 +814,9 @@ var Button = exports.Button = function (_DOMObject) {
 	}, {
 		key: 'makeStyles',
 		value: function makeStyles() {
-			var styleObj = _get(Object.getPrototypeOf(Button.prototype), 'makeStyles', this).call(this),
-			    data = this.data.appearance || {};
+			var data = this.data.appearance || {};
+			data.fontFamily = this.escapeStyle(data.fontFamily);
+			var styleObj = _get(Object.getPrototypeOf(Button.prototype), 'makeStyles', this).call(this);
 			if (data.align === 'justify') styleObj.width = '100%';
 			return styleObj;
 		}
@@ -1082,6 +1085,11 @@ var DOMObject = exports.DOMObject = function () {
 			return escape.innerHTML;
 		}
 	}, {
+		key: 'escapeStyle',
+		value: function escapeStyle(style) {
+			return style.replace(/"/g, "'");
+		}
+	}, {
 		key: 'initialize',
 		value: function initialize() {
 
@@ -1311,6 +1319,7 @@ var DateField = exports.DateField = function (_Field) {
         value: function getValue() {
             var dateObj = this.extractAndSeparateValue(),
                 accuracy = this.accuracy;
+
             var date = '';
             if (dateObj) {
                 date = this.normalizeValue(dateObj.year, 4) + '-' + this.normalizeValue(dateObj.month, 2) + '-' + this.normalizeValue(dateObj.day, 2);
@@ -1329,7 +1338,7 @@ var DateField = exports.DateField = function (_Field) {
     }, {
         key: 'normalizeValue',
         value: function normalizeValue(value, length) {
-            if (value === null) return false;
+            if (value === null) return '00';
             var str = '' + value,
                 leng = str.length;
             for (var i = 0; i < length - leng; i++) {
@@ -1341,17 +1350,19 @@ var DateField = exports.DateField = function (_Field) {
         value: function validate() {
             var isValid = _get(Object.getPrototypeOf(DateField.prototype), 'validate', this).call(this);
             var dateObj = this.extractAndSeparateValue();
-            if (dateObj) {
+            var rawValue = this.el.querySelector('input').value;
+            if (!rawValue[rawValue.length - 1].match(/[0-9]/)) isValid = false;
+            if (isValid && dateObj) {
                 var months = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
                 if (!dateObj.year) isValid = false;
                 if (!dateObj.month || dateObj.month < 1 || dateObj.month > 12) isValid = false;
                 if (isValid && (!dateObj.day || dateObj.day < 1 || dateObj.day > months[dateObj.month - 1])) isValid = false;
                 if (['yh', 'ym', 'ys'].indexOf(this.accuracy) !== -1) {
-                    if (!dateObj.hour === null || dateObj.hour < 0 || dateObj.hour > 23) isValid = false;
+                    if (dateObj.hour !== null && (dateObj.hour < 0 || dateObj.hour > 23)) isValid = false;
                     if (['ym', 'ys'].indexOf(this.accuracy) !== -1) {
-                        if (!dateObj.minute === null || dateObj.minute < 0 || dateObj.minute > 59) isValid = false;
+                        if (dateObj.minute !== null && (dateObj.minute < 0 || dateObj.minute > 59)) isValid = false;
                         if (this.accuracy == 'ys') {
-                            if (!dateObj.second === null || dateObj.second < 0 || dateObj.second > 59) isValid = false;
+                            if (dateObj.second !== null && (dateObj.second < 0 || dateObj.second > 59)) isValid = false;
                         }
                     }
                 }
@@ -1364,9 +1375,7 @@ var DateField = exports.DateField = function (_Field) {
     }, {
         key: 'extractAndSeparateValue',
         value: function extractAndSeparateValue() {
-            var regexStr = this.dateTemplate.replace(/[mMdyhs]/g, '\\d');
             var rawValue = this.el.querySelector('input').value;
-            if (!rawValue.match(new RegExp(regexStr))) return false;
             var template = this.dateTemplate;
             var year = template.match(/y+/),
                 month = template.match(/M+/),
@@ -1381,7 +1390,9 @@ var DateField = exports.DateField = function (_Field) {
             dateObj.hour = hour && +rawValue.substr(hour.index, hour[0].length);
             dateObj.minute = minute && +rawValue.substr(minute.index, minute[0].length);
             dateObj.second = second && +rawValue.substr(second.index, second[0].length);
-            return dateObj;
+            for (var key in dateObj) {
+                dateObj[key] = dateObj[key] || null;
+            }return dateObj;
         }
     }, {
         key: 'addEvents',
