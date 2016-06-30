@@ -79,6 +79,10 @@ export class Popup extends DOMObject {
 		this.general = {};
 		this.general.appearance = {}
 		this.general.appearance.textColor = this.data.appearance.textColor;
+		this.general.appearance.labelTextColor = this.data.appearance.labelTextColor;
+		this.general.appearance.labelFontSize = this.data.appearance.labelFontSize;
+		this.general.appearance.labelFontFamily = this.escapeStyle(this.data.appearance.labelFontFamily);
+
 
 	}
 
