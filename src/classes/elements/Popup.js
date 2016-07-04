@@ -112,8 +112,8 @@ export class Popup extends DOMObject {
 		let self = this;
 
 		this.addEvent('DOMNodeRemovedFromDocument', function() {
-			if(self.mediaQuery) {
-				document.head.removeChild(self.mediaQuery.el);
+			if (self.mediaQuery) {
+				self.mediaQuery.el.remove();
 			}
 		});
 		if(!this.noWrapper) {

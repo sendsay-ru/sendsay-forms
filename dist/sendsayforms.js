@@ -2005,7 +2005,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 
 			this.addEvent('DOMNodeRemovedFromDocument', function () {
 				if (self.mediaQuery) {
-					document.head.removeChild(self.mediaQuery.el);
+					self.mediaQuery.el.remove();
 				}
 			});
 			if (!this.noWrapper) {
