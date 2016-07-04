@@ -119,14 +119,15 @@
   display: block;
 }
 .sendsay-label {
-  font-size: 12px;
+  font-size: inherit;
+  color: inherit;
   display: block;
   padding-bottom: 4px;
-  font-family: 'Open Sans', 'Arial', sans-serif;
+  font-family: inherit;
   word-break: break-word;
 }
 .sendsay-input {
-  font-family: 'Open Sans', 'Arial', sans-serif;
+  font-family: inherit;
   font-size: 13px;
   font-weight: 400;
   display: block;
@@ -152,7 +153,6 @@
   cursor: pointer;
   text-align: center;
   vertical-align: middle;
-  white-space: nowrap;
   border: none;
   border-radius: 2px;
   outline: none;
