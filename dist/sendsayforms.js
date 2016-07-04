@@ -1593,7 +1593,9 @@ var Field = exports.Field = function (_DOMObject) {
 				'padding-top': { param: 'paddingTop', postfix: 'px' },
 				'padding-left': { param: 'paddingLeft', postfix: 'px' },
 				'padding-right': { param: 'paddingRight', postfix: 'px' },
-				'color': { param: 'textColor' }
+				'color': { param: 'labelTextColor' },
+				'font-family': { param: 'labelFontFamily' },
+				'font-size': { param: 'labelFontSize', postfix: 'px' }
 			};
 		}
 	}, {
@@ -1971,6 +1973,9 @@ var Popup = exports.Popup = function (_DOMObject) {
 			this.general = {};
 			this.general.appearance = {};
 			this.general.appearance.textColor = this.data.appearance.textColor;
+			this.general.appearance.labelTextColor = this.data.appearance.labelTextColor;
+			this.general.appearance.labelFontSize = this.data.appearance.labelFontSize;
+			this.general.appearance.labelFontFamily = this.escapeStyle(this.data.appearance.labelFontFamily);
 		}
 	}, {
 		key: "build",
@@ -2327,6 +2332,9 @@ var PopupBar = exports.PopupBar = function (_Popup) {
 			this.general = {};
 			this.general.appearance = {};
 			this.general.appearance.textColor = this.data.appearance.textColor;
+			this.general.appearance.labelTextColor = this.data.appearance.labelTextColor;
+			this.general.appearance.labelFontSize = this.data.appearance.labelFontSize;
+			this.general.appearance.labelFontFamily = this.escapeStyle(this.data.appearance.labelFontFamily);
 		}
 	}]);
 
@@ -2751,6 +2759,9 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 			this.general = {};
 			this.general.appearance = {};
 			this.general.appearance.textColor = this.data.appearance.textColor;
+			this.general.appearance.labelTextColor = this.data.appearance.labelTextColor;
+			this.general.appearance.labelFontSize = this.data.appearance.labelFontSize;
+			this.general.appearance.labelFontFamily = this.escapeStyle(this.data.appearance.labelFontFamily);
 		}
 	}, {
 		key: "makeSettings",
@@ -2926,4 +2937,4 @@ var _Form = require("./classes/Form.js");
 	};
 })();
 
-},{"./classes/Connector.js":2,"./classes/Form.js":5,"./classes/elements/Popup.js":17,"./classes/elements/PopupBar.js":18,"./classes/elements/ToggleablePopup.js":23}]},{},[24,1,2,3,4,8,9,10,12,11,13,14,15,16,17,18,19,20,21,22,23,5,6,7]);
+},{"./classes/Connector.js":2,"./classes/Form.js":5,"./classes/elements/Popup.js":17,"./classes/elements/PopupBar.js":18,"./classes/elements/ToggleablePopup.js":23}]},{},[24,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]);
