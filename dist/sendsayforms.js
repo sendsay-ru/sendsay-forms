@@ -1351,7 +1351,7 @@ var DateField = exports.DateField = function (_Field) {
             var isValid = _get(Object.getPrototypeOf(DateField.prototype), 'validate', this).call(this);
             var dateObj = this.extractAndSeparateValue();
             var rawValue = this.el.querySelector('input').value;
-            if (!rawValue[rawValue.length - 1].match(/[0-9]/)) isValid = false;
+            if (!rawValue || !rawValue[rawValue.length - 1].match(/[0-9]/)) isValid = false;
             if (isValid && dateObj) {
                 var months = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
                 if (!dateObj.year) isValid = false;

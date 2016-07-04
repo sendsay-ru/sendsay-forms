@@ -74,7 +74,7 @@ export class DateField extends Field {
         let isValid = super.validate();
         let dateObj = this.extractAndSeparateValue();
         let rawValue = this.el.querySelector('input').value;
-        if(!rawValue[rawValue.length-1].match(/[0-9]/))
+        if(!rawValue || !rawValue[rawValue.length-1].match(/[0-9]/))
             isValid = false;
         if(isValid && dateObj) {
             let months = [31,29,31,30,31,30,31,31,30,31,30,31];
