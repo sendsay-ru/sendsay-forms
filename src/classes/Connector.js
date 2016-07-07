@@ -42,7 +42,6 @@ export class Connector {
 			return;
 		this.request = new XMLHttpRequest();
 		this.request.open('GET', this.url, true);
-		this.request.setRequestHeader('Content-Type', 'application/json');
 		this.request.setRequestHeader('Accept', 'application/json');
 		return (new SendsayPromise(this.promiseHandler.bind(this))).then(this.handleLoadSuccess.bind(this),
 																	this.handleLoadFail.bind(this));
