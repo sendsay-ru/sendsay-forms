@@ -17,7 +17,12 @@ export class MultipleChoiseField extends Field {
 						'</div>';
 		this.curValues = this.data.field.default || [];
 		this.baseClass = 'sendsay-field';
-		this.handleChangeValue = this.handleChangeValue.bind(this);		
+		this.handleChangeValue = this.handleChangeValue.bind(this);
+		this.applicableStyles = {
+			'color': { param: 'labelTextColor'},
+			'font-family': { param: 'labelFontFamily'},
+			'font-size': { param: 'labelFontSize', postfix: 'px'}
+		};		
 	}
 
 	build() {
