@@ -18,6 +18,11 @@ export class SingleChoiseField extends Field {
 		this.curValue = field.default || '';
 		this.baseClass = 'sendsay-field';
 		this.handleChangeValue = this.handleChangeValue.bind(this);
+		this.applicableStyles = {
+			'color': { param: 'labelTextColor'},
+			'font-family': { param: 'labelFontFamily'},
+			'font-size': { param: 'labelFontSize', postfix: 'px'}
+		};
 	}
 
 	build() {

@@ -17,7 +17,9 @@ export class DateField extends Field {
             'padding-top': { param: 'paddingTop', postfix: 'px' },
             'padding-left': { param: 'paddingLeft', postfix: 'px' },
             'padding-right': { param: 'paddingRight', postfix: 'px' },
-            'color': { param: 'textColor' }
+            'color': { param: 'labelTextColor'},
+            'font-family': { param: 'labelFontFamily'},
+            'font-size': { param: 'labelFontSize', postfix: 'px'}
         };
         this.accuracy = this.data.content.accuracy;
         this.dateTemplate = 'dd/dd/dddd';
