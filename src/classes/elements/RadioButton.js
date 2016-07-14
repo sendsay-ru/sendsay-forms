@@ -16,8 +16,10 @@ export class RadioButton extends DOMObject {
 		this.handleChange = this.handleChange.bind(this);
 		this.handleClick = this.handleClick.bind(this);
 		this.applicableStyles = {
-			'color': { param: 'textColor'}
-		};	
+			'color': { param: 'labelTextColor'},
+			'font-family': { param: 'labelFontFamily'},
+			'font-size': { param: 'labelFontSize', postfix: 'px'}
+		};
 	}
 
 	build() {
