@@ -1292,7 +1292,9 @@ var DateField = exports.DateField = function (_Field) {
                 'padding-top': { param: 'paddingTop', postfix: 'px' },
                 'padding-left': { param: 'paddingLeft', postfix: 'px' },
                 'padding-right': { param: 'paddingRight', postfix: 'px' },
-                'color': { param: 'textColor' }
+                'color': { param: 'labelTextColor' },
+                'font-family': { param: 'labelFontFamily' },
+                'font-size': { param: 'labelFontSize', postfix: 'px' }
             };
             this.accuracy = this.data.content.accuracy;
             this.dateTemplate = 'dd/dd/dddd';
@@ -1764,6 +1766,11 @@ var MultipleChoiseField = exports.MultipleChoiseField = function (_Field) {
 			this.curValues = this.data.field.default || [];
 			this.baseClass = 'sendsay-field';
 			this.handleChangeValue = this.handleChangeValue.bind(this);
+			this.applicableStyles = {
+				'color': { param: 'labelTextColor' },
+				'font-family': { param: 'labelFontFamily' },
+				'font-size': { param: 'labelFontSize', postfix: 'px' }
+			};
 		}
 	}, {
 		key: "build",
@@ -2484,6 +2491,11 @@ var SingleChoiseField = exports.SingleChoiseField = function (_Field) {
 			this.curValue = field.default || '';
 			this.baseClass = 'sendsay-field';
 			this.handleChangeValue = this.handleChangeValue.bind(this);
+			this.applicableStyles = {
+				'color': { param: 'labelTextColor' },
+				'font-family': { param: 'labelFontFamily' },
+				'font-size': { param: 'labelFontSize', postfix: 'px' }
+			};
 		}
 	}, {
 		key: "build",
