@@ -21,8 +21,6 @@ export class Popup extends DOMObject {
 		this.steps = this.data.steps;
 		this.curStep = 0;
 		this.gainedData = {};
-
-
 		this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]" style="[%overlayStyles%]">' : '') +
 						'<div class = "[%classes%]" style="[%style%]"">' +
 							'<div class = "sendsay-close">×</div>' +
@@ -81,8 +79,7 @@ export class Popup extends DOMObject {
 		this.general.appearance.textColor = this.data.appearance.textColor;
 		this.general.appearance.labelTextColor = this.data.appearance.labelTextColor;
 		this.general.appearance.labelFontSize = this.data.appearance.labelFontSize;
-		console.log(this.data);
-		// this.general.appearance.labelFontFamily = this.escapeStyle(this.data.appearance.labelFontFamily);
+		this.general.appearance.labelFontFamily = this.escapeStyle(this.data.appearance.labelFontFamily);
 
 
 	}
