@@ -7,11 +7,11 @@ export class ConditionWatcher {
 		this.globCond = rawConditions;
 		let conditions = this.conditions = rawConditions.showCondition;
 		this.id = formID;
-
 		this.instant = conditions.instant != undefined ? conditions.instant : true;
 		this.pageScroll = +conditions.onPageScroll || 0;
 		this.onLeave = conditions.onLeave || false;
 		this.delay = +conditions.delay || 0;
+		this.active = rawConditions.active;
 
 		this.leaveWatcher = this.leaveWatcher.bind(this);
 		this.scrollWatcher = this.scrollWatcher.bind(this);
@@ -25,6 +25,11 @@ export class ConditionWatcher {
 		this.resolve = resolve;
 		this.reject = reject;
 		this.isDone = false;
+
+		if(!this.active) {
+			reject();
+			return;
+		}
 
 		if(this.isRejectByCookie()) {
 			reject();
