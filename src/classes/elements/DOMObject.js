@@ -19,7 +19,8 @@ export class DOMObject {
 	}
 
 	escapeStyle(style) {
-		return style.replace(/"/g, "'");
+		if(this.style)
+			return style.replace(/"/g, "'");
 	}
 
 	initialize() {
