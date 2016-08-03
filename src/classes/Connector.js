@@ -57,55 +57,6 @@ export class Connector {
 				this.data.active = true;
 			return;
 		};
-		this.data = {
-			endDialogMessage: 'Спасибо за заполнение формы!',
-			elements: [
-				{
-					type: 'text',
-					text: '<div style="font-size: 16px; padding-bottom: 10px; font-weight: bold;">Подписка на рассылку</div>'
-				}
-			],
-			id: this.id
-		};
-
-		this.data.active = json.state == '1' || false;
-		if(json.fields) {
-			let fields = json.fields;
-			for(var key in fields) {
-				let field = fields[key];
-				if(field.type !== 'submit') {
-					this.data.elements.push({
-						type: field.type == 'text' ? 'field' : field.type,
-						field: {
-							id: field.name,
-							required: field.required == '1',
-							answers: field.answers,
-							order: field.order
-						},
-						content: {
-							label: field.label
-						},
-						appearance: {
-							hidden: field.hidden
-						},
-						subtype: field['data_type']
-						
-					});
-				}
-			}
-			this.data.elements.push({
-					type: 'button',
-					content: {
-						text: 'Подписаться',
-					},
-					appearance: {
-						align: 'justify'
-					}
-				});
-		}
-		if(json.name)
-			this.data.title = json.name;
-
 	}
 
 	submit(params) {
