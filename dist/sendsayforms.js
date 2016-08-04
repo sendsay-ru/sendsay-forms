@@ -21,11 +21,11 @@ var ConditionWatcher = exports.ConditionWatcher = function () {
 		this.globCond = rawConditions;
 		var conditions = this.conditions = rawConditions.showCondition;
 		this.id = formID;
-
 		this.instant = conditions.instant != undefined ? conditions.instant : true;
 		this.pageScroll = +conditions.onPageScroll || 0;
 		this.onLeave = conditions.onLeave || false;
 		this.delay = +conditions.delay || 0;
+		this.active = rawConditions.active;
 
 		this.leaveWatcher = this.leaveWatcher.bind(this);
 		this.scrollWatcher = this.scrollWatcher.bind(this);
@@ -42,6 +42,11 @@ var ConditionWatcher = exports.ConditionWatcher = function () {
 			this.resolve = resolve;
 			this.reject = reject;
 			this.isDone = false;
+
+			if (!this.active) {
+				reject();
+				return;
+			}
 
 			if (this.isRejectByCookie()) {
 				reject();
@@ -197,51 +202,6 @@ var Connector = exports.Connector = function () {
 				if (json.obj.state && +json.obj.state === 1) this.data.active = true;
 				return;
 			};
-			this.data = {
-				endDialogMessage: 'Спасибо за заполнение формы!',
-				elements: [{
-					type: 'text',
-					text: '<div style="font-size: 16px; padding-bottom: 10px; font-weight: bold;">Подписка на рассылку</div>'
-				}],
-				id: this.id
-			};
-
-			this.data.active = json.state == '1' || false;
-			if (json.fields) {
-				var fields = json.fields;
-				for (var key in fields) {
-					var field = fields[key];
-					if (field.type !== 'submit') {
-						this.data.elements.push({
-							type: field.type == 'text' ? 'field' : field.type,
-							field: {
-								id: field.name,
-								required: field.required == '1',
-								answers: field.answers,
-								order: field.order
-							},
-							content: {
-								label: field.label
-							},
-							appearance: {
-								hidden: field.hidden
-							},
-							subtype: field['data_type']
-
-						});
-					}
-				}
-				this.data.elements.push({
-					type: 'button',
-					content: {
-						text: 'Подписаться'
-					},
-					appearance: {
-						align: 'justify'
-					}
-				});
-			}
-			if (json.name) this.data.title = json.name;
 		}
 	}, {
 		key: 'submit',
@@ -1088,7 +1048,7 @@ var DOMObject = exports.DOMObject = function () {
 	}, {
 		key: 'escapeStyle',
 		value: function escapeStyle(style) {
-			return style.replace(/"/g, "'");
+			if (this.style) return style.replace(/"/g, "'");
 		}
 	}, {
 		key: 'initialize',
@@ -2951,4 +2911,4 @@ var _Form = require("./classes/Form.js");
 	};
 })();
 
-},{"./classes/Connector.js":2,"./classes/Form.js":5,"./classes/elements/Popup.js":17,"./classes/elements/PopupBar.js":18,"./classes/elements/ToggleablePopup.js":23}]},{},[24,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]);
+},{"./classes/Connector.js":2,"./classes/Form.js":5,"./classes/elements/Popup.js":17,"./classes/elements/PopupBar.js":18,"./classes/elements/ToggleablePopup.js":23}]},{},[24,1,2,3,4,8,9,10,12,11,13,14,15,16,17,18,19,20,21,22,23,5,6,7]);
