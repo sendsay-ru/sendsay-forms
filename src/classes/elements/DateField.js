@@ -45,7 +45,9 @@ export class DateField extends Field {
     getValue() {
         let dateObj = this.extractAndSeparateValue(),
             accuracy = this.accuracy;
-
+        if (dateObj === '') {
+            return '';
+        }
         let date = '';
         if(dateObj) {
             date = this.normalizeValue(dateObj.year, 4) + '-' + this.normalizeValue(dateObj.month, 2) + '-' + this.normalizeValue(dateObj.day, 2);
@@ -76,6 +78,9 @@ export class DateField extends Field {
         let isValid = super.validate();
         let dateObj = this.extractAndSeparateValue();
         let rawValue = this.el.querySelector('input').value;
+        if (rawValue.trim() === '') {
+            return true;
+        }
         if(!rawValue || !rawValue[rawValue.length-1].match(/[0-9]/))
             isValid = false;
         if(isValid && dateObj) {
@@ -109,6 +114,9 @@ export class DateField extends Field {
 
     extractAndSeparateValue() {
         let rawValue = this.el.querySelector('input').value;
+        if (rawValue.trim() === '') {
+            return '';
+        }
         let template = this.dateTemplate;
         let year = template.match(/y+/),
             month = template.match(/M+/),

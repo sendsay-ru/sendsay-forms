@@ -226,7 +226,8 @@ export class Popup extends DOMObject {
 			for(let i = 0; i < elements.length; i++) {
 				let element = elements[i];
 				if(element instanceof Field ) {
-					data[element.data.field.id || element.data.field.qid] = element.getValue();
+					// if(element.getValue() !== '') 
+						data[element.data.field.id || element.data.field.qid] = element.getValue();
 					isValid = element.validate() && isValid;
 				}
 				if(element instanceof Button) {
