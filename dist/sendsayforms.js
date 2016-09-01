@@ -2910,7 +2910,9 @@ var _Form = require("./classes/Form.js");
 			}
 			link.addEventListener('load', callback);
 		} else {
-			callback();
+			if (typeof callback === 'function') {
+				callback();
+			}
 		}
 	};
 	window.SENDSAY = {

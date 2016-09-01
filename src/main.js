@@ -52,7 +52,9 @@ import {Form} from "./classes/Form.js";
 		    }
 		    link.addEventListener('load', callback);
 		} else {
-			callback();
+			if (typeof callback === 'function') {
+				callback();
+			}
 		}
 	} 
 	window.SENDSAY = {
