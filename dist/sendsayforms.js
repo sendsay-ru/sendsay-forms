@@ -1282,7 +1282,9 @@ var DateField = exports.DateField = function (_Field) {
         value: function getValue() {
             var dateObj = this.extractAndSeparateValue(),
                 accuracy = this.accuracy;
-
+            if (dateObj === '') {
+                return '';
+            }
             var date = '';
             if (dateObj) {
                 date = this.normalizeValue(dateObj.year, 4) + '-' + this.normalizeValue(dateObj.month, 2) + '-' + this.normalizeValue(dateObj.day, 2);
@@ -1314,6 +1316,9 @@ var DateField = exports.DateField = function (_Field) {
             var isValid = _get(Object.getPrototypeOf(DateField.prototype), 'validate', this).call(this);
             var dateObj = this.extractAndSeparateValue();
             var rawValue = this.el.querySelector('input').value;
+            if (rawValue.trim() === '') {
+                return true;
+            }
             if (!rawValue || !rawValue[rawValue.length - 1].match(/[0-9]/)) isValid = false;
             if (isValid && dateObj) {
                 var months = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -1339,6 +1344,9 @@ var DateField = exports.DateField = function (_Field) {
         key: 'extractAndSeparateValue',
         value: function extractAndSeparateValue() {
             var rawValue = this.el.querySelector('input').value;
+            if (rawValue.trim() === '') {
+                return '';
+            }
             var template = this.dateTemplate;
             var year = template.match(/y+/),
                 month = template.match(/M+/),
@@ -2085,6 +2093,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 				for (var i = 0; i < elements.length; i++) {
 					var element = elements[i];
 					if (element instanceof _Field.Field) {
+						// if(element.getValue() !== '') 
 						data[element.data.field.id || element.data.field.qid] = element.getValue();
 						isValid = element.validate() && isValid;
 					}
