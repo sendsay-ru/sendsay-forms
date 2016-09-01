@@ -16,7 +16,7 @@ import {Form} from "./classes/Form.js";
 	};
 
 	var showPopup = function(data, options) {
-		//loadCss();
+		loadCss();
 		var domConstructor;
 		switch(data.type) {
 			case 'popup':
@@ -35,15 +35,13 @@ import {Form} from "./classes/Form.js";
 
 	var loadCss = function(callback) {
 		var cssId = '_sendsay-styles';
-		console.log('loadCss');
-		if (!document.getElementById(cssId))
-		{
+		if (!document.getElementById(cssId)) {
 		    var head  = document.getElementsByTagName('head')[0];
 		    var link  = document.createElement('link');
 		    link.id   = cssId;
 		    link.rel  = 'stylesheet';
 		    link.type = 'text/css';
-		    link.href = 'https://rawgit.com/sendsay-ru/sendsay-forms/master/dist/sendsayforms.css';
+		    link.href = 'https://app.sendsay.ru/kit/sendsayForms/sendsayforms.css';
 		    link.media = 'all';
 
 		    var sibling = document.querySelector('#sendsay-generated-sheet');
