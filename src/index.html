@@ -1,42 +1,68 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
-	<script src="bower_components/traceur/traceur.js"></script>
-	<script src="bower_components/es6-module-loader/es6-module-loader.js"></script>
-  	<script src="bower_components/system.js/dist/system.js"></script>
-	
-	<script>
-	  // set our baseURL reference path
-	  System.config({
-	    baseURL: '/'
-	  });
+    <title></title>
+    <script src="bower_components/traceur/traceur.js"></script>
+    <script src="bower_components/es6-module-loader/es6-module-loader.js"></script>
+    <script src="bower_components/system.js/dist/system.js"></script>
+    <script>
+      // set our baseURL reference path
+      System.config({
+        baseURL: '/'
+      });
 
-	  // loads /app/main.js
-	  System.import('main.js').then(function() {
+      // loads /app/main.js
+      System.import('main.js').then(function() {
+        //"https://sendsay.ru/form/x_1445438168224221/41/"
+        //https://sendsay.ru/form/x_1445438168224221/41/
+        //https://test.sendsay.ru/form/x_1465468219407847/47/
 
-	  // 	SENDSAY.showPopup({"appearance":{"borderRadius":0,"paddingLeft":20,"paddingTop":20,"paddingRight":20,"paddingBottom":20,"backgroundColor":"#fff","textColor":"#000"},"content":{"endDialogMessage":"Спасибо за заполнение формы!"},"elements":[{"type":"text","content":{"text":"<b style=\"font-size: 16 px;\">Подписка на рассылку</b>"}},{"type":"image","appearance":{"align":"center","extended":false},"content":{"url":"http://image.fsndsy.ru/image/x_1445438168224221/block/201605/17125210/images.png"}},{"type":"textField","content":{"label":"Адрес подписчика","placeholder":""},"appearance":{"hidden":false},"field":{"qid":"_member_email","aid":"member","required":true,"default":""}},{"type":"intField","field":{"aid":"a596","qid":"q349"},"placeholder":"","hidden":false,"required":false,"content":{"label":"Возраст"}},{"type":"radioField","field":{"aid":"a596","qid":"q575","answers":{"1":"Мужчина","2":"Женщина"},"order":[1,2]},"appearance":{"hidden":false},"content":{"label":"Пол"}},{"type":"checkboxField","field":{"aid":"a596","qid":"q244","answers":{"1":"Iphone","2":"Samsung","3":"LG","4":"Nokia"},"order":[1,2,3,4]},"appearance":{"hidden":false},"content":{"label":"Любимая техника"}},{"type":"button","content":{"text":"Подписаться"},"appearance":{"textColor":"#ffffff","backgroundColor":"#000000","borderRadius":5,"align":"justify"}}],"active":true});
-	  		  SENDSAY.activatePopup("https://test.sendsay.ru/form/x_1465468219407847/26/", {
-	  		  	ignoreCookie: false
-	  		  });
-	   });
+        //https://test.sendsay.ru/form/x_147092960535487/2/
+        //https://test.sendsay.ru/form/x_147092960535487/1/
+        //https://test.sendsay.ru/form/x_147092960535487/2/
+
+        //second prod 
+        SENDSAY.activatePopup("https://sendsay.ru/form/x_1445438168224221/65/");
+        //minute prod 
+        SENDSAY.activatePopup("https://sendsay.ru/form/x_1445438168224221/66/");
+        //hour prod   
+        SENDSAY.activatePopup("https://sendsay.ru/form/x_1445438168224221/67/");
+        //day prod    
+        SENDSAY.activatePopup("https://sendsay.ru/form/x_1445438168224221/68/");
+        // SENDSAY.activatePopup("https://test.sendsay.ru/form/x_147092960535487/9/");
+        // SENDSAY.activatePopup("https://test.sendsay.ru/form/x_147092960535487/8/");
+        // SENDSAY.activatePopup("https://test.sendsay.ru/form/x_147092960535487/7/");
+        // SENDSAY.activatePopup("https://test.sendsay.ru/form/x_147092960535487/3/", {
+        //     ignoreCookie: false
+        // });
+        // SENDSAY.activatePopup("https://test.sendsay.ru/form/x_147092960535487/2/"); //second
+        // SENDSAY.activatePopup("https://test.sendsay.ru/form/x_147092960535487/4/", {
+        //     ignoreCookie: false
+        // });
+        // SENDSAY.activatePopup("https://test.sendsay.ru/form/x_147092960535487/5/", {
+        //     ignoreCookie: false
+        // });
+        // SENDSAY.activatePopup("https://test.sendsay.ru/form/x_147092960535487/6/", {
+        //     ignoreCookie: false
+        // });
+       });
 
 
-	</script>
-	<link rel="stylesheet" type="text/css" href="css/sendsayforms.css">
-	<style type="text/css">
-		div {
-			background: rgba(242,246,248,1);
-			background: -moz-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);
-			background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(242,246,248,1)), color-stop(50%, rgba(216,225,231,1)), color-stop(51%, rgba(181,198,208,1)), color-stop(100%, rgba(224,239,249,1)));
-			background: -webkit-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);
-			background: -o-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);
-			background: -ms-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);
-			background: linear-gradient(to bottom, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);
-			height: 2000px;
-		}
-	</style>
-	
+    </script>
+    <link rel="stylesheet" type="text/css" href="css/sendsayforms.css">
+    <style type="text/css">
+        div {
+            background: rgba(242,246,248,1);
+            background: -moz-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);
+            background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(242,246,248,1)), color-stop(50%, rgba(216,225,231,1)), color-stop(51%, rgba(181,198,208,1)), color-stop(100%, rgba(224,239,249,1)));
+            background: -webkit-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);
+            background: -o-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);
+            background: -ms-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);
+            background: linear-gradient(to bottom, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);
+            height: 2000px;
+        }
+    </style>
+    
 </head>
 <body>
 <div></div>
