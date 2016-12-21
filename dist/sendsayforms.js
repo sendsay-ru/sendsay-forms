@@ -384,7 +384,7 @@ var ElementFactory = exports.ElementFactory = function (_Factory) {
 	function ElementFactory() {
 		_classCallCheck(this, ElementFactory);
 
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(ElementFactory).call(this));
+		return _possibleConstructorReturn(this, (ElementFactory.__proto__ || Object.getPrototypeOf(ElementFactory)).call(this));
 	}
 
 	_createClass(ElementFactory, [{
@@ -727,7 +727,7 @@ var Button = exports.Button = function (_DOMObject) {
 	function Button(data, parent) {
 		_classCallCheck(this, Button);
 
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(Button).call(this, data, parent));
+		return _possibleConstructorReturn(this, (Button.__proto__ || Object.getPrototypeOf(Button)).call(this, data, parent));
 	}
 
 	_createClass(Button, [{
@@ -775,7 +775,7 @@ var Button = exports.Button = function (_DOMObject) {
 		value: function makeStyles() {
 			var data = this.data.appearance || {};
 			data.fontFamily = this.escapeStyle(data.fontFamily);
-			var styleObj = _get(Object.getPrototypeOf(Button.prototype), 'makeStyles', this).call(this);
+			var styleObj = _get(Button.prototype.__proto__ || Object.getPrototypeOf(Button.prototype), 'makeStyles', this).call(this);
 			if (data.align === 'justify') styleObj.width = '100%';
 			return styleObj;
 		}
@@ -783,7 +783,7 @@ var Button = exports.Button = function (_DOMObject) {
 		key: 'makeSettings',
 		value: function makeSettings() {
 			var data = this.data.content || {},
-			    settings = _get(Object.getPrototypeOf(Button.prototype), 'makeSettings', this).call(this);
+			    settings = _get(Button.prototype.__proto__ || Object.getPrototypeOf(Button.prototype), 'makeSettings', this).call(this);
 			settings.text = this.escapeHTML(data.text || 'Unknown');
 			settings.wrapperstyle = this.makeWrapperStyle();
 			return settings;
@@ -829,7 +829,7 @@ var CheckBox = exports.CheckBox = function (_DOMObject) {
 	function CheckBox(data, parent) {
 		_classCallCheck(this, CheckBox);
 
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(CheckBox).call(this, data, parent));
+		return _possibleConstructorReturn(this, (CheckBox.__proto__ || Object.getPrototypeOf(CheckBox)).call(this, data, parent));
 	}
 
 	_createClass(CheckBox, [{
@@ -849,7 +849,7 @@ var CheckBox = exports.CheckBox = function (_DOMObject) {
 	}, {
 		key: 'build',
 		value: function build() {
-			return _get(Object.getPrototypeOf(CheckBox.prototype), 'build', this).call(this);
+			return _get(CheckBox.prototype.__proto__ || Object.getPrototypeOf(CheckBox.prototype), 'build', this).call(this);
 		}
 	}, {
 		key: 'makeSettings',
@@ -858,7 +858,7 @@ var CheckBox = exports.CheckBox = function (_DOMObject) {
 			var content = this.data.content || {},
 			    field = this.data.field || {},
 			    appearance = this.data.appearance || {},
-			    settings = _get(Object.getPrototypeOf(CheckBox.prototype), 'makeSettings', this).call(this);
+			    settings = _get(CheckBox.prototype.__proto__ || Object.getPrototypeOf(CheckBox.prototype), 'makeSettings', this).call(this);
 
 			settings.label = this.escapeHTML(content.label || content.name || '');
 			settings.qid = field.qid || field.name || '';
@@ -913,7 +913,7 @@ var CheckBox = exports.CheckBox = function (_DOMObject) {
 	}, {
 		key: 'makeStyles',
 		value: function makeStyles() {
-			var styleObj = _get(Object.getPrototypeOf(CheckBox.prototype), 'makeStyles', this).call(this);
+			var styleObj = _get(CheckBox.prototype.__proto__ || Object.getPrototypeOf(CheckBox.prototype), 'makeStyles', this).call(this);
 			// 	data = this.data;
 			// if(this.parent && this.parent.data && this.parent.data.textColor)
 			// 	styleObj.color = this.parent.data.textColor;
@@ -954,7 +954,7 @@ var Column = exports.Column = function (_DOMObject) {
 	function Column(data, parent) {
 		_classCallCheck(this, Column);
 
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(Column).call(this, data, parent));
+		return _possibleConstructorReturn(this, (Column.__proto__ || Object.getPrototypeOf(Column)).call(this, data, parent));
 	}
 
 	_createClass(Column, [{
@@ -979,7 +979,7 @@ var Column = exports.Column = function (_DOMObject) {
 		key: "build",
 		value: function build() {
 
-			_get(Object.getPrototypeOf(Column.prototype), "build", this).call(this);
+			_get(Column.prototype.__proto__ || Object.getPrototypeOf(Column.prototype), "build", this).call(this);
 			this.elements = [];
 			var factory = new _ElementFactory.ElementFactory();
 			var popupBody = this.el.querySelector('.sendsay-column');
@@ -999,7 +999,7 @@ var Column = exports.Column = function (_DOMObject) {
 		key: "makeSettings",
 		value: function makeSettings() {
 			var data = this.data.content || {},
-			    settings = _get(Object.getPrototypeOf(Column.prototype), "makeSettings", this).call(this);
+			    settings = _get(Column.prototype.__proto__ || Object.getPrototypeOf(Column.prototype), "makeSettings", this).call(this);
 			settings.wrapperstyle = this.makeWrapperStyle();
 			return settings;
 		}
@@ -1241,7 +1241,7 @@ var DateField = exports.DateField = function (_Field) {
     function DateField(data, parent) {
         _classCallCheck(this, DateField);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(DateField).call(this, data, parent));
+        return _possibleConstructorReturn(this, (DateField.__proto__ || Object.getPrototypeOf(DateField)).call(this, data, parent));
     }
 
     _createClass(DateField, [{
@@ -1313,7 +1313,7 @@ var DateField = exports.DateField = function (_Field) {
     }, {
         key: 'validate',
         value: function validate() {
-            var isValid = _get(Object.getPrototypeOf(DateField.prototype), 'validate', this).call(this);
+            var isValid = _get(DateField.prototype.__proto__ || Object.getPrototypeOf(DateField.prototype), 'validate', this).call(this);
             var dateObj = this.extractAndSeparateValue();
             var rawValue = this.el.querySelector('input').value;
             if (rawValue.trim() === '') {
@@ -1368,7 +1368,7 @@ var DateField = exports.DateField = function (_Field) {
     }, {
         key: 'addEvents',
         value: function addEvents() {
-            _get(Object.getPrototypeOf(DateField.prototype), 'addEvents', this).call(this);
+            _get(DateField.prototype.__proto__ || Object.getPrototypeOf(DateField.prototype), 'addEvents', this).call(this);
             this.addEvent('keypress', 'input', this.handleKeyPress.bind(this));
             this.addEvent('keydown', 'input', this.handleKeyDown.bind(this));
             this.addEvent('paste', 'input', this.handlePaste.bind(this));
@@ -1551,7 +1551,7 @@ var Field = exports.Field = function (_DOMObject) {
 	function Field(data, parent) {
 		_classCallCheck(this, Field);
 
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(Field).call(this, data, parent));
+		return _possibleConstructorReturn(this, (Field.__proto__ || Object.getPrototypeOf(Field)).call(this, data, parent));
 	}
 
 	_createClass(Field, [{
@@ -1575,7 +1575,7 @@ var Field = exports.Field = function (_DOMObject) {
 			var field = this.data.field || {},
 			    content = this.data.content || {},
 			    appearance = this.data.appearance || {},
-			    settings = _get(Object.getPrototypeOf(Field.prototype), 'makeSettings', this).call(this);
+			    settings = _get(Field.prototype.__proto__ || Object.getPrototypeOf(Field.prototype), 'makeSettings', this).call(this);
 
 			settings.label = this.escapeHTML(content.label || '');
 			settings.placeholder = this.escapeHTML(content.placeholder || '');
@@ -1649,7 +1649,7 @@ var ImageElement = exports.ImageElement = function (_DOMObject) {
 	function ImageElement(data, parent) {
 		_classCallCheck(this, ImageElement);
 
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(ImageElement).call(this, data, parent));
+		return _possibleConstructorReturn(this, (ImageElement.__proto__ || Object.getPrototypeOf(ImageElement)).call(this, data, parent));
 	}
 
 	_createClass(ImageElement, [{
@@ -1668,7 +1668,7 @@ var ImageElement = exports.ImageElement = function (_DOMObject) {
 	}, {
 		key: 'makeStyles',
 		value: function makeStyles() {
-			var styleObj = _get(Object.getPrototypeOf(ImageElement.prototype), 'makeStyles', this).call(this),
+			var styleObj = _get(ImageElement.prototype.__proto__ || Object.getPrototypeOf(ImageElement.prototype), 'makeStyles', this).call(this),
 			    data = this.data.appearance || {};
 			if (data.extended) styleObj.width = '100%';else styleObj['max-width'] = '100%';
 			return styleObj;
@@ -1677,7 +1677,7 @@ var ImageElement = exports.ImageElement = function (_DOMObject) {
 		key: 'makeSettings',
 		value: function makeSettings() {
 			var data = this.data.content || {},
-			    settings = _get(Object.getPrototypeOf(ImageElement.prototype), 'makeSettings', this).call(this);
+			    settings = _get(ImageElement.prototype.__proto__ || Object.getPrototypeOf(ImageElement.prototype), 'makeSettings', this).call(this);
 			settings.wrapperstyle = this.makeWrapperStyle();
 			settings.url = data.url;
 			return settings;
@@ -1725,13 +1725,13 @@ var MultipleChoiseField = exports.MultipleChoiseField = function (_Field) {
 	function MultipleChoiseField(data, parent) {
 		_classCallCheck(this, MultipleChoiseField);
 
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(MultipleChoiseField).call(this, data, parent));
+		return _possibleConstructorReturn(this, (MultipleChoiseField.__proto__ || Object.getPrototypeOf(MultipleChoiseField)).call(this, data, parent));
 	}
 
 	_createClass(MultipleChoiseField, [{
 		key: "initialize",
 		value: function initialize() {
-			_get(Object.getPrototypeOf(MultipleChoiseField.prototype), "initialize", this).call(this);
+			_get(MultipleChoiseField.prototype.__proto__ || Object.getPrototypeOf(MultipleChoiseField.prototype), "initialize", this).call(this);
 			this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + '<div class = "sendsay-container"></div>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
 			this.curValues = this.data.field.default || [];
 			this.baseClass = 'sendsay-field';
@@ -1745,7 +1745,7 @@ var MultipleChoiseField = exports.MultipleChoiseField = function (_Field) {
 	}, {
 		key: "build",
 		value: function build() {
-			_get(Object.getPrototypeOf(MultipleChoiseField.prototype), "build", this).call(this);
+			_get(MultipleChoiseField.prototype.__proto__ || Object.getPrototypeOf(MultipleChoiseField.prototype), "build", this).call(this);
 			this.elements = [];
 			var body = this.el.querySelector('.sendsay-container');
 			var field = this.data.field || {};
@@ -1829,13 +1829,13 @@ var NumberField = exports.NumberField = function (_Field) {
 	function NumberField(data, parent) {
 		_classCallCheck(this, NumberField);
 
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(NumberField).call(this, data, parent));
+		return _possibleConstructorReturn(this, (NumberField.__proto__ || Object.getPrototypeOf(NumberField)).call(this, data, parent));
 	}
 
 	_createClass(NumberField, [{
 		key: "validate",
 		value: function validate() {
-			var isValid = _get(Object.getPrototypeOf(NumberField.prototype), "validate", this).call(this);
+			var isValid = _get(NumberField.prototype.__proto__ || Object.getPrototypeOf(NumberField.prototype), "validate", this).call(this);
 			if (isValid) {
 				var value = this.getValue();
 				isValid = !value.match(/[\.xXeE]/) && !isNaN(+value);
@@ -1886,7 +1886,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 	function Popup(data, parent) {
 		_classCallCheck(this, Popup);
 
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(Popup).call(this, data, parent));
+		return _possibleConstructorReturn(this, (Popup.__proto__ || Object.getPrototypeOf(Popup)).call(this, data, parent));
 	}
 
 	_createClass(Popup, [{
@@ -1955,7 +1955,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 	}, {
 		key: "build",
 		value: function build() {
-			_get(Object.getPrototypeOf(Popup.prototype), "build", this).call(this);
+			_get(Popup.prototype.__proto__ || Object.getPrototypeOf(Popup.prototype), "build", this).call(this);
 			this.columns = [];
 			var curStep = this.steps[this.curStep];
 			var popupBody = this.el.querySelector('.sendsay-content');
@@ -2015,7 +2015,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 	}, {
 		key: "makeSettings",
 		value: function makeSettings() {
-			var settings = _get(Object.getPrototypeOf(Popup.prototype), "makeSettings", this).call(this);
+			var settings = _get(Popup.prototype.__proto__ || Object.getPrototypeOf(Popup.prototype), "makeSettings", this).call(this);
 			settings.wrapperClasses = this.data.noAnimation ? 'sendsay-noanimation' : '';
 			settings.overlayStyles = this.convertStyles(this.applyStyles(this.applOverlayStyles));
 			return settings;
@@ -2024,7 +2024,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 		key: "makeClasses",
 		value: function makeClasses() {
 			var appearance = this.data.appearance || {};
-			var classes = _get(Object.getPrototypeOf(Popup.prototype), "makeClasses", this).call(this);
+			var classes = _get(Popup.prototype.__proto__ || Object.getPrototypeOf(Popup.prototype), "makeClasses", this).call(this);
 			classes += this.data.endDialog ? ' sendsay-enddialog' : '';
 			classes += ' sendsay-animation-' + (appearance.animation || 'none');
 			classes += ' sendsay-' + (appearance.position || 'center');
@@ -2230,7 +2230,7 @@ var PopupBar = exports.PopupBar = function (_Popup) {
 	function PopupBar(data, parent) {
 		_classCallCheck(this, PopupBar);
 
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(PopupBar).call(this, data, parent));
+		return _possibleConstructorReturn(this, (PopupBar.__proto__ || Object.getPrototypeOf(PopupBar)).call(this, data, parent));
 	}
 
 	_createClass(PopupBar, [{
@@ -2343,7 +2343,7 @@ var RadioButton = exports.RadioButton = function (_DOMObject) {
 	function RadioButton(data, parent) {
 		_classCallCheck(this, RadioButton);
 
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(RadioButton).call(this, data, parent));
+		return _possibleConstructorReturn(this, (RadioButton.__proto__ || Object.getPrototypeOf(RadioButton)).call(this, data, parent));
 	}
 
 	_createClass(RadioButton, [{
@@ -2362,13 +2362,13 @@ var RadioButton = exports.RadioButton = function (_DOMObject) {
 	}, {
 		key: 'build',
 		value: function build() {
-			return _get(Object.getPrototypeOf(RadioButton.prototype), 'build', this).call(this);
+			return _get(RadioButton.prototype.__proto__ || Object.getPrototypeOf(RadioButton.prototype), 'build', this).call(this);
 		}
 	}, {
 		key: 'makeSettings',
 		value: function makeSettings() {
 			var data = this.data,
-			    settings = _get(Object.getPrototypeOf(RadioButton.prototype), 'makeSettings', this).call(this);
+			    settings = _get(RadioButton.prototype.__proto__ || Object.getPrototypeOf(RadioButton.prototype), 'makeSettings', this).call(this);
 			var content = data.content || {},
 			    field = data.field || {},
 			    appearance = data.appearance || {};
@@ -2451,13 +2451,13 @@ var SingleChoiseField = exports.SingleChoiseField = function (_Field) {
 	function SingleChoiseField(data, parent) {
 		_classCallCheck(this, SingleChoiseField);
 
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(SingleChoiseField).call(this, data, parent));
+		return _possibleConstructorReturn(this, (SingleChoiseField.__proto__ || Object.getPrototypeOf(SingleChoiseField)).call(this, data, parent));
 	}
 
 	_createClass(SingleChoiseField, [{
 		key: "initialize",
 		value: function initialize() {
-			_get(Object.getPrototypeOf(SingleChoiseField.prototype), "initialize", this).call(this);
+			_get(SingleChoiseField.prototype.__proto__ || Object.getPrototypeOf(SingleChoiseField.prototype), "initialize", this).call(this);
 			this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + '<div class = "sendsay-container"></div>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
 			var field = this.data.field || {};
 			this.curValue = field.default || '';
@@ -2472,7 +2472,7 @@ var SingleChoiseField = exports.SingleChoiseField = function (_Field) {
 	}, {
 		key: "build",
 		value: function build() {
-			_get(Object.getPrototypeOf(SingleChoiseField.prototype), "build", this).call(this);
+			_get(SingleChoiseField.prototype.__proto__ || Object.getPrototypeOf(SingleChoiseField.prototype), "build", this).call(this);
 			this.elements = [];
 			var field = this.data.field || {};
 			var body = this.el.querySelector('.sendsay-container');
@@ -2539,7 +2539,7 @@ var Spacer = exports.Spacer = function (_DOMObject) {
 	function Spacer(data, parent) {
 		_classCallCheck(this, Spacer);
 
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(Spacer).call(this, data, parent));
+		return _possibleConstructorReturn(this, (Spacer.__proto__ || Object.getPrototypeOf(Spacer)).call(this, data, parent));
 	}
 
 	_createClass(Spacer, [{
@@ -2583,7 +2583,7 @@ var Text = exports.Text = function (_DOMObject) {
 	function Text(data, parent) {
 		_classCallCheck(this, Text);
 
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(Text).call(this, data, parent));
+		return _possibleConstructorReturn(this, (Text.__proto__ || Object.getPrototypeOf(Text)).call(this, data, parent));
 	}
 
 	_createClass(Text, [{
@@ -2605,13 +2605,13 @@ var Text = exports.Text = function (_DOMObject) {
 	}, {
 		key: 'build',
 		value: function build() {
-			return _get(Object.getPrototypeOf(Text.prototype), 'build', this).call(this);
+			return _get(Text.prototype.__proto__ || Object.getPrototypeOf(Text.prototype), 'build', this).call(this);
 		}
 	}, {
 		key: 'makeSettings',
 		value: function makeSettings() {
 			var content = this.data.content || {},
-			    settings = _get(Object.getPrototypeOf(Text.prototype), 'makeSettings', this).call(this);
+			    settings = _get(Text.prototype.__proto__ || Object.getPrototypeOf(Text.prototype), 'makeSettings', this).call(this);
 			settings.text = content.text || '';
 			return settings;
 		}
@@ -2650,7 +2650,7 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 	function ToggleablePopup(data, parent) {
 		_classCallCheck(this, ToggleablePopup);
 
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(ToggleablePopup).call(this, data, parent));
+		return _possibleConstructorReturn(this, (ToggleablePopup.__proto__ || Object.getPrototypeOf(ToggleablePopup)).call(this, data, parent));
 	}
 
 	_createClass(ToggleablePopup, [{
@@ -2749,7 +2749,7 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 	}, {
 		key: "makeSettings",
 		value: function makeSettings() {
-			var settings = _get(Object.getPrototypeOf(ToggleablePopup.prototype), "makeSettings", this).call(this);
+			var settings = _get(ToggleablePopup.prototype.__proto__ || Object.getPrototypeOf(ToggleablePopup.prototype), "makeSettings", this).call(this);
 
 			settings.toggle = new _Text.Text(this.data.toggle).build().outerHTML;
 
@@ -2758,13 +2758,13 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 	}, {
 		key: "addEvents",
 		value: function addEvents() {
-			_get(Object.getPrototypeOf(ToggleablePopup.prototype), "addEvents", this).call(this);
+			_get(ToggleablePopup.prototype.__proto__ || Object.getPrototypeOf(ToggleablePopup.prototype), "addEvents", this).call(this);
 			this.addEvent('click', '.sendsay-toggler', this.handleTogglerClick.bind(this));
 		}
 	}, {
 		key: "removeEvents",
 		value: function removeEvents() {
-			_get(Object.getPrototypeOf(ToggleablePopup.prototype), "removeEvents", this).call(this);
+			_get(ToggleablePopup.prototype.__proto__ || Object.getPrototypeOf(ToggleablePopup.prototype), "removeEvents", this).call(this);
 			this.removeEvent('click', '.sendsay-toggler', this.handleTogglerClick.bind(this));
 		}
 	}, {
@@ -2785,7 +2785,7 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 	}, {
 		key: "submit",
 		value: function submit() {
-			var temp = _get(Object.getPrototypeOf(ToggleablePopup.prototype), "submit", this).call(this);
+			var temp = _get(ToggleablePopup.prototype.__proto__ || Object.getPrototypeOf(ToggleablePopup.prototype), "submit", this).call(this);
 			this.setSaneMaxHeight();
 			return temp;
 		}
@@ -2799,7 +2799,7 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 	}, {
 		key: "showErrorFor",
 		value: function showErrorFor(qid, message) {
-			_get(Object.getPrototypeOf(ToggleablePopup.prototype), "showErrorFor", this).call(this, qid, message);
+			_get(ToggleablePopup.prototype.__proto__ || Object.getPrototypeOf(ToggleablePopup.prototype), "showErrorFor", this).call(this, qid, message);
 			this.setSaneMaxHeight();
 		}
 	}, {
@@ -2818,7 +2818,7 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 	}, {
 		key: "makeClasses",
 		value: function makeClasses() {
-			var classes = _get(Object.getPrototypeOf(ToggleablePopup.prototype), "makeClasses", this).call(this);
+			var classes = _get(ToggleablePopup.prototype.__proto__ || Object.getPrototypeOf(ToggleablePopup.prototype), "makeClasses", this).call(this);
 			if (this.curStep != 0) {
 				classes += ' sendsay-opened';
 			}
