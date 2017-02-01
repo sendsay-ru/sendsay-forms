@@ -6,13 +6,13 @@ import {Connector} from "./classes/Connector.js";
 import {Form} from "./classes/Form.js";
 (function() {
 
-	
+
 	var activatePopup  = function(url, options) {
 
 		loadCss(function() {
 			var connector = new Connector(url);
 			var form = new Form(connector, options);
-		});	
+		});
 	};
 
 	var showPopup = function(data, options) {
@@ -28,7 +28,7 @@ import {Form} from "./classes/Form.js";
 			case 'widget':
 				domConstructor = ToggleablePopup;
 				break;
-		} 
+		}
 		let popup = new domConstructor(data);
 		popup.activate(options);
 	}
@@ -56,7 +56,7 @@ import {Form} from "./classes/Form.js";
 				callback();
 			}
 		}
-	} 
+	}
 	window.SENDSAY = {
 		activatePopup: activatePopup,
 		showPopup: showPopup

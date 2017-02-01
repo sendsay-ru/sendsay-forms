@@ -69,6 +69,7 @@ module.exports = function(grunt) {
         },
         dist: {
           options: {
+            compress: true,
             plugins: [
               new (require('less-plugin-autoprefix'))(),
             ]
