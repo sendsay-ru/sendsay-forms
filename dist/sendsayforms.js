@@ -65,7 +65,11 @@ var ConditionWatcher = exports.ConditionWatcher = function () {
 			}
 
 			if (this.onLeave) {
-				document.addEventListener('mouseleave', this.leaveWatcher);
+				if (document.body) {
+					document.body.addEventListener('mouseleave', this.leaveWatcher);
+				} else {
+					document.addEventListener('mouseleave', this.leaveWatcher);
+				}
 			}
 			if (this.delay) this.timeoutID = setTimeout(this.delayWatcher.bind(this), this.delay * 1000);
 		}
@@ -107,6 +111,17 @@ var ConditionWatcher = exports.ConditionWatcher = function () {
 		key: "leaveWatcher",
 		value: function leaveWatcher(event) {
 			this.satisfyCondition();
+
+			this.removeLeaveWatcher();
+		}
+	}, {
+		key: "removeLeaveWatcher",
+		value: function removeLeaveWatcher() {
+			if (document.body) {
+				document.body.removeEventListener('mouseleave', this.leaveWatcher);
+			} else {
+				document.removeEventListener('mouseleave', this.leaveWatcher);
+			}
 		}
 	}, {
 		key: "delayWatcher",
@@ -126,7 +141,7 @@ var ConditionWatcher = exports.ConditionWatcher = function () {
 		key: "stopWatch",
 		value: function stopWatch() {
 			document.removeEventListener('scroll', this.scrollWatcher);
-			document.removeEventListener('mouseleave', this.leaveWatcher);
+
 			if (this.timeoutID) clearTimeout(this.timeoutID);
 		}
 	}]);
@@ -510,7 +525,6 @@ var Form = exports.Form = function () {
 			var watcher = new _ConditionWatcher.ConditionWatcher(conditions, id);
 
 			watcher.watch().then(function () {
-				console.log('showing');
 				switch (data.type) {
 					case 'popup':
 						self.domConstructor = _Popup.Popup;
@@ -529,9 +543,7 @@ var Form = exports.Form = function () {
 
 				self.setFrequencyCookie(self.connector.data);
 				self.setCountCookie(self.connector.data);
-			}, function () {
-				console.log('rejected');
-			});
+			}, function () {});
 		}
 	}, {
 		key: "handleFail",
@@ -2866,7 +2878,6 @@ var _Form = require("./classes/Form.js");
 (function () {
 
 	var activatePopup = function activatePopup(url, options) {
-
 		loadCss(function () {
 			var connector = new _Connector.Connector(url);
 			var form = new _Form.Form(connector, options);
@@ -2896,6 +2907,8 @@ var _Form = require("./classes/Form.js");
 		if (!document.getElementById(cssId)) {
 			var head = document.getElementsByTagName('head')[0];
 			var link = document.createElement('link');
+			var loaded = false;
+
 			link.id = cssId;
 			link.rel = 'stylesheet';
 			link.type = 'text/css';
@@ -2908,7 +2921,15 @@ var _Form = require("./classes/Form.js");
 			} else {
 				document.head.appendChild(link);
 			}
-			link.addEventListener('load', callback);
+			link.addEventListener('load', function () {
+				link.removeEventListener('load', callback);
+
+				if (!loaded) {
+					loaded = true;
+
+					callback();
+				}
+			});
 		} else {
 			if (typeof callback === 'function') {
 				callback();

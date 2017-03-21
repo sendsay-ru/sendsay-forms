@@ -62,7 +62,6 @@ export class Form {
 		let watcher = new ConditionWatcher(conditions, id);
 
 		watcher.watch().then(function() {
-			console.log('showing');
 			switch(data.type) {
 				case 'popup':
 					self.domConstructor = Popup;
@@ -82,7 +81,6 @@ export class Form {
 			self.setFrequencyCookie(self.connector.data);
 			self.setCountCookie(self.connector.data);
 		}, function() {
-			console.log('rejected');
 		});
 	}
 

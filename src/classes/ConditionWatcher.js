@@ -49,7 +49,11 @@ export class ConditionWatcher {
 		}
 
 		if(this.onLeave) {
-			document.addEventListener('mouseleave', this.leaveWatcher);
+			if (document.body) {
+				document.body.addEventListener('mouseleave', this.leaveWatcher);
+			} else {
+				document.addEventListener('mouseleave', this.leaveWatcher);
+			}
 		}
 		if(this.delay)
 			this.timeoutID = setTimeout(this.delayWatcher.bind(this), this.delay * 1000);
@@ -79,7 +83,7 @@ export class ConditionWatcher {
 			if(Cookies.has('__sendsay_forms_count_' + this.id) && +Cookies.get('__sendsay_forms_count_' + this.id) >= +this.conditions.maxCount)
 				return true;
 		}
-		return false;	
+		return false;
 	}
 
 	scrollWatcher(event) {
@@ -93,6 +97,16 @@ export class ConditionWatcher {
 
 	leaveWatcher(event) {
 		this.satisfyCondition();
+
+		this.removeLeaveWatcher();
+	}
+
+	removeLeaveWatcher() {
+		if (document.body) {
+			document.body.removeEventListener('mouseleave', this.leaveWatcher);
+		} else {
+			document.removeEventListener('mouseleave', this.leaveWatcher);
+		}
 	}
 
 	delayWatcher() {
@@ -101,7 +115,7 @@ export class ConditionWatcher {
 
 	satisfyCondition() {
 		this.isDone = true;
-
+	
 		this.stopWatch();
 
 		this.resolve();
@@ -109,11 +123,11 @@ export class ConditionWatcher {
 
 	stopWatch() {
 		document.removeEventListener('scroll', this.scrollWatcher);
-		document.removeEventListener('mouseleave', this.leaveWatcher);
+
 		if(this.timeoutID)
 			clearTimeout(this.timeoutID);
 	}
 
-	
+
 
 }

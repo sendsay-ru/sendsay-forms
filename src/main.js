@@ -8,7 +8,6 @@ import {Form} from "./classes/Form.js";
 
 
 	var activatePopup  = function(url, options) {
-
 		loadCss(function() {
 			var connector = new Connector(url);
 			var form = new Form(connector, options);
@@ -38,6 +37,8 @@ import {Form} from "./classes/Form.js";
 		if (!document.getElementById(cssId)) {
 		    var head  = document.getElementsByTagName('head')[0];
 		    var link  = document.createElement('link');
+		    var loaded = false;
+
 		    link.id   = cssId;
 		    link.rel  = 'stylesheet';
 		    link.type = 'text/css';
@@ -50,7 +51,15 @@ import {Form} from "./classes/Form.js";
 		    } else {
 		    	document.head.appendChild(link);
 		    }
-		    link.addEventListener('load', callback);
+		    link.addEventListener('load', function() {
+		    	link.removeEventListener('load', callback);
+
+		    	if(!loaded) {
+		    		loaded = true;
+
+		    		callback();
+		    	}
+		    });
 		} else {
 			if (typeof callback === 'function') {
 				callback();
