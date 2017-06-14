@@ -55,6 +55,7 @@ export class ConditionWatcher {
 				document.addEventListener('mouseleave', this.leaveWatcher);
 			}
 		}
+
 		if(this.delay)
 			this.timeoutID = setTimeout(this.delayWatcher.bind(this), this.delay * 1000);
 	}
@@ -97,8 +98,6 @@ export class ConditionWatcher {
 
 	leaveWatcher(event) {
 		this.satisfyCondition();
-
-		this.removeLeaveWatcher();
 	}
 
 	removeLeaveWatcher() {
@@ -115,7 +114,7 @@ export class ConditionWatcher {
 
 	satisfyCondition() {
 		this.isDone = true;
-	
+
 		this.stopWatch();
 
 		this.resolve();
@@ -123,6 +122,7 @@ export class ConditionWatcher {
 
 	stopWatch() {
 		document.removeEventListener('scroll', this.scrollWatcher);
+		this.removeLeaveWatcher();
 
 		if(this.timeoutID)
 			clearTimeout(this.timeoutID);

@@ -71,6 +71,7 @@ var ConditionWatcher = exports.ConditionWatcher = function () {
 					document.addEventListener('mouseleave', this.leaveWatcher);
 				}
 			}
+
 			if (this.delay) this.timeoutID = setTimeout(this.delayWatcher.bind(this), this.delay * 1000);
 		}
 	}, {
@@ -111,8 +112,6 @@ var ConditionWatcher = exports.ConditionWatcher = function () {
 		key: "leaveWatcher",
 		value: function leaveWatcher(event) {
 			this.satisfyCondition();
-
-			this.removeLeaveWatcher();
 		}
 	}, {
 		key: "removeLeaveWatcher",
@@ -141,6 +140,7 @@ var ConditionWatcher = exports.ConditionWatcher = function () {
 		key: "stopWatch",
 		value: function stopWatch() {
 			document.removeEventListener('scroll', this.scrollWatcher);
+			this.removeLeaveWatcher();
 
 			if (this.timeoutID) clearTimeout(this.timeoutID);
 		}
