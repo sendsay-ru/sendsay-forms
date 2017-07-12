@@ -10,15 +10,19 @@ export class SingleChoiseField extends Field {
 	initialize() {
 		super.initialize();
 		this.template = '<div class = "[%classes%]" style="[%style%]"">' +
-				'<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + 
+				'<label for="[%label%]" class = "sendsay-label">[%label%]</label>' +
 				'<div class = "sendsay-container"></div>' +
-				'<div type="text" class="sendsay-error"></div>' + 
+				'<div type="text" class="sendsay-error"></div>' +
 				'</div>';
 		let field = this.data.field || {};
 		this.curValue = field.default || '';
 		this.baseClass = 'sendsay-field';
 		this.handleChangeValue = this.handleChangeValue.bind(this);
 		this.applicableStyles = {
+      'padding-bottom': { param: 'paddingBottom', postfix: 'px'},
+      'padding-top': { param: 'paddingTop', postfix: 'px'},
+      'padding-left': { param: 'paddingLeft', postfix: 'px'},
+      'padding-right': { param: 'paddingRight', postfix: 'px'},
 			'color': { param: 'labelTextColor'},
 			'font-family': { param: 'labelFontFamily'},
 			'font-size': { param: 'labelFontSize', postfix: 'px'}
@@ -37,7 +41,7 @@ export class SingleChoiseField extends Field {
 					field: {
 						qid: field.id || field.qid || ''
 					},
-					content: { 
+					content: {
 						label: answers[key],
 						value: key,
 						checked: key === this.curValue
@@ -48,10 +52,10 @@ export class SingleChoiseField extends Field {
 					newEl.el.addEventListener('sendsay-change', this.handleChangeValue);
 					this.elements.push(newEl);
 					body.appendChild(newEl.el);
-				} 
+				}
 			}
 		}
-		return this.el; 
+		return this.el;
 	}
 
 	handleChangeValue(event) {
