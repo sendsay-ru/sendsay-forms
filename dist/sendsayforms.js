@@ -1749,6 +1749,10 @@ var MultipleChoiseField = exports.MultipleChoiseField = function (_Field) {
 			this.baseClass = 'sendsay-field';
 			this.handleChangeValue = this.handleChangeValue.bind(this);
 			this.applicableStyles = {
+				'padding-bottom': { param: 'paddingBottom', postfix: 'px' },
+				'padding-top': { param: 'paddingTop', postfix: 'px' },
+				'padding-left': { param: 'paddingLeft', postfix: 'px' },
+				'padding-right': { param: 'paddingRight', postfix: 'px' },
 				'color': { param: 'labelTextColor' },
 				'font-family': { param: 'labelFontFamily' },
 				'font-size': { param: 'labelFontSize', postfix: 'px' }
@@ -2476,6 +2480,10 @@ var SingleChoiseField = exports.SingleChoiseField = function (_Field) {
 			this.baseClass = 'sendsay-field';
 			this.handleChangeValue = this.handleChangeValue.bind(this);
 			this.applicableStyles = {
+				'padding-bottom': { param: 'paddingBottom', postfix: 'px' },
+				'padding-top': { param: 'paddingTop', postfix: 'px' },
+				'padding-left': { param: 'paddingLeft', postfix: 'px' },
+				'padding-right': { param: 'paddingRight', postfix: 'px' },
 				'color': { param: 'labelTextColor' },
 				'font-family': { param: 'labelFontFamily' },
 				'font-size': { param: 'labelFontSize', postfix: 'px' }
@@ -2885,21 +2893,22 @@ var _Form = require("./classes/Form.js");
 	};
 
 	var showPopup = function showPopup(data, options) {
-		loadCss();
-		var domConstructor;
-		switch (data.type) {
-			case 'popup':
-				domConstructor = _Popup.Popup;
-				break;
-			case 'bar':
-				domConstructor = _PopupBar.PopupBar;
-				break;
-			case 'widget':
-				domConstructor = _ToggleablePopup.ToggleablePopup;
-				break;
-		}
-		var popup = new domConstructor(data);
-		popup.activate(options);
+		loadCss(function () {
+			var domConstructor;
+			switch (data.type) {
+				case 'popup':
+					domConstructor = _Popup.Popup;
+					break;
+				case 'bar':
+					domConstructor = _PopupBar.PopupBar;
+					break;
+				case 'widget':
+					domConstructor = _ToggleablePopup.ToggleablePopup;
+					break;
+			}
+			var popup = new domConstructor(data);
+			popup.activate(options);
+		});
 	};
 
 	var loadCss = function loadCss(callback) {

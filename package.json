@@ -1,6 +1,6 @@
 {
   "name": "sendsay-forms",
-  "version": "0.0.32",
+  "version": "0.0.33",
   "description": "Library for displaying popups",
   "main": "index.js",
   "scripts": {

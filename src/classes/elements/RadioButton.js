@@ -8,7 +8,7 @@ export class RadioButton extends DOMObject {
 	}
 
 	initialize() {
-		this.template = '<div class = "[%classes%]" style="[%style%]">' +						
+		this.template = '<div class = "[%classes%]" style="[%style%]">' +
 							'<input [%checked%] name="[%qid%]" value="[%value%]" type="radio" class="sendsay-radioinput"/>' +
 							(this.data.content.label ? '<label for="[%qid%]" class = "sendsay-label">[%label%]</label>' : '') +
 						'</div>';
