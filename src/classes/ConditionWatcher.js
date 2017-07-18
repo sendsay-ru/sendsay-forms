@@ -54,6 +54,14 @@ export class ConditionWatcher {
 			} else {
 				document.addEventListener('mouseleave', this.leaveWatcher);
 			}
+
+      var id = this.id;
+
+      localStorage['sendsay-form-' + id] = ((parseInt(localStorage['sendsay-form-' + id]) + 1) || 1);
+
+      window.onbeforeunload = function () {
+        localStorage['sendsay-form-' + id] = ((parseInt(localStorage['sendsay-form-' + id]) - 1) || 0);
+      };
 		}
 
 		if(this.delay)
@@ -93,11 +101,15 @@ export class ConditionWatcher {
 			showScroll = this.pageScroll;
 		if(maxScroll <= 0 || showScroll <= curScroll/maxScroll * 100) {
 			this.satisfyCondition();
-		}
-	}
+		}}
+
 
 	leaveWatcher(event) {
-		this.satisfyCondition();
+    var opened = localStorage['sendsay-form-' + this.id];
+
+    if (!opened || parseInt(opened) < 2) {
+      this.satisfyCondition();
+    }
 	}
 
 	removeLeaveWatcher() {
@@ -109,7 +121,7 @@ export class ConditionWatcher {
 	}
 
 	delayWatcher() {
-		this.satisfyCondition();
+    this.satisfyCondition();
 	}
 
 	satisfyCondition() {

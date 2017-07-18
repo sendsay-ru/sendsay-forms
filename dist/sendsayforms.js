@@ -70,6 +70,14 @@ var ConditionWatcher = exports.ConditionWatcher = function () {
 				} else {
 					document.addEventListener('mouseleave', this.leaveWatcher);
 				}
+
+				var id = this.id;
+
+				localStorage['sendsay-form-' + id] = parseInt(localStorage['sendsay-form-' + id]) + 1 || 1;
+
+				window.onbeforeunload = function () {
+					localStorage['sendsay-form-' + id] = parseInt(localStorage['sendsay-form-' + id]) - 1 || 0;
+				};
 			}
 
 			if (this.delay) this.timeoutID = setTimeout(this.delayWatcher.bind(this), this.delay * 1000);
@@ -111,7 +119,11 @@ var ConditionWatcher = exports.ConditionWatcher = function () {
 	}, {
 		key: "leaveWatcher",
 		value: function leaveWatcher(event) {
-			this.satisfyCondition();
+			var opened = localStorage['sendsay-form-' + this.id];
+
+			if (!opened || parseInt(opened) < 2) {
+				this.satisfyCondition();
+			}
 		}
 	}, {
 		key: "removeLeaveWatcher",
