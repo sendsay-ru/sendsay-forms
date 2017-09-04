@@ -2888,17 +2888,27 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 }(_Popup2.Popup);
 
 },{"./../MediaQuery.js":6,"./Popup.js":17,"./Text.js":22}],24:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.getHostName = getHostName;
 function getHostName() {
-  var match = location.hostname.match(/(^|\.)[a-zA-Z0-9\-]+\.{0,1}[a-zA-Z0-9\-]*$/);
+  try {
+    var match = location.hostname.match(/(^|\.)[a-zA-Z0-9\-]+\.{0,1}[a-zA-Z0-9\-]*$/);
 
-  if (match) {
-    return match[0];
+    if (match) {
+      var domain = match[0];
+
+      if (domain[0] !== '.') {
+        domain = '.' + domain;
+      }
+
+      return domain;
+    }
+  } catch (e) {
+    return location.hostname;
   }
 
   return location.hostname;
