@@ -4,6 +4,7 @@ import {Cookies} from "./Cookies.js";
 import {Popup} from "./elements/Popup.js";
 import {PopupBar} from "./elements/PopupBar.js";
 import {ToggleablePopup} from "./elements/ToggleablePopup.js";
+import { getHostName } from "./utils.js";
 
 export class Form {
 
@@ -18,7 +19,7 @@ export class Form {
 	processConditionsSettings() {
 		let settings = this.connector.data.settings || {};
 		let conditions = JSON.parse(JSON.stringify(settings));
-		conditions.showCondition = conditions.showCondition || {}; 
+		conditions.showCondition = conditions.showCondition || {};
 		if(this.options.instant)
 			conditions.showCondition.instant = true;
 		if(this.options.ignoreState)
@@ -33,15 +34,16 @@ export class Form {
 		if(!data)
 			return;
 		if(data && data.settings && data.settings.frequency)
-			Cookies.set('__sendsay_forms_' + data.id, data.settings.frequency, data.settings.frequency);
+			Cookies.set('__sendsay_forms_' + data.id, data.settings.frequency, data.settings.frequency, '/', getHostName());
 	}
 
 	setCountCookie(data) {
+		console.log('foo', getHostName());
 		if(!data)
 			return;
 		var count = +Cookies.get('__sendsay_forms_count_' + data.id) || 0;
 		if(data) {
-			 Cookies.set('__sendsay_forms_count_' + data.id, count+1, 94608000);
+			 Cookies.set('__sendsay_forms_count_' + data.id, count+1, 94608000, '/', getHostName());
 		}
 	}
 
@@ -49,7 +51,7 @@ export class Form {
 		if(!data)
 			return;
 		if(data) {
-			 Cookies.set('__sendsay_forms_submit_' + data.id, true, 94608000);
+			 Cookies.set('__sendsay_forms_submit_' + data.id, true, 94608000, '/', getHostName());
 		}
 	}
 
@@ -73,7 +75,7 @@ export class Form {
 					self.domConstructor = ToggleablePopup;
 					break;
 			}
- 
+
 			self.domObj = new (self.domConstructor)(self.connector.data);
 			self.domObj.activate(self.options);
 			self.domObj.el.addEventListener('sendsay-success', self.handleSubmit.bind(self));

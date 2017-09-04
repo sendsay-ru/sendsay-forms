@@ -1,5 +1,6 @@
 import {Cookies} from "./Cookies.js";
 import {SendsayPromise} from "./SendsayPromise.js";
+import { getHostName } from "./utils.js";
 
 export class ConditionWatcher {
 
@@ -76,7 +77,7 @@ export class ConditionWatcher {
 			if(Cookies.get('__sendsay_forms_' + this.id) == this.globCond.frequency)
 				return true
 			else if(this.globCond.frequency) {
-				Cookies.set('__sendsay_forms_' + this.id, this.globCond.frequency, this.globCond.frequency);
+				Cookies.set('__sendsay_forms_' + this.id, this.globCond.frequency, this.globCond.frequency, '/', getHostName());
 				return true;
 			} else {
 				Cookies.remove('__sendsay_forms_' + this.id);

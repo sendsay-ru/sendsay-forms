@@ -12,6 +12,8 @@ var _Cookies = require("./Cookies.js");
 
 var _SendsayPromise = require("./SendsayPromise.js");
 
+var _utils = require("./utils.js");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var ConditionWatcher = exports.ConditionWatcher = function () {
@@ -90,7 +92,7 @@ var ConditionWatcher = exports.ConditionWatcher = function () {
 			}
 			if (_Cookies.Cookies.has('__sendsay_forms_' + this.id)) {
 				if (_Cookies.Cookies.get('__sendsay_forms_' + this.id) == this.globCond.frequency) return true;else if (this.globCond.frequency) {
-					_Cookies.Cookies.set('__sendsay_forms_' + this.id, this.globCond.frequency, this.globCond.frequency);
+					_Cookies.Cookies.set('__sendsay_forms_' + this.id, this.globCond.frequency, this.globCond.frequency, '/', (0, _utils.getHostName)());
 					return true;
 				} else {
 					_Cookies.Cookies.remove('__sendsay_forms_' + this.id);
@@ -161,7 +163,7 @@ var ConditionWatcher = exports.ConditionWatcher = function () {
 	return ConditionWatcher;
 }();
 
-},{"./Cookies.js":3,"./SendsayPromise.js":7}],2:[function(require,module,exports){
+},{"./Cookies.js":3,"./SendsayPromise.js":7,"./utils.js":24}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -480,6 +482,8 @@ var _PopupBar = require("./elements/PopupBar.js");
 
 var _ToggleablePopup = require("./elements/ToggleablePopup.js");
 
+var _utils = require("./utils.js");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Form = exports.Form = function () {
@@ -508,15 +512,16 @@ var Form = exports.Form = function () {
 		key: "setFrequencyCookie",
 		value: function setFrequencyCookie(data) {
 			if (!data) return;
-			if (data && data.settings && data.settings.frequency) _Cookies.Cookies.set('__sendsay_forms_' + data.id, data.settings.frequency, data.settings.frequency);
+			if (data && data.settings && data.settings.frequency) _Cookies.Cookies.set('__sendsay_forms_' + data.id, data.settings.frequency, data.settings.frequency, '/', (0, _utils.getHostName)());
 		}
 	}, {
 		key: "setCountCookie",
 		value: function setCountCookie(data) {
+			console.log('foo', (0, _utils.getHostName)());
 			if (!data) return;
 			var count = +_Cookies.Cookies.get('__sendsay_forms_count_' + data.id) || 0;
 			if (data) {
-				_Cookies.Cookies.set('__sendsay_forms_count_' + data.id, count + 1, 94608000);
+				_Cookies.Cookies.set('__sendsay_forms_count_' + data.id, count + 1, 94608000, '/', (0, _utils.getHostName)());
 			}
 		}
 	}, {
@@ -524,7 +529,7 @@ var Form = exports.Form = function () {
 		value: function setSubmitCookie(data) {
 			if (!data) return;
 			if (data) {
-				_Cookies.Cookies.set('__sendsay_forms_submit_' + data.id, true, 94608000);
+				_Cookies.Cookies.set('__sendsay_forms_submit_' + data.id, true, 94608000, '/', (0, _utils.getHostName)());
 			}
 		}
 	}, {
@@ -596,7 +601,7 @@ var Form = exports.Form = function () {
 	return Form;
 }();
 
-},{"./ConditionWatcher.js":1,"./Cookies.js":3,"./elements/Popup.js":17,"./elements/PopupBar.js":18,"./elements/ToggleablePopup.js":23}],6:[function(require,module,exports){
+},{"./ConditionWatcher.js":1,"./Cookies.js":3,"./elements/Popup.js":17,"./elements/PopupBar.js":18,"./elements/ToggleablePopup.js":23,"./utils.js":24}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2885,6 +2890,23 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 },{"./../MediaQuery.js":6,"./Popup.js":17,"./Text.js":22}],24:[function(require,module,exports){
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getHostName = getHostName;
+function getHostName() {
+  var match = location.hostname.match(/(^|\.)[a-zA-Z0-9\-]+\.{0,1}[a-zA-Z0-9\-]*$/);
+
+  if (match) {
+    return match[0];
+  }
+
+  return location.hostname;
+}
+
+},{}],25:[function(require,module,exports){
+"use strict";
+
 var _Popup = require("./classes/elements/Popup.js");
 
 var _PopupBar = require("./classes/elements/PopupBar.js");
@@ -2963,4 +2985,4 @@ var _Form = require("./classes/Form.js");
 	};
 })();
 
-},{"./classes/Connector.js":2,"./classes/Form.js":5,"./classes/elements/Popup.js":17,"./classes/elements/PopupBar.js":18,"./classes/elements/ToggleablePopup.js":23}]},{},[24,1,2,3,4,8,9,10,12,11,13,14,15,16,17,18,19,20,21,22,23,5,6,7]);
+},{"./classes/Connector.js":2,"./classes/Form.js":5,"./classes/elements/Popup.js":17,"./classes/elements/PopupBar.js":18,"./classes/elements/ToggleablePopup.js":23}]},{},[25,1,2,3,4,8,9,10,12,11,13,14,15,16,17,18,19,20,21,22,23,5,6,7,24]);

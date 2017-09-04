@@ -3,5 +3,6 @@ node_modules/
 compiled/
 coverage/
 test-dist/
+src/test-pages/
 ascend.sh
 
