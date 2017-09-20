@@ -17,7 +17,7 @@ export class ToggleablePopup extends Popup {
 		this.steps = this.data.steps;
 		this.curStep = 0;
 		this.gainedData = {};
-	
+
 		this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]"  style="[%overlayStyles%]">' : '') +
 						'<div class = "[%classes%]" style="[%style%]"">' +
 							'<div class = "sendsay-close">×</div>' +
@@ -54,9 +54,23 @@ export class ToggleablePopup extends Popup {
 			'background-color': { param: 'overlayColor' }
 		};
 
+
+		appearance.position = appearance.position || 'centered';
+
+		this.general = {};
+		this.general.appearance = {}
+		this.general.appearance.textColor = this.data.appearance.textColor;
+		this.general.appearance.labelTextColor = this.data.appearance.labelTextColor;
+		this.general.appearance.labelFontSize = this.data.appearance.labelFontSize;
+		this.general.appearance.labelFontFamily = this.escapeStyle(this.data.appearance.labelFontFamily);
+
+	}
+
+	makeMediaQuery() {
+		let appearance = this.data.appearance || {};
 		let width =  appearance.width;
 
-		let mediaQuery = new MediaQuery({  
+		let mediaQuery = new MediaQuery({
 			conditions: ['screen', '(min-width: 320px)', '(max-width:' + (+width + 100) + 'px)'],
 			selectors: {
 				'.sendsay-popup.sendsay-type-widget': {
@@ -69,17 +83,17 @@ export class ToggleablePopup extends Popup {
 					'right': '50px',
 					'border-radius': '0px !important'
 				},
-				'.sendsay-popup.sendsay-type-widget .sendsay-content': { 
+				'.sendsay-popup.sendsay-type-widget .sendsay-content': {
 					'display': 'none',
 					'transition': 'none'
 				},
-				'.sendsay-popup.sendsay-type-widget .sendsay-toggler ': { 
+				'.sendsay-popup.sendsay-type-widget .sendsay-toggler ': {
 					'font-size': '14px !important'
 				},
-				'.sendsay-popup.sendsay-type-widget.sendsay-opened  .sendsay-toggler': { 
+				'.sendsay-popup.sendsay-type-widget.sendsay-opened  .sendsay-toggler': {
 					'display': 'none'
 				},
-				'.sendsay-popup.sendsay-type-widget.sendsay-opened .sendsay-content': { 
+				'.sendsay-popup.sendsay-type-widget.sendsay-opened .sendsay-content': {
 					'display': 'block',
 					'transition': 'none'
 				},
@@ -94,24 +108,15 @@ export class ToggleablePopup extends Popup {
 				'.sendsay-popup.sendsay-type-widget.sendsay-opened .sendsay-close': {
 					'display': 'block'
 				},
-				'.sendsay-popup.sendsay-type-widget.sendsay-right .sendsay-toggler .sendsay-toggler-mobile, .sendsay-popup.sendsay-type-widget.sendsay-left .sendsay-toggler .sendsay-toggler-mobile': { 
+				'.sendsay-popup.sendsay-type-widget.sendsay-right .sendsay-toggler .sendsay-toggler-mobile, .sendsay-popup.sendsay-type-widget.sendsay-left .sendsay-toggler .sendsay-toggler-mobile': {
 					'display': 'block'
 				},
-				'.sendsay-popup.sendsay-type-widget.sendsay-right .sendsay-toggler .sendsay-toggler-desktop, .sendsay-popup.sendsay-type-widget.sendsay-left .sendsay-toggler .sendsay-toggler-desktop': { 
+				'.sendsay-popup.sendsay-type-widget.sendsay-right .sendsay-toggler .sendsay-toggler-desktop, .sendsay-popup.sendsay-type-widget.sendsay-left .sendsay-toggler .sendsay-toggler-desktop': {
 					'display': 'none'
 				},
 			}
 		});
 		this.mediaQuery = mediaQuery;
-		appearance.position = appearance.position || 'centered';
-
-		this.general = {};
-		this.general.appearance = {}
-		this.general.appearance.textColor = this.data.appearance.textColor;
-		this.general.appearance.labelTextColor = this.data.appearance.labelTextColor;
-		this.general.appearance.labelFontSize = this.data.appearance.labelFontSize;
-		this.general.appearance.labelFontFamily = this.escapeStyle(this.data.appearance.labelFontFamily);
-
 	}
 
 	makeSettings() {
@@ -204,8 +209,4 @@ export class ToggleablePopup extends Popup {
 					self.el.querySelector('.sendsay-popup').className = self.makeClasses();
 		}, 100);
 	}
-
-
-
-
 }

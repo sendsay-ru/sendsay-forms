@@ -45,6 +45,18 @@ export class Popup extends DOMObject {
 			'background-color': { param: 'overlayColor' }
 		};
 
+		appearance.position = appearance.position || 'centered';
+
+		this.general = {};
+		this.general.appearance = {}
+		this.general.appearance.textColor = this.data.appearance.textColor;
+		this.general.appearance.labelTextColor = this.data.appearance.labelTextColor;
+		this.general.appearance.labelFontSize = this.data.appearance.labelFontSize;
+		this.general.appearance.labelFontFamily = this.escapeStyle(this.data.appearance.labelFontFamily);
+	}
+
+	makeMediaQuery() {
+		let appearance = this.data.appearance || {};
 		let width = appearance.width;
 
 		let mediaQuery = new MediaQuery({
@@ -72,16 +84,6 @@ export class Popup extends DOMObject {
 			}
 		});
 		this.mediaQuery = mediaQuery;
-		appearance.position = appearance.position || 'centered';
-
-		this.general = {};
-		this.general.appearance = {}
-		this.general.appearance.textColor = this.data.appearance.textColor;
-		this.general.appearance.labelTextColor = this.data.appearance.labelTextColor;
-		this.general.appearance.labelFontSize = this.data.appearance.labelFontSize;
-		this.general.appearance.labelFontFamily = this.escapeStyle(this.data.appearance.labelFontFamily);
-
-
 	}
 
 	build() {
@@ -97,7 +99,7 @@ export class Popup extends DOMObject {
 
 					this.columns.push(newEl);
 					popupBody.appendChild(newEl.el);
-				} 
+				}
 			}
 		}
 		if(this.demo || this.container) {
@@ -107,26 +109,21 @@ export class Popup extends DOMObject {
 				el.style.position = 'absolute';
 		}
 
-		return this.el; 
+		return this.el;
 	}
 
 	addEvents() {
 		let self = this;
 
-		this.addEvent('DOMNodeRemovedFromDocument', function() {
-			if (self.mediaQuery) {
-				self.mediaQuery.el.remove();
-			}
-		});
 		if(!this.noWrapper) {
 			this.addEvent('click', this.handleWrapperClick.bind(this));
-			this.addEvent('click', '.sendsay-popup', this.handlePopupClick.bind(this));	
+			this.addEvent('click', '.sendsay-popup', this.handlePopupClick.bind(this));
 		} else
-			this.addEvent('click', this.handlePopupClick.bind(this));	
+			this.addEvent('click', this.handlePopupClick.bind(this));
 		this.addEvent('sendsay-click', '.sendsay-button', this.handleButtonClick.bind(this));
 		this.addEvent('wheel', this.handleWheel.bind(this));
 		this.addEvent('DOMMouseScroll', this.handleWheel.bind(this));
-		
+
 		this.addEvent('click', '.sendsay-close', this.handleClose.bind(this));
 		document.addEventListener('keyup', this.handleKeyPress.bind(this));
 	}
@@ -134,12 +131,12 @@ export class Popup extends DOMObject {
 	removeEvents() {
 		if(!this.noWrapper) {
 			this.removeEvent('click', this.handleWrapperClick.bind(this));
-			this.removeEvent('click', '.sendsay-popup', this.handlePopupClick.bind(this));	
+			this.removeEvent('click', '.sendsay-popup', this.handlePopupClick.bind(this));
 		} else
-			this.removeEvent('click', this.handlePopupClick.bind(this));	
+			this.removeEvent('click', this.handlePopupClick.bind(this));
 		this.removeEvent('sendsay-click', '.sendsay-button', this.handleButtonClick.bind(this));
 		this.removeEvent('wheel', this.handleWheel.bind(this));
-		this.removeEvent('DOMMouseScroll', this.handleWheel.bind(this));		
+		this.removeEvent('DOMMouseScroll', this.handleWheel.bind(this));
 		this.removeEvent('click', '.sendsay-close', this.handleClose.bind(this));
 		document.removeEventListener('keyup', this.handleKeyPress.bind(this));
 	}
@@ -197,20 +194,27 @@ export class Popup extends DOMObject {
 	}
 
 	show(options) {
+		this.makeMediaQuery();
 		if(!this.container)
 			document.querySelector('body').appendChild(this.el);
 		else {
 			this.el.style.position = 'absolute';
 			if(!this.noWrapper)
 				this.el.querySelector('.sendsay-popup').style.position = 'absolute';
-			this.container.appendChild(this.el); 
+			this.container.appendChild(this.el);
 		}
 	}
 
 	hide() {
-		if(this.el.parentNode)
+		if(this.el.parentNode) {
 			this.el.parentNode.removeChild(this.el);
-		
+
+			if (this.mediaQuery) {
+				this.mediaQuery.el.remove();
+				this.mediaQuery = null;
+			}
+		}
+
 	}
 
 	submit() {
@@ -226,7 +230,7 @@ export class Popup extends DOMObject {
 			for(let i = 0; i < elements.length; i++) {
 				let element = elements[i];
 				if(element instanceof Field ) {
-					// if(element.getValue() !== '') 
+					// if(element.getValue() !== '')
 						data[element.data.field.id || element.data.field.qid] = element.getValue();
 					isValid = element.validate() && isValid;
 				}
@@ -295,7 +299,7 @@ export class Popup extends DOMObject {
 	}
 
 	handlePopupClick(event) {
-		event.stopPropagation() 
+		event.stopPropagation()
 	}
 
 	handleButtonClick(event) {

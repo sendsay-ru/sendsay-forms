@@ -45,9 +45,21 @@ export class PopupBar extends Popup {
 			'background-color': { param: 'overlayColor' }
 		};
 
-		let width =  800;
 
-		let mediaQuery = new MediaQuery({  
+		appearance.position = appearance.position || 'centered';
+
+		this.general = {};
+		this.general.appearance = {}
+		this.general.appearance.textColor = this.data.appearance.textColor;
+		this.general.appearance.labelTextColor = this.data.appearance.labelTextColor;
+		this.general.appearance.labelFontSize = this.data.appearance.labelFontSize;
+		this.general.appearance.labelFontFamily = this.escapeStyle(this.data.appearance.labelFontFamily);
+	}
+
+	makeMediaQuery() {
+		let width = 800;
+
+		let mediaQuery = new MediaQuery({
 			conditions: ['screen', '(min-width: 320px)', '(max-width:' + (+width + 100) + 'px)'],
 			selectors: {
 				'.sendsay-popup': {
@@ -80,17 +92,8 @@ export class PopupBar extends Popup {
 				}
 			}
 		});
+
 		this.mediaQuery = mediaQuery;
-		appearance.position = appearance.position || 'centered';
-
-		this.general = {};
-		this.general.appearance = {}
-		this.general.appearance.textColor = this.data.appearance.textColor;
-		this.general.appearance.labelTextColor = this.data.appearance.labelTextColor;
-		this.general.appearance.labelFontSize = this.data.appearance.labelFontSize;
-		this.general.appearance.labelFontFamily = this.escapeStyle(this.data.appearance.labelFontFamily);
-
-
 	}
 
 }

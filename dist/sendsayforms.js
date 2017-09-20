@@ -1949,6 +1949,19 @@ var Popup = exports.Popup = function (_DOMObject) {
 				'background-color': { param: 'overlayColor' }
 			};
 
+			appearance.position = appearance.position || 'centered';
+
+			this.general = {};
+			this.general.appearance = {};
+			this.general.appearance.textColor = this.data.appearance.textColor;
+			this.general.appearance.labelTextColor = this.data.appearance.labelTextColor;
+			this.general.appearance.labelFontSize = this.data.appearance.labelFontSize;
+			this.general.appearance.labelFontFamily = this.escapeStyle(this.data.appearance.labelFontFamily);
+		}
+	}, {
+		key: "makeMediaQuery",
+		value: function makeMediaQuery() {
+			var appearance = this.data.appearance || {};
 			var width = appearance.width;
 
 			var mediaQuery = new _MediaQuery.MediaQuery({
@@ -1976,14 +1989,6 @@ var Popup = exports.Popup = function (_DOMObject) {
 				}
 			});
 			this.mediaQuery = mediaQuery;
-			appearance.position = appearance.position || 'centered';
-
-			this.general = {};
-			this.general.appearance = {};
-			this.general.appearance.textColor = this.data.appearance.textColor;
-			this.general.appearance.labelTextColor = this.data.appearance.labelTextColor;
-			this.general.appearance.labelFontSize = this.data.appearance.labelFontSize;
-			this.general.appearance.labelFontFamily = this.escapeStyle(this.data.appearance.labelFontFamily);
 		}
 	}, {
 		key: "build",
@@ -2016,11 +2021,6 @@ var Popup = exports.Popup = function (_DOMObject) {
 		value: function addEvents() {
 			var self = this;
 
-			this.addEvent('DOMNodeRemovedFromDocument', function () {
-				if (self.mediaQuery) {
-					self.mediaQuery.el.remove();
-				}
-			});
 			if (!this.noWrapper) {
 				this.addEvent('click', this.handleWrapperClick.bind(this));
 				this.addEvent('click', '.sendsay-popup', this.handlePopupClick.bind(this));
@@ -2100,6 +2100,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 	}, {
 		key: "show",
 		value: function show(options) {
+			this.makeMediaQuery();
 			if (!this.container) document.querySelector('body').appendChild(this.el);else {
 				this.el.style.position = 'absolute';
 				if (!this.noWrapper) this.el.querySelector('.sendsay-popup').style.position = 'absolute';
@@ -2109,7 +2110,14 @@ var Popup = exports.Popup = function (_DOMObject) {
 	}, {
 		key: "hide",
 		value: function hide() {
-			if (this.el.parentNode) this.el.parentNode.removeChild(this.el);
+			if (this.el.parentNode) {
+				this.el.parentNode.removeChild(this.el);
+
+				if (this.mediaQuery) {
+					this.mediaQuery.el.remove();
+					this.mediaQuery = null;
+				}
+			}
 		}
 	}, {
 		key: "submit",
@@ -2126,7 +2134,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 				for (var i = 0; i < elements.length; i++) {
 					var element = elements[i];
 					if (element instanceof _Field.Field) {
-						// if(element.getValue() !== '') 
+						// if(element.getValue() !== '')
 						data[element.data.field.id || element.data.field.qid] = element.getValue();
 						isValid = element.validate() && isValid;
 					}
@@ -2300,6 +2308,18 @@ var PopupBar = exports.PopupBar = function (_Popup) {
 				'background-color': { param: 'overlayColor' }
 			};
 
+			appearance.position = appearance.position || 'centered';
+
+			this.general = {};
+			this.general.appearance = {};
+			this.general.appearance.textColor = this.data.appearance.textColor;
+			this.general.appearance.labelTextColor = this.data.appearance.labelTextColor;
+			this.general.appearance.labelFontSize = this.data.appearance.labelFontSize;
+			this.general.appearance.labelFontFamily = this.escapeStyle(this.data.appearance.labelFontFamily);
+		}
+	}, {
+		key: "makeMediaQuery",
+		value: function makeMediaQuery() {
 			var width = 800;
 
 			var mediaQuery = new _MediaQuery.MediaQuery({
@@ -2335,15 +2355,8 @@ var PopupBar = exports.PopupBar = function (_Popup) {
 					}
 				}
 			});
-			this.mediaQuery = mediaQuery;
-			appearance.position = appearance.position || 'centered';
 
-			this.general = {};
-			this.general.appearance = {};
-			this.general.appearance.textColor = this.data.appearance.textColor;
-			this.general.appearance.labelTextColor = this.data.appearance.labelTextColor;
-			this.general.appearance.labelFontSize = this.data.appearance.labelFontSize;
-			this.general.appearance.labelFontFamily = this.escapeStyle(this.data.appearance.labelFontFamily);
+			this.mediaQuery = mediaQuery;
 		}
 	}]);
 
@@ -2725,6 +2738,19 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 				'background-color': { param: 'overlayColor' }
 			};
 
+			appearance.position = appearance.position || 'centered';
+
+			this.general = {};
+			this.general.appearance = {};
+			this.general.appearance.textColor = this.data.appearance.textColor;
+			this.general.appearance.labelTextColor = this.data.appearance.labelTextColor;
+			this.general.appearance.labelFontSize = this.data.appearance.labelFontSize;
+			this.general.appearance.labelFontFamily = this.escapeStyle(this.data.appearance.labelFontFamily);
+		}
+	}, {
+		key: "makeMediaQuery",
+		value: function makeMediaQuery() {
+			var appearance = this.data.appearance || {};
 			var width = appearance.width;
 
 			var mediaQuery = new _MediaQuery.MediaQuery({
@@ -2774,14 +2800,6 @@ var ToggleablePopup = exports.ToggleablePopup = function (_Popup) {
 				}
 			});
 			this.mediaQuery = mediaQuery;
-			appearance.position = appearance.position || 'centered';
-
-			this.general = {};
-			this.general.appearance = {};
-			this.general.appearance.textColor = this.data.appearance.textColor;
-			this.general.appearance.labelTextColor = this.data.appearance.labelTextColor;
-			this.general.appearance.labelFontSize = this.data.appearance.labelFontSize;
-			this.general.appearance.labelFontFamily = this.escapeStyle(this.data.appearance.labelFontFamily);
 		}
 	}, {
 		key: "makeSettings",
