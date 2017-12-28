@@ -38,7 +38,6 @@ export class Form {
 	}
 
 	setCountCookie(data) {
-		console.log('foo', getHostName());
 		if(!data)
 			return;
 		var count = +Cookies.get('__sendsay_forms_count_' + data.id) || 0;
@@ -57,11 +56,16 @@ export class Form {
 
 
 	handleSuccess() {
+		if (this.connector.errors) {
+			return;
+		}
+
 		let self = this,
 			id = self.connector.data.id,
 			data = self.connector.data;
 		let conditions = this.processConditionsSettings();
 		let watcher = new ConditionWatcher(conditions, id);
+
 
 		watcher.watch().then(function() {
 			switch(data.type) {
@@ -95,9 +99,11 @@ export class Form {
 			return this.handleSuccessSubmit();
 		var params = event.detail.extra;
 		let promise = this.connector.submit(params);
-		if(promise)
-			promise.then(this.handleSuccessSubmit.bind(this),
-											this.handleFailSubmit.bind(this));
+
+		if (promise) {
+			promise
+				.then(this.handleSuccessSubmit.bind(this), this.handleFail.bind(this));
+		}
 	}
 
 	handleSuccessSubmit() {
@@ -107,7 +113,6 @@ export class Form {
 
 	handleFailSubmit() {
 		this.domObj.onSubmitFail();
-		console.log('fail');
 
 		let error = this.connector.error;
 		if(error && this.findInErrors(error, 'wrong_member_email'))

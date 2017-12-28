@@ -16,7 +16,6 @@ export class Connector {
 
 	}
 
-
 	promiseHandler(resolve, reject) {
 		var self = this;
 		this.request.onreadystatechange = function() {
@@ -36,7 +35,6 @@ export class Connector {
 		this.request.send(this.params);
 	}
 
-
 	load() {
 		if(this.pending)
 			return;
@@ -46,8 +44,6 @@ export class Connector {
 		return (new SendsayPromise(this.promiseHandler.bind(this))).then(this.handleLoadSuccess.bind(this),
 																	this.handleLoadFail.bind(this));
 	}
-
-
 
 	transformAnswer(json) {
 		if(json.obj && json.obj.settings) {
@@ -94,10 +90,14 @@ export class Connector {
 	}
 
 	handleLoadSuccess() {
-
 		var rawJson = this.request.responseText;
 		var json = JSON.parse(rawJson);
-		this.transformAnswer(json);
+
+		if (!json.errors) {
+			this.transformAnswer(json);
+		} else {
+			this.errors = json.errors;
+		}
 	}
 
 	handleLoadFail() {

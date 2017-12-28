@@ -267,10 +267,14 @@ var Connector = exports.Connector = function () {
 	}, {
 		key: 'handleLoadSuccess',
 		value: function handleLoadSuccess() {
-
 			var rawJson = this.request.responseText;
 			var json = JSON.parse(rawJson);
-			this.transformAnswer(json);
+
+			if (!json.errors) {
+				this.transformAnswer(json);
+			} else {
+				this.errors = json.errors;
+			}
 		}
 	}, {
 		key: 'handleLoadFail',
@@ -517,7 +521,6 @@ var Form = exports.Form = function () {
 	}, {
 		key: "setCountCookie",
 		value: function setCountCookie(data) {
-			console.log('foo', (0, _utils.getHostName)());
 			if (!data) return;
 			var count = +_Cookies.Cookies.get('__sendsay_forms_count_' + data.id) || 0;
 			if (data) {
@@ -535,6 +538,10 @@ var Form = exports.Form = function () {
 	}, {
 		key: "handleSuccess",
 		value: function handleSuccess() {
+			if (this.connector.errors) {
+				return;
+			}
+
 			var self = this,
 			    id = self.connector.data.id,
 			    data = self.connector.data;
@@ -571,7 +578,10 @@ var Form = exports.Form = function () {
 			if (this.options.fakeSubmit) return this.handleSuccessSubmit();
 			var params = event.detail.extra;
 			var promise = this.connector.submit(params);
-			if (promise) promise.then(this.handleSuccessSubmit.bind(this), this.handleFailSubmit.bind(this));
+
+			if (promise) {
+				promise.then(this.handleSuccessSubmit.bind(this), this.handleFail.bind(this));
+			}
 		}
 	}, {
 		key: "handleSuccessSubmit",
@@ -583,7 +593,6 @@ var Form = exports.Form = function () {
 		key: "handleFailSubmit",
 		value: function handleFailSubmit() {
 			this.domObj.onSubmitFail();
-			console.log('fail');
 
 			var error = this.connector.error;
 			if (error && this.findInErrors(error, 'wrong_member_email')) this.domObj.showErrorFor('_member_email', 'Неверный формат email адреса');
