@@ -1940,7 +1940,7 @@ var Popup = exports.Popup = function (_DOMObject) {
 			this.steps = this.data.steps;
 			this.curStep = 0;
 			this.gainedData = {};
-			this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]" style="[%overlayStyles%]">' : '') + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">×</div>' + '<div class = "sendsay-content">' + '</div>' + '</div>' + (!this.noWrapper ? '</div>' : '');
+			this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]" style="[%overlayStyles%]">' : '') + '<div class = "[%classes%]" style="[%style%]"">' + '<div class = "sendsay-close">' + '<svg viewBox="0 0 20 20" fill="none" class="sendsay-close__svg" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">' + '<path d="M1 1L19 19" stroke-width="2"/>' + '<path d="M19 1L1 19" stroke-width="2"/>' + '</svg>' + '</div>' + '<div class = "sendsay-content">' + '</div>' + '</div>' + (!this.noWrapper ? '</div>' : '');
 
 			this.baseClass = 'sendsay-popup';
 			this.applicableStyles = {
