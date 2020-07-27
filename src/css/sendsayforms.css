@@ -186,6 +186,13 @@
   cursor: pointer;
   line-height: 20px;
 }
+.sendsay-close .sendsay-close__svg {
+  margin: 0;
+  padding: 0;
+  position: static;
+  top: unset;
+  left: unset;
+}
 .sendsay-radioinput,
 .sendsay-checkinput {
   display: inline-block;

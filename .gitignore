@@ -5,4 +5,5 @@ coverage/
 test-dist/
 src/test-pages/
 ascend.sh
+.idea
 
