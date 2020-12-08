@@ -28,7 +28,7 @@ module.exports = function(grunt) {
                ]
             },
             files: {
-              "./dist/sendsayforms.js": ["./src/*.js", "./src/classes/**/*.js"]
+              "./dist/forms.js": ["./src/*.js", "./src/classes/**/*.js"]
             }
          },
          dev: {
@@ -54,17 +54,17 @@ module.exports = function(grunt) {
       uglify: {
         target: {
           files: {
-            'dist/sendsayforms.min.js': ['dist/sendsayforms.js']
+            'dist/forms.min.js': ['dist/forms.js']
           }
         }
       },
       less: {
         dev: {
           files: {
-            'src/css/sendsayforms.css': ['src/css/less/general.less',
-                                         'src/css/less/bar.less',
-                                         'src/css/less/toggleable.less',
-                                         'src/css/less/animations.less']
+            'src/css/forms.css': ['src/css/less/general.less',
+                                   'src/css/less/bar.less',
+                                   'src/css/less/toggleable.less',
+                                   'src/css/less/animations.less']
           }
         },
         dist: {
@@ -75,10 +75,10 @@ module.exports = function(grunt) {
             ]
           },
           files: {
-            'dist/sendsayforms.css': ['src/css/less/general.less',
-                                      'src/css/less/bar.less',
-                                      'src/css/less/toggleable.less',
-                                      'src/css/less/animations.less']
+            'dist/forms.css': ['src/css/less/general.less',
+                               'src/css/less/bar.less',
+                               'src/css/less/toggleable.less',
+                               'src/css/less/animations.less']
           }
         }
       },

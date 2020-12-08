@@ -2992,7 +2992,7 @@ var _Form = require("./classes/Form.js");
 			link.id = cssId;
 			link.rel = 'stylesheet';
 			link.type = 'text/css';
-			link.href = 'https://app.sendsay.ru/kit/sendsayForms/sendsayforms.css';
+			link.href = 'https://image.sendsay.ru/app/js/forms/forms.css';
 			link.media = 'all';
 
 			var sibling = document.querySelector('#sendsay-generated-sheet');
