@@ -1,74 +1,82 @@
+/* eslint-disable func-names */
+import { Popup } from './classes/elements/Popup';
+import { PopupBar } from './classes/elements/PopupBar';
+import { ToggleablePopup } from './classes/elements/ToggleablePopup';
+import { Connector } from './classes/Connector';
+import { Form } from './classes/Form';
 
-import {Popup} from "./classes/elements/Popup.js";
-import {PopupBar} from "./classes/elements/PopupBar.js";
-import {ToggleablePopup} from "./classes/elements/ToggleablePopup.js";
-import {Connector} from "./classes/Connector.js";
-import {Form} from "./classes/Form.js";
-(function() {
+const config = {
+  forms: {
+    css: {
+      url: 'https://image.sendsay.ru/app/js/forms/forms.css',
+    },
+  },
+};
 
+(function () {
+  const loadCss = (callback) => {
+    const cssId = '_sendsay-styles';
+    if (!document.getElementById(cssId)) {
+      const link = document.createElement('link');
+      let loaded = false;
 
-	var activatePopup  = function(url, options) {
-		loadCss(function() {
-			var connector = new Connector(url);
-			var form = new Form(connector, options);
-		});
-	};
+      link.id = cssId;
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = config.forms.css.url;
+      link.media = 'all';
 
-	var showPopup = function(data, options) {
-		loadCss(function() {
-      var domConstructor;
-      switch(data.type) {
+      const sibling = document.querySelector('#sendsay-generated-sheet');
+      if (sibling) {
+        document.head.insertBefore(link, sibling);
+      } else {
+        document.head.appendChild(link);
+      }
+      link.addEventListener('load', () => {
+        link.removeEventListener('load', callback);
+
+        if (!loaded) {
+          loaded = true;
+
+          callback();
+        }
+      });
+    } else if (typeof callback === 'function') {
+      callback();
+    }
+  };
+
+  const activatePopup = function (url, options) {
+    loadCss(() => {
+      const connector = new Connector(url);
+      const form = new Form(connector, options);
+      return form;
+    });
+  };
+
+  const showPopup = function (data, options) {
+    loadCss(() => {
+      let DomConstructor;
+      // eslint-disable-next-line default-case
+      switch (data.type) {
         case 'popup':
-          domConstructor = Popup;
+          DomConstructor = Popup;
           break;
         case 'bar':
-          domConstructor = PopupBar;
+          DomConstructor = PopupBar;
           break;
         case 'widget':
-          domConstructor = ToggleablePopup;
+          DomConstructor = ToggleablePopup;
           break;
       }
-      let popup = new domConstructor(data);
+      const popup = new DomConstructor(data);
       popup.activate(options);
     });
-	}
+  };
 
-	var loadCss = function(callback) {
-		var cssId = '_sendsay-styles';
-		if (!document.getElementById(cssId)) {
-		    var head  = document.getElementsByTagName('head')[0];
-		    var link  = document.createElement('link');
-		    var loaded = false;
-
-		    link.id   = cssId;
-		    link.rel  = 'stylesheet';
-		    link.type = 'text/css';
-		    link.href = 'https://image.sendsay.ru/app/js/forms/forms.css';
-		    link.media = 'all';
-
-		    var sibling = document.querySelector('#sendsay-generated-sheet');
-		    if(sibling) {
-		    	document.head.insertBefore(link, sibling);
-		    } else {
-		    	document.head.appendChild(link);
-		    }
-		    link.addEventListener('load', function() {
-		    	link.removeEventListener('load', callback);
-
-		    	if(!loaded) {
-		    		loaded = true;
-
-		    		callback();
-		    	}
-		    });
-		} else {
-			if (typeof callback === 'function') {
-				callback();
-			}
-		}
-	}
-	window.SENDSAY = {
-		activatePopup: activatePopup,
-		showPopup: showPopup
-	};
-})();
+  window.SENDSAY = {
+    config,
+    activatePopup,
+    showPopup,
+  };
+}());

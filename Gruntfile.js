@@ -1,109 +1,93 @@
-module.exports = function(grunt) {
+const lessFiles = [
+  'src/css/less/general.less',
+  'src/css/less/bar.less',
+  'src/css/less/toggleable.less',
+  'src/css/less/notify.less',
+  'src/css/less/animations.less',
+];
+
+module.exports = (grunt) => {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    babel: {
+    browserify: {
+      dist: {
         options: {
-            sourceMap: true,
-            presets: ['es2015']
+          transform: [
+            ['babelify', {
+              sourceMaps: true,
+              presets: ['@babel/preset-env'],
+            }],
+          ],
         },
-        dist: {
-            files: [{
-                "expand": true,
-                "cwd": "src/",
-                "src": ["*.js", "classes/**/*.js"],
-                "dest": "compiled/",
-                "ext": ".js"
-            }]
-        }
-      },
-      browserify: {
-         dist: {
-            options: {
-               transform: [
-                  ["babelify", {
-                     sourceMap: true,
-                     presets: ['es2015']
-                  }]
-               ]
-            },
-            files: {
-              "./dist/forms.js": ["./src/*.js", "./src/classes/**/*.js"]
-            }
-         },
-         dev: {
-            options: {
-              transform: [
-                  ["babelify", {
-                     sourceMap: true,
-                     presets: ['es2015']
-                  }]
-               ]
-             },
-             files: {
-                "./test-dist/sendsayforms.js": ["./src/*.js", "./src/classes/**/*.js", "./tests/classes/*.js"]
-             }
-         }
-      },
-      connect: {
-        server: {
-          port: 8082,
-          base: 'src'
-        }
-      },
-      uglify: {
-        target: {
-          files: {
-            'dist/forms.min.js': ['dist/forms.js']
-          }
-        }
-      },
-      less: {
-        dev: {
-          files: {
-            'src/css/forms.css': ['src/css/less/general.less',
-                                   'src/css/less/bar.less',
-                                   'src/css/less/toggleable.less',
-                                   'src/css/less/animations.less']
-          }
+        files: {
+          './dist/forms.js': ['./src/*.js', './src/classes/**/*.js'],
         },
-        dist: {
-          options: {
-            compress: true,
-            plugins: [
-              new (require('less-plugin-autoprefix'))(),
-            ]
-          },
-          files: {
-            'dist/forms.css': ['src/css/less/general.less',
-                               'src/css/less/bar.less',
-                               'src/css/less/toggleable.less',
-                               'src/css/less/animations.less']
-          }
-        }
       },
-      watch: {
-        scripts: {
-          files: 'src/css/**/*.less',
-          tasks: ['less:dev'],
-          options: {
-            interrupt: true,
-          }
+      dev: {
+        options: {
+          transform: [
+            ['babelify', {
+              sourceMaps: true,
+              presets: ['@babel/preset-env'],
+            }],
+          ],
         },
-      }
+        files: {
+          './test-dist/sendsayforms.js': ['./src/*.js', './src/classes/**/*.js', './tests/classes/*.js'],
+        },
+      },
+    },
+    uglify: {
+      target: {
+        files: {
+          'dist/forms.min.js': ['dist/forms.js'],
+        },
+      },
+    },
+    less: {
+      dev: {
+        files: {
+          'dist/forms.css': lessFiles,
+        },
+      },
+      dist: {
+        options: {
+          compress: true,
+          plugins: [
+            new (require('less-plugin-autoprefix'))(),
+          ],
+        },
+        files: {
+          'dist/forms.min.css': lessFiles,
+        },
+      },
+    },
+    watch: {
+      scripts: {
+        files: 'src/**/*.js',
+        tasks: ['browserify'],
+        options: {
+          interrupt: true,
+        },
+      },
+      styles: {
+        files: 'src/css/**/*.less',
+        tasks: ['less:dev'],
+        options: {
+          interrupt: true,
+        },
+      },
+    },
   });
 
-
   grunt.loadNpmTasks('grunt-babel');
-  grunt.loadNpmTasks('grunt-connect');
-  grunt.loadNpmTasks("grunt-browserify");
+  grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
   // Default task(s).
-  grunt.registerTask('default', ['babel', 'browserify', 'uglify']);
-  grunt.registerTask('build', ['browserify', 'uglify', 'less:dist']);
-
-
+  grunt.registerTask('build', ['browserify', 'uglify', 'less']);
+  grunt.registerTask('default', ['build']);
 };

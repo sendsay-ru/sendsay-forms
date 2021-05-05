@@ -1,212 +1,222 @@
-import {Popup} from "./Popup.js";
-import {Text} from "./Text.js";
-import {MediaQuery} from "./../MediaQuery.js";
-
-
+import { Popup } from './Popup';
+import { Text } from './Text';
+import { MediaQuery } from '../MediaQuery';
 
 export class ToggleablePopup extends Popup {
+  initialize() {
+    const appearance = this.data.appearance || {};
 
-	constructor(data, parent) {
-		super(data, parent);
-	}
+    this.noWrapper = !appearance.overlayEnabled;
+    this.steps = this.data.steps;
+    this.curStep = 0;
+    this.gainedData = {};
 
-	initialize() {
-		let appearance = this.data.appearance || {};
+    this.template = `${!this.noWrapper
+      ? '<div class = "sendsay-wrapper [%wrapperClasses%]"  style="[%overlayStyles%]">'
+      : ''
+    }<div class = "[%classes%]" style="[%style%]"">`
+      + '<div class = "sendsay-close">×</div>'
+      + '<div class = "sendsay-toggler">'
+      + '<span class="sendsay-toggler-desktop">[%toggle%]</span>'
+      + '<span class="sendsay-toggler-mobile">[%toggle%]</span>'
+      + '</div>'
+      + '<div class = "sendsay-content">'
+      + '</div>'
+      + `</div>${
+        !this.noWrapper ? '</div>' : ''}`;
 
-		this.noWrapper = !appearance.overlayEnabled;
-		this.steps = this.data.steps;
-		this.curStep = 0;
-		this.gainedData = {};
+    this.baseClass = 'sendsay-popup';
 
-		this.template = (!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]"  style="[%overlayStyles%]">' : '') +
-						'<div class = "[%classes%]" style="[%style%]"">' +
-							'<div class = "sendsay-close">×</div>' +
-							'<div class = "sendsay-toggler">' +
-								'<span class="sendsay-toggler-desktop">[%toggle%]</span>' +
-								'<span class="sendsay-toggler-mobile">[%toggle%]</span>' +
-							'</div>' +
-							'<div class = "sendsay-content">' +
-							'</div>' +
-						'</div>'+
-						(!this.noWrapper ? '</div>' : '');
+    this.applicableStyles = {
+      'background-color': { param: 'backgroundColor' },
+      'padding-bottom': { param: 'paddingBottom', postfix: 'px' },
+      'padding-top': { param: 'paddingTop', postfix: 'px' },
+      'padding-left': { param: 'paddingLeft', postfix: 'px' },
+      'padding-right': { param: 'paddingRight', postfix: 'px' },
+      color: { param: 'textColor' },
+      width: { param: 'width', prefix: 'px' },
+      'border-radius': {
+        param: 'borderRadius',
+        template: '[%v%]px [%v%]px 0px 0px',
+      },
+    };
 
+    this.maintextApplStyle = {
+      'font-family': { param: 'font-family' },
+      'font-size': { param: 'fontSize', postfix: 'px' },
+      'text-align': { param: 'text-align', postfix: 'px' },
+    };
 
-		this.baseClass = 'sendsay-popup';
+    this.applOverlayStyles = {
+      'background-color': { param: 'overlayColor' },
+    };
 
-		this.applicableStyles = {
-			'background-color': { param: 'backgroundColor' },
-			'padding-bottom': { param: 'paddingBottom', postfix: 'px'},
-			'padding-top': { param: 'paddingTop', postfix: 'px'},
-			'padding-left': { param: 'paddingLeft', postfix: 'px'},
-			'padding-right': { param: 'paddingRight', postfix: 'px'},
-			'color': { param: 'textColor'},
-			'width': { param: 'width', prefix: 'px'},
-			'border-radius': { param: 'borderRadius', template: '[%v%]px [%v%]px 0px 0px'}
-		};
+    appearance.position = appearance.position || 'centered';
 
-		this.maintextApplStyle = {
-			'font-family': { param: 'font-family' },
-			'font-size': { param: 'fontSize', postfix: 'px' },
-			'text-align': { param: 'text-align', postfix: 'px'}
-		};
+    this.general = {};
+    this.general.appearance = {};
+    this.general.appearance.textColor = this.data.appearance.textColor;
+    this.general.appearance.labelTextColor = this.data.appearance.labelTextColor;
+    this.general.appearance.labelFontSize = this.data.appearance.labelFontSize;
+    this.general.appearance.labelFontFamily = this.escapeStyle(
+      this.data.appearance.labelFontFamily,
+    );
 
-		this.applOverlayStyles = {
-			'background-color': { param: 'overlayColor' }
-		};
+    this.mobileWith = 150;
+  }
 
+  makeMediaQuery() {
+    const appearance = this.data.appearance || {};
+    const { width } = appearance;
 
-		appearance.position = appearance.position || 'centered';
+    const mediaQuery = new MediaQuery({
+      conditions: [
+        'screen',
+        '(min-width: 320px)',
+        `(max-width:${+width + 100}px)`,
+      ],
+      selectors: {
+        '.sendsay-popup.sendsay-type-widget': {
+          width: `${this.mobileWith}px !important`,
+          '-webkit-flex-direction': 'column',
+          '-ms-flex-direction': 'column',
+          'flex-direction': 'column',
+          animation: 'none',
+          bottom: '50px',
+          right: '50px',
+          'border-radius': '0px !important',
+        },
+        '.sendsay-popup.sendsay-type-widget .sendsay-content': {
+          display: 'none',
+          transition: 'none',
+        },
+        '.sendsay-popup.sendsay-type-widget .sendsay-toggler ': {
+          'font-size': '14px !important',
+        },
+        '.sendsay-popup.sendsay-type-widget.sendsay-opened  .sendsay-toggler': {
+          display: 'none',
+        },
+        '.sendsay-popup.sendsay-type-widget.sendsay-opened .sendsay-content': {
+          display: 'block',
+          transition: 'none',
+        },
+        '.sendsay-popup.sendsay-type-widget.sendsay-opened': {
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          bottom: 'initial',
+          right: 'initial',
+          width: '300px !important',
+        },
+        '.sendsay-popup.sendsay-type-widget.sendsay-opened .sendsay-close': {
+          display: 'block',
+        },
+        '.sendsay-popup.sendsay-type-widget.sendsay-right .sendsay-toggler .sendsay-toggler-mobile, .sendsay-popup.sendsay-type-widget.sendsay-left .sendsay-toggler .sendsay-toggler-mobile': {
+          display: 'block',
+        },
+        '.sendsay-popup.sendsay-type-widget.sendsay-right .sendsay-toggler .sendsay-toggler-desktop, .sendsay-popup.sendsay-type-widget.sendsay-left .sendsay-toggler .sendsay-toggler-desktop': {
+          display: 'none',
+        },
+      },
+    });
+    this.mediaQuery = mediaQuery;
+  }
 
-		this.general = {};
-		this.general.appearance = {}
-		this.general.appearance.textColor = this.data.appearance.textColor;
-		this.general.appearance.labelTextColor = this.data.appearance.labelTextColor;
-		this.general.appearance.labelFontSize = this.data.appearance.labelFontSize;
-		this.general.appearance.labelFontFamily = this.escapeStyle(this.data.appearance.labelFontFamily);
+  makeSettings() {
+    const settings = super.makeSettings();
 
-	}
+    settings.toggle = new Text(this.data.toggle).build().outerHTML;
 
-	makeMediaQuery() {
-		let appearance = this.data.appearance || {};
-		let width =  appearance.width;
+    return settings;
+  }
 
-		let mediaQuery = new MediaQuery({
-			conditions: ['screen', '(min-width: 320px)', '(max-width:' + (+width + 100) + 'px)'],
-			selectors: {
-				'.sendsay-popup.sendsay-type-widget': {
-					 'width': '150px !important',
-					'-webkit-flex-direction': 'column',
-					'-ms-flex-direction': 'column',
-					'flex-direction': 'column',
-					'animation': 'none',
-					'bottom': '50px',
-					'right': '50px',
-					'border-radius': '0px !important'
-				},
-				'.sendsay-popup.sendsay-type-widget .sendsay-content': {
-					'display': 'none',
-					'transition': 'none'
-				},
-				'.sendsay-popup.sendsay-type-widget .sendsay-toggler ': {
-					'font-size': '14px !important'
-				},
-				'.sendsay-popup.sendsay-type-widget.sendsay-opened  .sendsay-toggler': {
-					'display': 'none'
-				},
-				'.sendsay-popup.sendsay-type-widget.sendsay-opened .sendsay-content': {
-					'display': 'block',
-					'transition': 'none'
-				},
-				'.sendsay-popup.sendsay-type-widget.sendsay-opened': {
-					'top': '50%',
-					'left': '50%',
-					'transform': 'translate(-50%, -50%)',
-					'bottom': 'initial',
-					'right': 'initial',
-					'width': '300px !important',
-				},
-				'.sendsay-popup.sendsay-type-widget.sendsay-opened .sendsay-close': {
-					'display': 'block'
-				},
-				'.sendsay-popup.sendsay-type-widget.sendsay-right .sendsay-toggler .sendsay-toggler-mobile, .sendsay-popup.sendsay-type-widget.sendsay-left .sendsay-toggler .sendsay-toggler-mobile': {
-					'display': 'block'
-				},
-				'.sendsay-popup.sendsay-type-widget.sendsay-right .sendsay-toggler .sendsay-toggler-desktop, .sendsay-popup.sendsay-type-widget.sendsay-left .sendsay-toggler .sendsay-toggler-desktop': {
-					'display': 'none'
-				},
-			}
-		});
-		this.mediaQuery = mediaQuery;
-	}
+  addEvents() {
+    super.addEvents();
+    this.addEvent(
+      'click',
+      '.sendsay-toggler',
+      this.handleTogglerClick.bind(this),
+    );
+  }
 
-	makeSettings() {
-		let settings = super.makeSettings();
+  removeEvents() {
+    super.removeEvents();
+    this.removeEvent(
+      'click',
+      '.sendsay-toggler',
+      this.handleTogglerClick.bind(this),
+    );
+  }
 
-		settings.toggle = (new Text(this.data.toggle)).build().outerHTML;
+  handleTogglerClick() {
+    const el = this.noWrapper ? this.el : this.el.querySelector('.sendsay-popup');
+    const contentEl = el.querySelector('.sendsay-content');
 
-		return settings;
-	}
+    if (el.classList.contains('sendsay-opened')) {
+      el.classList.remove('sendsay-opened');
+      contentEl.style.maxHeight = `${0}px`;
+    } else {
+      el.classList.add('sendsay-opened');
+      this.setSaneMaxHeight();
+    }
+  }
 
-	addEvents() {
-		super.addEvents();
-		this.addEvent('click', '.sendsay-toggler', this.handleTogglerClick.bind(this));
-	}
+  submit() {
+    const temp = super.submit();
+    this.setSaneMaxHeight();
+    return temp;
+  }
 
-	removeEvents() {
-		super.removeEvents();
-		this.removeEvent('click', '.sendsay-toggler', this.handleTogglerClick.bind(this));
-	}
+  setSaneMaxHeight() {
+    const el = this.noWrapper ? this.el : this.el.querySelector('.sendsay-popup');
+    const contentEl = el.querySelector('.sendsay-content');
+    contentEl.style.maxHeight = `${contentEl.scrollHeight}px`;
+  }
 
-	handleTogglerClick() {
+  showErrorFor(qid, message) {
+    super.showErrorFor(qid, message);
+    this.setSaneMaxHeight();
+  }
 
-		let el = this.noWrapper ? this.el : this.el.querySelector('.sendsay-popup');
-		let contentEl = el.querySelector('.sendsay-content');
+  handleClose() {
+    const el = this.noWrapper ? this.el : this.el.querySelector('.sendsay-popup');
+    const contentEl = el.querySelector('.sendsay-content');
 
-		if(el.classList.contains('sendsay-opened')) {
-			el.classList.remove('sendsay-opened');
-			contentEl.style.maxHeight = 0 + 'px';
-		} else {
-			el.classList.add('sendsay-opened');
-			this.setSaneMaxHeight();
-		}
-	}
+    if (
+      el.classList.contains('sendsay-opened')
+      && this.steps.length - 1 !== this.curStep
+    ) {
+      el.classList.remove('sendsay-opened');
+      contentEl.style.maxHeight = `${0}px`;
+    } else {
+      this.hide();
+    }
+  }
 
-	submit() {
-		let temp = super.submit();
-		this.setSaneMaxHeight();
-		return temp;
-	}
+  makeClasses() {
+    let classes = super.makeClasses();
+    if (this.curStep !== 0) {
+      classes += ' sendsay-opened';
+    }
+    return classes;
+  }
 
-	setSaneMaxHeight() {
-		let el = this.noWrapper ? this.el : this.el.querySelector('.sendsay-popup');
-		let contentEl = el.querySelector('.sendsay-content');
-		contentEl.style.maxHeight = contentEl.scrollHeight + 'px';
-	}
+  afterRender() {
+    if (this.curStep !== 0) { this.setSaneMaxHeight(); }
+  }
 
-	showErrorFor(qid, message) {
-		super.showErrorFor(qid, message);
-		this.setSaneMaxHeight();
-	}
-
-	handleClose() {
-		let el = this.noWrapper ? this.el : this.el.querySelector('.sendsay-popup');
-		let contentEl = el.querySelector('.sendsay-content');
-
-		if(el.classList.contains('sendsay-opened') && this.steps.length -1 !== this.curStep) {
-			el.classList.remove('sendsay-opened');
-			contentEl.style.maxHeight = 0 + 'px';
-		} else {
-			this.hide();
-		}
-	}
-
-	makeClasses() {
-		let classes = super.makeClasses();
-		if(this.curStep != 0) {
-			classes += ' sendsay-opened';
-		}
-		return classes;
-	}
-
-	afterRender() {
-		if(this.curStep != 0)
-			this.setSaneMaxHeight();
-	}
-
-	proceedToNextStep() {
-		let temp, self = this;
-		this.curStep++;
-		if(this.curStep != 0) {
-			temp = this.data.appearance.animation;
-			this.data.appearance.animation = 'none';
-		}
-		this.render();
-		setTimeout(function() {
-				self.data.appearance.animation = temp;
-				if(self.noWrapper)
-					self.el.className = self.makeClasses();
-				else
-					self.el.querySelector('.sendsay-popup').className = self.makeClasses();
-		}, 100);
-	}
+  proceedToNextStep() {
+    let temp;
+    const self = this;
+    this.curStep++;
+    if (this.curStep !== 0) {
+      temp = this.data.appearance.animation;
+      this.data.appearance.animation = 'none';
+    }
+    this.render();
+    setTimeout(() => {
+      self.data.appearance.animation = temp;
+      if (self.noWrapper) { self.el.className = self.makeClasses(); } else { self.el.querySelector('.sendsay-popup').className = self.makeClasses(); }
+    }, 100);
+  }
 }
