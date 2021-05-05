@@ -5,14 +5,11 @@ class NotificationService {
     this.notify = null;
   }
 
-  show = (id) => {
+  show = () => {
     if (this.domObj?.isShow) {
       return;
     }
-    this.domObj = new Notification({
-      ...this.options(),
-      id,
-    });
+    this.domObj = new Notification(this.options());
     this.domObj.activate();
   }
 

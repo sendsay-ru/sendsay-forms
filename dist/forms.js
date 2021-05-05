@@ -291,23 +291,25 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
 
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
 
+var _attributes = require("./attributes");
+
 var ClickTrigger = /*#__PURE__*/function () {
   function ClickTrigger() {
     (0, _classCallCheck2["default"])(this, ClickTrigger);
-    this.attributes = ['data-sendsay-form-subscribe'];
+    this.attributes = [_attributes.ATTRIBUTES.SUBSCRIBE];
   }
 
   (0, _createClass2["default"])(ClickTrigger, [{
     key: "watch",
     value: function watch(resolve) {
-      var _this = this;
-
       document.addEventListener('click', function (e) {
-        if (_this.attributes.some(function (attr) {
-          return e.target.hasAttribute(attr);
-        })) {
-          resolve('click');
+        var attr = e.target.getAttribute(_attributes.ATTRIBUTES.SUBSCRIBE);
+
+        if (!attr) {
+          return;
         }
+
+        resolve(attr);
       });
     }
   }]);
@@ -316,7 +318,7 @@ var ClickTrigger = /*#__PURE__*/function () {
 
 exports["default"] = ClickTrigger;
 
-},{"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/interopRequireDefault":10}],20:[function(require,module,exports){
+},{"./attributes":27,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/interopRequireDefault":10}],20:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -337,12 +339,17 @@ var _utils = require("./utils");
 var _ClickTrigger = _interopRequireDefault(require("./ClickTrigger"));
 
 var ConditionWatcher = /*#__PURE__*/function () {
-  function ConditionWatcher(rawConditions, formID) {
+  function ConditionWatcher(rawConditions, _ref) {
+    var id = _ref.id,
+        formId = _ref.formId,
+        login = _ref.login;
     (0, _classCallCheck2["default"])(this, ConditionWatcher);
     this.globCond = rawConditions; // eslint-disable-next-line no-multi-assign
 
     var conditions = this.conditions = rawConditions.showCondition;
-    this.id = formID; // eslint-disable-next-line eqeqeq
+    this.id = id;
+    this.login = login;
+    this.formId = formId; // eslint-disable-next-line eqeqeq
 
     this.instant = conditions.instant != undefined ? conditions.instant : true;
     this.pageScroll = parseInt(conditions.onPageScroll, 10) || 0;
@@ -356,6 +363,8 @@ var ConditionWatcher = /*#__PURE__*/function () {
   (0, _createClass2["default"])(ConditionWatcher, [{
     key: "watch",
     value: function watch(resolve, reject) {
+      var _this = this;
+
       this.resolve = resolve;
       this.reject = reject;
       this.isDone = false;
@@ -365,7 +374,11 @@ var ConditionWatcher = /*#__PURE__*/function () {
       }
 
       var clickTrigger = new _ClickTrigger["default"]();
-      clickTrigger.watch(resolve);
+      clickTrigger.watch(function (attr) {
+        if (attr === "".concat(_this.login, "/").concat(_this.formId)) {
+          resolve('click');
+        }
+      });
 
       if (this.isRejectByCookie()) {
         reject();
@@ -500,7 +513,7 @@ var ConditionWatcher = /*#__PURE__*/function () {
 
 exports.ConditionWatcher = ConditionWatcher;
 
-},{"./ClickTrigger":19,"./Cookies":22,"./utils":44,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/interopRequireDefault":10}],21:[function(require,module,exports){
+},{"./ClickTrigger":19,"./Cookies":22,"./utils":46,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/interopRequireDefault":10}],21:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -523,9 +536,11 @@ var Connector = /*#__PURE__*/function () {
 
     var _this$extractID = this.extractID(this.url),
         id = _this$extractID.id,
+        login = _this$extractID.login,
         formId = _this$extractID.formId;
 
     this.id = id;
+    this.login = login;
     this.formId = formId;
   }
 
@@ -882,7 +897,7 @@ var ElementFactory = /*#__PURE__*/function (_Factory) {
 
 exports.ElementFactory = ElementFactory;
 
-},{"./elements/Button":27,"./elements/DateField":31,"./elements/Field":32,"./elements/ImageElement":33,"./elements/MultipleChoiseField":34,"./elements/NumberField":36,"./elements/SingleChoiseField":40,"./elements/Spacer":41,"./elements/Text":42,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],24:[function(require,module,exports){
+},{"./elements/Button":28,"./elements/DateField":32,"./elements/Field":34,"./elements/ImageElement":35,"./elements/MultipleChoiseField":36,"./elements/NumberField":38,"./elements/SingleChoiseField":42,"./elements/Spacer":43,"./elements/Text":44,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],24:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -903,6 +918,8 @@ var _Cookies = require("./Cookies");
 var _Popup = require("./elements/Popup");
 
 var _PopupBar = require("./elements/PopupBar");
+
+var _Embedded = require("./elements/Embedded");
 
 var _ToggleablePopup = require("./elements/ToggleablePopup");
 
@@ -986,20 +1003,26 @@ var Form = /*#__PURE__*/function () {
     value: function handleSuccess() {
       var _this = this;
 
+      var _this$connector = this.connector,
+          data = _this$connector.data,
+          id = _this$connector.id,
+          formId = _this$connector.formId,
+          login = _this$connector.login;
+
       if (this.connector.errors) {
         var clickTrigger = new _ClickTrigger["default"]();
         clickTrigger.watch(function () {
-          var formId = _this.connector.formId;
-
-          _NotificationService["default"].show(formId);
+          _NotificationService["default"].show();
         });
         return;
       }
 
-      var id = this.connector.data.id;
-      var data = this.connector.data;
       var conditions = this.processConditionsSettings();
-      var watcher = new _ConditionWatcher.ConditionWatcher(conditions, id);
+      var watcher = new _ConditionWatcher.ConditionWatcher(conditions, {
+        id: id,
+        formId: formId,
+        login: login
+      });
       var DomConstructor = null;
       watcher.watch(function (event) {
         var _this$domObj;
@@ -1017,6 +1040,10 @@ var Form = /*#__PURE__*/function () {
           case 'widget':
             DomConstructor = _ToggleablePopup.ToggleablePopup;
             break;
+
+          case 'embedded':
+            DomConstructor = _Embedded.Embedded;
+            break;
         }
 
         if (!DomConstructor || (_this$domObj = _this.domObj) !== null && _this$domObj !== void 0 && _this$domObj.isShow) {
@@ -1025,7 +1052,7 @@ var Form = /*#__PURE__*/function () {
 
         _this.domObj = null; // eslint-disable-next-line new-cap
 
-        _this.domObj = new DomConstructor(_this.connector.data);
+        _this.domObj = new DomConstructor(data);
 
         _this.domObj.activate(_this.options);
 
@@ -1090,7 +1117,7 @@ var Form = /*#__PURE__*/function () {
 
 exports.Form = Form;
 
-},{"./ClickTrigger":19,"./ConditionWatcher":20,"./Cookies":22,"./NotificationService":26,"./elements/Popup":37,"./elements/PopupBar":38,"./elements/ToggleablePopup":43,"./utils":44,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/interopRequireDefault":10}],25:[function(require,module,exports){
+},{"./ClickTrigger":19,"./ConditionWatcher":20,"./Cookies":22,"./NotificationService":26,"./elements/Embedded":33,"./elements/Popup":39,"./elements/PopupBar":40,"./elements/ToggleablePopup":45,"./utils":46,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/interopRequireDefault":10}],25:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -1186,24 +1213,18 @@ var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/de
 
 var _Notification = require("./elements/Notification");
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
 var NotificationService = function NotificationService() {
   var _this = this;
 
   (0, _classCallCheck2["default"])(this, NotificationService);
-  (0, _defineProperty2["default"])(this, "show", function (id) {
+  (0, _defineProperty2["default"])(this, "show", function () {
     var _this$domObj;
 
     if ((_this$domObj = _this.domObj) !== null && _this$domObj !== void 0 && _this$domObj.isShow) {
       return;
     }
 
-    _this.domObj = new _Notification.Notification(_objectSpread(_objectSpread({}, _this.options()), {}, {
-      id: id
-    }));
+    _this.domObj = new _Notification.Notification(_this.options());
 
     _this.domObj.activate();
   });
@@ -1249,7 +1270,21 @@ var _default = getInstance();
 
 exports["default"] = _default;
 
-},{"./elements/Notification":35,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/defineProperty":6,"@babel/runtime/helpers/interopRequireDefault":10}],27:[function(require,module,exports){
+},{"./elements/Notification":37,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/defineProperty":6,"@babel/runtime/helpers/interopRequireDefault":10}],27:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ATTRIBUTES = void 0;
+var ATTRIBUTES = {
+  INIT: 'data-sendsay-form-init',
+  EMBEDDED: 'data-sendsay-form-embedded',
+  SUBSCRIBE: 'data-sendsay-form-subscribe'
+};
+exports.ATTRIBUTES = ATTRIBUTES;
+
+},{}],28:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -1395,7 +1430,7 @@ var Button = /*#__PURE__*/function (_DOMObject) {
 
 exports.Button = Button;
 
-},{"./DOMObject":30,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],28:[function(require,module,exports){
+},{"./DOMObject":31,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],29:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -1530,7 +1565,7 @@ var CheckBox = /*#__PURE__*/function (_DOMObject) {
 
 exports.CheckBox = CheckBox;
 
-},{"./DOMObject":30,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],29:[function(require,module,exports){
+},{"./DOMObject":31,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],30:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -1645,7 +1680,7 @@ var Column = /*#__PURE__*/function (_DOMObject) {
 
 exports.Column = Column;
 
-},{"../ElementFactory":23,"./DOMObject":30,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],30:[function(require,module,exports){
+},{"../ElementFactory":23,"./DOMObject":31,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],31:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -1725,13 +1760,12 @@ var DOMObject = /*#__PURE__*/function () {
       var general = this.general && this.general.appearance || {}; // eslint-disable-next-line
 
       for (var key in mapping) {
-        var val = mapping[key]; // eslint-disable-next-line eqeqeq
+        var val = mapping[key];
+        var value = data[val.param] || general[val.param];
 
-        if (data[val.param] !== undefined || general[val.param] != undefined) {
-          var value = data[val.param] || general[val.param];
-
+        if (value !== undefined && (data[val.param] !== undefined || general[val.param] !== undefined)) {
           if (!val.template) {
-            styles[key] = (data[val.param] || general[val.param]) + (val.postfix ? val.postfix : '');
+            styles[key] = value + (val.postfix ? val.postfix : '');
           } else {
             styles[key] = this.processTemplate(val.template, {
               v: value
@@ -1890,7 +1924,7 @@ var DOMObject = /*#__PURE__*/function () {
 
 exports.DOMObject = DOMObject;
 
-},{"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/interopRequireDefault":10}],31:[function(require,module,exports){
+},{"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/interopRequireDefault":10}],32:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -2290,7 +2324,127 @@ var DateField = /*#__PURE__*/function (_Field) {
 
 exports.DateField = DateField;
 
-},{"./Field":32,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],32:[function(require,module,exports){
+},{"./Field":34,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],33:[function(require,module,exports){
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Embedded = void 0;
+
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
+
+var _get2 = _interopRequireDefault(require("@babel/runtime/helpers/get"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime/helpers/inherits"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime/helpers/getPrototypeOf"));
+
+var _Popup2 = require("./Popup");
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2["default"])(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2["default"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2["default"])(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+var Embedded = /*#__PURE__*/function (_Popup) {
+  (0, _inherits2["default"])(Embedded, _Popup);
+
+  var _super = _createSuper(Embedded);
+
+  function Embedded() {
+    (0, _classCallCheck2["default"])(this, Embedded);
+    return _super.apply(this, arguments);
+  }
+
+  (0, _createClass2["default"])(Embedded, [{
+    key: "initialize",
+    value: function initialize() {
+      (0, _get2["default"])((0, _getPrototypeOf2["default"])(Embedded.prototype), "initialize", this).call(this);
+      this.makeBorder();
+      this.makeShadow();
+    }
+  }, {
+    key: "makeBorder",
+    value: function makeBorder() {
+      var _ref = this.data.appearance || {},
+          borderEnabled = _ref.borderEnabled,
+          borderWidth = _ref.borderWidth,
+          borderColor = _ref.borderColor;
+
+      if (borderEnabled) {
+        this.applicableStyles.border = {
+          "default": "".concat(borderWidth, "px solid ").concat(borderColor)
+        };
+      }
+    }
+  }, {
+    key: "makeShadow",
+    value: function makeShadow() {
+      var _ref2 = this.data.appearance || {},
+          shadowEnabled = _ref2.shadowEnabled,
+          shadowOffsetX = _ref2.shadowOffsetX,
+          shadowOffsetY = _ref2.shadowOffsetY,
+          shadowBlur = _ref2.shadowBlur,
+          shadowSpread = _ref2.shadowSpread,
+          shadowColor = _ref2.shadowColor;
+
+      if (shadowEnabled) {
+        this.applicableStyles['box-shadow'] = {
+          "default": "".concat(shadowOffsetX, "px ").concat(shadowOffsetY, "px ").concat(shadowBlur, "px ").concat(shadowSpread, "px ").concat(shadowColor)
+        };
+      }
+    }
+  }, {
+    key: "activate",
+    value: function activate(options) {
+      if (options.el) {
+        (0, _get2["default"])((0, _getPrototypeOf2["default"])(Embedded.prototype), "activate", this).call(this, options);
+        return;
+      }
+
+      var el = document.querySelector("[data-sendsay-form-root=\"".concat(options.formId, "\"]"));
+
+      if (!el) {
+        return;
+      }
+
+      el.innerHTML = '';
+      (0, _get2["default"])((0, _getPrototypeOf2["default"])(Embedded.prototype), "activate", this).call(this, _objectSpread(_objectSpread({}, options), {}, {
+        el: el
+      }));
+    }
+  }, {
+    key: "handleKeyPress",
+    value: function handleKeyPress(event) {
+      var _this$data$settings;
+
+      var canClose = (_this$data$settings = this.data.settings) === null || _this$data$settings === void 0 ? void 0 : _this$data$settings.canClose;
+
+      if (event.keyCode === 27 && (this.curStep === 0 || this.curStep === 1 && !canClose)) {
+        return;
+      }
+
+      (0, _get2["default"])((0, _getPrototypeOf2["default"])(Embedded.prototype), "handleKeyPress", this).call(this, event);
+    }
+  }]);
+  return Embedded;
+}(_Popup2.Popup);
+
+exports.Embedded = Embedded;
+
+},{"./Popup":39,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/defineProperty":6,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],34:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -2419,7 +2573,7 @@ var Field = /*#__PURE__*/function (_DOMObject) {
 
 exports.Field = Field;
 
-},{"./DOMObject":30,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],33:[function(require,module,exports){
+},{"./DOMObject":31,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],35:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -2519,7 +2673,7 @@ var ImageElement = /*#__PURE__*/function (_DOMObject) {
 
 exports.ImageElement = ImageElement;
 
-},{"./DOMObject":30,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],34:[function(require,module,exports){
+},{"./DOMObject":31,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],36:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -2665,7 +2819,7 @@ var MultipleChoiseField = /*#__PURE__*/function (_Field) {
 
 exports.MultipleChoiseField = MultipleChoiseField;
 
-},{"./CheckBox":28,"./Field":32,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],35:[function(require,module,exports){
+},{"./CheckBox":29,"./Field":34,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],37:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -2718,7 +2872,7 @@ var Notification = /*#__PURE__*/function (_ToggleablePopup) {
     value: function build() {
       (0, _get2["default"])((0, _getPrototypeOf2["default"])(Notification.prototype), "build", this).call(this);
       var popupBody = this.el.querySelector('.sendsay-toggler');
-      popupBody.innerHTML = "\n      <div class=\"sendsay-warning\">\n        <div>\n          ".concat(_warning["default"], "\n        </div>\n        <div class=\"sendsay-warning__text\">").concat((0, _l8n.l8n)('notify__form-is-inactive').replace('{id}', this.data.id), "</div>\n      </div>\n    ");
+      popupBody.innerHTML = "\n      <div class=\"sendsay-warning\">\n        <div>\n          ".concat(_warning["default"], "\n        </div>\n        <div class=\"sendsay-warning__text\">").concat((0, _l8n.l8n)('notify__form-is-inactive'), "</div>\n      </div>\n    ");
     }
   }, {
     key: "handleTogglerClick",
@@ -2730,7 +2884,7 @@ var Notification = /*#__PURE__*/function (_ToggleablePopup) {
 
 exports.Notification = Notification;
 
-},{"../../icons/warning":46,"../../l8n":47,"./ToggleablePopup":43,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],36:[function(require,module,exports){
+},{"../../icons/warning":48,"../../l8n":49,"./ToggleablePopup":45,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],38:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -2791,7 +2945,7 @@ var NumberField = /*#__PURE__*/function (_Field) {
 
 exports.NumberField = NumberField;
 
-},{"./Field":32,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],37:[function(require,module,exports){
+},{"./Field":34,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],39:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -2977,7 +3131,7 @@ var Popup = /*#__PURE__*/function (_DOMObject) {
       this.addEvent('wheel', this.handleWheel.bind(this));
       this.addEvent('DOMMouseScroll', this.handleWheel.bind(this));
       this.addEvent('click', '.sendsay-close', this.handleClose.bind(this));
-      document.addEventListener('keyup', this.handleKeyPress.bind(this));
+      this.addEvent('keyup', this.handleKeyPress.bind(this));
     }
   }, {
     key: "removeEvents",
@@ -2993,7 +3147,7 @@ var Popup = /*#__PURE__*/function (_DOMObject) {
       this.removeEvent('wheel', this.handleWheel.bind(this));
       this.removeEvent('DOMMouseScroll', this.handleWheel.bind(this));
       this.removeEvent('click', '.sendsay-close', this.handleClose.bind(this));
-      document.removeEventListener('keyup', this.handleKeyPress.bind(this));
+      this.removeEvent('keyup', this.handleKeyPress.bind(this));
     }
   }, {
     key: "makeSettings",
@@ -3006,12 +3160,19 @@ var Popup = /*#__PURE__*/function (_DOMObject) {
   }, {
     key: "makeClasses",
     value: function makeClasses() {
-      var appearance = this.data.appearance || {};
+      var _ref = this.data || {},
+          appearance = _ref.appearance,
+          settings = _ref.settings;
+
       var classes = (0, _get2["default"])((0, _getPrototypeOf2["default"])(Popup.prototype), "makeClasses", this).call(this);
       classes += this.data.endDialog ? ' sendsay-enddialog' : '';
       classes += " sendsay-animation-".concat(appearance.animation || 'none');
       classes += " sendsay-".concat(appearance.position || 'center');
       classes += " sendsay-type-".concat(this.data.type);
+
+      if (settings !== null && settings !== void 0 && settings.canClose) {
+        classes += ' sendsay--can-close';
+      }
 
       if (this.steps.length - 1 === this.curStep) {
         classes += ' sendsay-laststep';
@@ -3236,7 +3397,7 @@ var Popup = /*#__PURE__*/function (_DOMObject) {
 
 exports.Popup = Popup;
 
-},{"../../icons/close":45,"../MediaQuery":25,"./Button":27,"./Column":29,"./DOMObject":30,"./Field":32,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],38:[function(require,module,exports){
+},{"../../icons/close":47,"../MediaQuery":25,"./Button":28,"./Column":30,"./DOMObject":31,"./Field":34,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],40:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -3380,7 +3541,7 @@ var PopupBar = /*#__PURE__*/function (_Popup) {
 
 exports.PopupBar = PopupBar;
 
-},{"../MediaQuery":25,"./Popup":37,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],39:[function(require,module,exports){
+},{"../MediaQuery":25,"./Popup":39,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],41:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -3510,7 +3671,7 @@ var RadioButton = /*#__PURE__*/function (_DOMObject) {
 
 exports.RadioButton = RadioButton;
 
-},{"./DOMObject":30,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],40:[function(require,module,exports){
+},{"./DOMObject":31,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],42:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -3638,7 +3799,7 @@ var SingleChoiseField = /*#__PURE__*/function (_Field) {
 
 exports.SingleChoiseField = SingleChoiseField;
 
-},{"./Field":32,"./RadioButton":39,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],41:[function(require,module,exports){
+},{"./Field":34,"./RadioButton":41,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],43:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -3692,7 +3853,7 @@ var Spacer = /*#__PURE__*/function (_DOMObject) {
 
 exports.Spacer = Spacer;
 
-},{"./DOMObject":30,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],42:[function(require,module,exports){
+},{"./DOMObject":31,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],44:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -3784,7 +3945,7 @@ var Text = /*#__PURE__*/function (_DOMObject) {
 
 exports.Text = Text;
 
-},{"./DOMObject":30,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],43:[function(require,module,exports){
+},{"./DOMObject":31,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],45:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -4061,7 +4222,7 @@ var ToggleablePopup = /*#__PURE__*/function (_Popup) {
 
 exports.ToggleablePopup = ToggleablePopup;
 
-},{"../MediaQuery":25,"./Popup":37,"./Text":42,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],44:[function(require,module,exports){
+},{"../MediaQuery":25,"./Popup":39,"./Text":44,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],46:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4092,7 +4253,7 @@ function getHostName() {
   return location.hostname;
 }
 
-},{}],45:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4103,7 +4264,7 @@ var closeIcon = "\n  <svg viewBox=\"0 0 20 20\" fill=\"none\" class=\"sendsay-cl
 var _default = closeIcon;
 exports["default"] = _default;
 
-},{}],46:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4114,7 +4275,7 @@ var warningIcon = "\n  <svg width=\"40\" height=\"40\" viewBox=\"0 0 40 40\" fil
 var _default = warningIcon;
 exports["default"] = _default;
 
-},{}],47:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4144,7 +4305,7 @@ function l8n(key) {
   return (getLang() === 'en' ? _en.en[key] : _ru.ru[key]) || key;
 }
 
-},{"./locales/en":48,"./locales/ru":49}],48:[function(require,module,exports){
+},{"./locales/en":50,"./locales/ru":51}],50:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4152,11 +4313,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.en = void 0;
 var en = {
-  'notify__form-is-inactive': 'The subscription form {id} is currently inactive'
+  'notify__form-is-inactive': 'The subscription form is currently inactive'
 };
 exports.en = en;
 
-},{}],49:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4164,12 +4325,16 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.ru = void 0;
 var ru = {
-  'notify__form-is-inactive': 'Извините, форма подписки {id} сейчас неактивна'
+  'notify__form-is-inactive': 'Извините, форма подписки сейчас неактивна'
 };
 exports.ru = ru;
 
-},{}],50:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 "use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _Popup = require("./classes/elements/Popup");
 
@@ -4177,12 +4342,25 @@ var _PopupBar = require("./classes/elements/PopupBar");
 
 var _ToggleablePopup = require("./classes/elements/ToggleablePopup");
 
+var _Embedded = require("./classes/elements/Embedded");
+
 var _Connector = require("./classes/Connector");
 
 var _Form = require("./classes/Form");
 
-/* eslint-disable func-names */
-var config = {
+var _attributes = require("./classes/attributes");
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+var DEFAULT_CONFIG = {
   forms: {
     css: {
       url: 'https://image.sendsay.ru/app/js/forms/forms.css'
@@ -4191,6 +4369,10 @@ var config = {
 };
 
 (function () {
+  var _window$SENDSAY_FORMS, _window;
+
+  var config = _objectSpread(_objectSpread({}, DEFAULT_CONFIG), ((_window$SENDSAY_FORMS = (_window = window).SENDSAY_FORMS_CONFIG) === null || _window$SENDSAY_FORMS === void 0 ? void 0 : _window$SENDSAY_FORMS.call(_window)) || {});
+
   var loadCss = function loadCss(callback) {
     var cssId = '_sendsay-styles';
 
@@ -4247,6 +4429,10 @@ var config = {
         case 'widget':
           DomConstructor = _ToggleablePopup.ToggleablePopup;
           break;
+
+        case 'embedded':
+          DomConstructor = _Embedded.Embedded;
+          break;
       }
 
       var popup = new DomConstructor(data);
@@ -4254,6 +4440,57 @@ var config = {
     });
   };
 
+  var checkEmbeddedForms = function checkEmbeddedForms() {
+    var elements = document.querySelectorAll("[".concat(_attributes.ATTRIBUTES.EMBEDDED, "]"));
+    elements.forEach(function (el) {
+      var formId = el.getAttribute(_attributes.ATTRIBUTES.EMBEDDED);
+
+      if (!formId || el.hasAttribute(_attributes.ATTRIBUTES.INIT)) {
+        return;
+      }
+
+      el.setAttribute(_attributes.ATTRIBUTES.INIT, true);
+      activatePopup("https://sendsay.ru/form/".concat(formId), {
+        el: el
+      });
+    });
+  };
+
+  var embeddedFormWatcher = function embeddedFormWatcher() {
+    var callback = function callback(mutationsList) {
+      // eslint-disable-next-line no-restricted-syntax
+      var _iterator = _createForOfIteratorHelper(mutationsList),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var _step$value = _step.value,
+              type = _step$value.type,
+              addedNodes = _step$value.addedNodes;
+
+          if (type !== 'childList' || !addedNodes) {
+            return;
+          }
+
+          checkEmbeddedForms();
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+    };
+
+    var observer = new MutationObserver(callback);
+    observer.observe(document, {
+      attributes: false,
+      childList: true,
+      subtree: true
+    });
+  };
+
+  checkEmbeddedForms();
+  embeddedFormWatcher();
   window.SENDSAY = {
     config: config,
     activatePopup: activatePopup,
@@ -4261,4 +4498,4 @@ var config = {
   };
 })();
 
-},{"./classes/Connector":21,"./classes/Form":24,"./classes/elements/Popup":37,"./classes/elements/PopupBar":38,"./classes/elements/ToggleablePopup":43}]},{},[50,19,20,21,22,23,27,28,29,31,30,32,33,34,35,36,37,38,39,40,41,42,43,24,25,26,44]);
+},{"./classes/Connector":21,"./classes/Form":24,"./classes/attributes":27,"./classes/elements/Embedded":33,"./classes/elements/Popup":39,"./classes/elements/PopupBar":40,"./classes/elements/ToggleablePopup":45,"@babel/runtime/helpers/defineProperty":6,"@babel/runtime/helpers/interopRequireDefault":10}]},{},[52,27,19,20,21,22,23,28,29,30,32,31,33,34,35,36,37,38,39,40,41,42,43,44,45,24,25,26,46]);

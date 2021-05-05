@@ -3,6 +3,7 @@ const lessFiles = [
   'src/css/less/bar.less',
   'src/css/less/toggleable.less',
   'src/css/less/notify.less',
+  'src/css/less/embedded.less',
   'src/css/less/animations.less',
 ];
 

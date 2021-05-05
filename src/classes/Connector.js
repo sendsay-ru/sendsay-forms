@@ -1,8 +1,9 @@
 export class Connector {
   constructor(url) {
     this.url = url;
-    const { id, formId } = this.extractID(this.url);
+    const { id, login, formId } = this.extractID(this.url);
     this.id = id;
+    this.login = login;
     this.formId = formId;
   }
 

@@ -16,7 +16,7 @@ export class Notification extends ToggleablePopup {
         <div>
           ${warningIcon}
         </div>
-        <div class="sendsay-warning__text">${l8n('notify__form-is-inactive').replace('{id}', this.data.id)}</div>
+        <div class="sendsay-warning__text">${l8n('notify__form-is-inactive')}</div>
       </div>
     `;
   }

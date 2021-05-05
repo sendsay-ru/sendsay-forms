@@ -3,14 +3,28 @@
   <head>
     <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="/dist/forms.js"></script>
     <script>
-      SENDSAY.config.forms.css.url = '/dist/forms.css';
+      function SENDSAY_FORMS_CONFIG() {
+        return {
+          forms: {
+            css: {
+              url: '/dist/forms.css'
+            }
+          }
+        };
+      }
+    </script>
+    <script src="/dist/forms.js"></script>
+    <!-- <script src="https://image.sendsay.ru/app/js/forms/forms.min.js"></script> -->
+    <script>
       SENDSAY.activatePopup("https://sendsay.ru/form/codeception/445/");
     </script>
     <script>
       setTimeout(function() {
-        document.getElementById("box").innerHTML = '<div class="example" data-sendsay-form-subscribe>Dynamic modal dialog</div>';
+        document.getElementById("box").innerHTML = `
+          <div class="example" data-sendsay-form-subscribe="codeception/445">Dynamic modal dialog</div>
+          <div data-sendsay-form-embedded="codeception/449"></div>
+        `;
       }, 1000);
     </script>
     <style type="text/css">
@@ -71,7 +85,8 @@
   </head>
   <body>
     <div class="wrapper">
-      <div class="example" data-sendsay-form-subscribe>Open modal dialog</div>
+      <div class="example" data-sendsay-form-subscribe="codeception/445">Open modal dialog</div>
+      <div data-sendsay-form-embedded="codeception/449"></div>
       <div id="box"></div>
     </div>
   </body>

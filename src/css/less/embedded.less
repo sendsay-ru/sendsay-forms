@@ -1,0 +1,27 @@
+.sendsay-popup {
+
+  &.sendsay-type-embedded {
+    position: relative !important;
+    box-shadow: unset;
+    max-height: unset;
+    z-index: 1;
+
+    &.sendsay-centered {
+      top: unset;
+      bottom: unset;
+      left: unset;
+      right: unset;
+      transform: unset;
+    }
+
+    .sendsay-close {
+      display: none;
+    }
+
+    &.sendsay--can-close.sendsay-laststep {
+      .sendsay-close {
+        display: block;
+      }  
+    }
+  }
+} 

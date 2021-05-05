@@ -3,11 +3,13 @@ import { getHostName } from './utils';
 import ClickTrigger from './ClickTrigger';
 
 export class ConditionWatcher {
-  constructor(rawConditions, formID) {
+  constructor(rawConditions, { id, formId, login }) {
     this.globCond = rawConditions;
     // eslint-disable-next-line no-multi-assign
     const conditions = (this.conditions = rawConditions.showCondition);
-    this.id = formID;
+    this.id = id;
+    this.login = login;
+    this.formId = formId;
     // eslint-disable-next-line eqeqeq
     this.instant = conditions.instant != undefined ? conditions.instant : true;
     this.pageScroll = parseInt(conditions.onPageScroll, 10) || 0;
@@ -28,7 +30,11 @@ export class ConditionWatcher {
     }
 
     const clickTrigger = new ClickTrigger();
-    clickTrigger.watch(resolve);
+    clickTrigger.watch((attr) => {
+      if (attr === `${this.login}/${this.formId}`) {
+        resolve('click');
+      }
+    });
 
     if (this.isRejectByCookie()) {
       reject();

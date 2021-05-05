@@ -1,3 +1,3 @@
 export const en = {
-  'notify__form-is-inactive': 'The subscription form {id} is currently inactive',
+  'notify__form-is-inactive': 'The subscription form is currently inactive',
 };
