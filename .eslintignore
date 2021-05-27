@@ -1,0 +1,5 @@
+dist
+test-dist
+bower_components
+css
+node_modules

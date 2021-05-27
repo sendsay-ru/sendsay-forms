@@ -1,249 +1,259 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,700|Roboto:300,400,700|Lora:300,400,700|PT+Sans:300,400,700|Merriweather:300,400,700|PT+Serif:300,400,700|Scada:300,400,700);
 
 @-webkit-keyframes sendsay-progress-bar-stripes {
-    from {
-        background-position: 40px 0;
-    }
-    to {
-        background-position: 0 0;
-    }
+  from {
+    background-position: 40px 0;
+  }
+  to {
+    background-position: 0 0;
+  }
 }
 
 @keyframes sendsay-progress-bar-stripes {
-    from {
-        background-position: 40px 0;
-    }
-    to {
-        background-position: 0 0;
-    }
+  from {
+    background-position: 40px 0;
+  }
+  to {
+    background-position: 0 0;
+  }
 }
-
 
 .sendsay-popup * {
-    box-sizing: border-box;
-    background: none;
-    background-image: none;
-    height: auto;
-    -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+  background: none;
+  background-image: none;
+  height: auto;
+  -webkit-font-smoothing: antialiased;
 }
 
-
-
 .sendsay-loading {
-    -webkit-animation: sendsay-progress-bar-stripes 2s linear infinite;
-       -moz-animation: sendsay-progress-bar-stripes 2s linear infinite;
-            animation: sendsay-progress-bar-stripes 2s linear infinite;
+  -webkit-animation: sendsay-progress-bar-stripes 2s linear infinite;
+  -moz-animation: sendsay-progress-bar-stripes 2s linear infinite;
+  animation: sendsay-progress-bar-stripes 2s linear infinite;
 
-    background-image: linear-gradient(45deg, rgba(255, 255, 255, .5) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .5) 50%, rgba(255, 255, 255, .5) 75%, transparent 75%, transparent);
-    background-size: 40px 40px;
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.5) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0.5) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 40px 40px;
 }
 
 .sendsay-wrapper {
-    position: fixed;
-    z-index: 2000000000;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: none;
-    background-color: rgba(0, 0, 0, 0.8);
-    box-sizing: border-box;
-    text-align: left;
-    font-family: 'Open Sans', 'Arial', sans-serif;
+  position: fixed;
+  z-index: 2000000000;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: none;
+  background-color: rgba(0, 0, 0, 0.8);
+  box-sizing: border-box;
+  text-align: left;
+  font-family: "Open Sans", "Arial", sans-serif;
 }
 
 .sendsay-wrapper.sendsay-noanimation,
 .sendsay-wrapper.sendsay-noanimation .sendsay-popup {
-    animation: none;
+  animation: none;
 }
 
 .sendsay-wrapper * {
-	box-sizing: border-box;
-    -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
 }
 .sendsay-popup.sendsay-left {
-    bottom: 50px;
-    left: 50px;
+  bottom: 50px;
+  left: 50px;
 }
 
 .sendsay-popup.sendsay-right {
-    bottom: 50px;
-    right: 50px;
+  bottom: 50px;
+  right: 50px;
 }
 
 .sendsay-popup.sendsay-centered {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .sendsay-popup {
-    background: none;
-    background-image: none;
-    overflow-y: auto;
-    height: auto;
-    text-align: left;
-    font-family: 'Open Sans', 'Arial', sans-serif;
-    position: fixed;
-    width: 400px;
-    max-height: ~"calc(100% - 100px)";
-    padding: 20px;
-    border-radius: 2px;
-    background-color: #fff;
-    box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.3);
-    box-sizing: border-box;
-    display: block;
-    z-index: 2000000001;
+  background: none;
+  background-image: none;
+  overflow-y: auto;
+  height: auto;
+  text-align: left;
+  font-family: "Open Sans", "Arial", sans-serif;
+  position: fixed;
+  width: 400px;
+  max-height: ~"calc(100% - 100px)";
+  padding: 20px;
+  border-radius: 2px;
+  background-color: #fff;
+  box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+  display: block;
+  z-index: 2000000001;
 }
 
 .sendsay-popup .sendsay-content {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
 }
 
-
 .sendsay-field-hidden {
-    display: none;
+  display: none;
 }
 
 .sendsay-field {
-    padding: 0px;
+  padding: 0px;
 }
 
 .sendsay-columnwrapper {
-    display: flex;
-    min-width: 0px;
+  display: flex;
+  min-width: 0px;
 }
 
 .sendsay-column {
-    flex: 1;
-    min-width: 0px;
+  flex: 1;
+  min-width: 0px;
 }
 
 .sendsay-image {
-    min-width: 0px;
+  min-width: 0px;
 }
 
-.sendsay-field.sendsay-field-invalid .sendsay-input, .sendsay-field.sendsay-field-invalid .sendsay-input:focus {
-    border-color: red;
+.sendsay-field.sendsay-field-invalid .sendsay-input,
+.sendsay-field.sendsay-field-invalid .sendsay-input:focus {
+  border-color: red;
 }
 
-.sendsay-field.sendsay-field-invalid  > .sendsay-label {
-    color: red;
+.sendsay-field.sendsay-field-invalid > .sendsay-label {
+  color: red;
 }
 
 .sendsay-error {
-    font-size: 12px;
-    display: none;
-    padding-top: 4px;
-    color: red;
+  font-size: 12px;
+  display: none;
+  padding-top: 4px;
+  color: red;
 }
 
 .sendsay-field.sendsay-field-invalid .sendsay-error {
-    display: block;
+  display: block;
 }
 
 .sendsay-label {
-    font-size: inherit;
-    color:inherit;
-    display: block;
-    padding-bottom: 4px;
-    font-family: inherit;
-    word-break: break-word;
+  font-size: inherit;
+  color: inherit;
+  display: block;
+  padding-bottom: 4px;
+  font-family: inherit;
+  word-break: break-word;
 }
 
 .sendsay-input {
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 400;
-    display: block;
-    width: 100%;
-    height: 30px;
-    padding: 0 8px;
-    transition: border .2s;
-    border: 1px solid #e3e3e3;
-    border-radius: 2px;
-    outline: none;
-    background-color: #fff;
-    margin: 0px;
-    -webkit-font-smoothing: antialiased;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 400;
+  display: block;
+  width: 100%;
+  height: 30px;
+  padding: 0 8px;
+  transition: border 0.2s;
+  border: 1px solid #e3e3e3;
+  border-radius: 2px;
+  outline: none;
+  background-color: #fff;
+  margin: 0px;
+  -webkit-font-smoothing: antialiased;
 }
 .sendsay-input:focus {
-    border-color: #007c99;
+  border-color: #007c99;
 }
 
 .sendsay-button input {
-	padding: 10px 10px;
-	cursor: pointer;
-    font-weight: normal;
-    position: relative;
-    display: inline-block;
-    cursor: pointer;
-    text-align: center;
-    vertical-align: middle;
+  padding: 10px 10px;
+  cursor: pointer;
+  font-weight: normal;
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+  vertical-align: middle;
 
-    border: none;
-    border-radius: 2px;
-    outline: none;
-    background-color: #000000;
-    border-radius: 5px;
-    color: #ffffff;
-    line-height: normal;
-    font-family: 'Open Sans', 'Arial', sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-    -webkit-font-smoothing: antialiased;
-    width: auto;
+  border: none;
+  border-radius: 2px;
+  outline: none;
+  background-color: #000000;
+  border-radius: 5px;
+  color: #ffffff;
+  line-height: normal;
+  font-family: "Open Sans", "Arial", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  width: auto;
 }
 
-
 .sendsay-text {
-    word-break: break-word;
-    font-family: 'Open Sans', 'Arial', sans-serif;
-    font-size: 13px;
+  word-break: break-word;
+  font-family: "Open Sans", "Arial", sans-serif;
+  font-size: 13px;
 }
 
 .sendsay-title {
-	font-size: 20px;
-    font-weight: 400;
-    margin: 0;
-    margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: 400;
+  margin: 0;
+  margin-bottom: 20px;
 }
 
-
 .sendsay-close {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    cursor: pointer;
-    width: 24px;
-    height: 24px;
-    padding: 4px;
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  padding: 4px;
 }
 
 .sendsay-close:hover {
-    opacity: 0.7;
+  opacity: 0.7;
 }
 
 .sendsay-close .sendsay-close__svg {
-    margin: 0;
-    padding: 0;
-    position: static;
-    top: unset;
-    left: unset;
+  margin: 0;
+  padding: 0;
+  position: static;
+  top: unset;
+  left: unset;
 }
 
 .sendsay-close__svg {
-    display: block;
-    width: 100%;
+  display: block;
+  width: 100%;
 }
 
-.sendsay-radioinput, .sendsay-checkinput {
-    display: inline-block;
+.sendsay-close--with-icon {
+  top: 12px;
+  right: 12px;
 }
 
-.sendsay-radio .sendsay-label, .sendsay-checkbox .sendsay-label {
-    display: inline-block;
+.sendsay-radioinput,
+.sendsay-checkinput {
+  display: inline-block;
+}
+
+.sendsay-radio .sendsay-label,
+.sendsay-checkbox .sendsay-label {
+  display: inline-block;
 }

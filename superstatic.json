@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/src/index.html" },
+    { "source": "/forms.css", "destination": "/src/forms.css" }
+  ]
+}

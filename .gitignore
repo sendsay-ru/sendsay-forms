@@ -1,3 +1,4 @@
+.DS_Store
 npm-debug.log
 node_modules/
 compiled/
@@ -6,4 +7,5 @@ test-dist/
 src/test-pages/
 ascend.sh
 .idea
-
+yarn-error.log
+bower_components

@@ -1,180 +1,181 @@
-
 export class DOMObject {
+  constructor(data, parent) {
+    this.data = data;
+    this.parent = parent || null;
+    if (parent && parent.general) { this.general = this.extend({}, parent.general); }
+    this.initialize();
+    this.render();
+  }
 
-	constructor(data, parent) {
-		this.data = data;
-		this.parent = parent || null;
-		if(parent && parent.general)
-		 	this.general = this.extend({}, parent.general);
-		this.initialize();
-		this.render();
+  escapeHTML(html) {
+    const escape = document.createElement('textarea');
+    escape.textContent = html;
+    return escape.innerHTML;
+  }
 
-	}
+  escapeStyle(style) {
+    if (this.style) { return style.replace(/"/g, "'"); }
+  }
 
+  initialize() {
+    this.template = '<div></div>';
+    this.baseClass = 'sendsay-main';
+    this.applicableStyles = {};
+  }
 
-	escapeHTML(html) {
-		let escape = document.createElement('textarea');
-	    escape.textContent = html;
-	    return escape.innerHTML;
-	}
+  makeElement() {
+    const div = document.createElement('div');
+    const element = this.applySettings(this.makeSettings());
+    div.innerHTML = element;
+    return div.firstChild;
+  }
 
-	escapeStyle(style) {
-		if(this.style)
-			return style.replace(/"/g, "'");
-	}
+  makeSettings() {
+    const settings = {
+      classes: this.makeClasses(),
+      style: this.convertStyles(this.makeStyles()),
+    };
+    return settings;
+  }
 
-	initialize() {
+  makeStyles() {
+    const styleObj = this.applyStyles(this.applicableStyles);
+    return styleObj;
+  }
 
-		this.template = '<div></div>';
-		this.baseClass = 'sendsay-main';
-		this.applicableStyles = {
+  applyStyles(mapping) {
+    const styles = {};
+    const data = this.data.appearance || {};
+    const general = (this.general && this.general.appearance) || {};
 
-		};
-	}
+    // eslint-disable-next-line
+    for (const key in mapping) {
+      const val = mapping[key];
+      // eslint-disable-next-line eqeqeq
+      if (data[val.param] !== undefined || general[val.param] != undefined) {
+        const value = data[val.param] || general[val.param];
+        if (!val.template) {
+          styles[key] = (data[val.param] || general[val.param])
+            + (val.postfix ? val.postfix : '');
+        } else {
+          styles[key] = this.processTemplate(val.template, { v: value });
+        }
+      } else if (val.default) {
+        styles[key] = val.default;
+      }
+    }
+    return styles;
+  }
 
-	makeElement() {
-		let div = document.createElement('div'),
-			element = this.applySettings(this.makeSettings());
-		div.innerHTML = element;
-		return div.firstChild;
-	}
+  convertStyles(toConvert) {
+    const styleObj = toConvert;
+    let styleStr = '';
 
-	makeSettings() {
-		let data = this.data,
-			settings = {
-				classes: this.makeClasses(),
-				style: this.convertStyles(this.makeStyles())
-			};
-		return settings;
-	}
+    // eslint-disable-next-line
+    for (const key in styleObj) { styleStr += ` ${key}:${styleObj[key]};`; }
+    return styleStr;
+  }
 
-	makeStyles() {
-		let styleObj = this.applyStyles(this.applicableStyles);
-		return styleObj;
-	}
+  makeClasses() {
+    return this.baseClass;
+  }
 
-	applyStyles(mapping) {
-		let styles = {},
-			data = this.data.appearance || {},
-			general = this.general && this.general.appearance || {};
-	
-		for(var key in mapping) {
-			let val = mapping[key];
-			if(data[val.param] !== undefined || general[val.param] != undefined) {
-				let value = data[val.param] || general[val.param];
-				if(!val.template) {
-					styles[key] = (data[val.param] || general[val.param]) + (val.postfix ? val.postfix : '');
-				} else {
-					styles[key] = this.processTemplate(val.template, { v: value })
-				}
-				
-			} else if(val.default) {
-				styles[key] = val.default;
-			}
-		}
-		return styles;
-	}
+  applySettings(settings) {
+    return this.processTemplate(this.template, settings);
+  }
 
-	convertStyles(toConvert) {
-		let styleObj = toConvert,
-			styleStr = '';
+  processTemplate(template, settings) {
+    // eslint-disable-next-line no-param-reassign
+    settings = settings || {};
+    let string = template;
+    const templateParams = string.match(new RegExp('\\[% *[a-zA-Z0-9\\-]* *%\\]', 'g')) || [];
+    for (let i = 0; i < templateParams.length; i++) {
+      let param = templateParams[i];
+      param = param.substring(2, param.length - 2);
+      const paramValue = settings[param.trim()] || '';
+      string = string.replace(
+        new RegExp(`\\[%${param}%\\]`, 'g'),
+        paramValue,
+      );
+    }
+    return string;
+  }
 
-		for(var key in styleObj)
-			styleStr += ' ' + key + ':' + styleObj[key] + ';';
-		return styleStr;
-	}
+  build() {
+    this.el = this.makeElement();
+    this.el.core = this;
+    return this.el;
+  }
 
-	makeClasses() {
-		return this.baseClass;
-	}
+  render() {
+    const oldEl = this.el;
+    this.removeEvents();
+    this.build();
+    this.addEvents();
+    if (oldEl && oldEl.parentNode) { oldEl.parentNode.replaceChild(this.el, oldEl); }
+    this.afterRender();
+  }
 
-	applySettings(settings) {
-		return this.processTemplate(this.template, settings);
-	}
+  afterRender() {}
 
-	processTemplate(template, settings) {
-		settings = settings || {};
-		let string = template;
-		let templateParams = string.match(new RegExp('\\[% *[a-zA-Z0-9\\-]* *%\\]', 'g')) || [];
-		for(let i=0; i<templateParams.length; i++) {
-			let param = templateParams[i];
-			param = param.substring(2, param.length-2);
-			let paramValue = settings[param.trim()] || '';
-			string = string.replace(new RegExp('\\[%' + param + '%\\]', 'g'), paramValue);
-		}
-		return string;
-	}
+  addEvents() {}
 
-	build() {
-		this.el = this.makeElement();
-		this.el.core = this;
-		return this.el;
-	}
+  addEvent(event, selector, callback) {
+    this._eventAction(true, event, selector, callback);
+  }
 
-	render() {
-		let oldEl = this.el;
-		this.removeEvents();
-		this.build();
-		this.addEvents();
-		if(oldEl && oldEl.parentNode)
-			oldEl.parentNode.replaceChild(this.el, oldEl);
-		this.afterRender();
-	}
+  removeEvents() {}
 
-	afterRender() {
+  removeEvent(event, selector, callback) {
+    this._eventAction(false, event, selector, callback);
+  }
 
-	}
+  _eventAction(toAdd, event, selector, callback) {
+    if (!this.el) { return; }
+    if (callback === undefined && typeof selector === 'function') {
+      // eslint-disable-next-line no-param-reassign
+      callback = selector;
+      // eslint-disable-next-line no-param-reassign
+      selector = null;
+    }
+    const target = selector ? this.el.querySelector(selector) : this.el;
+    if (target) {
+      // eslint-disable-next-line no-unused-expressions
+      toAdd
+        ? target.addEventListener(event, callback)
+        : target.removeEventListener(event, callback);
+    }
+  }
 
-	addEvents() {
+  trigger(eventName, data) {
+    let event;
+    const extra = { extra: data };
+    if (CustomEvent && typeof CustomEvent === 'function') {
+      event = new CustomEvent(eventName, { detail: extra });
+    } else {
+      event = document.createEvent('HTMLEvents');
+      event.initEvent(eventName, true, true);
+      event.detail = extra;
+    }
 
-	}
+    this.el.dispatchEvent(event);
+  }
 
-	addEvent(event, selector, callback) {
-		this._eventAction(true, event, selector, callback);
-	}
-
-	removeEvents() {
-
-	}
-
-	removeEvent(event, selector, callback) {
-		this._eventAction(false, event, selector, callback);
-	}
-
-	_eventAction(toAdd, event, selector, callback) {
-		if(!this.el)
-			return;
-		if(callback === undefined && typeof selector === 'function') {
-			callback = selector;
-			selector = null;
-		}
-		let target = selector ? this.el.querySelector(selector) : this.el;
-		if(target)
-			toAdd ? target.addEventListener(event, callback) : target.removeEventListener(event, callback); 
-	}
-
-	trigger(eventName, data) {
-		let event, extra = { extra : data };
-		if(CustomEvent && typeof CustomEvent === 'function') {
-			event = new CustomEvent(eventName, { detail: extra });
-		} else {
-			event = document.createEvent('HTMLEvents');
-			event.initEvent(eventName, true, true);
-			event.detail = extra;
-		}
-
-		this.el.dispatchEvent(event);
-	}
-
-	extend(dest, source) {
-		dest = dest || {};
-		source = source || {};
-		for(let key in source) {
-			if((dest[key] instanceof Object) && (source[key] instanceof Object))
-				dest[key] = this.extend(dest[key], source[key]);
-			else
-				dest[key] = source[key];
-		}
-		return dest;
-	}
+  extend(dest, source) {
+    // eslint-disable-next-line no-param-reassign
+    dest = dest || {};
+    // eslint-disable-next-line no-param-reassign
+    source = source || {};
+    // eslint-disable-next-line no-restricted-syntax
+    for (const key in source) {
+      if (dest[key] instanceof Object && source[key] instanceof Object) {
+        // eslint-disable-next-line no-param-reassign
+        dest[key] = this.extend(dest[key], source[key]);
+      } else {
+        // eslint-disable-next-line no-param-reassign
+        dest[key] = source[key];
+      }
+    }
+    return dest;
+  }
 }
