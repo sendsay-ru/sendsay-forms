@@ -133,7 +133,7 @@ export class Popup extends DOMObject {
     this.addEvent('DOMMouseScroll', this.handleWheel.bind(this));
 
     this.addEvent('click', '.sendsay-close', this.handleClose.bind(this));
-    document.addEventListener('keyup', this.handleKeyPress.bind(this));
+    this.addEvent('keyup', this.handleKeyPress.bind(this));
   }
 
   removeEvents() {
@@ -153,7 +153,7 @@ export class Popup extends DOMObject {
     this.removeEvent('wheel', this.handleWheel.bind(this));
     this.removeEvent('DOMMouseScroll', this.handleWheel.bind(this));
     this.removeEvent('click', '.sendsay-close', this.handleClose.bind(this));
-    document.removeEventListener('keyup', this.handleKeyPress.bind(this));
+    this.removeEvent('keyup', this.handleKeyPress.bind(this));
   }
 
   makeSettings() {
@@ -168,12 +168,15 @@ export class Popup extends DOMObject {
   }
 
   makeClasses() {
-    const appearance = this.data.appearance || {};
+    const { appearance, settings } = this.data || {};
     let classes = super.makeClasses();
     classes += this.data.endDialog ? ' sendsay-enddialog' : '';
     classes += ` sendsay-animation-${appearance.animation || 'none'}`;
     classes += ` sendsay-${appearance.position || 'center'}`;
     classes += ` sendsay-type-${this.data.type}`;
+    if (settings?.canClose) {
+      classes += ' sendsay--can-close';
+    }
     if (this.steps.length - 1 === this.curStep) { classes += ' sendsay-laststep'; }
     return classes;
   }

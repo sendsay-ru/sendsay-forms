@@ -51,12 +51,10 @@ export class DOMObject {
     // eslint-disable-next-line
     for (const key in mapping) {
       const val = mapping[key];
-      // eslint-disable-next-line eqeqeq
-      if (data[val.param] !== undefined || general[val.param] != undefined) {
-        const value = data[val.param] || general[val.param];
+      const value = data[val.param] || general[val.param];
+      if ((value !== undefined) && (data[val.param] !== undefined || general[val.param] !== undefined)) {
         if (!val.template) {
-          styles[key] = (data[val.param] || general[val.param])
-            + (val.postfix ? val.postfix : '');
+          styles[key] = value + (val.postfix ? val.postfix : '');
         } else {
           styles[key] = this.processTemplate(val.template, { v: value });
         }

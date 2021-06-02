@@ -2,10 +2,12 @@
 import { Popup } from './classes/elements/Popup';
 import { PopupBar } from './classes/elements/PopupBar';
 import { ToggleablePopup } from './classes/elements/ToggleablePopup';
+import { Embedded } from './classes/elements/Embedded';
 import { Connector } from './classes/Connector';
 import { Form } from './classes/Form';
+import { ATTRIBUTES } from './classes/attributes';
 
-const config = {
+const DEFAULT_CONFIG = {
   forms: {
     css: {
       url: 'https://image.sendsay.ru/app/js/forms/forms.css',
@@ -14,6 +16,7 @@ const config = {
 };
 
 (function () {
+  const config = { ...DEFAULT_CONFIG, ...window.SENDSAY_FORMS_CONFIG?.() || {} };
   const loadCss = (callback) => {
     const cssId = '_sendsay-styles';
     if (!document.getElementById(cssId)) {
@@ -68,11 +71,49 @@ const config = {
         case 'widget':
           DomConstructor = ToggleablePopup;
           break;
+        case 'embedded':
+          DomConstructor = Embedded;
+          break;
       }
       const popup = new DomConstructor(data);
       popup.activate(options);
     });
   };
+
+  const checkEmbeddedForms = () => {
+    const elements = document.querySelectorAll(`[${ATTRIBUTES.EMBEDDED}]`);
+    elements.forEach((el) => {
+      const formId = el.getAttribute(ATTRIBUTES.EMBEDDED);
+      if (!formId || el.hasAttribute(ATTRIBUTES.INIT)) {
+        return;
+      }
+      el.setAttribute(ATTRIBUTES.INIT, true);
+      activatePopup(`https://sendsay.ru/form/${formId}`, { el });
+    });
+  };
+
+  const embeddedFormWatcher = () => {
+    const callback = (mutationsList) => {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const { type, addedNodes } of mutationsList) {
+        if (type !== 'childList' || !addedNodes) {
+          return;
+        }
+        checkEmbeddedForms();
+      }
+    };
+
+    const observer = new MutationObserver(callback);
+
+    observer.observe(document, {
+      attributes: false,
+      childList: true,
+      subtree: true,
+    });
+  };
+
+  checkEmbeddedForms();
+  embeddedFormWatcher();
 
   window.SENDSAY = {
     config,

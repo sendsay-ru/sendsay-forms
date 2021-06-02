@@ -2,6 +2,7 @@ import { ConditionWatcher } from './ConditionWatcher';
 import { Cookies } from './Cookies';
 import { Popup } from './elements/Popup';
 import { PopupBar } from './elements/PopupBar';
+import { Embedded } from './elements/Embedded';
 import { ToggleablePopup } from './elements/ToggleablePopup';
 import { getHostName } from './utils';
 import NotificationService from './NotificationService';
@@ -67,19 +68,22 @@ export class Form {
   }
 
   handleSuccess() {
+    const { data, id, formId, login } = this.connector;
+
     if (this.connector.errors) {
       const clickTrigger = new ClickTrigger();
       clickTrigger.watch(() => {
-        const { formId } = this.connector;
-        NotificationService.show(formId);
+        NotificationService.show();
       });
       return;
     }
 
-    const { id } = this.connector.data;
-    const { data } = this.connector;
     const conditions = this.processConditionsSettings();
-    const watcher = new ConditionWatcher(conditions, id);
+    const watcher = new ConditionWatcher(conditions, {
+      id,
+      formId,
+      login,
+    });
     let DomConstructor = null;
 
     watcher.watch(
@@ -95,6 +99,9 @@ export class Form {
           case 'widget':
             DomConstructor = ToggleablePopup;
             break;
+          case 'embedded':
+            DomConstructor = Embedded;
+            break;
         }
 
         if (!DomConstructor || this.domObj?.isShow) {
@@ -103,7 +110,7 @@ export class Form {
         this.domObj = null;
 
         // eslint-disable-next-line new-cap
-        this.domObj = new DomConstructor(this.connector.data);
+        this.domObj = new DomConstructor(data);
         this.domObj.activate(this.options);
         this.domObj.el.addEventListener(
           'sendsay-success',

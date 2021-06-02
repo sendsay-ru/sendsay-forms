@@ -8,5 +8,5 @@ const DEFAULT_PORT = process.env.PORT || 8082;
 const app = superstatic({ port: DEFAULT_PORT });
 
 app.listen(() => {
-  console.log(`Listening on ${DEFAULT_PORT}`);
+  console.log(`Listening on http://localhost:${DEFAULT_PORT}`);
 });

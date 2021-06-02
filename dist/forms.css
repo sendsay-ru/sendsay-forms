@@ -335,6 +335,26 @@
   margin-left: 20px;
 }
 
+.sendsay-popup.sendsay-type-embedded {
+  position: relative !important;
+  box-shadow: unset;
+  max-height: unset;
+  z-index: 1;
+}
+.sendsay-popup.sendsay-type-embedded.sendsay-centered {
+  top: unset;
+  bottom: unset;
+  left: unset;
+  right: unset;
+  transform: unset;
+}
+.sendsay-popup.sendsay-type-embedded .sendsay-close {
+  display: none;
+}
+.sendsay-popup.sendsay-type-embedded.sendsay--can-close.sendsay-laststep .sendsay-close {
+  display: block;
+}
+
 .sendsay-animation-bounce {
   -webkit-animation-name: sendsay-bounce;
   animation-name: sendsay-bounce;

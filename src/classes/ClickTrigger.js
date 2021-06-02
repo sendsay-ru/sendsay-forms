@@ -1,13 +1,17 @@
+import { ATTRIBUTES } from './attributes';
+
 export default class ClickTrigger {
   constructor() {
-    this.attributes = ['data-sendsay-form-subscribe'];
+    this.attributes = [ATTRIBUTES.SUBSCRIBE];
   }
 
   watch(resolve) {
     document.addEventListener('click', (e) => {
-      if (this.attributes.some(attr => e.target.hasAttribute(attr))) {
-        resolve('click');
+      const attr = e.target.getAttribute(ATTRIBUTES.SUBSCRIBE);
+      if (!attr) {
+        return;
       }
+      resolve(attr);
     });
   }
 }
