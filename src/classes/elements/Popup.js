@@ -18,7 +18,7 @@ export class Popup extends DOMObject {
       ? '<div class = "sendsay-wrapper [%wrapperClasses%]" style="[%overlayStyles%]">'
       : ''
     }<div class = "[%classes%]" style="[%style%]"">`
-      + '<div class = "sendsay-close sendsay-close--with-icon">'}${
+      + '<div class="sendsay-close sendsay-close--with-icon">'}${
       closeIcon
     }</div>`
       + '<div class = "sendsay-content">'

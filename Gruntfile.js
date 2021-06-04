@@ -7,10 +7,26 @@ const lessFiles = [
   'src/css/less/animations.less',
 ];
 
+const pathToCss = ({ min }) => (`https://image.sendsay.ru/app/js/forms/forms${min ? '.min' : ''}.css`);
+
 module.exports = (grunt) => {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    rewrite: {
+      default: {
+        src: 'dist/forms.js',
+        editor(contents) {
+          return contents.replace(/DEFAULT_PATH_TO_CSS/g, pathToCss({ min: false }));
+        },
+      },
+      min: {
+        src: 'dist/forms.min.js',
+        editor(contents) {
+          return contents.replace(/DEFAULT_PATH_TO_CSS/g, pathToCss({ min: true }));
+        },
+      },
+    },
     browserify: {
       dist: {
         options: {
@@ -25,7 +41,7 @@ module.exports = (grunt) => {
           './dist/forms.js': ['./src/*.js', './src/classes/**/*.js'],
         },
       },
-      dev: {
+      test: {
         options: {
           transform: [
             ['babelify', {
@@ -67,7 +83,7 @@ module.exports = (grunt) => {
     watch: {
       scripts: {
         files: 'src/**/*.js',
-        tasks: ['browserify'],
+        tasks: ['browserify', 'rewrite:default'],
         options: {
           interrupt: true,
         },
@@ -87,8 +103,9 @@ module.exports = (grunt) => {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-rewrite');
 
   // Default task(s).
-  grunt.registerTask('build', ['browserify', 'uglify', 'less']);
+  grunt.registerTask('build', ['browserify', 'uglify', 'rewrite', 'less']);
   grunt.registerTask('default', ['build']);
 };

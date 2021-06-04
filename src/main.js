@@ -5,12 +5,12 @@ import { ToggleablePopup } from './classes/elements/ToggleablePopup';
 import { Embedded } from './classes/elements/Embedded';
 import { Connector } from './classes/Connector';
 import { Form } from './classes/Form';
-import { ATTRIBUTES } from './classes/attributes';
+import EmbeddedFormWatcher from './classes/EmbeddedFormWatcher';
 
 const DEFAULT_CONFIG = {
   forms: {
     css: {
-      url: 'https://image.sendsay.ru/app/js/forms/forms.css',
+      url: 'DEFAULT_PATH_TO_CSS',
     },
   },
 };
@@ -80,40 +80,8 @@ const DEFAULT_CONFIG = {
     });
   };
 
-  const checkEmbeddedForms = () => {
-    const elements = document.querySelectorAll(`[${ATTRIBUTES.EMBEDDED}]`);
-    elements.forEach((el) => {
-      const formId = el.getAttribute(ATTRIBUTES.EMBEDDED);
-      if (!formId || el.hasAttribute(ATTRIBUTES.INIT)) {
-        return;
-      }
-      el.setAttribute(ATTRIBUTES.INIT, true);
-      activatePopup(`https://sendsay.ru/form/${formId}`, { el });
-    });
-  };
-
-  const embeddedFormWatcher = () => {
-    const callback = (mutationsList) => {
-      // eslint-disable-next-line no-restricted-syntax
-      for (const { type, addedNodes } of mutationsList) {
-        if (type !== 'childList' || !addedNodes) {
-          return;
-        }
-        checkEmbeddedForms();
-      }
-    };
-
-    const observer = new MutationObserver(callback);
-
-    observer.observe(document, {
-      attributes: false,
-      childList: true,
-      subtree: true,
-    });
-  };
-
-  checkEmbeddedForms();
-  embeddedFormWatcher();
+  const embeddedFormWatcher = new EmbeddedFormWatcher(activatePopup);
+  embeddedFormWatcher.start();
 
   window.SENDSAY = {
     config,

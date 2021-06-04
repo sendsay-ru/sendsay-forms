@@ -335,6 +335,9 @@
   margin-left: 20px;
 }
 
+.sendsay-popup {
+  display: block !important;
+}
 .sendsay-popup.sendsay-type-embedded {
   position: relative !important;
   box-shadow: unset;
