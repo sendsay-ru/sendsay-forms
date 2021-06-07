@@ -5,6 +5,9 @@ export class Embedded extends Popup {
     super.initialize();
     this.makeBorder();
     this.makeShadow();
+    this.applicableStyles.display = {
+      default: 'none',
+    };
   }
 
   makeBorder() {
