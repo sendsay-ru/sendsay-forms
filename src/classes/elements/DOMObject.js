@@ -136,18 +136,23 @@ export class DOMObject {
       // eslint-disable-next-line no-param-reassign
       selector = null;
     }
-    const target = selector ? this.el.querySelector(selector) : this.el;
-    if (target) {
-      // eslint-disable-next-line no-unused-expressions
-      toAdd
-        ? target.addEventListener(event, callback)
-        : target.removeEventListener(event, callback);
-    }
+
+    const targets = selector ? this.el.querySelectorAll(selector) : [this.el];
+
+    targets.forEach((target) => {
+      if (target) {
+        // eslint-disable-next-line no-unused-expressions
+        toAdd
+          ? target.addEventListener(event, callback)
+          : target.removeEventListener(event, callback);
+      }
+    });
   }
 
   trigger(eventName, data) {
     let event;
     const extra = { extra: data };
+
     if (CustomEvent && typeof CustomEvent === 'function') {
       event = new CustomEvent(eventName, { detail: extra });
     } else {

@@ -1149,7 +1149,7 @@ var Form = /*#__PURE__*/function () {
 
         _this.setCountCookie(_this.connector.data);
 
-        if (data.type === 'widget' && ['scroll', 'delay', 'click'].includes(event)) {
+        if (data.type === 'widget' && ['scroll', 'delay', 'click', 'instant'].includes(event)) {
           _this.domObj.handleTogglerClick();
         }
       }, function () {});
@@ -1958,12 +1958,13 @@ var DOMObject = /*#__PURE__*/function () {
         selector = null;
       }
 
-      var target = selector ? this.el.querySelector(selector) : this.el;
-
-      if (target) {
-        // eslint-disable-next-line no-unused-expressions
-        toAdd ? target.addEventListener(event, callback) : target.removeEventListener(event, callback);
-      }
+      var targets = selector ? this.el.querySelectorAll(selector) : [this.el];
+      targets.forEach(function (target) {
+        if (target) {
+          // eslint-disable-next-line no-unused-expressions
+          toAdd ? target.addEventListener(event, callback) : target.removeEventListener(event, callback);
+        }
+      });
     }
   }, {
     key: "trigger",
@@ -2724,6 +2725,18 @@ var ImageElement = /*#__PURE__*/function (_DOMObject) {
         }
       };
       this.baseClass = 'sendsay-image';
+    }
+  }, {
+    key: "addEvents",
+    value: function addEvents() {
+      if (this.el) {
+        this.el.querySelector('img').onload = this.handleLoad.bind(this);
+      }
+    }
+  }, {
+    key: "handleLoad",
+    value: function handleLoad() {
+      this.trigger('sendsay-image-load');
     }
   }, {
     key: "makeStyles",
@@ -4211,12 +4224,14 @@ var ToggleablePopup = /*#__PURE__*/function (_Popup) {
     value: function addEvents() {
       (0, _get2["default"])((0, _getPrototypeOf2["default"])(ToggleablePopup.prototype), "addEvents", this).call(this);
       this.addEvent('click', '.sendsay-toggler', this.handleTogglerClick.bind(this));
+      this.addEvent('sendsay-image-load', '.sendsay-image', this.setSaneMaxHeight.bind(this));
     }
   }, {
     key: "removeEvents",
     value: function removeEvents() {
       (0, _get2["default"])((0, _getPrototypeOf2["default"])(ToggleablePopup.prototype), "removeEvents", this).call(this);
       this.removeEvent('click', '.sendsay-toggler', this.handleTogglerClick.bind(this));
+      this.removeEvent('sendsay-image-load', '.sendsay-image', this.setSaneMaxHeight.bind(this));
     }
   }, {
     key: "handleTogglerClick",

@@ -137,6 +137,11 @@ export class ToggleablePopup extends Popup {
       '.sendsay-toggler',
       this.handleTogglerClick.bind(this),
     );
+    this.addEvent(
+      'sendsay-image-load',
+      '.sendsay-image',
+      this.setSaneMaxHeight.bind(this),
+    );
   }
 
   removeEvents() {
@@ -145,6 +150,11 @@ export class ToggleablePopup extends Popup {
       'click',
       '.sendsay-toggler',
       this.handleTogglerClick.bind(this),
+    );
+    this.removeEvent(
+      'sendsay-image-load',
+      '.sendsay-image',
+      this.setSaneMaxHeight.bind(this),
     );
   }
 

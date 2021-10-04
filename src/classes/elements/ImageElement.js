@@ -15,6 +15,18 @@ export class ImageElement extends DOMObject {
     this.baseClass = 'sendsay-image';
   }
 
+  addEvents() {
+    if (this.el) {
+      this.el
+        .querySelector('img')
+        .onload = this.handleLoad.bind(this);
+    }
+  }
+
+  handleLoad() {
+    this.trigger('sendsay-image-load');
+  }
+
   makeStyles() {
     const styleObj = super.makeStyles();
     const data = this.data.appearance || {};
