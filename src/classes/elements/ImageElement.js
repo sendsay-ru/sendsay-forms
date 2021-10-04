@@ -2,7 +2,7 @@ import { DOMObject } from './DOMObject';
 
 export class ImageElement extends DOMObject {
   initialize() {
-    this.template = '<div class = "[%classes%]" style="[%wrapperstyle%]">'
+    this.template = '<div class="[%classes%]" style="[%wrapperstyle%]">'
       + '<img src="[%url%]" style="[%style%]/>" />'
       + '</div>';
     this.wrapperApplStyles = {

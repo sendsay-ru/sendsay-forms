@@ -2,10 +2,10 @@ import { DOMObject } from './DOMObject';
 
 export class CheckBox extends DOMObject {
   initialize() {
-    this.template = `${'<div class = "[%classes%]" style="[%style%]"">'
+    this.template = `${'<div class="[%classes%]" style="[%style%]">'
       + '<input [%checked%] name="[%qid%]" value="[%value%]" type="checkbox" class="sendsay-checkinput"/>'}${
       this.data.content.label
-        ? '<label for="[%label%]" class = "sendsay-label">[%label%]</label>'
+        ? '<label for="[%label%]" class="sendsay-label">[%label%]</label>'
         : ''
     }</div>`;
     this.baseClass = 'sendsay-checkbox';

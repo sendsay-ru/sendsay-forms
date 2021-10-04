@@ -2,7 +2,7 @@ import { DOMObject } from './DOMObject';
 
 export class Text extends DOMObject {
   initialize() {
-    this.template = '<div class = "sendsay-text" style="[%style%]"">[%text%]</div>';
+    this.template = '<div class="sendsay-text" style="[%style%]">[%text%]</div>';
     this.baseClass = 'sendsay-text';
     this.applicableStyles = {
       'text-align': { param: 'align', default: 'left' },

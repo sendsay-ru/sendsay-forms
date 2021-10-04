@@ -12,15 +12,15 @@ export class ToggleablePopup extends Popup {
     this.gainedData = {};
 
     this.template = `${!this.noWrapper
-      ? '<div class = "sendsay-wrapper [%wrapperClasses%]"  style="[%overlayStyles%]">'
+      ? '<div class="sendsay-wrapper [%wrapperClasses%]" style="[%overlayStyles%]">'
       : ''
-    }<div class = "[%classes%]" style="[%style%]"">`
-      + '<div class = "sendsay-close">×</div>'
-      + '<div class = "sendsay-toggler">'
+    }<div class="[%classes%]" style="[%style%]">`
+      + '<div class="sendsay-close">×</div>'
+      + '<div class="sendsay-toggler">'
       + '<span class="sendsay-toggler-desktop">[%toggle%]</span>'
       + '<span class="sendsay-toggler-mobile">[%toggle%]</span>'
       + '</div>'
-      + '<div class = "sendsay-content">'
+      + '<div class="sendsay-content">'
       + '</div>'
       + `</div>${
         !this.noWrapper ? '</div>' : ''}`;
@@ -154,7 +154,7 @@ export class ToggleablePopup extends Popup {
 
     if (el.classList.contains('sendsay-opened')) {
       el.classList.remove('sendsay-opened');
-      contentEl.style.maxHeight = `${0}px`;
+      contentEl.style.maxHeight = '0px';
     } else {
       el.classList.add('sendsay-opened');
       this.setSaneMaxHeight();
