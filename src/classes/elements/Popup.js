@@ -17,7 +17,7 @@ export class Popup extends DOMObject {
     this.template = `${`${!this.noWrapper
       ? '<div class = "sendsay-wrapper [%wrapperClasses%]" style="[%overlayStyles%]">'
       : ''
-    }<div class = "[%classes%]" style="[%style%]"">`
+    }<div class="[%classes%]" style="[%style%]">`
       + '<div class="sendsay-close sendsay-close--with-icon">'}${
       closeIcon
     }</div>`

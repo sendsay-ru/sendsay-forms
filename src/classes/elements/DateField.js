@@ -2,8 +2,8 @@ import { Field } from './Field';
 
 export class DateField extends Field {
   initialize() {
-    this.template = '<div class = "[%classes%]" style="[%style%]"">'
-      + '<label for="[%label%]" class = "sendsay-label">[%label%]</label>'
+    this.template = '<div class="[%classes%]" style="[%style%]">'
+      + '<label for="[%label%]" class="sendsay-label">[%label%]</label>'
       + '<input name="[%qid%]" placeholder="[%placeholder%]" value="[%value%]" type="text" class="sendsay-input"/>'
       + '<div type="text" class="sendsay-error"></div>'
       + '</div>';

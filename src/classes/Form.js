@@ -120,7 +120,7 @@ export class Form {
         this.setFrequencyCookie(this.connector.data);
         this.setCountCookie(this.connector.data);
 
-        if (data.type === 'widget' && ['scroll', 'delay', 'click'].includes(event)) {
+        if (data.type === 'widget' && ['scroll', 'delay', 'click', 'instant'].includes(event)) {
           this.domObj.handleTogglerClick();
         }
       },

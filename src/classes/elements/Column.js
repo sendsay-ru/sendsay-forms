@@ -3,8 +3,8 @@ import { ElementFactory } from '../ElementFactory';
 
 export class Column extends DOMObject {
   initialize() {
-    this.template = '<div class = "sendsay-columnwrapper" style = "width:100%; [%wrapperstyle%]">'
-      + '<div class = "[%classes%]" style="[%style%]"">'
+    this.template = '<div class="sendsay-columnwrapper" style = "width:100%; [%wrapperstyle%]">'
+      + '<div class="[%classes%]" style="[%style%]">'
       + '</div></div>';
     this.baseClass = 'sendsay-column';
     this.applicableStyles = {

@@ -4,9 +4,9 @@ import { CheckBox } from './CheckBox';
 export class MultipleChoiseField extends Field {
   initialize() {
     super.initialize();
-    this.template = '<div class = "[%classes%]" style="[%style%]"">'
-      + '<label for="[%label%]" class = "sendsay-label">[%label%]</label>'
-      + '<div class = "sendsay-container"></div>'
+    this.template = '<div class="[%classes%]" style="[%style%]">'
+      + '<label for="[%label%]" class="sendsay-label">[%label%]</label>'
+      + '<div class="sendsay-container"></div>'
       + '<div type="text" class="sendsay-error"></div>'
       + '</div>';
     this.curValues = this.data.field.default || [];

@@ -1149,7 +1149,7 @@ var Form = /*#__PURE__*/function () {
 
         _this.setCountCookie(_this.connector.data);
 
-        if (data.type === 'widget' && ['scroll', 'delay', 'click'].includes(event)) {
+        if (data.type === 'widget' && ['scroll', 'delay', 'click', 'instant'].includes(event)) {
           _this.domObj.handleTogglerClick();
         }
       }, function () {});
@@ -1412,7 +1412,7 @@ var Button = /*#__PURE__*/function (_DOMObject) {
   (0, _createClass2["default"])(Button, [{
     key: "initialize",
     value: function initialize() {
-      this.template = '<div class = "[%classes%]" style="[%wrapperstyle%]">' + '<input type="button"  value="[%text%]"  style="[%style%]" />' + '</div>';
+      this.template = '<div class="[%classes%]" style="[%wrapperstyle%]">' + '<input type="button"  value="[%text%]" style="[%style%]" />' + '</div>';
       this.baseClass = 'sendsay-button';
       this.applicableStyles = {
         'background-color': {
@@ -1558,7 +1558,7 @@ var CheckBox = /*#__PURE__*/function (_DOMObject) {
   (0, _createClass2["default"])(CheckBox, [{
     key: "initialize",
     value: function initialize() {
-      this.template = "".concat('<div class = "[%classes%]" style="[%style%]"">' + '<input [%checked%] name="[%qid%]" value="[%value%]" type="checkbox" class="sendsay-checkinput"/>').concat(this.data.content.label ? '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' : '', "</div>");
+      this.template = "".concat('<div class="[%classes%]" style="[%style%]">' + '<input [%checked%] name="[%qid%]" value="[%value%]" type="checkbox" class="sendsay-checkinput"/>').concat(this.data.content.label ? '<label for="[%label%]" class="sendsay-label">[%label%]</label>' : '', "</div>");
       this.baseClass = 'sendsay-checkbox';
       this.handleChange = this.handleChange.bind(this);
       this.handleClick = this.handleClick.bind(this);
@@ -1695,7 +1695,7 @@ var Column = /*#__PURE__*/function (_DOMObject) {
   (0, _createClass2["default"])(Column, [{
     key: "initialize",
     value: function initialize() {
-      this.template = '<div class = "sendsay-columnwrapper" style = "width:100%; [%wrapperstyle%]">' + '<div class = "[%classes%]" style="[%style%]"">' + '</div></div>';
+      this.template = '<div class="sendsay-columnwrapper" style = "width:100%; [%wrapperstyle%]">' + '<div class="[%classes%]" style="[%style%]">' + '</div></div>';
       this.baseClass = 'sendsay-column';
       this.applicableStyles = {
         'background-color': {
@@ -1958,12 +1958,13 @@ var DOMObject = /*#__PURE__*/function () {
         selector = null;
       }
 
-      var target = selector ? this.el.querySelector(selector) : this.el;
-
-      if (target) {
-        // eslint-disable-next-line no-unused-expressions
-        toAdd ? target.addEventListener(event, callback) : target.removeEventListener(event, callback);
-      }
+      var targets = selector ? this.el.querySelectorAll(selector) : [this.el];
+      targets.forEach(function (target) {
+        if (target) {
+          // eslint-disable-next-line no-unused-expressions
+          toAdd ? target.addEventListener(event, callback) : target.removeEventListener(event, callback);
+        }
+      });
     }
   }, {
     key: "trigger",
@@ -2052,7 +2053,7 @@ var DateField = /*#__PURE__*/function (_Field) {
   (0, _createClass2["default"])(DateField, [{
     key: "initialize",
     value: function initialize() {
-      this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + '<input name="[%qid%]" placeholder="[%placeholder%]" value="[%value%]" type="text" class="sendsay-input"/>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
+      this.template = '<div class="[%classes%]" style="[%style%]">' + '<label for="[%label%]" class="sendsay-label">[%label%]</label>' + '<input name="[%qid%]" placeholder="[%placeholder%]" value="[%value%]" type="text" class="sendsay-input"/>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
       this.baseClass = 'sendsay-field';
       this.applicableStyles = {
         'padding-bottom': {
@@ -2575,7 +2576,7 @@ var Field = /*#__PURE__*/function (_DOMObject) {
   (0, _createClass2["default"])(Field, [{
     key: "initialize",
     value: function initialize() {
-      this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + '<input name="[%qid%]" placeholder="[%placeholder%]" value="[%value%]" type="text" class="sendsay-input"/>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
+      this.template = '<div class="[%classes%]" style="[%style%]">' + '<label for="[%label%]" class="sendsay-label">[%label%]</label>' + '<input name="[%qid%]" placeholder="[%placeholder%]" value="[%value%]" type="text" class="sendsay-input"/>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
       this.baseClass = 'sendsay-field';
       this.applicableStyles = {
         'padding-bottom': {
@@ -2704,7 +2705,7 @@ var ImageElement = /*#__PURE__*/function (_DOMObject) {
   (0, _createClass2["default"])(ImageElement, [{
     key: "initialize",
     value: function initialize() {
-      this.template = '<div class = "[%classes%]" style="[%wrapperstyle%]">' + '<img src="[%url%]" style="[%style%]/>" />' + '</div>';
+      this.template = '<div class="[%classes%]" style="[%wrapperstyle%]">' + '<img src="[%url%]" style="[%style%]/>" />' + '</div>';
       this.wrapperApplStyles = {
         'padding-bottom': {
           param: 'paddingBottom',
@@ -2724,6 +2725,18 @@ var ImageElement = /*#__PURE__*/function (_DOMObject) {
         }
       };
       this.baseClass = 'sendsay-image';
+    }
+  }, {
+    key: "addEvents",
+    value: function addEvents() {
+      if (this.el) {
+        this.el.querySelector('img').onload = this.handleLoad.bind(this);
+      }
+    }
+  }, {
+    key: "handleLoad",
+    value: function handleLoad() {
+      this.trigger('sendsay-image-load');
     }
   }, {
     key: "makeStyles",
@@ -2807,7 +2820,7 @@ var MultipleChoiseField = /*#__PURE__*/function (_Field) {
     key: "initialize",
     value: function initialize() {
       (0, _get2["default"])((0, _getPrototypeOf2["default"])(MultipleChoiseField.prototype), "initialize", this).call(this);
-      this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + '<div class = "sendsay-container"></div>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
+      this.template = '<div class="[%classes%]" style="[%style%]">' + '<label for="[%label%]" class="sendsay-label">[%label%]</label>' + '<div class="sendsay-container"></div>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
       this.curValues = this.data.field["default"] || [];
       this.baseClass = 'sendsay-field';
       this.handleChangeValue = this.handleChangeValue.bind(this);
@@ -3092,7 +3105,7 @@ var Popup = /*#__PURE__*/function (_DOMObject) {
       this.steps = this.data.steps;
       this.curStep = 0;
       this.gainedData = {};
-      this.template = "".concat("".concat(!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]" style="[%overlayStyles%]">' : '', "<div class = \"[%classes%]\" style=\"[%style%]\"\">") + '<div class="sendsay-close sendsay-close--with-icon">').concat(_close["default"], "</div>") + '<div class = "sendsay-content">' + '</div>' + "</div>".concat(!this.noWrapper ? '</div>' : '');
+      this.template = "".concat("".concat(!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]" style="[%overlayStyles%]">' : '', "<div class=\"[%classes%]\" style=\"[%style%]\">") + '<div class="sendsay-close sendsay-close--with-icon">').concat(_close["default"], "</div>") + '<div class = "sendsay-content">' + '</div>' + "</div>".concat(!this.noWrapper ? '</div>' : '');
       this.baseClass = 'sendsay-popup';
       this.applicableStyles = {
         'background-color': {
@@ -3534,7 +3547,7 @@ var PopupBar = /*#__PURE__*/function (_Popup) {
       this.steps = this.data.steps;
       this.curStep = 0;
       this.gainedData = {};
-      this.template = "".concat(!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]"  style="[%overlayStyles%]">' : '', "<div class = \"[%classes%]\" style=\"[%style%]\"\">") + '<div class = "sendsay-close">×</div>' + '<div class = "sendsay-content">' + '</div>' + "</div>".concat(!this.noWrapper ? '</div>' : '');
+      this.template = "".concat(!this.noWrapper ? '<div class="sendsay-wrapper [%wrapperClasses%]" style="[%overlayStyles%]">' : '', "<div class=\"[%classes%]\" style=\"[%style%]\">") + '<div class="sendsay-close">×</div>' + '<div class="sendsay-content">' + '</div>' + "</div>".concat(!this.noWrapper ? '</div>' : '');
       this.baseClass = 'sendsay-popup';
       this.applicableStyles = {
         'background-color': {
@@ -3672,7 +3685,7 @@ var RadioButton = /*#__PURE__*/function (_DOMObject) {
   (0, _createClass2["default"])(RadioButton, [{
     key: "initialize",
     value: function initialize() {
-      this.template = "".concat('<div class = "[%classes%]" style="[%style%]">' + '<input [%checked%] name="[%qid%]" value="[%value%]" type="radio" class="sendsay-radioinput"/>').concat(this.data.content.label ? '<label for="[%qid%]" class = "sendsay-label">[%label%]</label>' : '', "</div>");
+      this.template = "".concat('<div class="[%classes%]" style="[%style%]">' + '<input [%checked%] name="[%qid%]" value="[%value%]" type="radio" class="sendsay-radioinput"/>').concat(this.data.content.label ? '<label for="[%qid%]" class="sendsay-label">[%label%]</label>' : '', "</div>");
       this.baseClass = 'sendsay-radio';
       this.handleChange = this.handleChange.bind(this);
       this.handleClick = this.handleClick.bind(this);
@@ -3805,7 +3818,7 @@ var SingleChoiseField = /*#__PURE__*/function (_Field) {
     key: "initialize",
     value: function initialize() {
       (0, _get2["default"])((0, _getPrototypeOf2["default"])(SingleChoiseField.prototype), "initialize", this).call(this);
-      this.template = '<div class = "[%classes%]" style="[%style%]"">' + '<label for="[%label%]" class = "sendsay-label">[%label%]</label>' + '<div class = "sendsay-container"></div>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
+      this.template = '<div class="[%classes%]" style="[%style%]">' + '<label for="[%label%]" class="sendsay-label">[%label%]</label>' + '<div class="sendsay-container"></div>' + '<div type="text" class="sendsay-error"></div>' + '</div>';
       var field = this.data.field || {};
       this.curValue = field["default"] || '';
       this.baseClass = 'sendsay-field';
@@ -3928,7 +3941,7 @@ var Spacer = /*#__PURE__*/function (_DOMObject) {
   (0, _createClass2["default"])(Spacer, [{
     key: "initialize",
     value: function initialize() {
-      this.template = '<div class = "[%classes%]" style="[%style%]"></div>';
+      this.template = '<div class="[%classes%]" style="[%style%]"></div>';
       this.baseClass = 'sendsay-spacer';
       this.applicableStyles = {
         height: {
@@ -3984,7 +3997,7 @@ var Text = /*#__PURE__*/function (_DOMObject) {
   (0, _createClass2["default"])(Text, [{
     key: "initialize",
     value: function initialize() {
-      this.template = '<div class = "sendsay-text" style="[%style%]"">[%text%]</div>';
+      this.template = '<div class="sendsay-text" style="[%style%]">[%text%]</div>';
       this.baseClass = 'sendsay-text';
       this.applicableStyles = {
         'text-align': {
@@ -4085,7 +4098,7 @@ var ToggleablePopup = /*#__PURE__*/function (_Popup) {
       this.steps = this.data.steps;
       this.curStep = 0;
       this.gainedData = {};
-      this.template = "".concat(!this.noWrapper ? '<div class = "sendsay-wrapper [%wrapperClasses%]"  style="[%overlayStyles%]">' : '', "<div class = \"[%classes%]\" style=\"[%style%]\"\">") + '<div class = "sendsay-close">×</div>' + '<div class = "sendsay-toggler">' + '<span class="sendsay-toggler-desktop">[%toggle%]</span>' + '<span class="sendsay-toggler-mobile">[%toggle%]</span>' + '</div>' + '<div class = "sendsay-content">' + '</div>' + "</div>".concat(!this.noWrapper ? '</div>' : '');
+      this.template = "".concat(!this.noWrapper ? '<div class="sendsay-wrapper [%wrapperClasses%]" style="[%overlayStyles%]">' : '', "<div class=\"[%classes%]\" style=\"[%style%]\">") + '<div class="sendsay-close">×</div>' + '<div class="sendsay-toggler">' + '<span class="sendsay-toggler-desktop">[%toggle%]</span>' + '<span class="sendsay-toggler-mobile">[%toggle%]</span>' + '</div>' + '<div class="sendsay-content">' + '</div>' + "</div>".concat(!this.noWrapper ? '</div>' : '');
       this.baseClass = 'sendsay-popup';
       this.applicableStyles = {
         'background-color': {
@@ -4211,12 +4224,14 @@ var ToggleablePopup = /*#__PURE__*/function (_Popup) {
     value: function addEvents() {
       (0, _get2["default"])((0, _getPrototypeOf2["default"])(ToggleablePopup.prototype), "addEvents", this).call(this);
       this.addEvent('click', '.sendsay-toggler', this.handleTogglerClick.bind(this));
+      this.addEvent('sendsay-image-load', '.sendsay-image', this.setSaneMaxHeight.bind(this));
     }
   }, {
     key: "removeEvents",
     value: function removeEvents() {
       (0, _get2["default"])((0, _getPrototypeOf2["default"])(ToggleablePopup.prototype), "removeEvents", this).call(this);
       this.removeEvent('click', '.sendsay-toggler', this.handleTogglerClick.bind(this));
+      this.removeEvent('sendsay-image-load', '.sendsay-image', this.setSaneMaxHeight.bind(this));
     }
   }, {
     key: "handleTogglerClick",
@@ -4226,7 +4241,7 @@ var ToggleablePopup = /*#__PURE__*/function (_Popup) {
 
       if (el.classList.contains('sendsay-opened')) {
         el.classList.remove('sendsay-opened');
-        contentEl.style.maxHeight = "".concat(0, "px");
+        contentEl.style.maxHeight = '0px';
       } else {
         el.classList.add('sendsay-opened');
         this.setSaneMaxHeight();

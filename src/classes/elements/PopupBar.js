@@ -12,11 +12,11 @@ export class PopupBar extends Popup {
     this.gainedData = {};
 
     this.template = `${!this.noWrapper
-      ? '<div class = "sendsay-wrapper [%wrapperClasses%]"  style="[%overlayStyles%]">'
+      ? '<div class="sendsay-wrapper [%wrapperClasses%]" style="[%overlayStyles%]">'
       : ''
-    }<div class = "[%classes%]" style="[%style%]"">`
-      + '<div class = "sendsay-close">×</div>'
-      + '<div class = "sendsay-content">'
+    }<div class="[%classes%]" style="[%style%]">`
+      + '<div class="sendsay-close">×</div>'
+      + '<div class="sendsay-content">'
       + '</div>'
       + `</div>${
         !this.noWrapper ? '</div>' : ''}`;
