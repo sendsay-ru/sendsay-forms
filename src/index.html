@@ -17,8 +17,10 @@
     <script src="/dist/forms.js"></script>
     <!-- <script src="https://image.sendsay.ru/app/js/forms/forms.min.js"></script> -->
     <script>
-      SENDSAY.activatePopup("https://sendsay.ru/form/codeception/467");
-      // SENDSAY.activatePopup("https://sendsay.ru/form/x_1587461997567015/4");
+      (async function load() {
+        const form = await SENDSAY.activatePopup("https://sendsay.ru/form/codeception/445/");
+        window.form = form;
+      })();
     </script>
     <script>
       // setTimeout(function() {
@@ -87,7 +89,7 @@
   <body>
     <div class="wrapper">
       <div class="example" data-sendsay-form-subscribe="codeception/445">Open modal dialog</div>
-      <div data-sendsay-form-embedded="codeception/449"></div>
+      <!-- <div data-sendsay-form-embedded="codeception/449"></div> -->
       <div id="box"></div>
     </div>
   </body>

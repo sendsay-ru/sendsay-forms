@@ -1024,7 +1024,7 @@ var Form = /*#__PURE__*/function () {
     var promise = connector.load();
 
     if (promise) {
-      promise.then(this.handleSuccess.bind(this), this.handleFail.bind(this));
+      promise.then(this.runWatcher.bind(this), this.handleFail.bind(this));
     }
   }
 
@@ -1086,8 +1086,8 @@ var Form = /*#__PURE__*/function () {
       }
     }
   }, {
-    key: "handleSuccess",
-    value: function handleSuccess() {
+    key: "runWatcher",
+    value: function runWatcher() {
       var _this = this;
 
       var _this$connector = this.connector,
@@ -1104,6 +1104,7 @@ var Form = /*#__PURE__*/function () {
         return;
       }
 
+      this.enable = true;
       var conditions = this.processConditionsSettings();
       var watcher = new _ConditionWatcher.ConditionWatcher(conditions, {
         id: id,
@@ -1114,7 +1115,11 @@ var Form = /*#__PURE__*/function () {
       watcher.watch(function (event) {
         var _this$domObj;
 
-        // eslint-disable-next-line default-case
+        if (!_this.enable) {
+          return;
+        } // eslint-disable-next-line default-case
+
+
         switch (data.type) {
           case 'popup':
             DomConstructor = _Popup.Popup;
@@ -1153,6 +1158,11 @@ var Form = /*#__PURE__*/function () {
           _this.domObj.handleTogglerClick();
         }
       }, function () {});
+    }
+  }, {
+    key: "stopWatcher",
+    value: function stopWatcher() {
+      this.enable = false;
     }
   }, {
     key: "handleFail",
@@ -4505,15 +4515,25 @@ var DEFAULT_CONFIG = {
   };
 
   var activatePopup = function activatePopup(url, options) {
-    loadCss(function () {
-      var connector = new _Connector.Connector(url);
-      var form = new _Form.Form(connector, options);
-      return form;
+    // eslint-disable-next-line compat/compat
+    return new Promise(function (resolve) {
+      loadCss(function () {
+        var connector = new _Connector.Connector(url);
+        var form = new _Form.Form(connector, options);
+        resolve({
+          runWatcher: function runWatcher() {
+            return form.runWatcher();
+          },
+          stopWatcher: function stopWatcher() {
+            return form.stopWatcher();
+          }
+        });
+      });
     });
   };
 
   var showPopup = function showPopup(data, options) {
-    loadCss(function () {
+    return loadCss(function () {
       var DomConstructor; // eslint-disable-next-line default-case
 
       switch (data.type) {

@@ -13,7 +13,8 @@ export class Form {
     this.options = options || {};
     this.connector = connector;
     const promise = connector.load();
-    if (promise) { promise.then(this.handleSuccess.bind(this), this.handleFail.bind(this)); }
+
+    if (promise) { promise.then(this.runWatcher.bind(this), this.handleFail.bind(this)); }
   }
 
   processConditionsSettings() {
@@ -67,7 +68,7 @@ export class Form {
     }
   }
 
-  handleSuccess() {
+  runWatcher() {
     const { data, id, formId, login } = this.connector;
 
     if (this.connector.errors) {
@@ -78,6 +79,7 @@ export class Form {
       return;
     }
 
+    this.enable = true;
     const conditions = this.processConditionsSettings();
     const watcher = new ConditionWatcher(conditions, {
       id,
@@ -88,6 +90,10 @@ export class Form {
 
     watcher.watch(
       (event) => {
+        if (!this.enable) {
+          return;
+        }
+
         // eslint-disable-next-line default-case
         switch (data.type) {
           case 'popup':
@@ -126,6 +132,10 @@ export class Form {
       },
       () => {},
     );
+  }
+
+  stopWatcher() {
+    this.enable = false;
   }
 
   handleFail() {}
