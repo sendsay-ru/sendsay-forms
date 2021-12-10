@@ -1,16 +1,16 @@
-Sendsay Form
+Sendsay Forms
 =
 
-### Предпросмотр:
+## Предпросмотр:
 Демо: https://sendsay-forms.herokuapp.com/
 
-### Типы форм:
+## Типы форм:
  - popup - Всплывающее окно
  - bar - Полоса сверху или снизу
  - widget - Вызываемое окно
  - embedded - Встраиваемая форма
 
-### Настройки:
+## Настройки:
 ```js
 SENDSAY.showPopup({
 {
@@ -108,10 +108,10 @@ SENDSAY.showPopup({
 });
 ```
 
-#### Встраиваемая форма
+### Встраиваемая форма
 Расположите на странице тег с атрибутом `[data-sendsay-form-embedded="{login}/{formId}"]`, где `login`- аккаунт, `formId` - `Id` формы, например `449`.
 
-#### Триггеры
+### Триггеры
 Все триггеры активные одновременно.
 
 - **click**
@@ -135,13 +135,24 @@ SENDSAY.showPopup({
 Срабатывает при уходе со страницы
 
 
-#### API
-```js
+## API
 
+### Активация формы на странице
+
+```js
 window.SENDSAY.activatePopup( /* url формы - https://sendsay.ru/form/{login}/{id} */ ); // инициализировать форму
 
 window.SENDSAY.showPopup({ /* объект формы */ }, { /* дополнительные настройки */ }); // показать форму подписки Sendsay
+```
 
+### Деактивация формы
+
+```js
+const form = await SENDSAY.activatePopup("https://sendsay.ru/form/codeception/445/");
+...
+form.stopWatcher();
+...
+form.runWatcher();
 ```
 
 License

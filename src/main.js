@@ -19,6 +19,7 @@ const DEFAULT_CONFIG = {
   const config = { ...DEFAULT_CONFIG, ...window.SENDSAY_FORMS_CONFIG?.() || {} };
   const loadCss = (callback) => {
     const cssId = '_sendsay-styles';
+
     if (!document.getElementById(cssId)) {
       const link = document.createElement('link');
       let loaded = false;
@@ -30,11 +31,13 @@ const DEFAULT_CONFIG = {
       link.media = 'all';
 
       const sibling = document.querySelector('#sendsay-generated-sheet');
+
       if (sibling) {
         document.head.insertBefore(link, sibling);
       } else {
         document.head.appendChild(link);
       }
+
       link.addEventListener('load', () => {
         link.removeEventListener('load', callback);
 
@@ -50,15 +53,22 @@ const DEFAULT_CONFIG = {
   };
 
   const activatePopup = function (url, options) {
-    loadCss(() => {
-      const connector = new Connector(url);
-      const form = new Form(connector, options);
-      return form;
+    // eslint-disable-next-line compat/compat
+    return new Promise((resolve) => {
+      loadCss(() => {
+        const connector = new Connector(url);
+        const form = new Form(connector, options);
+
+        resolve({
+          runWatcher: () => form.runWatcher(),
+          stopWatcher: () => form.stopWatcher(),
+        });
+      });
     });
   };
 
   const showPopup = function (data, options) {
-    loadCss(() => {
+    return loadCss(() => {
       let DomConstructor;
       // eslint-disable-next-line default-case
       switch (data.type) {
@@ -75,7 +85,9 @@ const DEFAULT_CONFIG = {
           DomConstructor = Embedded;
           break;
       }
+
       const popup = new DomConstructor(data);
+
       popup.activate(options);
     });
   };
