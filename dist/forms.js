@@ -334,7 +334,7 @@ var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/creat
 
 var _Cookies = require("./Cookies");
 
-var _utils = require("./utils");
+var _utils = require("../utils");
 
 var _ClickTrigger = _interopRequireDefault(require("./ClickTrigger"));
 
@@ -352,9 +352,9 @@ var ConditionWatcher = /*#__PURE__*/function () {
     this.formId = formId; // eslint-disable-next-line eqeqeq
 
     this.instant = conditions.instant != undefined ? conditions.instant : true;
-    this.pageScroll = parseInt(conditions.onPageScroll, 10) || 0;
+    this.pageScroll = (0, _utils.toNumber)(conditions.onPageScroll);
     this.onLeave = conditions.onLeave || false;
-    this.delay = parseInt(conditions.delay, 10) || 0;
+    this.delay = (0, _utils.toNumber)(conditions.delay);
     this.active = rawConditions.active;
     this.leaveWatcher = this.leaveWatcher.bind(this);
     this.scrollWatcher = this.scrollWatcher.bind(this);
@@ -406,13 +406,12 @@ var ConditionWatcher = /*#__PURE__*/function () {
           document.addEventListener('mouseleave', this.leaveWatcher);
         }
 
-        var id = this.id; // eslint-disable-next-line radix
+        var id = this.id;
 
-        localStorage["sendsay-form-".concat(id)] = parseInt(localStorage["sendsay-form-".concat(id)]) + 1 || 1;
+        _utils.LeaveCounter.increment(id);
 
         window.onbeforeunload = function () {
-          // eslint-disable-next-line radix
-          localStorage["sendsay-form-".concat(id)] = parseInt(localStorage["sendsay-form-".concat(id)]) - 1 || 0;
+          _utils.LeaveCounter.decrement(id);
         };
       }
 
@@ -470,9 +469,9 @@ var ConditionWatcher = /*#__PURE__*/function () {
   }, {
     key: "leaveWatcher",
     value: function leaveWatcher() {
-      var opened = localStorage["sendsay-form-".concat(this.id)];
+      var opened = _utils.LeaveCounter.get(this.id);
 
-      if (!opened || parseInt(opened, 10) < 2) {
+      if (!opened || (0, _utils.toNumber)(opened) < 2) {
         this.satisfyCondition('leave');
       }
     }
@@ -513,7 +512,7 @@ var ConditionWatcher = /*#__PURE__*/function () {
 
 exports.ConditionWatcher = ConditionWatcher;
 
-},{"./ClickTrigger":19,"./Cookies":22,"./utils":47,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/interopRequireDefault":10}],21:[function(require,module,exports){
+},{"../utils":54,"./ClickTrigger":19,"./Cookies":22,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/interopRequireDefault":10}],21:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -691,6 +690,8 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
 
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
 
+var _utils = require("../utils");
+
 var Cookies = /*#__PURE__*/function () {
   function Cookies() {
     (0, _classCallCheck2["default"])(this, Cookies);
@@ -707,7 +708,11 @@ var Cookies = /*#__PURE__*/function () {
     }
   }, {
     key: "set",
-    value: function set(sKey, sValue, vEnd, sPath, sDomain, bSecure) {
+    value: function set(sKey, sValue, vEnd) {
+      var sPath = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '/';
+      var sDomain = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : (0, _utils.getHostName)();
+      var bSecure = arguments.length > 5 ? arguments[5] : undefined;
+
       if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) {
         return false;
       }
@@ -770,7 +775,7 @@ var Cookies = /*#__PURE__*/function () {
 
 exports.Cookies = Cookies;
 
-},{"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/interopRequireDefault":10}],23:[function(require,module,exports){
+},{"../utils":54,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/interopRequireDefault":10}],23:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -1010,7 +1015,7 @@ var _Embedded = require("./elements/Embedded");
 
 var _ToggleablePopup = require("./elements/ToggleablePopup");
 
-var _utils = require("./utils");
+var _utils = require("../utils");
 
 var _NotificationService = _interopRequireDefault(require("./NotificationService"));
 
@@ -1058,7 +1063,7 @@ var Form = /*#__PURE__*/function () {
       }
 
       if (data && data.settings && data.settings.frequency) {
-        _Cookies.Cookies.set("__sendsay_forms_".concat(data.id), data.settings.frequency, data.settings.frequency, '/', (0, _utils.getHostName)());
+        _Cookies.Cookies.set("__sendsay_forms_".concat(data.id), data.settings.frequency, data.settings.frequency);
       }
     }
   }, {
@@ -1071,7 +1076,7 @@ var Form = /*#__PURE__*/function () {
       var count = +_Cookies.Cookies.get("__sendsay_forms_count_".concat(data.id)) || 0;
 
       if (data) {
-        _Cookies.Cookies.set("__sendsay_forms_count_".concat(data.id), count + 1, 94608000, '/', (0, _utils.getHostName)());
+        _Cookies.Cookies.set("__sendsay_forms_count_".concat(data.id), count + 1, 94608000);
       }
     }
   }, {
@@ -1082,7 +1087,7 @@ var Form = /*#__PURE__*/function () {
       }
 
       if (data) {
-        _Cookies.Cookies.set("__sendsay_forms_submit_".concat(data.id), true, 94608000, '/', (0, _utils.getHostName)());
+        _Cookies.Cookies.set("__sendsay_forms_submit_".concat(data.id), true, 94608000);
       }
     }
   }, {
@@ -1162,6 +1167,10 @@ var Form = /*#__PURE__*/function () {
   }, {
     key: "stopWatcher",
     value: function stopWatcher() {
+      var id = this.connector.id;
+
+      _utils.LeaveCounter.decrement(id);
+
       this.enable = false;
     }
   }, {
@@ -1214,7 +1223,7 @@ var Form = /*#__PURE__*/function () {
 
 exports.Form = Form;
 
-},{"./ClickTrigger":19,"./ConditionWatcher":20,"./Cookies":22,"./NotificationService":27,"./elements/Embedded":34,"./elements/Popup":40,"./elements/PopupBar":41,"./elements/ToggleablePopup":46,"./utils":47,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/interopRequireDefault":10}],26:[function(require,module,exports){
+},{"../utils":54,"./ClickTrigger":19,"./ConditionWatcher":20,"./Cookies":22,"./NotificationService":27,"./elements/Embedded":34,"./elements/Popup":40,"./elements/PopupBar":41,"./elements/ToggleablePopup":46,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/interopRequireDefault":10}],26:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -2997,7 +3006,7 @@ var Notification = /*#__PURE__*/function (_ToggleablePopup) {
 
 exports.Notification = Notification;
 
-},{"../../icons/warning":49,"../../l8n":50,"./ToggleablePopup":46,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],39:[function(require,module,exports){
+},{"../../icons/warning":48,"../../l8n":49,"./ToggleablePopup":46,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],39:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -3510,7 +3519,7 @@ var Popup = /*#__PURE__*/function (_DOMObject) {
 
 exports.Popup = Popup;
 
-},{"../../icons/close":48,"../MediaQuery":26,"./Button":29,"./Column":31,"./DOMObject":32,"./Field":35,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],41:[function(require,module,exports){
+},{"../../icons/close":47,"../MediaQuery":26,"./Button":29,"./Column":31,"./DOMObject":32,"./Field":35,"@babel/runtime/helpers/classCallCheck":4,"@babel/runtime/helpers/createClass":5,"@babel/runtime/helpers/get":7,"@babel/runtime/helpers/getPrototypeOf":8,"@babel/runtime/helpers/inherits":9,"@babel/runtime/helpers/interopRequireDefault":10,"@babel/runtime/helpers/possibleConstructorReturn":13}],41:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -4343,43 +4352,12 @@ exports.ToggleablePopup = ToggleablePopup;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getHostName = getHostName;
-
-function getHostName() {
-  try {
-    // eslint-disable-next-line
-    var match = location.hostname.match(/(^|\.)[a-zA-Z0-9\-]+\.{0,1}[a-zA-Z0-9\-]*$/);
-
-    if (match) {
-      var domain = match[0];
-
-      if (domain[0] !== '.') {
-        domain = ".".concat(domain);
-      }
-
-      return domain;
-    }
-  } catch (e) {
-    // eslint-disable-next-line
-    return location.hostname;
-  } // eslint-disable-next-line
-
-
-  return location.hostname;
-}
-
-},{}],48:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 exports["default"] = void 0;
 var closeIcon = "\n  <svg viewBox=\"0 0 20 20\" fill=\"none\" class=\"sendsay-close__svg\" stroke=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\">\n  <path d=\"M1 1L19 19\" stroke-width=\"2\"/>\n  <path d=\"M19 1L1 19\" stroke-width=\"2\"/>\n  </svg>\n";
 var _default = closeIcon;
 exports["default"] = _default;
 
-},{}],49:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4390,7 +4368,7 @@ var warningIcon = "\n  <svg width=\"40\" height=\"40\" viewBox=\"0 0 40 40\" fil
 var _default = warningIcon;
 exports["default"] = _default;
 
-},{}],50:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4420,7 +4398,7 @@ function l8n(key) {
   return (getLang() === 'en' ? _en.en[key] : _ru.ru[key]) || key;
 }
 
-},{"./locales/en":51,"./locales/ru":52}],51:[function(require,module,exports){
+},{"./locales/en":50,"./locales/ru":51}],50:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4432,7 +4410,7 @@ var en = {
 };
 exports.en = en;
 
-},{}],52:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4444,7 +4422,7 @@ var ru = {
 };
 exports.ru = ru;
 
-},{}],53:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -4568,4 +4546,105 @@ var DEFAULT_CONFIG = {
   };
 })();
 
-},{"./classes/Connector":21,"./classes/EmbeddedFormWatcher":24,"./classes/Form":25,"./classes/elements/Embedded":34,"./classes/elements/Popup":40,"./classes/elements/PopupBar":41,"./classes/elements/ToggleablePopup":46,"@babel/runtime/helpers/defineProperty":6,"@babel/runtime/helpers/interopRequireDefault":10}]},{},[53,28,19,20,21,22,23,29,30,31,33,32,34,35,36,37,38,39,40,41,42,43,44,45,46,24,25,26,27,47]);
+},{"./classes/Connector":21,"./classes/EmbeddedFormWatcher":24,"./classes/Form":25,"./classes/elements/Embedded":34,"./classes/elements/Popup":40,"./classes/elements/PopupBar":41,"./classes/elements/ToggleablePopup":46,"@babel/runtime/helpers/defineProperty":6,"@babel/runtime/helpers/interopRequireDefault":10}],53:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getHostName = getHostName;
+var REG_EXP_DOMAIN = /(^|\.)[a-zA-Z0-9\-]+\.{0,1}[a-zA-Z0-9\-]*$/; // eslint-disable-next-line compat/compat
+
+function getHostName() {
+  var hostname = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window.location.hostname;
+
+  try {
+    var match = hostname.match(REG_EXP_DOMAIN);
+
+    if (match) {
+      var domain = match[0];
+
+      if (domain.charAt(0) === '.') {
+        domain = domain.substring(1);
+      }
+
+      return domain;
+    }
+  } catch (e) {
+    return hostname;
+  }
+
+  return hostname;
+}
+
+},{}],54:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "getHostName", {
+  enumerable: true,
+  get: function get() {
+    return _getHostName.getHostName;
+  }
+});
+Object.defineProperty(exports, "toNumber", {
+  enumerable: true,
+  get: function get() {
+    return _toNumber.toNumber;
+  }
+});
+Object.defineProperty(exports, "LeaveCounter", {
+  enumerable: true,
+  get: function get() {
+    return _leaveCounter.LeaveCounter;
+  }
+});
+
+var _getHostName = require("./getHostName");
+
+var _toNumber = require("./toNumber");
+
+var _leaveCounter = require("./leaveCounter");
+
+},{"./getHostName":53,"./leaveCounter":55,"./toNumber":56}],55:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.LeaveCounter = void 0;
+
+var _toNumber = require("./toNumber");
+
+var leaveCounterKey = function leaveCounterKey(formId) {
+  return "sendsay-form-".concat(formId);
+};
+
+var LeaveCounter = {
+  get: function get(formId) {
+    return localStorage[leaveCounterKey(formId)];
+  },
+  increment: function increment(formId) {
+    localStorage[leaveCounterKey(formId)] = Math.min((0, _toNumber.toNumber)(localStorage[leaveCounterKey(formId)]) + 1 || 1, 2);
+  },
+  decrement: function decrement(formId) {
+    localStorage[leaveCounterKey(formId)] = Math.max((0, _toNumber.toNumber)(localStorage[leaveCounterKey(formId)]) - 1 || 0, 0);
+  }
+};
+exports.LeaveCounter = LeaveCounter;
+
+},{"./toNumber":56}],56:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.toNumber = toNumber;
+
+function toNumber(value) {
+  return parseInt(value, 10) || 0;
+}
+
+},{}]},{},[52,28,19,20,21,22,23,29,30,31,33,32,34,35,36,37,38,39,40,41,42,43,44,45,46,24,25,26,27]);

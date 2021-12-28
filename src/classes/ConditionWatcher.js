@@ -1,5 +1,9 @@
 import { Cookies } from './Cookies';
-import { getHostName } from './utils';
+import {
+  getHostName,
+  toNumber,
+  LeaveCounter,
+} from '../utils';
 import ClickTrigger from './ClickTrigger';
 
 export class ConditionWatcher {
@@ -12,9 +16,9 @@ export class ConditionWatcher {
     this.formId = formId;
     // eslint-disable-next-line eqeqeq
     this.instant = conditions.instant != undefined ? conditions.instant : true;
-    this.pageScroll = parseInt(conditions.onPageScroll, 10) || 0;
+    this.pageScroll = toNumber(conditions.onPageScroll);
     this.onLeave = conditions.onLeave || false;
-    this.delay = parseInt(conditions.delay, 10) || 0;
+    this.delay = toNumber(conditions.delay);
     this.active = rawConditions.active;
     this.leaveWatcher = this.leaveWatcher.bind(this);
     this.scrollWatcher = this.scrollWatcher.bind(this);
@@ -61,12 +65,10 @@ export class ConditionWatcher {
 
       const { id } = this;
 
-      // eslint-disable-next-line radix
-      localStorage[`sendsay-form-${id}`] = parseInt(localStorage[`sendsay-form-${id}`]) + 1 || 1;
+      LeaveCounter.increment(id);
 
       window.onbeforeunload = () => {
-        // eslint-disable-next-line radix
-        localStorage[`sendsay-form-${id}`] = parseInt(localStorage[`sendsay-form-${id}`]) - 1 || 0;
+        LeaveCounter.decrement(id);
       };
     }
 
@@ -126,9 +128,9 @@ export class ConditionWatcher {
   }
 
   leaveWatcher() {
-    const opened = localStorage[`sendsay-form-${this.id}`];
+    const opened = LeaveCounter.get(this.id);
 
-    if (!opened || parseInt(opened, 10) < 2) {
+    if (!opened || toNumber(opened) < 2) {
       this.satisfyCondition('leave');
     }
   }

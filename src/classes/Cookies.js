@@ -1,3 +1,5 @@
+import { getHostName } from '../utils';
+
 export class Cookies {
   static get(sKey) {
     if (!sKey) {
@@ -17,7 +19,7 @@ export class Cookies {
     );
   }
 
-  static set(sKey, sValue, vEnd, sPath, sDomain, bSecure) {
+  static set(sKey, sValue, vEnd, sPath = '/', sDomain = getHostName(), bSecure) {
     if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) {
       return false;
     }
