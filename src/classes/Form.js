@@ -4,7 +4,7 @@ import { Popup } from './elements/Popup';
 import { PopupBar } from './elements/PopupBar';
 import { Embedded } from './elements/Embedded';
 import { ToggleablePopup } from './elements/ToggleablePopup';
-import { getHostName } from './utils';
+import { LeaveCounter } from '../utils';
 import NotificationService from './NotificationService';
 import ClickTrigger from './ClickTrigger';
 
@@ -35,8 +35,6 @@ export class Form {
         `__sendsay_forms_${data.id}`,
         data.settings.frequency,
         data.settings.frequency,
-        '/',
-        getHostName(),
       );
     }
   }
@@ -49,8 +47,6 @@ export class Form {
         `__sendsay_forms_count_${data.id}`,
         count + 1,
         94608000,
-        '/',
-        getHostName(),
       );
     }
   }
@@ -62,8 +58,6 @@ export class Form {
         `__sendsay_forms_submit_${data.id}`,
         true,
         94608000,
-        '/',
-        getHostName(),
       );
     }
   }
@@ -113,6 +107,7 @@ export class Form {
         if (!DomConstructor || this.domObj?.isShow) {
           return;
         }
+
         this.domObj = null;
 
         // eslint-disable-next-line new-cap
@@ -135,6 +130,10 @@ export class Form {
   }
 
   stopWatcher() {
+    const { id } = this.connector;
+
+    LeaveCounter.decrement(id);
+
     this.enable = false;
   }
 
