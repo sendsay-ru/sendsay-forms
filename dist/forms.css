@@ -206,9 +206,26 @@
   top: 12px;
   right: 12px;
 }
+.sendsay-radioinput {
+  margin: 3px 4px 5px 0;
+}
+.sendsay-checkinput {
+  margin: 3px 4px 3px 0;
+}
 .sendsay-radioinput,
 .sendsay-checkinput {
   display: inline-block;
+}
+.sendsay-radio,
+.sendsay-checkbox {
+  display: flex;
+  flex-direction: row;
+}
+.sendsay-radio {
+  align-items: center;
+}
+.sendsay-checkbox {
+  align-items: baseline;
 }
 .sendsay-radio .sendsay-label,
 .sendsay-checkbox .sendsay-label {
