@@ -2536,6 +2536,11 @@ var Embedded = /*#__PURE__*/function (_Popup) {
       }));
     }
   }, {
+    key: "handleWheel",
+    value: function handleWheel() {
+      return false;
+    }
+  }, {
     key: "handleKeyPress",
     value: function handleKeyPress(event) {
       var _this$data$settings;
