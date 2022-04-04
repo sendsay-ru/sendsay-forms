@@ -61,6 +61,10 @@ export class Embedded extends Popup {
     });
   }
 
+  handleWheel() {
+    return false;
+  }
+
   handleKeyPress(event) {
     const canClose = this.data.settings?.canClose;
     if (event.keyCode === 27 && ((this.curStep === 0) || (this.curStep === 1 && !canClose))) {
