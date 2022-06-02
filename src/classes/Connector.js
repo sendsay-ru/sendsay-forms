@@ -30,7 +30,9 @@ export class Connector {
       if (self.request.readyState === 4) {
         self.pending = false;
         let success = true;
-        if (self.request.onReady) { success = self.request.onReady.apply(self); }
+        if (self.request.onReady) {
+          success = self.request.onReady.apply(self);
+        }
         if (self.request.status === 200 && success) {
           resolve(self.data);
         } else {
@@ -43,14 +45,16 @@ export class Connector {
   }
 
   load() {
-    if (this.pending) { return; }
+    if (this.pending) {
+      return;
+    }
     this.request = new XMLHttpRequest();
     this.request.open('GET', this.url, true);
     this.request.setRequestHeader('Accept', 'application/json');
     // eslint-disable-next-line compat/compat
     return new Promise(this.promiseHandler.bind(this)).then(
       this.handleLoadSuccess.bind(this),
-      this.handleLoadFail.bind(this),
+      this.handleLoadFail.bind(this)
     );
   }
 
@@ -58,12 +62,16 @@ export class Connector {
     if (json.obj && json.obj.settings) {
       this.data = json.obj.settings;
       this.data.id = this.id;
-      if (json.obj.state && +json.obj.state === 1) { this.data.active = true; }
+      if (json.obj.state && +json.obj.state === 1) {
+        this.data.active = true;
+      }
     }
   }
 
   submit(params) {
-    if (this.pending) { return; }
+    if (this.pending) {
+      return;
+    }
     this.request = new XMLHttpRequest();
     this.request.open('POST', this.url, true);
     this.request.setRequestHeader('Content-Type', 'application/json');
@@ -87,7 +95,9 @@ export class Connector {
       return false;
     }
     this.error = json.errors;
-    if (json.errors) { return false; }
+    if (json.errors) {
+      return false;
+    }
 
     return true;
   }

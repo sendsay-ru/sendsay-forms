@@ -1,7 +1,6 @@
 .DS_Store
 npm-debug.log
 node_modules/
-dist/
 compiled/
 coverage/
 test-dist/
@@ -10,3 +9,4 @@ ascend.sh
 .idea
 yarn-error.log
 bower_components
+dist/

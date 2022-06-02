@@ -2,11 +2,12 @@ import { Field } from './Field';
 
 export class DateField extends Field {
   initialize() {
-    this.template = '<div class="[%classes%]" style="[%style%]">'
-      + '<label for="[%label%]" class="sendsay-label">[%label%]</label>'
-      + '<input name="[%qid%]" placeholder="[%placeholder%]" value="[%value%]" type="text" class="sendsay-input"/>'
-      + '<div type="text" class="sendsay-error"></div>'
-      + '</div>';
+    this.template =
+      '<div class="[%classes%]" style="[%style%]">' +
+      '<label for="[%label%]" class="sendsay-label">[%label%]</label>' +
+      '<input name="[%qid%]" placeholder="[%placeholder%]" value="[%value%]" type="text" class="sendsay-input"/>' +
+      '<div type="text" class="sendsay-error"></div>' +
+      '</div>';
     this.baseClass = 'sendsay-field';
     this.applicableStyles = {
       'padding-bottom': { param: 'paddingBottom', postfix: 'px' },
@@ -46,11 +47,10 @@ export class DateField extends Field {
     }
     let date = '';
     if (dateObj) {
-      date = `${this.normalizeValue(dateObj.year, 4)
-      }-${
-        this.normalizeValue(dateObj.month, 2)
-      }-${
-        this.normalizeValue(dateObj.day, 2)}`;
+      date = `${this.normalizeValue(dateObj.year, 4)}-${this.normalizeValue(
+        dateObj.month,
+        2
+      )}-${this.normalizeValue(dateObj.day, 2)}`;
       if (accuracy === 'ys' || accuracy === 'ym' || accuracy === 'yh') {
         date += ` ${this.normalizeValue(dateObj.hour, 2)}`;
         if (accuracy === 'ys' || accuracy === 'ym') {
@@ -65,10 +65,14 @@ export class DateField extends Field {
   }
 
   normalizeValue(value, length) {
-    if (value === null) { return '00'; }
+    if (value === null) {
+      return '00';
+    }
     let str = `${value}`;
     const leng = str.length;
-    for (let i = 0; i < length - leng; i++) { str = `0${str}`; }
+    for (let i = 0; i < length - leng; i++) {
+      str = `0${str}`;
+    }
     return str;
   }
 
@@ -79,33 +83,38 @@ export class DateField extends Field {
     if (rawValue.trim() === '') {
       return true;
     }
-    if (!rawValue || !rawValue[rawValue.length - 1].match(/[0-9]/)) { isValid = false; }
+    if (!rawValue || !rawValue[rawValue.length - 1].match(/[0-9]/)) {
+      isValid = false;
+    }
     if (isValid && dateObj) {
       const months = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-      if (!dateObj.year) { isValid = false; }
-      if (!dateObj.month || dateObj.month < 1 || dateObj.month > 12) { isValid = false; }
-      if (
-        isValid
-        && (!dateObj.day
-          || dateObj.day < 1
-          || dateObj.day > months[dateObj.month - 1])
-      ) { isValid = false; }
+      if (!dateObj.year) {
+        isValid = false;
+      }
+      if (!dateObj.month || dateObj.month < 1 || dateObj.month > 12) {
+        isValid = false;
+      }
+      if (isValid && (!dateObj.day || dateObj.day < 1 || dateObj.day > months[dateObj.month - 1])) {
+        isValid = false;
+      }
       if (['yh', 'ym', 'ys'].indexOf(this.accuracy) !== -1) {
-        if (dateObj.hour !== null && (dateObj.hour < 0 || dateObj.hour > 23)) { isValid = false; }
+        if (dateObj.hour !== null && (dateObj.hour < 0 || dateObj.hour > 23)) {
+          isValid = false;
+        }
         if (['ym', 'ys'].indexOf(this.accuracy) !== -1) {
-          if (
-            dateObj.minute !== null
-            && (dateObj.minute < 0 || dateObj.minute > 59)
-          ) { isValid = false; }
+          if (dateObj.minute !== null && (dateObj.minute < 0 || dateObj.minute > 59)) {
+            isValid = false;
+          }
           if (this.accuracy === 'ys') {
-            if (
-              dateObj.second !== null
-              && (dateObj.second < 0 || dateObj.second > 59)
-            ) { isValid = false; }
+            if (dateObj.second !== null && (dateObj.second < 0 || dateObj.second > 59)) {
+              isValid = false;
+            }
           }
         }
       }
-    } else { isValid = false; }
+    } else {
+      isValid = false;
+    }
     if (!isValid) {
       this.showErrorMessage('Введена неверная дата');
     }
@@ -132,7 +141,9 @@ export class DateField extends Field {
     dateObj.minute = minute && +rawValue.substr(minute.index, minute[0].length);
     dateObj.second = second && +rawValue.substr(second.index, second[0].length);
     // eslint-disable-next-line
-    for (const key in dateObj) { dateObj[key] = dateObj[key] || null; }
+    for (const key in dateObj) {
+      dateObj[key] = dateObj[key] || null;
+    }
     return dateObj;
   }
 
@@ -145,7 +156,9 @@ export class DateField extends Field {
   }
 
   handleKeyDown(event) {
-    if (event.keyCode !== 8 && event.keyCode !== 46) { return true; }
+    if (event.keyCode !== 8 && event.keyCode !== 46) {
+      return true;
+    }
     const valueArr = event.target.value.split('');
     let start = this.getSelectionStart();
     let end = this.getSelectionEnd();
@@ -154,10 +167,14 @@ export class DateField extends Field {
     if (key === 'Backspace') {
       key = undefined;
 
-      if (start > 0 && start === end) { start--; }
+      if (start > 0 && start === end) {
+        start--;
+      }
     } else if (key === 'Delete') {
       key = undefined;
-      if (start === end) { end++; }
+      if (start === end) {
+        end++;
+      }
     }
 
     valueArr.splice(start, end - start);
@@ -175,15 +192,10 @@ export class DateField extends Field {
     const start = this.getSelectionStart();
     const end = this.getSelectionEnd();
     // eslint-disable-next-line prefer-spread
-    valueArr.splice.apply(
-      valueArr,
-      [start, end - start].concat(pastedData.split('')),
-    );
+    valueArr.splice.apply(valueArr, [start, end - start].concat(pastedData.split('')));
     this.updateInput(valueArr);
     const pastedArr = pastedData.replace(/[^\d]/g, '').split('');
-    this.setCursor(
-      this.findCursorPosition(event.target.value.split(''), pastedArr, start),
-    );
+    this.setCursor(this.findCursorPosition(event.target.value.split(''), pastedArr, start));
     event.stopPropagation();
     event.preventDefault();
   }
@@ -207,7 +219,7 @@ export class DateField extends Field {
     this.setCursor(
       isFull && start === end
         ? start
-        : this.findCursorPosition(event.target.value.split(''), [key], start),
+        : this.findCursorPosition(event.target.value.split(''), [key], start)
     );
 
     return false;
@@ -243,9 +255,9 @@ export class DateField extends Field {
 
   countBefore(array, regex, index) {
     let count = 0;
-    // eslint-disable-next-line
-    if (index == undefined) { index = 100000; }
-    for (let i = 0; i < index && i < array.length; i++) {
+    const max = index ?? 100000;
+
+    for (let i = 0; i < max && i < array.length; i++) {
       if (array[i].match(regex)) {
         count++;
       }
@@ -254,10 +266,12 @@ export class DateField extends Field {
   }
 
   findCursorPosition(valueArr, insertedArr, start) {
-    let i; let
-      j;
+    let i;
+    let j;
     for (i = start, j = 0; i < valueArr.length && j < insertedArr.length; i++) {
-      if (valueArr[i] === insertedArr[j]) { j++; }
+      if (valueArr[i] === insertedArr[j]) {
+        j++;
+      }
     }
     return i;
   }

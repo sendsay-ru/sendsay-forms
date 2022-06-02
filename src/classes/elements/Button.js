@@ -2,9 +2,10 @@ import { DOMObject } from './DOMObject';
 
 export class Button extends DOMObject {
   initialize() {
-    this.template = '<div class="[%classes%]" style="[%wrapperstyle%]">'
-      + '<input type="button"  value="[%text%]" style="[%style%]" />'
-      + '</div>';
+    this.template =
+      '<div class="[%classes%]" style="[%wrapperstyle%]">' +
+      '<input type="button"  value="[%text%]" style="[%style%]" />' +
+      '</div>';
 
     this.baseClass = 'sendsay-button';
     this.applicableStyles = {
@@ -25,9 +26,7 @@ export class Button extends DOMObject {
 
   addEvents() {
     if (this.el) {
-      this.el
-        .querySelector('input')
-        .addEventListener('click', this.handleClick.bind(this));
+      this.el.querySelector('input').addEventListener('click', this.handleClick.bind(this));
     }
   }
 
@@ -37,9 +36,7 @@ export class Button extends DOMObject {
 
   removeEvents() {
     if (this.el) {
-      this.el
-        .querySelector('input')
-        .removeEventListener('click', this.handleClick.bind(this));
+      this.el.querySelector('input').removeEventListener('click', this.handleClick.bind(this));
     }
   }
 
@@ -47,7 +44,9 @@ export class Button extends DOMObject {
     const data = this.data.appearance || {};
     data.fontFamily = this.escapeStyle(data.fontFamily);
     const styleObj = super.makeStyles();
-    if (data.align === 'justify') { styleObj.width = '100%'; }
+    if (data.align === 'justify') {
+      styleObj.width = '100%';
+    }
     return styleObj;
   }
 
@@ -63,7 +62,9 @@ export class Button extends DOMObject {
     let style = {};
     const data = this.data.appearance || {};
 
-    if (data.align !== 'justify') { style['text-align'] = data.align; }
+    if (data.align !== 'justify') {
+      style['text-align'] = data.align;
+    }
     style = this.extend(style, this.applyStyles(this.wrapperApplStyles));
     return this.convertStyles(style);
   }

@@ -2,9 +2,10 @@ import { DOMObject } from './DOMObject';
 
 export class ImageElement extends DOMObject {
   initialize() {
-    this.template = '<div class="[%classes%]" style="[%wrapperstyle%]">'
-      + '<img src="[%url%]" style="[%style%]/>" />'
-      + '</div>';
+    this.template =
+      '<div class="[%classes%]" style="[%wrapperstyle%]">' +
+      '<img src="[%url%]" style="[%style%]/>" />' +
+      '</div>';
     this.wrapperApplStyles = {
       'padding-bottom': { param: 'paddingBottom', postfix: 'px' },
       'padding-top': { param: 'paddingTop', postfix: 'px' },
@@ -17,9 +18,7 @@ export class ImageElement extends DOMObject {
 
   addEvents() {
     if (this.el) {
-      this.el
-        .querySelector('img')
-        .onload = this.handleLoad.bind(this);
+      this.el.querySelector('img').onload = this.handleLoad.bind(this);
     }
   }
 
@@ -30,7 +29,11 @@ export class ImageElement extends DOMObject {
   makeStyles() {
     const styleObj = super.makeStyles();
     const data = this.data.appearance || {};
-    if (data.extended) { styleObj.width = '100%'; } else { styleObj['max-width'] = '100%'; }
+    if (data.extended) {
+      styleObj.width = '100%';
+    } else {
+      styleObj['max-width'] = '100%';
+    }
     return styleObj;
   }
 

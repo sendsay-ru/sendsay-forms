@@ -2,7 +2,9 @@ export class DOMObject {
   constructor(data, parent) {
     this.data = data;
     this.parent = parent || null;
-    if (parent && parent.general) { this.general = this.extend({}, parent.general); }
+    if (parent && parent.general) {
+      this.general = this.extend({}, parent.general);
+    }
     this.initialize();
     this.render();
   }
@@ -14,7 +16,9 @@ export class DOMObject {
   }
 
   escapeStyle(style) {
-    if (this.style) { return style.replace(/"/g, "'"); }
+    if (this.style) {
+      return style.replace(/"/g, "'");
+    }
   }
 
   initialize() {
@@ -52,7 +56,10 @@ export class DOMObject {
     for (const key in mapping) {
       const val = mapping[key];
       const value = data[val.param] || general[val.param];
-      if ((value !== undefined) && (data[val.param] !== undefined || general[val.param] !== undefined)) {
+      if (
+        value !== undefined &&
+        (data[val.param] !== undefined || general[val.param] !== undefined)
+      ) {
         if (!val.template) {
           styles[key] = value + (val.postfix ? val.postfix : '');
         } else {
@@ -70,7 +77,9 @@ export class DOMObject {
     let styleStr = '';
 
     // eslint-disable-next-line
-    for (const key in styleObj) { styleStr += ` ${key}:${styleObj[key]};`; }
+    for (const key in styleObj) {
+      styleStr += ` ${key}:${styleObj[key]};`;
+    }
     return styleStr;
   }
 
@@ -91,10 +100,7 @@ export class DOMObject {
       let param = templateParams[i];
       param = param.substring(2, param.length - 2);
       const paramValue = settings[param.trim()] || '';
-      string = string.replace(
-        new RegExp(`\\[%${param}%\\]`, 'g'),
-        paramValue,
-      );
+      string = string.replace(new RegExp(`\\[%${param}%\\]`, 'g'), paramValue);
     }
     return string;
   }
@@ -110,7 +116,9 @@ export class DOMObject {
     this.removeEvents();
     this.build();
     this.addEvents();
-    if (oldEl && oldEl.parentNode) { oldEl.parentNode.replaceChild(this.el, oldEl); }
+    if (oldEl && oldEl.parentNode) {
+      oldEl.parentNode.replaceChild(this.el, oldEl);
+    }
     this.afterRender();
   }
 
@@ -129,7 +137,9 @@ export class DOMObject {
   }
 
   _eventAction(toAdd, event, selector, callback) {
-    if (!this.el) { return; }
+    if (!this.el) {
+      return;
+    }
     if (callback === undefined && typeof selector === 'function') {
       // eslint-disable-next-line no-param-reassign
       callback = selector;

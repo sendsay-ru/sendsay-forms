@@ -2,16 +2,21 @@
 <html>
   <head>
     <title></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://necolas.github.io/normalize.css/latest/normalize.css" type="text/css" media="all">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://necolas.github.io/normalize.css/latest/normalize.css"
+      type="text/css"
+      media="all"
+    />
     <script>
       function SENDSAY_FORMS_CONFIG() {
         return {
           forms: {
             css: {
-              url: '/dist/forms.css'
-            }
-          }
+              url: '/dist/forms.css',
+            },
+          },
         };
       }
     </script>
@@ -19,7 +24,7 @@
     <!-- <script src="https://image.sendsay.ru/app/js/forms/forms.min.js"></script> -->
     <script>
       (async function load() {
-        const form = await SENDSAY.activatePopup("https://sendsay.ru/form/codeception/445/");
+        const form = await SENDSAY.activatePopup('https://sendsay.ru/form/codeception/445/');
         window.form = form;
       })();
     </script>

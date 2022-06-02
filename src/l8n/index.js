@@ -4,7 +4,14 @@ import { en } from './locales/en';
 function getLang() {
   let lang = 'ru';
   if (navigator) {
-    const systemLang = (navigator.language || navigator.systemLanguage || navigator.userLanguage || '').substr(0, 2).toLowerCase();
+    const systemLang = (
+      navigator.language ||
+      navigator.systemLanguage ||
+      navigator.userLanguage ||
+      ''
+    )
+      .substr(0, 2)
+      .toLowerCase();
     if (systemLang && systemLang !== 'ru') {
       lang = 'en';
     }

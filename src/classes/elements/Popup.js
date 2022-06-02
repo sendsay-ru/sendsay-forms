@@ -14,17 +14,18 @@ export class Popup extends DOMObject {
     this.steps = this.data.steps;
     this.curStep = 0;
     this.gainedData = {};
-    this.template = `${`${!this.noWrapper
-      ? '<div class = "sendsay-wrapper [%wrapperClasses%]" style="[%overlayStyles%]">'
-      : ''
-    }<div class="[%classes%]" style="[%style%]">`
-      + '<div class="sendsay-close sendsay-close--with-icon">'}${
-      closeIcon
-    }</div>`
-      + '<div class = "sendsay-content">'
-      + '</div>'
-      + `</div>${
-        !this.noWrapper ? '</div>' : ''}`;
+    this.template =
+      `${
+        `${
+          !this.noWrapper
+            ? '<div class = "sendsay-wrapper [%wrapperClasses%]" style="[%overlayStyles%]">'
+            : ''
+        }<div class="[%classes%]" style="[%style%]">` +
+        '<div class="sendsay-close sendsay-close--with-icon">'
+      }${closeIcon}</div>` +
+      '<div class = "sendsay-content">' +
+      '</div>' +
+      `</div>${!this.noWrapper ? '</div>' : ''}`;
 
     this.baseClass = 'sendsay-popup';
     this.applicableStyles = {
@@ -50,7 +51,7 @@ export class Popup extends DOMObject {
     this.general.appearance.labelTextColor = this.data.appearance.labelTextColor;
     this.general.appearance.labelFontSize = this.data.appearance.labelFontSize;
     this.general.appearance.labelFontFamily = this.escapeStyle(
-      this.data.appearance.labelFontFamily,
+      this.data.appearance.labelFontFamily
     );
   }
 
@@ -59,11 +60,7 @@ export class Popup extends DOMObject {
     const { width } = appearance;
 
     const mediaQuery = new MediaQuery({
-      conditions: [
-        'screen',
-        '(min-width: 320px)',
-        `(max-width:${+width + 100}px)`,
-      ],
+      conditions: ['screen', '(min-width: 320px)', `(max-width:${+width + 100}px)`],
       selectors: {
         '.sendsay-popup': {
           width: '300px !important',
@@ -109,7 +106,9 @@ export class Popup extends DOMObject {
     if (this.demo || this.container) {
       const el = this.el.querySelector('.sendsay-popup');
       this.el.style.position = 'absolute';
-      if (el) { el.style.position = 'absolute'; }
+      if (el) {
+        el.style.position = 'absolute';
+      }
     }
 
     return this.el;
@@ -118,17 +117,11 @@ export class Popup extends DOMObject {
   addEvents() {
     if (!this.noWrapper) {
       this.addEvent('click', this.handleWrapperClick.bind(this));
-      this.addEvent(
-        'click',
-        '.sendsay-popup',
-        this.handlePopupClick.bind(this),
-      );
-    } else { this.addEvent('click', this.handlePopupClick.bind(this)); }
-    this.addEvent(
-      'sendsay-click',
-      '.sendsay-button',
-      this.handleButtonClick.bind(this),
-    );
+      this.addEvent('click', '.sendsay-popup', this.handlePopupClick.bind(this));
+    } else {
+      this.addEvent('click', this.handlePopupClick.bind(this));
+    }
+    this.addEvent('sendsay-click', '.sendsay-button', this.handleButtonClick.bind(this));
     this.addEvent('wheel', this.handleWheel.bind(this));
     this.addEvent('DOMMouseScroll', this.handleWheel.bind(this));
 
@@ -139,17 +132,11 @@ export class Popup extends DOMObject {
   removeEvents() {
     if (!this.noWrapper) {
       this.removeEvent('click', this.handleWrapperClick.bind(this));
-      this.removeEvent(
-        'click',
-        '.sendsay-popup',
-        this.handlePopupClick.bind(this),
-      );
-    } else { this.removeEvent('click', this.handlePopupClick.bind(this)); }
-    this.removeEvent(
-      'sendsay-click',
-      '.sendsay-button',
-      this.handleButtonClick.bind(this),
-    );
+      this.removeEvent('click', '.sendsay-popup', this.handlePopupClick.bind(this));
+    } else {
+      this.removeEvent('click', this.handlePopupClick.bind(this));
+    }
+    this.removeEvent('sendsay-click', '.sendsay-button', this.handleButtonClick.bind(this));
     this.removeEvent('wheel', this.handleWheel.bind(this));
     this.removeEvent('DOMMouseScroll', this.handleWheel.bind(this));
     this.removeEvent('click', '.sendsay-close', this.handleClose.bind(this));
@@ -158,12 +145,8 @@ export class Popup extends DOMObject {
 
   makeSettings() {
     const settings = super.makeSettings();
-    settings.wrapperClasses = this.data.noAnimation
-      ? 'sendsay-noanimation'
-      : '';
-    settings.overlayStyles = this.convertStyles(
-      this.applyStyles(this.applOverlayStyles),
-    );
+    settings.wrapperClasses = this.data.noAnimation ? 'sendsay-noanimation' : '';
+    settings.overlayStyles = this.convertStyles(this.applyStyles(this.applOverlayStyles));
     return settings;
   }
 
@@ -177,7 +160,9 @@ export class Popup extends DOMObject {
     if (settings?.canClose) {
       classes += ' sendsay--can-close';
     }
-    if (this.steps.length - 1 === this.curStep) { classes += ' sendsay-laststep'; }
+    if (this.steps.length - 1 === this.curStep) {
+      classes += ' sendsay-laststep';
+    }
     return classes;
   }
 
@@ -190,7 +175,9 @@ export class Popup extends DOMObject {
 
   searchForElements(comparator) {
     const found = [];
-    if (!comparator || typeof comparator !== 'function') { return found; }
+    if (!comparator || typeof comparator !== 'function') {
+      return found;
+    }
     const { columns } = this;
     for (let i = 0; i < columns.length; i++) {
       const column = columns[i];
@@ -213,9 +200,13 @@ export class Popup extends DOMObject {
   show() {
     this.isShow = true;
     this.makeMediaQuery();
-    if (!this.container) { document.querySelector('body').appendChild(this.el); } else {
+    if (!this.container) {
+      document.querySelector('body').appendChild(this.el);
+    } else {
       this.el.style.position = 'absolute';
-      if (!this.noWrapper) { this.el.querySelector('.sendsay-popup').style.position = 'absolute'; }
+      if (!this.noWrapper) {
+        this.el.querySelector('.sendsay-popup').style.position = 'absolute';
+      }
       this.container.appendChild(this.el);
     }
   }
@@ -233,7 +224,9 @@ export class Popup extends DOMObject {
   }
 
   submit() {
-    const elements = this.searchForElements(element => element instanceof Field || element instanceof Button);
+    const elements = this.searchForElements(
+      (element) => element instanceof Field || element instanceof Button
+    );
     let isValid = true;
     const data = {};
     let button;
@@ -243,9 +236,7 @@ export class Popup extends DOMObject {
         const element = elements[i];
         if (element instanceof Field) {
           // if(element.getValue() !== '')
-          data[
-            element.data.field.id || element.data.field.qid
-          ] = element.getValue();
+          data[element.data.field.id || element.data.field.qid] = element.getValue();
           isValid = element.validate() && isValid;
         }
         if (element instanceof Button) {
@@ -275,20 +266,17 @@ export class Popup extends DOMObject {
 
   // eslint-disable-next-line no-dupe-class-members
   onSubmitFail() {
-    const elements = this.searchForElements(element => element instanceof Button);
+    const elements = this.searchForElements((element) => element instanceof Button);
     if (elements[0]) {
       elements[0].el.querySelector('input').classList.remove('sendsay-loading');
     }
   }
 
   showErrorFor(qid, message) {
-    const elements = this.searchForElements(element => element instanceof Field);
+    const elements = this.searchForElements((element) => element instanceof Field);
     for (let i = 0; i < elements.length; i++) {
       const element = elements[i];
-      if (
-        element.data.field
-        && (element.data.field.qid === qid || element.data.field.id === qid)
-      ) {
+      if (element.data.field && (element.data.field.qid === qid || element.data.field.id === qid)) {
         element.showErrorMessage(message);
       }
     }
@@ -303,13 +291,13 @@ export class Popup extends DOMObject {
     if (event.target.classList.contains('sendsay-wrapper')) {
       event.preventDefault();
     } else {
-      const el = this.noWrapper
-        ? this.el
-        : this.el.querySelector('.sendsay-popup');
+      const el = this.noWrapper ? this.el : this.el.querySelector('.sendsay-popup');
       if (
-        (delta === -1 && el.clientHeight + el.scrollTop === el.scrollHeight)
-        || (delta === 1 && el.scrollTop === 0)
-      ) { event.preventDefault(); }
+        (delta === -1 && el.clientHeight + el.scrollTop === el.scrollHeight) ||
+        (delta === 1 && el.scrollTop === 0)
+      ) {
+        event.preventDefault();
+      }
     }
     return false;
   }

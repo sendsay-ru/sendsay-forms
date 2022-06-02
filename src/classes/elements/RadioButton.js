@@ -2,11 +2,11 @@ import { DOMObject } from './DOMObject';
 
 export class RadioButton extends DOMObject {
   initialize() {
-    this.template = `${'<div class="[%classes%]" style="[%style%]">'
-      + '<input [%checked%] name="[%qid%]" value="[%value%]" type="radio" class="sendsay-radioinput"/>'}${
-      this.data.content.label
-        ? '<label for="[%qid%]" class="sendsay-label">[%label%]</label>'
-        : ''
+    this.template = `${
+      '<div class="[%classes%]" style="[%style%]">' +
+      '<input [%checked%] name="[%qid%]" value="[%value%]" type="radio" class="sendsay-radioinput"/>'
+    }${
+      this.data.content.label ? '<label for="[%qid%]" class="sendsay-label">[%label%]</label>' : ''
     }</div>`;
     this.baseClass = 'sendsay-radio';
     this.handleChange = this.handleChange.bind(this);
@@ -41,26 +41,18 @@ export class RadioButton extends DOMObject {
 
   addEvents() {
     if (this.el) {
-      this.el
-        .querySelector('input')
-        .addEventListener('change', this.handleChange);
+      this.el.querySelector('input').addEventListener('change', this.handleChange);
       if (this.data.content.label) {
-        this.el
-          .querySelector('label')
-          .addEventListener('click', this.handleClick);
+        this.el.querySelector('label').addEventListener('click', this.handleClick);
       }
     }
   }
 
   removeEvents() {
     if (this.el) {
-      this.el
-        .querySelector('input')
-        .removeEventListener('change', this.handleChange);
+      this.el.querySelector('input').removeEventListener('change', this.handleChange);
       if (this.data.content.label) {
-        this.el
-          .querySelector('label')
-          .removeEventListener('click', this.handleClick);
+        this.el.querySelector('label').removeEventListener('click', this.handleClick);
       }
     }
   }

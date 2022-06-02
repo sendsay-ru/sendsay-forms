@@ -19,9 +19,8 @@ env:
     - NODE_ENV=CI
     - RELEASE_NAME=dev
 
-before_script: export NODE_OPTIONS=–max_old_space_size=4096
 script:
-  - yarn eslint
+  - yarn lint
   - yarn test
 
 before_deploy:

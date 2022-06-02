@@ -11,15 +11,16 @@ export class PopupBar extends Popup {
     this.curStep = 0;
     this.gainedData = {};
 
-    this.template = `${!this.noWrapper
-      ? '<div class="sendsay-wrapper [%wrapperClasses%]" style="[%overlayStyles%]">'
-      : ''
-    }<div class="[%classes%]" style="[%style%]">`
-      + '<div class="sendsay-close">×</div>'
-      + '<div class="sendsay-content">'
-      + '</div>'
-      + `</div>${
-        !this.noWrapper ? '</div>' : ''}`;
+    this.template =
+      `${
+        !this.noWrapper
+          ? '<div class="sendsay-wrapper [%wrapperClasses%]" style="[%overlayStyles%]">'
+          : ''
+      }<div class="[%classes%]" style="[%style%]">` +
+      '<div class="sendsay-close">×</div>' +
+      '<div class="sendsay-content">' +
+      '</div>' +
+      `</div>${!this.noWrapper ? '</div>' : ''}`;
 
     this.baseClass = 'sendsay-popup';
 
@@ -50,7 +51,7 @@ export class PopupBar extends Popup {
     this.general.appearance.labelTextColor = this.data.appearance.labelTextColor;
     this.general.appearance.labelFontSize = this.data.appearance.labelFontSize;
     this.general.appearance.labelFontFamily = this.escapeStyle(
-      this.data.appearance.labelFontFamily,
+      this.data.appearance.labelFontFamily
     );
   }
 
@@ -58,11 +59,7 @@ export class PopupBar extends Popup {
     const width = 800;
 
     const mediaQuery = new MediaQuery({
-      conditions: [
-        'screen',
-        '(min-width: 320px)',
-        `(max-width:${+width + 100}px)`,
-      ],
+      conditions: ['screen', '(min-width: 320px)', `(max-width:${+width + 100}px)`],
       selectors: {
         '.sendsay-popup': {
           width: '300px !important',
@@ -71,21 +68,23 @@ export class PopupBar extends Popup {
           'flex-direction': 'column',
           animation: 'none',
         },
-        '.sendsay-popup.sendsay-type-bar.sendsay-top, .sendsay-popup.sendsay-type-bar.sendsay-bottom': {
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          animation: 'none',
-          bottom: 'initial',
-        },
+        '.sendsay-popup.sendsay-type-bar.sendsay-top, .sendsay-popup.sendsay-type-bar.sendsay-bottom':
+          {
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            animation: 'none',
+            bottom: 'initial',
+          },
         '.sendsay-column': {
           height: 'auto !important',
           'flex-direction': 'column',
         },
-        '.sendsay-popup.sendsay-type-bar.sendsay-top  .sendsay-column > *, .sendsay-popup.sendsay-type-bar.sendsay-bottom .sendsay-column > *': {
-          'padding-bottom': '20px',
-          'padding-left': '0px',
-        },
+        '.sendsay-popup.sendsay-type-bar.sendsay-top  .sendsay-column > *, .sendsay-popup.sendsay-type-bar.sendsay-bottom .sendsay-column > *':
+          {
+            'padding-bottom': '20px',
+            'padding-left': '0px',
+          },
         '.sendsay-popup.sendsay-type-bar.sendsay-top.sendsay-animation-slidetop': {
           animation: 'none',
         },

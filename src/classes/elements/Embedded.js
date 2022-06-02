@@ -11,11 +11,7 @@ export class Embedded extends Popup {
   }
 
   makeBorder() {
-    const {
-      borderEnabled,
-      borderWidth,
-      borderColor,
-    } = this.data.appearance || {};
+    const { borderEnabled, borderWidth, borderColor } = this.data.appearance || {};
 
     if (borderEnabled) {
       this.applicableStyles.border = {
@@ -25,14 +21,8 @@ export class Embedded extends Popup {
   }
 
   makeShadow() {
-    const {
-      shadowEnabled,
-      shadowOffsetX,
-      shadowOffsetY,
-      shadowBlur,
-      shadowSpread,
-      shadowColor,
-    } = this.data.appearance || {};
+    const { shadowEnabled, shadowOffsetX, shadowOffsetY, shadowBlur, shadowSpread, shadowColor } =
+      this.data.appearance || {};
 
     if (shadowEnabled) {
       this.applicableStyles['box-shadow'] = {
@@ -67,7 +57,7 @@ export class Embedded extends Popup {
 
   handleKeyPress(event) {
     const canClose = this.data.settings?.canClose;
-    if (event.keyCode === 27 && ((this.curStep === 0) || (this.curStep === 1 && !canClose))) {
+    if (event.keyCode === 27 && (this.curStep === 0 || (this.curStep === 1 && !canClose))) {
       return;
     }
     super.handleKeyPress(event);

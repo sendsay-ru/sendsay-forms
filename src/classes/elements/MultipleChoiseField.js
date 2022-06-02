@@ -4,11 +4,12 @@ import { CheckBox } from './CheckBox';
 export class MultipleChoiseField extends Field {
   initialize() {
     super.initialize();
-    this.template = '<div class="[%classes%]" style="[%style%]">'
-      + '<label for="[%label%]" class="sendsay-label">[%label%]</label>'
-      + '<div class="sendsay-container"></div>'
-      + '<div type="text" class="sendsay-error"></div>'
-      + '</div>';
+    this.template =
+      '<div class="[%classes%]" style="[%style%]">' +
+      '<label for="[%label%]" class="sendsay-label">[%label%]</label>' +
+      '<div class="sendsay-container"></div>' +
+      '<div type="text" class="sendsay-error"></div>' +
+      '</div>';
     this.curValues = this.data.field.default || [];
     this.baseClass = 'sendsay-field';
     this.handleChangeValue = this.handleChangeValue.bind(this);
@@ -44,7 +45,7 @@ export class MultipleChoiseField extends Field {
               checked: this.curValues.indexOf(key) !== -1,
             },
           },
-          this,
+          this
         );
         if (newEl) {
           newEl.el.addEventListener('sendsay-change', this.handleChangeValue);
@@ -59,8 +60,12 @@ export class MultipleChoiseField extends Field {
   handleChangeValue(event) {
     const data = event.detail.extra;
     if (data.checked) {
-      if (this.curValues.indexOf(data.value) === -1) { this.curValues.push(data.value); }
-    } else if (this.curValues.indexOf(data.value) !== -1) { this.curValues.splice(this.curValues.indexOf(data.value), 1); }
+      if (this.curValues.indexOf(data.value) === -1) {
+        this.curValues.push(data.value);
+      }
+    } else if (this.curValues.indexOf(data.value) !== -1) {
+      this.curValues.splice(this.curValues.indexOf(data.value), 1);
+    }
   }
 
   getValue() {
