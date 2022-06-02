@@ -8,7 +8,7 @@
     "start": "yarn build && yarn serve & yarn watch",
     "watch": "grunt watch",
     "serve": "node --harmony scripts/serve.js",
-    "eslint": "yarn exec eslint src",
+    "eslint": "eslint src",
     "postinstall": "bower install && husky install",
     "test": "grunt browserify:test && karma start ./tools/karma.conf.js "
   },
@@ -58,7 +58,6 @@
     "less-plugin-autoprefix": "~1.5.1"
   },
   "dependencies": {
-    "husky": "^6.0.0",
     "superstatic": "^7.1.0"
   }
 }
