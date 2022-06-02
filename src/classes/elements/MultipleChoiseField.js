@@ -75,7 +75,7 @@ export class MultipleChoiseField extends Field {
   validate() {
     this.removeErrorMessage();
     if (this.data.field.required && this.getValue().length === 0) {
-      this.showErrorMessage('Обязательное поле');
+      this.showErrorMessageById('validation__required-field');
       return false;
     }
     return true;

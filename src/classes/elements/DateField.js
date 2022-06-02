@@ -116,7 +116,7 @@ export class DateField extends Field {
       isValid = false;
     }
     if (!isValid) {
-      this.showErrorMessage('Введена неверная дата');
+      this.showErrorMessageById('validation__wrong-date-format');
     }
     return isValid;
   }

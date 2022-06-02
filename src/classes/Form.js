@@ -159,11 +159,17 @@ export class Form {
     this.domObj.onSubmitFail();
 
     const { error } = this.connector;
-    if (
-      error &&
-      (this.findInErrors(error, 'wrong_member_email') || this.findInErrors(error, 'error/email'))
-    ) {
-      this.domObj.showErrorFor('_member_email', 'Неверный формат email адреса');
+
+    if (!error) {
+      return;
+    }
+
+    if (this.findInErrors(error, 'wrong_member_email') || this.findInErrors(error, 'error/email')) {
+      this.domObj.showErrorFor('_member_email', 'submit-error__wrong-email-format');
+    }
+
+    if (this.findInErrors(error, 'only_once')) {
+      this.domObj.showErrorFor('_member_email', 'submit-error__same-email');
     }
   }
 
