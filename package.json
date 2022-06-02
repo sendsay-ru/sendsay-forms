@@ -15,7 +15,7 @@
     "eslint:fix": "yarn eslint --fix",
     "lint:fix": "yarn eslint:fix && yarn pretify:fix",
     "postinstall": "bower install",
-    "test": "grunt browserify:test && karma start ./tools/karma.conf.js "
+    "test": "grunt browserify:test && karma start"
   },
   "repository": {
     "type": "git",
