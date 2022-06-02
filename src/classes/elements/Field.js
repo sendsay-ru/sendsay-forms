@@ -2,11 +2,12 @@ import { DOMObject } from './DOMObject';
 
 export class Field extends DOMObject {
   initialize() {
-    this.template = '<div class="[%classes%]" style="[%style%]">'
-      + '<label for="[%label%]" class="sendsay-label">[%label%]</label>'
-      + '<input name="[%qid%]" placeholder="[%placeholder%]" value="[%value%]" type="text" class="sendsay-input"/>'
-      + '<div type="text" class="sendsay-error"></div>'
-      + '</div>';
+    this.template =
+      '<div class="[%classes%]" style="[%style%]">' +
+      '<label for="[%label%]" class="sendsay-label">[%label%]</label>' +
+      '<input name="[%qid%]" placeholder="[%placeholder%]" value="[%value%]" type="text" class="sendsay-input"/>' +
+      '<div type="text" class="sendsay-error"></div>' +
+      '</div>';
     this.baseClass = 'sendsay-field';
     this.applicableStyles = {
       'padding-bottom': { param: 'paddingBottom', postfix: 'px' },

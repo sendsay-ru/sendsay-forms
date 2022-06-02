@@ -1,0 +1,33 @@
+language: node_js
+node_js:
+  - 17
+
+dist: xenial
+services:
+  - xvfb
+
+vm:
+  size: large
+cache:
+  directories:
+    - ~/.cache/yarn
+
+before_install:
+  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.22.4
+  - export PATH="$HOME/.yarn/bin:$PATH"
+install:
+  - yarn --frozen-lockfile
+
+script:
+  - yarn lint
+  - yarn test
+
+before_deploy:
+  - git config --global user.email "services@iprojects.ru"
+  - git config --global user.name "sendsay-cat"
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: bin/deploy.sh
+  on:
+    branch: master

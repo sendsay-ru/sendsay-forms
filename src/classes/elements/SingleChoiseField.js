@@ -4,11 +4,12 @@ import { RadioButton } from './RadioButton';
 export class SingleChoiseField extends Field {
   initialize() {
     super.initialize();
-    this.template = '<div class="[%classes%]" style="[%style%]">'
-      + '<label for="[%label%]" class="sendsay-label">[%label%]</label>'
-      + '<div class="sendsay-container"></div>'
-      + '<div type="text" class="sendsay-error"></div>'
-      + '</div>';
+    this.template =
+      '<div class="[%classes%]" style="[%style%]">' +
+      '<label for="[%label%]" class="sendsay-label">[%label%]</label>' +
+      '<div class="sendsay-container"></div>' +
+      '<div type="text" class="sendsay-error"></div>' +
+      '</div>';
     const field = this.data.field || {};
     this.curValue = field.default || '';
     this.baseClass = 'sendsay-field';
@@ -44,7 +45,7 @@ export class SingleChoiseField extends Field {
               checked: key === this.curValue,
             },
           },
-          this,
+          this
         );
         if (newEl) {
           newEl.el.addEventListener('sendsay-change', this.handleChangeValue);

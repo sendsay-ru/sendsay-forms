@@ -7,7 +7,9 @@ export class NumberField extends Field {
       const value = this.getValue();
       // eslint-disable-next-line no-restricted-globals
       isValid = !value.match(/[\.xXeE]/) && !isNaN(+value);
-      if (!isValid) { this.showErrorMessage('Неверный формат целого числа'); }
+      if (!isValid) {
+        this.showErrorMessage('Неверный формат целого числа');
+      }
     }
     return isValid;
   }

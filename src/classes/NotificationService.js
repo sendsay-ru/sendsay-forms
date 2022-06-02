@@ -11,7 +11,7 @@ class NotificationService {
     }
     this.domObj = new Notification(this.options());
     this.domObj.activate();
-  }
+  };
 
   options = () => ({
     active: true,
@@ -35,7 +35,7 @@ class NotificationService {
     steps: [],
     toggle: {},
     type: 'widget',
-  })
+  });
 }
 
 let instance = null;

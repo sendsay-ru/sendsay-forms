@@ -14,51 +14,53 @@ export class Form {
     this.connector = connector;
     const promise = connector.load();
 
-    if (promise) { promise.then(this.runWatcher.bind(this), this.handleFail.bind(this)); }
+    if (promise) {
+      promise.then(this.runWatcher.bind(this), this.handleFail.bind(this));
+    }
   }
 
   processConditionsSettings() {
     const settings = this.connector.data.settings || {};
     const conditions = JSON.parse(JSON.stringify(settings));
     conditions.showCondition = conditions.showCondition || {};
-    if (this.options.instant) { conditions.showCondition.instant = true; }
-    if (this.options.ignoreState) { conditions.ignoreState = true; }
-    if (this.options.ignoreCookie) { conditions.ignoreCookie = true; }
+    if (this.options.instant) {
+      conditions.showCondition.instant = true;
+    }
+    if (this.options.ignoreState) {
+      conditions.ignoreState = true;
+    }
+    if (this.options.ignoreCookie) {
+      conditions.ignoreCookie = true;
+    }
     conditions.active = this.connector.data.active;
     return conditions;
   }
 
   setFrequencyCookie(data) {
-    if (!data) { return; }
+    if (!data) {
+      return;
+    }
     if (data && data.settings && data.settings.frequency) {
-      Cookies.set(
-        `__sendsay_forms_${data.id}`,
-        data.settings.frequency,
-        data.settings.frequency,
-      );
+      Cookies.set(`__sendsay_forms_${data.id}`, data.settings.frequency, data.settings.frequency);
     }
   }
 
   setCountCookie(data) {
-    if (!data) { return; }
+    if (!data) {
+      return;
+    }
     const count = +Cookies.get(`__sendsay_forms_count_${data.id}`) || 0;
     if (data) {
-      Cookies.set(
-        `__sendsay_forms_count_${data.id}`,
-        count + 1,
-        94608000,
-      );
+      Cookies.set(`__sendsay_forms_count_${data.id}`, count + 1, 94608000);
     }
   }
 
   setSubmitCookie(data) {
-    if (!data) { return; }
+    if (!data) {
+      return;
+    }
     if (data) {
-      Cookies.set(
-        `__sendsay_forms_submit_${data.id}`,
-        true,
-        94608000,
-      );
+      Cookies.set(`__sendsay_forms_submit_${data.id}`, true, 94608000);
     }
   }
 
@@ -113,10 +115,7 @@ export class Form {
         // eslint-disable-next-line new-cap
         this.domObj = new DomConstructor(data);
         this.domObj.activate(this.options);
-        this.domObj.el.addEventListener(
-          'sendsay-success',
-          this.handleSubmit.bind(this),
-        );
+        this.domObj.el.addEventListener('sendsay-success', this.handleSubmit.bind(this));
 
         this.setFrequencyCookie(this.connector.data);
         this.setCountCookie(this.connector.data);
@@ -125,7 +124,7 @@ export class Form {
           this.domObj.handleTogglerClick();
         }
       },
-      () => {},
+      () => {}
     );
   }
 
@@ -140,15 +139,14 @@ export class Form {
   handleFail() {}
 
   handleSubmit(event) {
-    if (this.options.fakeSubmit) { return this.handleSuccessSubmit(); }
+    if (this.options.fakeSubmit) {
+      return this.handleSuccessSubmit();
+    }
     const params = event.detail.extra;
     const promise = this.connector.submit(params);
 
     if (promise) {
-      promise.then(
-        this.handleSuccessSubmit.bind(this),
-        this.handleFailSubmit.bind(this),
-      );
+      promise.then(this.handleSuccessSubmit.bind(this), this.handleFailSubmit.bind(this));
     }
   }
 
@@ -161,9 +159,10 @@ export class Form {
     this.domObj.onSubmitFail();
 
     const { error } = this.connector;
-    if (error
-      && (this.findInErrors(error, 'wrong_member_email')
-      || this.findInErrors(error, 'error/email'))) {
+    if (
+      error &&
+      (this.findInErrors(error, 'wrong_member_email') || this.findInErrors(error, 'error/email'))
+    ) {
       this.domObj.showErrorFor('_member_email', 'Неверный формат email адреса');
     }
   }

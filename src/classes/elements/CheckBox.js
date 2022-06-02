@@ -2,8 +2,10 @@ import { DOMObject } from './DOMObject';
 
 export class CheckBox extends DOMObject {
   initialize() {
-    this.template = `${'<div class="[%classes%]" style="[%style%]">'
-      + '<input [%checked%] name="[%qid%]" value="[%value%]" type="checkbox" class="sendsay-checkinput"/>'}${
+    this.template = `${
+      '<div class="[%classes%]" style="[%style%]">' +
+      '<input [%checked%] name="[%qid%]" value="[%value%]" type="checkbox" class="sendsay-checkinput"/>'
+    }${
       this.data.content.label
         ? '<label for="[%label%]" class="sendsay-label">[%label%]</label>'
         : ''
@@ -40,26 +42,18 @@ export class CheckBox extends DOMObject {
 
   addEvents() {
     if (this.el) {
-      this.el
-        .querySelector('input')
-        .addEventListener('change', this.handleChange);
+      this.el.querySelector('input').addEventListener('change', this.handleChange);
       if (this.el.querySelector('label')) {
-        this.el
-          .querySelector('label')
-          .addEventListener('click', this.handleClick);
+        this.el.querySelector('label').addEventListener('click', this.handleClick);
       }
     }
   }
 
   removeEvents() {
     if (this.el) {
-      this.el
-        .querySelector('input')
-        .removeEventListener('change', this.handleChange);
+      this.el.querySelector('input').removeEventListener('change', this.handleChange);
       if (this.el.querySelector('label')) {
-        this.el
-          .querySelector('label')
-          .removeEventListener('click', this.handleClick);
+        this.el.querySelector('label').removeEventListener('click', this.handleClick);
       }
     }
   }

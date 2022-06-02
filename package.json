@@ -8,9 +8,14 @@
     "start": "yarn build && yarn serve & yarn watch",
     "watch": "grunt watch",
     "serve": "node --harmony scripts/serve.js",
-    "eslint": "yarn exec eslint src",
-    "postinstall": "bower install && husky install",
-    "test": "grunt browserify:test && karma start ./tools/karma.conf.js "
+    "pretify": "prettier src/ ./*.js tests/ --check",
+    "eslint": "eslint src",
+    "lint": "yarn eslint && yarn pretify",
+    "pretify:fix": "prettier src/ ./*.js tests/ --write",
+    "eslint:fix": "yarn eslint --fix",
+    "lint:fix": "yarn eslint:fix && yarn pretify:fix",
+    "postinstall": "bower install",
+    "test": "grunt browserify:test && karma start"
   },
   "repository": {
     "type": "git",
@@ -53,12 +58,13 @@
     "jasmine-core": "^2.4.1",
     "karma": "~6.3.16",
     "karma-chrome-launcher": "~0.2.3",
+    "karma-coverage": "^2.2.0",
     "karma-jasmine": "~0.3.8",
     "karma-mocha-reporter": "~2.0.2",
-    "less-plugin-autoprefix": "~1.5.1"
+    "less-plugin-autoprefix": "^2.0.0",
+    "prettier": "^2.6.2"
   },
   "dependencies": {
-    "husky": "^6.0.0",
     "superstatic": "^7.1.0"
   }
 }

@@ -16,7 +16,7 @@ const DEFAULT_CONFIG = {
 };
 
 (function () {
-  const config = { ...DEFAULT_CONFIG, ...window.SENDSAY_FORMS_CONFIG?.() || {} };
+  const config = { ...DEFAULT_CONFIG, ...(window.SENDSAY_FORMS_CONFIG?.() || {}) };
   const loadCss = (callback) => {
     const cssId = '_sendsay-styles';
 
@@ -100,4 +100,4 @@ const DEFAULT_CONFIG = {
     activatePopup,
     showPopup,
   };
-}());
+})();

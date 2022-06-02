@@ -11,19 +11,20 @@ export class ToggleablePopup extends Popup {
     this.curStep = 0;
     this.gainedData = {};
 
-    this.template = `${!this.noWrapper
-      ? '<div class="sendsay-wrapper [%wrapperClasses%]" style="[%overlayStyles%]">'
-      : ''
-    }<div class="[%classes%]" style="[%style%]">`
-      + '<div class="sendsay-close">×</div>'
-      + '<div class="sendsay-toggler">'
-      + '<span class="sendsay-toggler-desktop">[%toggle%]</span>'
-      + '<span class="sendsay-toggler-mobile">[%toggle%]</span>'
-      + '</div>'
-      + '<div class="sendsay-content">'
-      + '</div>'
-      + `</div>${
-        !this.noWrapper ? '</div>' : ''}`;
+    this.template =
+      `${
+        !this.noWrapper
+          ? '<div class="sendsay-wrapper [%wrapperClasses%]" style="[%overlayStyles%]">'
+          : ''
+      }<div class="[%classes%]" style="[%style%]">` +
+      '<div class="sendsay-close">×</div>' +
+      '<div class="sendsay-toggler">' +
+      '<span class="sendsay-toggler-desktop">[%toggle%]</span>' +
+      '<span class="sendsay-toggler-mobile">[%toggle%]</span>' +
+      '</div>' +
+      '<div class="sendsay-content">' +
+      '</div>' +
+      `</div>${!this.noWrapper ? '</div>' : ''}`;
 
     this.baseClass = 'sendsay-popup';
 
@@ -59,7 +60,7 @@ export class ToggleablePopup extends Popup {
     this.general.appearance.labelTextColor = this.data.appearance.labelTextColor;
     this.general.appearance.labelFontSize = this.data.appearance.labelFontSize;
     this.general.appearance.labelFontFamily = this.escapeStyle(
-      this.data.appearance.labelFontFamily,
+      this.data.appearance.labelFontFamily
     );
 
     this.mobileWith = 150;
@@ -70,11 +71,7 @@ export class ToggleablePopup extends Popup {
     const { width } = appearance;
 
     const mediaQuery = new MediaQuery({
-      conditions: [
-        'screen',
-        '(min-width: 320px)',
-        `(max-width:${+width + 100}px)`,
-      ],
+      conditions: ['screen', '(min-width: 320px)', `(max-width:${+width + 100}px)`],
       selectors: {
         '.sendsay-popup.sendsay-type-widget': {
           width: `${this.mobileWith}px !important`,
@@ -111,12 +108,14 @@ export class ToggleablePopup extends Popup {
         '.sendsay-popup.sendsay-type-widget.sendsay-opened .sendsay-close': {
           display: 'block',
         },
-        '.sendsay-popup.sendsay-type-widget.sendsay-right .sendsay-toggler .sendsay-toggler-mobile, .sendsay-popup.sendsay-type-widget.sendsay-left .sendsay-toggler .sendsay-toggler-mobile': {
-          display: 'block',
-        },
-        '.sendsay-popup.sendsay-type-widget.sendsay-right .sendsay-toggler .sendsay-toggler-desktop, .sendsay-popup.sendsay-type-widget.sendsay-left .sendsay-toggler .sendsay-toggler-desktop': {
-          display: 'none',
-        },
+        '.sendsay-popup.sendsay-type-widget.sendsay-right .sendsay-toggler .sendsay-toggler-mobile, .sendsay-popup.sendsay-type-widget.sendsay-left .sendsay-toggler .sendsay-toggler-mobile':
+          {
+            display: 'block',
+          },
+        '.sendsay-popup.sendsay-type-widget.sendsay-right .sendsay-toggler .sendsay-toggler-desktop, .sendsay-popup.sendsay-type-widget.sendsay-left .sendsay-toggler .sendsay-toggler-desktop':
+          {
+            display: 'none',
+          },
       },
     });
     this.mediaQuery = mediaQuery;
@@ -132,30 +131,14 @@ export class ToggleablePopup extends Popup {
 
   addEvents() {
     super.addEvents();
-    this.addEvent(
-      'click',
-      '.sendsay-toggler',
-      this.handleTogglerClick.bind(this),
-    );
-    this.addEvent(
-      'sendsay-image-load',
-      '.sendsay-image',
-      this.setSaneMaxHeight.bind(this),
-    );
+    this.addEvent('click', '.sendsay-toggler', this.handleTogglerClick.bind(this));
+    this.addEvent('sendsay-image-load', '.sendsay-image', this.setSaneMaxHeight.bind(this));
   }
 
   removeEvents() {
     super.removeEvents();
-    this.removeEvent(
-      'click',
-      '.sendsay-toggler',
-      this.handleTogglerClick.bind(this),
-    );
-    this.removeEvent(
-      'sendsay-image-load',
-      '.sendsay-image',
-      this.setSaneMaxHeight.bind(this),
-    );
+    this.removeEvent('click', '.sendsay-toggler', this.handleTogglerClick.bind(this));
+    this.removeEvent('sendsay-image-load', '.sendsay-image', this.setSaneMaxHeight.bind(this));
   }
 
   handleTogglerClick() {
@@ -192,10 +175,7 @@ export class ToggleablePopup extends Popup {
     const el = this.noWrapper ? this.el : this.el.querySelector('.sendsay-popup');
     const contentEl = el.querySelector('.sendsay-content');
 
-    if (
-      el.classList.contains('sendsay-opened')
-      && this.steps.length - 1 !== this.curStep
-    ) {
+    if (el.classList.contains('sendsay-opened') && this.steps.length - 1 !== this.curStep) {
       el.classList.remove('sendsay-opened');
       contentEl.style.maxHeight = `${0}px`;
     } else {
@@ -212,7 +192,9 @@ export class ToggleablePopup extends Popup {
   }
 
   afterRender() {
-    if (this.curStep !== 0) { this.setSaneMaxHeight(); }
+    if (this.curStep !== 0) {
+      this.setSaneMaxHeight();
+    }
   }
 
   proceedToNextStep() {
@@ -226,7 +208,11 @@ export class ToggleablePopup extends Popup {
     this.render();
     setTimeout(() => {
       self.data.appearance.animation = temp;
-      if (self.noWrapper) { self.el.className = self.makeClasses(); } else { self.el.querySelector('.sendsay-popup').className = self.makeClasses(); }
+      if (self.noWrapper) {
+        self.el.className = self.makeClasses();
+      } else {
+        self.el.querySelector('.sendsay-popup').className = self.makeClasses();
+      }
     }, 100);
   }
 }

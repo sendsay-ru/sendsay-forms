@@ -1,9 +1,5 @@
 import { Cookies } from './Cookies';
-import {
-  getHostName,
-  toNumber,
-  LeaveCounter,
-} from '../utils';
+import { getHostName, toNumber, LeaveCounter } from '../utils';
 import ClickTrigger from './ClickTrigger';
 
 export class ConditionWatcher {
@@ -53,7 +49,9 @@ export class ConditionWatcher {
     if (this.pageScroll) {
       document.addEventListener('scroll', this.scrollWatcher);
       this.scrollWatcher();
-      if (this.isDone) { return; }
+      if (this.isDone) {
+        return;
+      }
     }
 
     if (this.onLeave) {
@@ -73,10 +71,7 @@ export class ConditionWatcher {
     }
 
     if (this.delay) {
-      this.timeoutID = setTimeout(
-        this.delayWatcher.bind(this),
-        this.delay * 1000,
-      );
+      this.timeoutID = setTimeout(this.delayWatcher.bind(this), this.delay * 1000);
     }
   }
 
@@ -85,14 +80,16 @@ export class ConditionWatcher {
       return false;
     }
     if (Cookies.has(`__sendsay_forms_${this.id}`)) {
-      if (Cookies.get(`__sendsay_forms_${this.id}`) === this.globCond.frequency) { return true; }
+      if (Cookies.get(`__sendsay_forms_${this.id}`) === this.globCond.frequency) {
+        return true;
+      }
       if (this.globCond.frequency) {
         Cookies.set(
           `__sendsay_forms_${this.id}`,
           this.globCond.frequency,
           this.globCond.frequency,
           '/',
-          getHostName(),
+          getHostName()
         );
         return true;
       }
@@ -101,26 +98,28 @@ export class ConditionWatcher {
 
     if (
       // eslint-disable-next-line eqeqeq
-      this.conditions.multipleSubmit != undefined
-      && !this.conditions.multipleSubmit
+      this.conditions.multipleSubmit != undefined &&
+      !this.conditions.multipleSubmit
     ) {
-      if (Cookies.has(`__sendsay_forms_submit_${this.id}`)) { return true; }
+      if (Cookies.has(`__sendsay_forms_submit_${this.id}`)) {
+        return true;
+      }
     }
 
     if (this.conditions.maxCount) {
       if (
-        Cookies.has(`__sendsay_forms_count_${this.id}`)
-        && +Cookies.get(`__sendsay_forms_count_${this.id}`)
-          >= +this.conditions.maxCount
-      ) { return true; }
+        Cookies.has(`__sendsay_forms_count_${this.id}`) &&
+        +Cookies.get(`__sendsay_forms_count_${this.id}`) >= +this.conditions.maxCount
+      ) {
+        return true;
+      }
     }
     return false;
   }
 
   scrollWatcher() {
     const curScroll = document.documentElement.scrollTop || window.pageYOffset;
-    const maxScroll = document.documentElement.scrollHeight
-        - document.documentElement.clientHeight;
+    const maxScroll = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     const showScroll = this.pageScroll;
     if (maxScroll <= 0 || showScroll <= (curScroll / maxScroll) * 100) {
       this.satisfyCondition('scroll');
@@ -159,6 +158,8 @@ export class ConditionWatcher {
     document.removeEventListener('scroll', this.scrollWatcher);
     this.removeLeaveWatcher();
 
-    if (this.timeoutID) { clearTimeout(this.timeoutID); }
+    if (this.timeoutID) {
+      clearTimeout(this.timeoutID);
+    }
   }
 }

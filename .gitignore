@@ -9,3 +9,4 @@ ascend.sh
 .idea
 yarn-error.log
 bower_components
+dist/

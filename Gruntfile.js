@@ -7,7 +7,8 @@ const lessFiles = [
   'src/css/less/animations.less',
 ];
 
-const pathToCss = ({ min }) => (`https://image.sendsay.ru/app/js/forms/forms${min ? '.min' : ''}.css`);
+const pathToCss = ({ min }) =>
+  `https://image.sendsay.ru/app/js/forms/forms${min ? '.min' : ''}.css`;
 
 module.exports = (grunt) => {
   // Project configuration.
@@ -31,10 +32,13 @@ module.exports = (grunt) => {
       dist: {
         options: {
           transform: [
-            ['babelify', {
-              sourceMaps: true,
-              presets: ['@babel/preset-env'],
-            }],
+            [
+              'babelify',
+              {
+                sourceMaps: true,
+                presets: ['@babel/preset-env'],
+              },
+            ],
           ],
         },
         files: {
@@ -44,14 +48,21 @@ module.exports = (grunt) => {
       test: {
         options: {
           transform: [
-            ['babelify', {
-              sourceMaps: true,
-              presets: ['@babel/preset-env'],
-            }],
+            [
+              'babelify',
+              {
+                sourceMaps: true,
+                presets: ['@babel/preset-env'],
+              },
+            ],
           ],
         },
         files: {
-          './test-dist/sendsayforms.js': ['./src/*.js', './src/classes/**/*.js', './tests/classes/*.js'],
+          './test-dist/sendsayforms.js': [
+            './src/*.js',
+            './src/classes/**/*.js',
+            './tests/classes/*.js',
+          ],
         },
       },
     },
@@ -71,9 +82,7 @@ module.exports = (grunt) => {
       dist: {
         options: {
           compress: true,
-          plugins: [
-            new (require('less-plugin-autoprefix'))(),
-          ],
+          plugins: [new (require('less-plugin-autoprefix'))()],
         },
         files: {
           'dist/forms.min.css': lessFiles,

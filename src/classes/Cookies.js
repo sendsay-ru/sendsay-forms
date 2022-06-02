@@ -9,12 +9,13 @@ export class Cookies {
       decodeURIComponent(
         document.cookie.replace(
           new RegExp(
-            `(?:(?:^|.*;)\\s*${
-              encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, '\\$&')
-            }\\s*\\=\\s*([^;]*).*$)|^.*$`,
+            `(?:(?:^|.*;)\\s*${encodeURIComponent(sKey).replace(
+              /[\-\.\+\*]/g,
+              '\\$&'
+            )}\\s*\\=\\s*([^;]*).*$)|^.*$`
           ),
-          '$1',
-        ),
+          '$1'
+        )
       ) || null
     );
   }
@@ -28,9 +29,8 @@ export class Cookies {
       // eslint-disable-next-line default-case
       switch (vEnd.constructor) {
         case Number:
-          sExpires = vEnd === Infinity
-            ? '; expires=Fri, 31 Dec 9999 23:59:59 GMT'
-            : `; max-age=${vEnd}`;
+          sExpires =
+            vEnd === Infinity ? '; expires=Fri, 31 Dec 9999 23:59:59 GMT' : `; max-age=${vEnd}`;
           break;
         case String:
           sExpires = `; expires=${vEnd}`;
@@ -40,13 +40,9 @@ export class Cookies {
           break;
       }
     }
-    document.cookie = `${encodeURIComponent(sKey)
-    }=${
-      encodeURIComponent(sValue)
-    }${sExpires
-    }${sDomain ? `; domain=${sDomain}` : ''
-    }${sPath ? `; path=${sPath}` : ''
-    }${bSecure ? '; secure' : ''}`;
+    document.cookie = `${encodeURIComponent(sKey)}=${encodeURIComponent(sValue)}${sExpires}${
+      sDomain ? `; domain=${sDomain}` : ''
+    }${sPath ? `; path=${sPath}` : ''}${bSecure ? '; secure' : ''}`;
     return true;
   }
 
@@ -54,8 +50,7 @@ export class Cookies {
     if (!this.has(sKey)) {
       return false;
     }
-    document.cookie = `${encodeURIComponent(sKey)
-    }=; expires=Thu, 01 Jan 1970 00:00:00 GMT${
+    document.cookie = `${encodeURIComponent(sKey)}=; expires=Thu, 01 Jan 1970 00:00:00 GMT${
       sDomain ? `; domain=${sDomain}` : ''
     }${sPath ? `; path=${sPath}` : ''}`;
     return true;
@@ -66,9 +61,7 @@ export class Cookies {
       return false;
     }
     return new RegExp(
-      `(?:^|;\\s*)${
-        encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, '\\$&')
-      }\\s*\\=`,
+      `(?:^|;\\s*)${encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, '\\$&')}\\s*\\=`
     ).test(document.cookie);
   }
 
