@@ -1,4 +1,6 @@
-export const ru = {
+export const LOCALE_RU = 'ru';
+
+export default {
   'notify__form-is-inactive': 'Извините, форма подписки сейчас неактивна',
   'validation__required-field': 'Обязательное поле',
   'validation__wrong-number-format': 'Неверный формат целого числа',

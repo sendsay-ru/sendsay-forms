@@ -1,4 +1,6 @@
-export const en = {
+export const LOCALE_EN = 'en';
+
+export default {
   'notify__form-is-inactive': 'The subscription form is currently inactive',
   'validation__required-field': 'Required field',
   'validation__wrong-number-format': 'Wrong integer format',

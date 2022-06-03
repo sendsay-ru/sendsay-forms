@@ -1,27 +1,27 @@
-import { ru } from './locales/ru';
-import { en } from './locales/en';
+import ru, { LOCALE_RU } from './locales/ru';
+import en, { LOCALE_EN } from './locales/en';
 
-const getSystemLang = () =>
+const getBrowserLang = () =>
   navigator.language || navigator.systemLanguage || navigator.userLanguage;
 
-const getLanguage = () => document.documentElement.lang || getSystemLang();
-const formatLanguage = (lang) => lang.substr(0, 2).toLowerCase();
+const getUserLang = () => document.documentElement.lang || getBrowserLang();
+const formatLang = (lang) => lang.substr(0, 2).toLowerCase();
 
 const getLang = () => {
   if (!navigator) {
-    return 'ru';
+    return LOCALE_RU;
   }
 
-  const language = getLanguage();
-  const formattedLang = formatLanguage(language);
+  const language = getUserLang();
+  const formattedLang = formatLang(language);
 
-  if (formattedLang === 'ru') {
-    return 'ru';
+  if (formattedLang === LOCALE_RU) {
+    return LOCALE_RU;
   }
 
-  return 'en';
+  return LOCALE_EN;
 };
 
 export function l8n(key) {
-  return (getLang() === 'en' ? en[key] : ru[key]) || key;
+  return (getLang() === LOCALE_EN ? en[key] : ru[key]) || key;
 }
