@@ -1,6 +1,6 @@
 import { ToggleablePopup } from './ToggleablePopup';
 import warningIcon from '../../icons/warning';
-import { l8n } from '../../l8n';
+import i18n from '../../i18n';
 
 export class Notification extends ToggleablePopup {
   initialize() {
@@ -16,7 +16,7 @@ export class Notification extends ToggleablePopup {
         <div>
           ${warningIcon}
         </div>
-        <div class="sendsay-warning__text">${l8n('notify__form-is-inactive')}</div>
+        <div class="sendsay-warning__text">${i18n('notify__form-is-inactive')}</div>
       </div>
     `;
   }

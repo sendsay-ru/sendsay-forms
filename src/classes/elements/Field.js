@@ -1,5 +1,5 @@
 import { DOMObject } from './DOMObject';
-import { l8n } from '../../l8n';
+import i18n from '../../i18n';
 
 export class Field extends DOMObject {
   initialize() {
@@ -54,7 +54,7 @@ export class Field extends DOMObject {
 
   showErrorMessageById(messageId) {
     this.el.classList.add('sendsay-field-invalid');
-    this.el.querySelector('.sendsay-error').innerHTML = l8n(messageId);
+    this.el.querySelector('.sendsay-error').innerHTML = i18n(messageId);
   }
 
   removeErrorMessage() {
