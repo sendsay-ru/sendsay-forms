@@ -89,6 +89,19 @@ module.exports = (grunt) => {
         },
       },
     },
+    htmlmin: {
+      file: {
+        options: {
+          removeComments: true,
+          collapseWhitespace: true,
+          minifyJS: true,
+          minifyCSS: true,
+        },
+        files: {
+          'dist/index.html': 'src/index.html',
+        },
+      },
+    },
     watch: {
       scripts: {
         files: 'src/**/*.js',
@@ -104,6 +117,13 @@ module.exports = (grunt) => {
           interrupt: true,
         },
       },
+      html: {
+        files: 'src/index.html',
+        tasks: ['htmlmin'],
+        options: {
+          interrupt: true,
+        },
+      },
     },
   });
 
@@ -112,9 +132,10 @@ module.exports = (grunt) => {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-htmlmin');
   grunt.loadNpmTasks('grunt-rewrite');
 
   // Default task(s).
-  grunt.registerTask('build', ['browserify', 'uglify', 'rewrite', 'less']);
+  grunt.registerTask('build', ['browserify', 'uglify', 'rewrite', 'less', 'htmlmin']);
   grunt.registerTask('default', ['build']);
 };
