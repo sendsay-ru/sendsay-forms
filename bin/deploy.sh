@@ -1,17 +1,20 @@
 #!/usr/bin/env bash
 
-BUILD_PATH=build-forms
 MESSAGE=$(git log -1 --pretty=format:"%s %h %an")
+TMP_FOLDER=/tmp
+REP_NAME=sendsay-frontend-builds
+BUILD_PATH=build-forms
+TMP_PATH=$TMP_FOLDER/$REP_NAME
 
-git clone git@github.com:sendsay-ru/sendsay-frontend-builds.git /tmp/sendsay-frontend-builds
+git clone git@github.com:sendsay-ru/$REP_NAME.git $TMP_PATH
 
 yarn build
 
-rm -rf /tmp/sendsay-frontend-builds/$BUILD_PATH
+rm -rf $TMP_PATH/$BUILD_PATH dist/index.html
 
-yes | cp -R build /tmp/sendsay-frontend-builds/$BUILD_PATH
+yes | cp -R dist $TMP_PATH/$BUILD_PATH
 
-cd /tmp/sendsay-frontend-builds
+cd $TMP_PATH
 
 echo $MESSAGE > $BUILD_PATH/COMMIT
 
