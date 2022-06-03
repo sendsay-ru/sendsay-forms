@@ -195,8 +195,6 @@ export class Popup extends DOMObject {
     this.proceedToNextStep();
   }
 
-  onSubmitFail() {}
-
   show() {
     this.isShow = true;
     this.makeMediaQuery();
@@ -264,7 +262,6 @@ export class Popup extends DOMObject {
     this.render();
   }
 
-  // eslint-disable-next-line no-dupe-class-members
   onSubmitFail() {
     const elements = this.searchForElements((element) => element instanceof Button);
     if (elements[0]) {
@@ -272,12 +269,12 @@ export class Popup extends DOMObject {
     }
   }
 
-  showErrorFor(qid, message) {
+  showErrorFor(qid, messageId) {
     const elements = this.searchForElements((element) => element instanceof Field);
     for (let i = 0; i < elements.length; i++) {
       const element = elements[i];
       if (element.data.field && (element.data.field.qid === qid || element.data.field.id === qid)) {
-        element.showErrorMessage(message);
+        element.showErrorMessageById(messageId);
       }
     }
   }

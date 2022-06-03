@@ -166,8 +166,8 @@ export class ToggleablePopup extends Popup {
     contentEl.style.maxHeight = `${contentEl.scrollHeight}px`;
   }
 
-  showErrorFor(qid, message) {
-    super.showErrorFor(qid, message);
+  showErrorFor(qid, messageId) {
+    super.showErrorFor(qid, messageId);
     this.setSaneMaxHeight();
   }
 

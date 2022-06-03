@@ -7,6 +7,7 @@ module.exports = {
 
   rules: {
     curly: ['error', 'all'],
+    'implicit-arrow-linebreak': 'off',
     'operator-linebreak': 'off',
     'comma-dangle': 'off',
     'wrap-iife': ['error', 'inside'],

@@ -1,4 +1,5 @@
 import { DOMObject } from './DOMObject';
+import i18n from '../../i18n';
 
 export class Field extends DOMObject {
   initialize() {
@@ -45,15 +46,15 @@ export class Field extends DOMObject {
 
     // eslint-disable-next-line eqeqeq
     if (this.data.field.required && this.getValue() == '') {
-      this.showErrorMessage('Обязательное поле');
+      this.showErrorMessageById('validation__required-field');
       return false;
     }
     return true;
   }
 
-  showErrorMessage(message) {
+  showErrorMessageById(messageId) {
     this.el.classList.add('sendsay-field-invalid');
-    this.el.querySelector('.sendsay-error').innerHTML = message;
+    this.el.querySelector('.sendsay-error').innerHTML = i18n(messageId);
   }
 
   removeErrorMessage() {
