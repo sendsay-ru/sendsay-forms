@@ -26,8 +26,8 @@ before_deploy:
   - git config --global user.email "services@iprojects.ru"
   - git config --global user.name "sendsay-cat"
 deploy:
-  provider: script
-  skip_cleanup: true
-  script: bin/deploy.sh
-  on:
-    branch: master
+  - provider: script
+    skip_cleanup: true
+    script: bin/deploy.sh
+    on:
+      branch: master

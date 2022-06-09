@@ -6,7 +6,8 @@ REP_NAME=sendsay-frontend-builds
 BUILD_PATH=build-forms
 TMP_PATH=$TMP_FOLDER/$REP_NAME
 
-git clone git@github.com:sendsay-ru/$REP_NAME.git $TMP_PATH
+echo -e "machine github.com\n login $GH_TOKEN" > ~/.netrc
+git clone https://github.com/sendsay-ru/$REP_NAME.git $TMP_PATH
 
 yarn build
 
