@@ -20,7 +20,8 @@ jobs:
       - name: Install packages
         run: yarn install --frozen-lockfile
 
-      - uses: browser-actions/setup-chrome@latest
+      - name: Install chrome
+        uses: browser-actions/setup-chrome@latest
 
       - name: Eslint
         run: yarn eslint
