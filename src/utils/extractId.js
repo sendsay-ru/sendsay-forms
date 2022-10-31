@@ -1,9 +1,18 @@
 export const extractId = (url) => {
-  const [, login, formId] = url.match(/([^\/]+)\/([^\/]+)\/?$/) ?? [null, '', ''];
+  let login = '';
+  let formId = '';
+  let id = '';
+
+  const res = url.match(/([^\/]+)\/([^\/]+)\/?$/);
+
+  if (res) {
+    [, login, formId] = res;
+    id = `${login}-${formId}`;
+  }
 
   return {
     login,
     formId,
-    id: formId ? `${login}-${formId}` : '',
+    id,
   };
 };
