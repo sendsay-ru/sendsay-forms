@@ -22,4 +22,11 @@ describe('ExtractId', () => {
     expect(extractId('https://api.sendsay.ru/form/xeliusestate/1').id).toEqual('xeliusestate-1');
     expect(extractId('https://api.sendsay.ru/form/xeliusestate/1/').id).toEqual('xeliusestate-1');
   });
+
+  it('Should extract login from empty string', () => {
+    expect(extractId('https://sendsay.ru/form/codeception/').id).toEqual('form-codeception');
+    expect(extractId('https://sendsay.ru/form').id).toEqual('sendsay.ru-form');
+    expect(extractId('https://sendsay.ru/').id).toEqual('');
+    expect(extractId('test').id).toEqual('');
+  });
 });
