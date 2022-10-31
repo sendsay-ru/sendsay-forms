@@ -1,27 +1,12 @@
+import { extractId } from '../utils';
+
 export class Connector {
   constructor(url) {
     this.url = url;
-    const { id, login, formId } = this.extractID(this.url);
+    const { id, login, formId } = extractId(this.url);
     this.id = id;
     this.login = login;
     this.formId = formId;
-  }
-
-  extractID(url) {
-    let login = '';
-    let formId = '';
-    let id = '';
-    const res = url.match(/[^/s\/]*\/[^/s\/]*\/?$/);
-    if (res) {
-      const parts = res[0].split('/');
-      [login, formId] = parts;
-      id = `${login}-${formId}`;
-    }
-    return {
-      login,
-      formId,
-      id,
-    };
   }
 
   promiseHandler(resolve, reject) {

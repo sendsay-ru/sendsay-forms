@@ -1,15 +1,15 @@
-import { Spacer } from '../../src/classes/elements/Spacer.js';
+import { Spacer } from '../../src/classes/elements/Spacer';
 
-describe('Spacer.spec.js', function () {
-  var json = {
+describe('Spacer.spec.js', () => {
+  const json = {
     type: 'spacer',
     appearance: {
       height: 38,
     },
   };
 
-  it('Cheking Spacer render', function () {
-    var dom = new Spacer(json);
+  it('Cheking Spacer render', () => {
+    const dom = new Spacer(json);
     dom.render();
   });
 });

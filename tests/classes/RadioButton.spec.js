@@ -1,7 +1,7 @@
-import { RadioButton } from '../../src/classes/elements/RadioButton.js';
+import { RadioButton } from '../../src/classes/elements/RadioButton';
 
-describe('RadioButton.spec.js', function () {
-  var json = {
+describe('RadioButton.spec.js', () => {
+  const json = {
     field: {
       qid: 'test',
     },
@@ -12,8 +12,8 @@ describe('RadioButton.spec.js', function () {
     },
   };
 
-  it('Cheking RadioButton render', function () {
-    var dom = new RadioButton(json);
+  it('Cheking RadioButton render', () => {
+    const dom = new RadioButton(json);
     dom.render();
   });
 });

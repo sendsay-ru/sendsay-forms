@@ -1,7 +1,7 @@
-import { CheckBox } from '../../src/classes/elements/CheckBox.js';
+import { CheckBox } from '../../src/classes/elements/CheckBox';
 
-describe('CheckBox.spec.js', function () {
-  var json = {
+describe('CheckBox.spec.js', () => {
+  const json = {
     field: {
       qid: 'test',
     },
@@ -11,8 +11,9 @@ describe('CheckBox.spec.js', function () {
       checked: true,
     },
   };
-  it('Cheking CheckBox render', function () {
-    var dom = new CheckBox(json);
+
+  it('Cheking CheckBox render', () => {
+    const dom = new CheckBox(json);
     dom.render();
   });
 });

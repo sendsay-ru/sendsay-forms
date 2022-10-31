@@ -1,7 +1,7 @@
-import { Popup } from '../../src/classes/elements/Popup.js';
+import { Popup } from '../../src/classes/elements/Popup';
 
-describe('Popup.spec.js', function () {
-  var popupJSON = {
+describe('Popup.spec.js', () => {
+  const popupJSON = {
     appearance: {
       borderRadius: 0,
       paddingLeft: 20,
@@ -130,19 +130,19 @@ describe('Popup.spec.js', function () {
     active: true,
   };
 
-  it('Cheking popup render', function () {
-    var dom = new Popup(popupJSON);
+  it('Cheking popup render', () => {
+    const dom = new Popup(popupJSON);
     dom.render();
   });
 
-  it('Cheking popup activate', function () {
-    var dom = new Popup(popupJSON);
+  it('Cheking popup activate', () => {
+    const dom = new Popup(popupJSON);
     dom.render();
     dom.activate();
   });
 
-  it('Cheking popup show', function () {
-    var dom = new Popup(popupJSON);
+  it('Cheking popup show', () => {
+    const dom = new Popup(popupJSON);
     dom.render();
     dom.show();
   });

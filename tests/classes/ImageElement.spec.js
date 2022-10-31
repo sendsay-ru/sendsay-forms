@@ -1,7 +1,7 @@
-import { ImageElement } from '../../src/classes/elements/ImageElement.js';
+import { ImageElement } from '../../src/classes/elements/ImageElement';
 
-describe('ImageElement.spec.js', function () {
-  var json = {
+describe('ImageElement.spec.js', () => {
+  const json = {
     type: 'image',
     appearance: {
       align: 'center',
@@ -12,8 +12,8 @@ describe('ImageElement.spec.js', function () {
     },
   };
 
-  it('Cheking ImageElement render', function () {
-    var dom = new ImageElement(json);
+  it('Cheking ImageElement render', () => {
+    const dom = new ImageElement(json);
     dom.render();
   });
 });
