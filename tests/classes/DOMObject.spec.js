@@ -1,12 +1,13 @@
-import { DOMObject } from '../../src/classes/elements/DOMObject.js';
+import { DOMObject } from '../../src/classes/elements/DOMObject';
 
-describe('DOMObject.spec.js', function () {
-  it('Cheking render', function () {
-    var dom = new DOMObject({ type: 'foo' });
+describe('DOMObject.spec.js', () => {
+  it('Cheking render', () => {
+    const dom = new DOMObject({ type: 'foo' });
     dom.render();
   });
-  it('Cheking makeStyles', function () {
-    var dom = new DOMObject({
+
+  it('Cheking makeStyles', () => {
+    const dom = new DOMObject({
       type: 'foo',
       appearance: {
         param1: 200,
@@ -26,14 +27,14 @@ describe('DOMObject.spec.js', function () {
     });
   });
 
-  it('Cheking applyStyles with all types of params', function () {
-    var dom = new DOMObject({
+  it('Cheking applyStyles with all types of params', () => {
+    const dom = new DOMObject({
       appearance: {
         param1: 200,
         param2: 'test',
       },
     });
-    var applicableStyles = {
+    const applicableStyles = {
       converted1: { param: 'param1', postfix: 'px' },
       converted2: { param: 'param2' },
       converted3: { param: 'param3', default: 'test3' },
@@ -46,8 +47,8 @@ describe('DOMObject.spec.js', function () {
     });
   });
 
-  it('Cheking applyStyles without params', function () {
-    var dom = new DOMObject({
+  it('Cheking applyStyles without params', () => {
+    const dom = new DOMObject({
       param1: 200,
       param2: 'test',
     });
@@ -55,18 +56,18 @@ describe('DOMObject.spec.js', function () {
     expect(dom.applyStyles()).toEqual({});
   });
 
-  it('Cheking convertStyles without params', function () {
-    var dom = new DOMObject({
+  it('Cheking convertStyles without params', () => {
+    const dom = new DOMObject({
       param1: 200,
       param2: 'test',
     });
-    var applicableStyles = {
-      converted1: { param: 'param1', postfix: 'px' },
-      converted2: { param: 'param2' },
-      converted3: { param: 'param3', default: 'test3' },
-      converted4: { param: 'param4' },
-    };
-    var style = {
+    // const applicableStyles = {
+    //   converted1: { param: 'param1', postfix: 'px' },
+    //   converted2: { param: 'param2' },
+    //   converted3: { param: 'param3', default: 'test3' },
+    //   converted4: { param: 'param4' },
+    // };
+    const style = {
       style1: 'test1',
       style2: 'test2',
     };
@@ -74,13 +75,13 @@ describe('DOMObject.spec.js', function () {
     expect(dom.convertStyles(style)).toEqual(' style1:test1; style2:test2;');
   });
 
-  it('Cheking applySettings with all params', function () {
-    var dom = new DOMObject({
+  it('Cheking applySettings with all params', () => {
+    const dom = new DOMObject({
       param1: 200,
       param2: 'test',
     });
     dom.template = '[%value1%] [%  value2   %] [%value3%]';
-    var settings = {
+    const settings = {
       value1: 'test1',
       value2: 'test2',
       value3: 'test3',
@@ -89,13 +90,13 @@ describe('DOMObject.spec.js', function () {
     expect(dom.applySettings(settings)).toEqual('test1 test2 test3');
   });
 
-  it('Cheking applySettings without all params', function () {
-    var dom = new DOMObject({
+  it('Cheking applySettings without all params', () => {
+    const dom = new DOMObject({
       param1: 200,
       param2: 'test',
     });
     dom.template = '[%value1%] [%  value2   %] [%value3%]';
-    var settings = {
+    const settings = {
       value1: 'test1',
       value2: 'test2',
     };
@@ -103,8 +104,8 @@ describe('DOMObject.spec.js', function () {
     expect(dom.applySettings(settings)).toEqual('test1 test2 ');
   });
 
-  it('Cheking applySettings without params', function () {
-    var dom = new DOMObject({
+  it('Cheking applySettings without params', () => {
+    const dom = new DOMObject({
       param1: 200,
       param2: 'test',
     });
@@ -113,15 +114,15 @@ describe('DOMObject.spec.js', function () {
     expect(dom.applySettings()).toEqual('  ');
   });
 
-  it('Cheking trigger event without extra data', function () {
-    var dom = new DOMObject({
+  it('Cheking trigger event without extra data', () => {
+    const dom = new DOMObject({
       param1: 200,
       param2: 'test',
     });
     dom.render();
-    var test = false;
-    var testBlock = {
-      testFunc: function () {
+    let test = false;
+    const testBlock = {
+      testFunc() {
         test = true;
       },
     };
@@ -131,16 +132,16 @@ describe('DOMObject.spec.js', function () {
     expect(test).toEqual(true);
   });
 
-  it('Cheking trigger event with extra data', function () {
-    var dom = new DOMObject({
+  it('Cheking trigger event with extra data', () => {
+    const dom = new DOMObject({
       param1: 200,
       param2: 'test',
     });
     dom.render();
-    var test = false,
-      extra;
-    var testBlock = {
-      testFunc: function (event) {
+    let test = false;
+    let extra;
+    const testBlock = {
+      testFunc(event) {
         test = true;
         extra = event.detail.extra;
       },

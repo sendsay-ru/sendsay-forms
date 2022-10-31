@@ -1,7 +1,7 @@
-import { SingleChoiseField } from '../../src/classes/elements/SingleChoiseField.js';
+import { SingleChoiseField } from '../../src/classes/elements/SingleChoiseField';
 
-describe('SingleChoiseField.spec.js', function () {
-  var json = {
+describe('SingleChoiseField.spec.js', () => {
+  const json = {
     type: 'radioField',
     field: {
       aid: 'a596',
@@ -20,8 +20,8 @@ describe('SingleChoiseField.spec.js', function () {
     },
   };
 
-  it('Cheking SingleChoiseField render', function () {
-    var dom = new SingleChoiseField(json);
+  it('Cheking SingleChoiseField render', () => {
+    const dom = new SingleChoiseField(json);
     dom.render();
   });
 });

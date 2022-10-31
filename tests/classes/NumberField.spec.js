@@ -1,7 +1,7 @@
-import { NumberField } from '../../src/classes/elements/NumberField.js';
+import { NumberField } from '../../src/classes/elements/NumberField';
 
-describe('NumberField.spec.js', function () {
-  var json = {
+describe('NumberField.spec.js', () => {
+  const json = {
     type: 'intField',
     field: {
       aid: 'a596',
@@ -16,25 +16,25 @@ describe('NumberField.spec.js', function () {
     },
   };
 
-  it('Cheking NumberField render', function () {
-    var dom = new NumberField(json);
+  it('Cheking NumberField render', () => {
+    const dom = new NumberField(json);
     dom.render();
   });
 
-  it('Cheking not required empty NumberField validation', function () {
-    var dom = new NumberField(json);
+  it('Cheking not required empty NumberField validation', () => {
+    const dom = new NumberField(json);
 
     expect(dom.validate()).toEqual(true);
   });
 
-  it('Cheking NumberField with valid number validation', function () {
-    var dom = new NumberField(json);
+  it('Cheking NumberField with valid number validation', () => {
+    const dom = new NumberField(json);
     dom.el.querySelector('input').value = '234';
     expect(dom.validate()).toEqual(true);
   });
 
-  it('Cheking NumberField with invalid number validation', function () {
-    var dom = new NumberField(json);
+  it('Cheking NumberField with invalid number validation', () => {
+    const dom = new NumberField(json);
     dom.el.querySelector('input').value = '2d34';
     expect(dom.validate()).toEqual(false);
   });

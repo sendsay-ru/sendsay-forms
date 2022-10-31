@@ -2,32 +2,36 @@
   "name": "sendsay-forms",
   "version": "0.0.33",
   "description": "Library for displaying popups",
-  "main": "index.js",
-  "scripts": {
-    "build": "grunt build",
-    "start": "yarn build && concurrently \"yarn serve\" \"yarn watch\"",
-    "watch": "grunt watch",
-    "serve": "node --harmony scripts/serve.js",
-    "pretify": "prettier src/ ./*.js tests/ --check",
-    "eslint": "eslint src",
-    "lint": "yarn eslint && yarn pretify",
-    "pretify:fix": "prettier src/ ./*.js tests/ --write",
-    "eslint:fix": "yarn eslint --fix",
-    "lint:fix": "yarn eslint:fix && yarn pretify:fix",
-    "postinstall": "bower install",
-    "test": "grunt browserify:test && karma start"
+  "keywords": [
+    "popup"
+  ],
+  "bugs": {
+    "url": "https://github.com/sendsay-ru/sendsay-forms"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/sendsay-ru/sendsay-forms.git"
   },
-  "keywords": [
-    "popup"
-  ],
-  "author": "",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/sendsay-ru/sendsay-forms"
+  "author": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "grunt build",
+    "deploy": "./bin/deploy.sh",
+    "eslint": "eslint src tests",
+    "eslint:fix": "yarn eslint --fix",
+    "postinstall": "bower install",
+    "lint": "yarn eslint && yarn pretify",
+    "lint:fix": "yarn eslint:fix && yarn pretify:fix",
+    "pretify": "prettier src/ ./*.js tests/ --check",
+    "pretify:fix": "prettier src/ ./*.js tests/ --write",
+    "serve": "node --harmony scripts/serve.js",
+    "start": "yarn build && concurrently \"yarn serve\" \"yarn watch\"",
+    "test": "grunt browserify:test && karma start",
+    "watch": "grunt watch"
+  },
+  "dependencies": {
+    "superstatic": "^7.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
@@ -65,8 +69,5 @@
     "karma-mocha-reporter": "~2.0.2",
     "less-plugin-autoprefix": "^2.0.0",
     "prettier": "^2.6.2"
-  },
-  "dependencies": {
-    "superstatic": "^7.1.0"
   }
 }

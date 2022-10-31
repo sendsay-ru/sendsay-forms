@@ -62,6 +62,7 @@ module.exports = (grunt) => {
             './src/*.js',
             './src/classes/**/*.js',
             './tests/classes/*.js',
+            './tests/utils/*.js',
           ],
         },
       },
