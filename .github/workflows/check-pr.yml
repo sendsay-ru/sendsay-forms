@@ -3,7 +3,7 @@ on: [pull_request]
 
 jobs:
   checks:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     env:
       FORCE_COLOR: 1
@@ -19,6 +19,8 @@ jobs:
 
       - name: Install packages
         run: yarn install --frozen-lockfile
+
+      - uses: browser-actions/setup-chrome@latest
 
       - name: Eslint
         run: yarn eslint
