@@ -30,7 +30,7 @@ jobs:
       - name: Setup ssh-key
         uses: webfactory/ssh-agent@v0.7.0
         with:
-            ssh-private-key: ${{ secrets.SENDSAY_CAT_KEY }}
+          ssh-private-key: ${{ secrets.SENDSAY_CAT_KEY }}
 
       - name: Install packages
         run: yarn install --frozen-lockfile

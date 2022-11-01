@@ -6,7 +6,7 @@ REP_NAME=sendsay-frontend-builds
 BUILD_PATH=build-forms
 TMP_PATH=$TMP_FOLDER/$REP_NAME
 
-git clone https://github.com/sendsay-ru/$REP_NAME.git $TMP_PATH
+git clone git@github.com:sendsay-ru/sendsay-frontend-builds.git $TMP_PATH
 
 yarn build
 
