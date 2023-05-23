@@ -5,6 +5,7 @@ import { MediaQuery } from '../MediaQuery';
 export class ToggleablePopup extends Popup {
   initialize() {
     const appearance = this.data.appearance || {};
+    const opened = this.data.openedByDefault;
 
     this.noWrapper = !appearance.overlayEnabled;
     this.steps = this.data.steps;
@@ -26,7 +27,7 @@ export class ToggleablePopup extends Popup {
       '</div>' +
       `</div>${!this.noWrapper ? '</div>' : ''}`;
 
-    this.baseClass = 'sendsay-popup';
+    this.baseClass = `sendsay-popup ${opened ? 'sendsay-animation-none' : ''}`;
 
     this.applicableStyles = {
       'background-color': { param: 'backgroundColor' },
@@ -189,6 +190,14 @@ export class ToggleablePopup extends Popup {
       classes += ' sendsay-opened';
     }
     return classes;
+  }
+
+  show() {
+    super.show();
+
+    if (this.data.openedByDefault) {
+      this.handleTogglerClick();
+    }
   }
 
   afterRender() {

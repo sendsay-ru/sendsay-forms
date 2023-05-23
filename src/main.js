@@ -68,10 +68,12 @@ const DEFAULT_CONFIG = {
   };
 
   const showPopup = function (data, options) {
+    const localData = { ...data };
+
     return loadCss(() => {
       let DomConstructor;
       // eslint-disable-next-line default-case
-      switch (data.type) {
+      switch (localData.type) {
         case 'popup':
           DomConstructor = Popup;
           break;
@@ -79,6 +81,8 @@ const DEFAULT_CONFIG = {
           DomConstructor = PopupBar;
           break;
         case 'widget':
+          localData.openedByDefault = true;
+
           DomConstructor = ToggleablePopup;
           break;
         case 'embedded':
@@ -86,7 +90,7 @@ const DEFAULT_CONFIG = {
           break;
       }
 
-      const popup = new DomConstructor(data);
+      const popup = new DomConstructor(localData);
 
       popup.activate(options);
     });
