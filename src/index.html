@@ -24,7 +24,166 @@
     <!-- <script src="https://image.sendsay.ru/app/js/forms/forms.min.js"></script> -->
     <script>
       (async function load() {
-        const form = await SENDSAY.activatePopup('https://sendsay.ru/form/xeliusestate/1');
+        const form = await SENDSAY.showPopup(
+          {
+            steps: [
+              {
+                columns: [
+                  {
+                    elements: [
+                      {
+                        content: {
+                          text: '<span style="font-size:14px;">Подписывайтесь, чтобы получать последние новости и специльные предложения, которые будут доставляться прямо в ваш почтовый ящик.</span>',
+                        },
+                        type: 'text',
+                        appearance: {
+                          paddingLeft: 0,
+                          align: 'left',
+                          paddingRight: 0,
+                          paddingBottom: 0,
+                          paddingTop: 20,
+                          lineHeight: '1.2',
+                        },
+                      },
+                      { type: 'spacer', appearance: { height: 10 } },
+                      {
+                        content: {
+                          url: 'https://image.sendsay.ru/image/x_1674547398793664/block/202305/23083437/Bez_nazvaniya.jpg',
+                        },
+                        type: 'image',
+                        appearance: {
+                          paddingLeft: 0,
+                          align: 'left',
+                          paddingRight: 0,
+                          paddingBottom: 10,
+                          paddingTop: 0,
+                          extended: false,
+                        },
+                      },
+                      {
+                        content: { label: 'Email', placeholder: 'Введите ваш email' },
+                        type: 'textField',
+                        appearance: {
+                          paddingLeft: 0,
+                          paddingRight: 0,
+                          hidden: false,
+                          paddingBottom: 0,
+                          paddingTop: 0,
+                        },
+                        field: { qid: '_member_email', aid: 'member', required: true, default: '' },
+                      },
+                      { type: 'spacer', appearance: { height: 10 } },
+                      {
+                        content: { text: 'Подписаться' },
+                        type: 'button',
+                        appearance: {
+                          textColor: '#ffffff',
+                          paddingLeft: 0,
+                          align: 'justify',
+                          fontFamily: '"Open Sans",Helvetica,Arial,sans-serif',
+                          paddingRight: 0,
+                          fontSize: '14',
+                          paddingBottom: 0,
+                          borderRadius: '2',
+                          paddingTop: 0,
+                          backgroundColor: '#2d52e3',
+                          lineHeight: '1.2',
+                        },
+                      },
+                    ],
+                    appearance: {
+                      paddingLeft: 0,
+                      paddingRight: 0,
+                      flex: 12,
+                      paddingBottom: 0,
+                      backgroundColor: '#ffffff',
+                      paddingTop: 0,
+                    },
+                  },
+                ],
+                appearance: {},
+              },
+              {
+                columns: [
+                  {
+                    elements: [
+                      {
+                        content: { text: 'Спасибо за заполнение формы!' },
+                        type: 'text',
+                        appearance: {
+                          paddingLeft: 0,
+                          align: 'left',
+                          paddingRight: 0,
+                          paddingBottom: 0,
+                          paddingTop: 0,
+                        },
+                      },
+                    ],
+                    appearance: {
+                      paddingLeft: 0,
+                      paddingRight: 0,
+                      flex: 12,
+                      paddingBottom: 0,
+                      paddingTop: 0,
+                    },
+                  },
+                ],
+                appearance: {},
+              },
+            ],
+            type: 'widget',
+            appearance: {
+              width: 400,
+              labelFontFamily: '"Open Sans",Helvetica,Arial,sans-serif',
+              paddingLeft: 20,
+              textColor: '#000',
+              paddingRight: 20,
+              position: 'right',
+              paddingBottom: 20,
+              borderRadius: 0,
+              paddingTop: 20,
+              overlayColor: 'rgba(0, 0, 0, 0.8)',
+              overlayEnabled: false,
+              labelFontSize: '14',
+              backgroundColor: '#fff',
+              labelTextColor: '#000',
+              animation: 'slide',
+            },
+            settings: {
+              frequency: 0,
+              showCondition: {
+                onLeave: false,
+                maxCount: 0,
+                delay: 0,
+                instant: true,
+                multipleSubmit: true,
+                onPageScroll: 0,
+              },
+            },
+            toggle: {
+              content: { text: '<span style="font-size:16px;">Подпишитесь на рассылку</span>' },
+              type: 'text',
+              appearance: {
+                paddingLeft: 0,
+                align: 'left',
+                paddingRight: 0,
+                paddingBottom: 0,
+                paddingTop: 0,
+                lineHeight: '1.2',
+              },
+            },
+          },
+          {
+            ignoreState: true,
+            ignoreKeyboard: true,
+            ignoreCookie: true,
+            instant: true,
+            fakeSubmit: true,
+            demo: true,
+            formId: 0,
+          }
+        );
+
         window.form = form;
       })();
     </script>
@@ -96,7 +255,7 @@
     <div class="wrapper">
       <!-- <div class="example" data-sendsay-form-subscribe="xeliusestate/1">Open modal dialog</div> -->
       <!-- <div data-sendsay-form-embedded="x_1647957072928694/5"></div> -->
-      <div data-sendsay-form-embedded="elektro/2"></div>
+      <!-- <div data-sendsay-form-embedded="elektro/2"></div> -->
 
       <div id="box"></div>
     </div>

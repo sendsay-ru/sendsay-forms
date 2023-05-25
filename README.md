@@ -13,92 +13,91 @@ Sendsay Forms
 ## Настройки:
 ```js
 SENDSAY.showPopup({
-{
-   "obj":{
-      "fields":[ // поля формы
-         {
-            "required":1,
-            "name":"_member_email",
-            "type":"text",
-            "label":"E-mail",
-            "default":""
-         }
-      ],
-      "state":"1",
-      "settings":{
-         "steps":[ // шаги: [0] - начальная верстка, [1] - после отправки данных
-            {
-               "columns":[ // сетка
-                  {
-                     "elements":[ // элементы
-                        {
-                           "content":{ // настройки элемента
-                              "text":"<span style=\"font-size:20px;\"><strong>Подпишитесь на рассылку</strong></span>"
-                           },
-                           "type":"text", // тип элемента
-                           "appearance":{ // стили элемента
-                              "paddingLeft":0,
-                              "align":"left",
-                              "paddingRight":0,
-                              "paddingBottom":"10",
-                              "paddingTop":0,
-                              "lineHeight":"1.2"
-                           }
-                        },
-                     ],
-                     "appearance":{ // стили колонки
-                        "paddingLeft":0,
-                        "paddingRight":0,
-                        "flex":12,
-                        "paddingBottom":0,
-                        "paddingTop":0
-                     }
-                  }
-               ],
-            },
-         ],
-         "type":"popup", // тип формы
-         "appearance":{ // общие стили формы
-            "width":"500",
-            "borderEnabled":true,
-            "position":"centered",
-            "paddingBottom":"15",
-            "borderColor":"rgba(191, 183, 240, 0.51)",
-            "overlayColor":"rgba(0, 0, 0, 0.8)",
-            "shadowColor":"rgba(33, 219, 27, 1)",
-            "labelFontSize":"14",
-            "labelTextColor":"#000",
-            "animation":"none",
-            "labelFontFamily":"\"Open Sans\",Helvetica,Arial,sans-serif",
-            "shadowEnabled":true,
-            "paddingLeft":"15",
-            "textColor":"#000",
-            "paddingRight":"15",
-            "shadowOffsetX":"0",
-            "borderRadius":"10",
-            "paddingTop":"15",
-            "shadowOffsetY":"2",
-            "borderWidth":"4",
-            "shadowBlur":"8",
-            "overlayEnabled":false,
-            "backgroundColor":"#fff",
-            "shadowSpread":"1"
-         },
-         "settings":{ // настройки отображения
-            "frequency":0, // отображать ли форму при каждом просмотре страницы
-            "showCondition":{
-               "onLeave":false, // показывать при уходе со страницы
-               "maxCount":0, // макс. кол-во показов
-               "delay":0, // показывать по таймеру
-               "instant":true, // показывать при загрузке страницы 
-               "multipleSubmit":false, // возможность повторно заполнить форму
-               "onPageScroll":0 // показывать при скролле
-            },
-            "canClose":1 // возможность закрыть форму после отправки данных
-         }
-      },
-      "landing_page":""
-   }
+  "steps":[ // шаги: [0] - начальная верстка, [1] - после отправки данных
+    {
+        "columns":[ // сетка
+          {
+              "elements":[ // элементы
+                {
+                    "content":{ // настройки элемента
+                      "text":"<span style=\"font-size:20px;\"><strong>Подпишитесь на рассылку</strong></span>"
+                    },
+                    "type":"text", // тип элемента
+                    "appearance":{ // стили элемента
+                      "paddingLeft":0,
+                      "align":"left",
+                      "paddingRight":0,
+                      "paddingBottom":"10",
+                      "paddingTop":0,
+                      "lineHeight":"1.2"
+                    }
+                },
+              ],
+              "appearance":{ // стили колонки
+                "paddingLeft":0,
+                "paddingRight":0,
+                "flex":12,
+                "paddingBottom":0,
+                "paddingTop":0
+              }
+          }
+        ],
+    },
+  ],
+  "type":"popup", // тип формы
+  "appearance":{ // общие стили формы
+    "width":"500",
+    "borderEnabled":true,
+    "position":"centered",
+    "paddingBottom":"15",
+    "borderColor":"rgba(191, 183, 240, 0.51)",
+    "overlayColor":"rgba(0, 0, 0, 0.8)",
+    "shadowColor":"rgba(33, 219, 27, 1)",
+    "labelFontSize":"14",
+    "labelTextColor":"#000",
+    "animation":"none",
+    "labelFontFamily":"\"Open Sans\",Helvetica,Arial,sans-serif",
+    "shadowEnabled":true,
+    "paddingLeft":"15",
+    "textColor":"#000",
+    "paddingRight":"15",
+    "shadowOffsetX":"0",
+    "borderRadius":"10",
+    "paddingTop":"15",
+    "shadowOffsetY":"2",
+    "borderWidth":"4",
+    "shadowBlur":"8",
+    "overlayEnabled":false,
+    "backgroundColor":"#fff",
+    "shadowSpread":"1"
+  },
+  "toggle":{ // есть только для формы типа widget
+    "content":{
+      "text":"<span style=\"font-size:16px;\">Подпишитесь на рассылку</span>"
+    },
+    "type":"text",
+    "appearance":{
+      "paddingLeft":0,
+      "align":"left",
+      "paddingRight":0,
+      "paddingBottom":0,
+      "paddingTop":0,
+      "lineHeight":"1.2"
+    }
+  },
+  "settings":{ // настройки отображения
+    "frequency":0, // отображать ли форму при каждом просмотре страницы
+    "showCondition":{
+        "onLeave":false, // показывать при уходе со страницы
+        "onClick":false, // показывать только по клику на `data-sendsay-form-subscribe`
+        "maxCount":0, // макс. кол-во показов
+        "delay":0, // показывать по таймеру
+        "instant":true, // показывать при загрузке страницы
+        "multipleSubmit":false, // возможность повторно заполнить форму
+        "onPageScroll":0 // показывать при скролле
+    },
+    "canClose":0 // возможность закрыть форму после отправки данных
+  }
 },
 {
   "ignoreKeyboard": true, // игнорировать горячие клавиши
@@ -128,7 +127,7 @@ SENDSAY.showPopup({
 
 - **instant**
 
-Срабатывает сразу же, как только страница загрузится. 
+Срабатывает сразу же, как только страница загрузится.
 
 - **leave**
 
