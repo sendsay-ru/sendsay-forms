@@ -21,8 +21,11 @@
       }
     </script>
     <script src="./forms.js"></script>
-    <!-- <script src="https://image.sendsay.ru/app/js/forms/forms.min.js"></script> -->
-    <script>
+    <script src="https://image.sendsay.ru/app/js/forms/forms.min.js"></script>
+    <script type="text/javascript">
+      SENDSAY.activatePopup('https://sendsay.ru/form/codeception/556/');
+    </script>
+    <!-- <script>
       (async function load() {
         const form = await SENDSAY.showPopup(
           {
@@ -186,14 +189,14 @@
 
         window.form = form;
       })();
-    </script>
+    </script> -->
     <script>
-      // setTimeout(function() {
-      //   document.getElementById("box").innerHTML = `
-      //     <div class="example" data-sendsay-form-subscribe="codeception/445">Dynamic modal dialog</div>
-      //     <div data-sendsay-form-embedded="codeception/449"></div>
-      //   `;
-      // }, 1000);
+      setTimeout(function () {
+        document.getElementById('box').innerHTML = `
+          <div class="example" data-sendsay-form-subscribe="codeception/556">Dynamic modal dialog</div>
+          <div data-sendsay-form-embedded="codeception/556"></div>
+        `;
+      }, 1000);
     </script>
     <style type="text/css">
       .wrapper {
@@ -254,7 +257,7 @@
   <body>
     <div class="wrapper">
       <!-- <div class="example" data-sendsay-form-subscribe="xeliusestate/1">Open modal dialog</div> -->
-      <!-- <div data-sendsay-form-embedded="x_1647957072928694/5"></div> -->
+      <!-- <div data-sendsay-form-embedded="x_16819945481025977/1"></div> -->
       <!-- <div data-sendsay-form-embedded="elektro/2"></div> -->
 
       <div id="box"></div>
