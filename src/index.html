@@ -22,10 +22,10 @@
     </script>
     <script src="./forms.js"></script>
     <script src="https://image.sendsay.ru/app/js/forms/forms.min.js"></script>
-    <script type="text/javascript">
-      SENDSAY.activatePopup('https://sendsay.ru/form/codeception/556/');
-    </script>
-    <!-- <script>
+    <!-- <script type="text/javascript">
+      SENDSAY.activatePopup('https://sendsay.ru/form/x_1681122422133281/4/');
+    </script> -->
+    <script>
       (async function load() {
         const form = await SENDSAY.showPopup(
           {
@@ -36,58 +36,150 @@
                     elements: [
                       {
                         content: {
-                          text: '<span style="font-size:14px;">Подписывайтесь, чтобы получать последние новости и специльные предложения, которые будут доставляться прямо в ваш почтовый ящик.</span>',
+                          text: '<span style="font-family:Roboto,Helvetica,Arial,sans-serif;"><strong><span style="font-size:16px;">Подписка на новости Комплекса А0</span></strong></span>',
                         },
                         type: 'text',
                         appearance: {
                           paddingLeft: 0,
-                          align: 'left',
+                          align: 'center',
                           paddingRight: 0,
-                          paddingBottom: 0,
-                          paddingTop: 20,
+                          paddingBottom: '10',
+                          paddingTop: 0,
                           lineHeight: '1.2',
                         },
                       },
-                      { type: 'spacer', appearance: { height: 10 } },
                       {
                         content: {
-                          url: 'https://image.sendsay.ru/image/x_1674547398793664/block/202305/23083437/Bez_nazvaniya.jpg',
+                          label: 'Имя',
+                          placeholder: 'Иван',
                         },
-                        type: 'image',
+                        type: 'textField',
                         appearance: {
                           paddingLeft: 0,
-                          align: 'left',
                           paddingRight: 0,
                           paddingBottom: 10,
+                          hidden: false,
                           paddingTop: 0,
-                          extended: false,
+                        },
+                        field: {
+                          aid: 'base',
+                          qid: 'firstName',
+                          width: 256,
+                          id: 'q31',
                         },
                       },
                       {
-                        content: { label: 'Email', placeholder: 'Введите ваш email' },
+                        content: {
+                          label: 'Email',
+                          placeholder: 'Введите ваш email',
+                        },
                         type: 'textField',
                         appearance: {
                           paddingLeft: 0,
                           paddingRight: 0,
                           hidden: false,
-                          paddingBottom: 0,
+                          paddingBottom: '10',
                           paddingTop: 0,
                         },
-                        field: { qid: '_member_email', aid: 'member', required: true, default: '' },
+                        field: {
+                          qid: '_member_email',
+                          aid: 'member',
+                          required: true,
+                          default: '',
+                        },
                       },
-                      { type: 'spacer', appearance: { height: 10 } },
                       {
-                        content: { text: 'Подписаться' },
+                        content: {
+                          label: 'Мобильный телефон',
+                          placeholder: '+(код страны)(№ телефона10 знаков)',
+                        },
+                        type: 'textField',
+                        appearance: {
+                          paddingLeft: 0,
+                          paddingRight: 0,
+                          paddingBottom: 10,
+                          hidden: false,
+                          paddingTop: 0,
+                        },
+                        field: {
+                          aid: 'custom',
+                          qid: 'q765',
+                          width: 14,
+                          required: true,
+                          default: '',
+                          id: 'q357',
+                        },
+                      },
+                      {
+                        content: {
+                          label: 'Компания',
+                          placeholder: 'Название компании',
+                        },
+                        type: 'textField',
+                        appearance: {
+                          paddingLeft: 0,
+                          paddingRight: 0,
+                          paddingBottom: 10,
+                          hidden: false,
+                          paddingTop: 0,
+                        },
+                        field: {
+                          aid: 'custom',
+                          qid: 'company',
+                          width: 100,
+                          id: 'q284',
+                        },
+                      },
+                      {
+                        content: {
+                          label: 'Вы согласны на обработку персональных данных?',
+                        },
+                        type: 'checkboxField',
+                        appearance: {
+                          paddingLeft: 20,
+                          paddingRight: 0,
+                          paddingBottom: 10,
+                          hidden: false,
+                          paddingTop: 0,
+                        },
+                        field: {
+                          aid: 'custom',
+                          qid: 'q101',
+                          order: [1],
+                          id: 'q982',
+                          answers: {
+                            1: 'Да',
+                          },
+                        },
+                      },
+                      {
+                        content: {
+                          text: '<a href="https://gk-infostroy.ru/agreement/">Политика обработки персональных данных</a>',
+                        },
+                        type: 'text',
+                        appearance: {
+                          paddingLeft: 0,
+                          align: null,
+                          paddingRight: 0,
+                          paddingBottom: 10,
+                          paddingTop: 0,
+                          lineHeight: '1.2',
+                        },
+                      },
+                      {
+                        content: {
+                          text: 'Подписаться',
+                        },
                         type: 'button',
                         appearance: {
                           textColor: '#ffffff',
                           paddingLeft: 0,
-                          align: 'justify',
-                          fontFamily: '"Open Sans",Helvetica,Arial,sans-serif',
+                          align: 'center',
+                          fontFamily: 'Roboto,Helvetica,Arial,sans-serif',
                           paddingRight: 0,
-                          fontSize: '14',
+                          fontSize: '16',
                           paddingBottom: 0,
-                          borderRadius: '2',
+                          borderRadius: '10',
                           paddingTop: 0,
                           backgroundColor: '#2d52e3',
                           lineHeight: '1.2',
@@ -99,7 +191,6 @@
                       paddingRight: 0,
                       flex: 12,
                       paddingBottom: 0,
-                      backgroundColor: '#ffffff',
                       paddingTop: 0,
                     },
                   },
@@ -111,7 +202,22 @@
                   {
                     elements: [
                       {
-                        content: { text: 'Спасибо за заполнение формы!' },
+                        content: {
+                          text: '<span style="font-family:open sans,helvetica,arial,sans-serif;"><span style="font-size:20px;"><strong>Спасибо за подписку!</strong></span></span>',
+                        },
+                        type: 'text',
+                        appearance: {
+                          paddingLeft: '0',
+                          align: 'left',
+                          paddingRight: '0',
+                          paddingBottom: '10',
+                          paddingTop: '0',
+                        },
+                      },
+                      {
+                        content: {
+                          text: '<span style="font-size:16px;">Для подтверждения подписки перейдите по ссылке из письма.</span>',
+                        },
                         type: 'text',
                         appearance: {
                           paddingLeft: 0,
@@ -134,23 +240,23 @@
                 appearance: {},
               },
             ],
-            type: 'widget',
+            type: 'popup',
             appearance: {
               width: 400,
               labelFontFamily: '"Open Sans",Helvetica,Arial,sans-serif',
-              paddingLeft: 20,
+              paddingLeft: '30',
               textColor: '#000',
-              paddingRight: 20,
-              position: 'right',
+              paddingRight: '30',
+              position: 'centered',
               paddingBottom: 20,
-              borderRadius: 0,
+              borderRadius: '5',
               paddingTop: 20,
               overlayColor: 'rgba(0, 0, 0, 0.8)',
-              overlayEnabled: false,
+              overlayEnabled: true,
               labelFontSize: '14',
               backgroundColor: '#fff',
               labelTextColor: '#000',
-              animation: 'slide',
+              animation: 'zoom',
             },
             settings: {
               frequency: 0,
@@ -158,21 +264,9 @@
                 onLeave: false,
                 maxCount: 0,
                 delay: 0,
-                instant: true,
-                multipleSubmit: true,
+                instant: false,
+                multipleSubmit: false,
                 onPageScroll: 0,
-              },
-            },
-            toggle: {
-              content: { text: '<span style="font-size:16px;">Подпишитесь на рассылку</span>' },
-              type: 'text',
-              appearance: {
-                paddingLeft: 0,
-                align: 'left',
-                paddingRight: 0,
-                paddingBottom: 0,
-                paddingTop: 0,
-                lineHeight: '1.2',
               },
             },
           },
@@ -189,15 +283,15 @@
 
         window.form = form;
       })();
-    </script> -->
-    <script>
+    </script>
+    <!-- <script>
       setTimeout(function () {
         document.getElementById('box').innerHTML = `
           <div class="example" data-sendsay-form-subscribe="codeception/556">Dynamic modal dialog</div>
           <div data-sendsay-form-embedded="codeception/556"></div>
         `;
       }, 1000);
-    </script>
+    </script> -->
     <style type="text/css">
       .wrapper {
         background: rgba(242, 246, 248, 1);
@@ -256,8 +350,10 @@
   </head>
   <body>
     <div class="wrapper">
-      <!-- <div class="example" data-sendsay-form-subscribe="xeliusestate/1">Open modal dialog</div> -->
-      <!-- <div data-sendsay-form-embedded="x_16819945481025977/1"></div> -->
+      <div class="example" data-sendsay-form-subscribe="x_1681122422133281/4/">
+        Open modal dialog
+      </div>
+      <div data-sendsay-form-embedded="x_1681122422133281/4/"></div>
       <!-- <div data-sendsay-form-embedded="elektro/2"></div> -->
 
       <div id="box"></div>
