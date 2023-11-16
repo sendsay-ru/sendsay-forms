@@ -43,7 +43,7 @@ module.exports = (grunt) => {
         },
         files: {
           './dist/forms.js': ['./src/*.js', './src/classes/**/*.js'],
-          './dist/website.js': './src/website/**/*.js'
+          './dist/website.js': './src/website/**/*.js',
         },
       },
       test: {

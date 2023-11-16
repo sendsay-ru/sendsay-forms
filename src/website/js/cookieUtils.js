@@ -6,7 +6,8 @@ export const getCookies = () => ({
   isProduction: Cookies.get('isProduction') === 'true',
 });
 
-export const setCookie = (name, value) => Cookies.set(name, value, { expires: COOKIE_EXPIRES_DATE });
+export const setCookie = (name, value) =>
+  Cookies.set(name, value, { expires: COOKIE_EXPIRES_DATE });
 
 export const clearAllCookie = () => {
   document.cookie = '';

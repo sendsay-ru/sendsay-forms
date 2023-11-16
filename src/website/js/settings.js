@@ -4,7 +4,7 @@ import { DEFAULT_FORM_ID, DEFAULT_ACCOUNT_ID, DEFAULT_IS_PRODUCTION_VALUE } from
 const DEFAULT_FORM_VALUES = {
   isProduction: DEFAULT_IS_PRODUCTION_VALUE,
   accountId: DEFAULT_ACCOUNT_ID,
-  widgetId: DEFAULT_FORM_ID,
+  formId: DEFAULT_FORM_ID,
 };
 
 const resetCheckboxCookies = () => {
