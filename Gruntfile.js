@@ -43,6 +43,7 @@ module.exports = (grunt) => {
         },
         files: {
           './dist/forms.js': ['./src/*.js', './src/classes/**/*.js'],
+          './dist/website.js': './src/website/**/*.js'
         },
       },
       test: {
@@ -71,6 +72,7 @@ module.exports = (grunt) => {
       target: {
         files: {
           'dist/forms.min.js': ['dist/forms.js'],
+          'dist/website.min.js': ['dist/website.js'],
         },
       },
     },
@@ -100,6 +102,7 @@ module.exports = (grunt) => {
         },
         files: {
           'dist/index.html': 'src/index.html',
+          'dist/settings.html': 'src/website/settings.html',
         },
       },
     },
@@ -119,7 +122,7 @@ module.exports = (grunt) => {
         },
       },
       html: {
-        files: 'src/index.html',
+        files: ['src/index.html', 'src/website/settings.html'],
         tasks: ['htmlmin'],
         options: {
           interrupt: true,
@@ -130,7 +133,7 @@ module.exports = (grunt) => {
 
   grunt.loadNpmTasks('grunt-babel');
   grunt.loadNpmTasks('grunt-browserify');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-uglify-es');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-htmlmin');
