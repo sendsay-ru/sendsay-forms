@@ -19,11 +19,7 @@ const getScriptElement = ({ isProduction = DEFAULT_IS_PRODUCTION_VALUE }) => {
   return scriptTag;
 };
 
-const createFormElement = ({
-  accountId,
-  formId,
-  dataAttr,
-}) => {
+const createFormElement = ({ accountId, formId, dataAttr }) => {
   const formElement = document.createElement('div');
 
   formElement.dataset[dataAttr] = `${accountId}/${formId}`;
@@ -52,33 +48,39 @@ const createErrorElement = () => {
   return errorElement;
 };
 
-const getFormData = (formId) => (
+const getFormData = (formId) =>
   // eslint-disable-next-line compat/compat
   fetch(`https://sendsay.ru/form/${formId}`, {
     method: 'GET',
     headers: {
-      Accept: 'application/json'
+      Accept: 'application/json',
     },
-  })
-    .then((response) => response.json())
-);
+  }).then((response) => response.json());
 
 const getFormElement = ({ accountId = DEFAULT_ACCOUNT_ID, formId = DEFAULT_FORM_ID }, wrapper) => {
-  getFormData(`${accountId}/${formId}`).then((data) => {
-    if (data?.errors) {
-      wrapper.appendChild(createErrorElement());
+  getFormData(`${accountId}/${formId}`)
+    .then((data) => {
+      if (!wrapper) {
+        return;
+      }
 
-      console.log(data);
+      if (data?.errors) {
+        wrapper.appendChild(createErrorElement());
 
-      return;
-    }
+        console.log(data);
 
-    if (data?.obj?.settings?.type === FORM_TYPE_POPUP) {
-      wrapper.appendChild(createSubscibeElement(accountId, formId));
-    } else {
-      wrapper.appendChild(createFormElement({ accountId, formId, dataAttr: SENDSAY_FORM_EMBEDDED }));
-    }
-  }).catch((error) => console.log('Error:', error));
+        return;
+      }
+
+      if (data?.obj?.settings?.type === FORM_TYPE_POPUP) {
+        wrapper.appendChild(createSubscibeElement(accountId, formId));
+      } else {
+        wrapper.appendChild(
+          createFormElement({ accountId, formId, dataAttr: SENDSAY_FORM_EMBEDDED })
+        );
+      }
+    })
+    .catch((error) => console.log('Error:', error));
 };
 
 const main = () => {

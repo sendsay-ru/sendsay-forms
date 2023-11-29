@@ -19,7 +19,7 @@ const insertFormData = () => {
     return;
   }
 
-  (Object.entries(cookies)).forEach(([name, value]) => {
+  Object.entries(cookies).forEach(([name, value]) => {
     if (name === 'isProduction') {
       form.elements.isProduction.checked = Boolean(value);
 
