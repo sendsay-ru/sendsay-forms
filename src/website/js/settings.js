@@ -15,7 +15,11 @@ const insertFormData = () => {
   const form = document.getElementById('settings');
   const cookies = getCookies();
 
-  Object.entries(cookies).forEach(([name, value]) => {
+  if (!form) {
+    return;
+  }
+
+  (Object.entries(cookies)).forEach(([name, value]) => {
     if (name === 'isProduction') {
       form.elements.isProduction.checked = Boolean(value);
 
@@ -48,6 +52,10 @@ const handleFormSubmit = (event) => {
 
 const main = () => {
   const form = document.getElementById('settings');
+
+  if (!form) {
+    return;
+  }
 
   insertFormData();
   form.onsubmit = handleFormSubmit;

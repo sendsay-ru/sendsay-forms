@@ -6,3 +6,8 @@ export const COOKIE_EXPIRES_DATE = 7;
 
 export const SENDSAY_FORM_EMBEDDED = 'sendsayFormEmbedded';
 export const SENDSAY_FORM_SUBSCRIBE = 'sendsayFormSubscribe';
+
+export const PRODUCTION = 'https://image.sendsay.ru/app/js/forms/forms.min.js';
+export const DEPLOY = './forms.min.js';
+
+export const FORM_TYPE_POPUP = 'popup';
