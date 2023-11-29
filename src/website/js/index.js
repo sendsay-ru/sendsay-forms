@@ -38,7 +38,7 @@ const createSubscibeElement = (accountId, formId) => {
     'flex p-2 rounded bg-blue-600 text-white cursor-pointer m-3 w-40 justify-center';
   formElement.innerText = 'Open modal dialog';
 
-  window.SENDSAY.activatePopup(`https://sendsay.ru/form/${accountId}/${formId}`)
+  window.SENDSAY.activatePopup(`https://sendsay.ru/form/${accountId}/${formId}`);
 
   return formElement;
 };
