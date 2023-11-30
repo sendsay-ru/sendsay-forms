@@ -67,7 +67,7 @@ const getFormElement = ({ accountId = DEFAULT_ACCOUNT_ID, formId = DEFAULT_FORM_
       if (data?.errors) {
         wrapper.appendChild(createErrorElement());
 
-        console.log(data);
+        console.error(data);
 
         return;
       }
