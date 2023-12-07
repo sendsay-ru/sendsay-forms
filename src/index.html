@@ -20,243 +20,33 @@
         };
       }
     </script>
-    <script src="./forms.js"></script>
-    <!-- <script src="https://image.sendsay.ru/app/js/forms/forms.min.js"></script> -->
-    <script>
-      (async function load() {
-        const form = await SENDSAY.showPopup(
-          {
-            steps: [
-              {
-                columns: [
-                  {
-                    elements: [
-                      {
-                        content: {
-                          text: '<span style="font-size:14px;">Подписывайтесь, чтобы получать последние новости и специльные предложения, которые будут доставляться прямо в ваш почтовый ящик.</span>',
-                        },
-                        type: 'text',
-                        appearance: {
-                          paddingLeft: 0,
-                          align: 'left',
-                          paddingRight: 0,
-                          paddingBottom: 0,
-                          paddingTop: 20,
-                          lineHeight: '1.2',
-                        },
-                      },
-                      { type: 'spacer', appearance: { height: 10 } },
-                      {
-                        content: {
-                          url: 'https://image.sendsay.ru/image/x_1674547398793664/block/202305/23083437/Bez_nazvaniya.jpg',
-                        },
-                        type: 'image',
-                        appearance: {
-                          paddingLeft: 0,
-                          align: 'left',
-                          paddingRight: 0,
-                          paddingBottom: 10,
-                          paddingTop: 0,
-                          extended: false,
-                        },
-                      },
-                      {
-                        content: { label: 'Email', placeholder: 'Введите ваш email' },
-                        type: 'textField',
-                        appearance: {
-                          paddingLeft: 0,
-                          paddingRight: 0,
-                          hidden: false,
-                          paddingBottom: 0,
-                          paddingTop: 0,
-                        },
-                        field: { qid: '_member_email', aid: 'member', required: true, default: '' },
-                      },
-                      { type: 'spacer', appearance: { height: 10 } },
-                      {
-                        content: { text: 'Подписаться' },
-                        type: 'button',
-                        appearance: {
-                          textColor: '#ffffff',
-                          paddingLeft: 0,
-                          align: 'justify',
-                          fontFamily: '"Open Sans",Helvetica,Arial,sans-serif',
-                          paddingRight: 0,
-                          fontSize: '14',
-                          paddingBottom: 0,
-                          borderRadius: '2',
-                          paddingTop: 0,
-                          backgroundColor: '#2d52e3',
-                          lineHeight: '1.2',
-                        },
-                      },
-                    ],
-                    appearance: {
-                      paddingLeft: 0,
-                      paddingRight: 0,
-                      flex: 12,
-                      paddingBottom: 0,
-                      backgroundColor: '#ffffff',
-                      paddingTop: 0,
-                    },
-                  },
-                ],
-                appearance: {},
-              },
-              {
-                columns: [
-                  {
-                    elements: [
-                      {
-                        content: { text: 'Спасибо за заполнение формы!' },
-                        type: 'text',
-                        appearance: {
-                          paddingLeft: 0,
-                          align: 'left',
-                          paddingRight: 0,
-                          paddingBottom: 0,
-                          paddingTop: 0,
-                        },
-                      },
-                    ],
-                    appearance: {
-                      paddingLeft: 0,
-                      paddingRight: 0,
-                      flex: 12,
-                      paddingBottom: 0,
-                      paddingTop: 0,
-                    },
-                  },
-                ],
-                appearance: {},
-              },
-            ],
-            type: 'widget',
-            appearance: {
-              width: 400,
-              labelFontFamily: '"Open Sans",Helvetica,Arial,sans-serif',
-              paddingLeft: 20,
-              textColor: '#000',
-              paddingRight: 20,
-              position: 'right',
-              paddingBottom: 20,
-              borderRadius: 0,
-              paddingTop: 20,
-              overlayColor: 'rgba(0, 0, 0, 0.8)',
-              overlayEnabled: false,
-              labelFontSize: '14',
-              backgroundColor: '#fff',
-              labelTextColor: '#000',
-              animation: 'slide',
-            },
-            settings: {
-              frequency: 0,
-              showCondition: {
-                onLeave: false,
-                maxCount: 0,
-                delay: 0,
-                instant: true,
-                multipleSubmit: true,
-                onPageScroll: 0,
-              },
-            },
-            toggle: {
-              content: { text: '<span style="font-size:16px;">Подпишитесь на рассылку</span>' },
-              type: 'text',
-              appearance: {
-                paddingLeft: 0,
-                align: 'left',
-                paddingRight: 0,
-                paddingBottom: 0,
-                paddingTop: 0,
-                lineHeight: '1.2',
-              },
-            },
-          },
-          {
-            ignoreState: true,
-            ignoreKeyboard: true,
-            ignoreCookie: true,
-            instant: true,
-            fakeSubmit: true,
-            demo: true,
-            formId: 0,
-          }
-        );
-
-        window.form = form;
-      })();
-    </script>
-    <script>
-      // setTimeout(function() {
-      //   document.getElementById("box").innerHTML = `
-      //     <div class="example" data-sendsay-form-subscribe="codeception/445">Dynamic modal dialog</div>
-      //     <div data-sendsay-form-embedded="codeception/449"></div>
-      //   `;
-      // }, 1000);
-    </script>
-    <style type="text/css">
-      .wrapper {
-        background: rgba(242, 246, 248, 1);
-        background: -moz-linear-gradient(
-          top,
-          rgba(242, 246, 248, 1) 0%,
-          rgba(216, 225, 231, 1) 50%,
-          rgba(181, 198, 208, 1) 51%,
-          rgba(224, 239, 249, 1) 100%
-        );
-        background: -webkit-gradient(
-          left top,
-          left bottom,
-          color-stop(0%, rgba(242, 246, 248, 1)),
-          color-stop(50%, rgba(216, 225, 231, 1)),
-          color-stop(51%, rgba(181, 198, 208, 1)),
-          color-stop(100%, rgba(224, 239, 249, 1))
-        );
-        background: -webkit-linear-gradient(
-          top,
-          rgba(242, 246, 248, 1) 0%,
-          rgba(216, 225, 231, 1) 50%,
-          rgba(181, 198, 208, 1) 51%,
-          rgba(224, 239, 249, 1) 100%
-        );
-        background: -o-linear-gradient(
-          top,
-          rgba(242, 246, 248, 1) 0%,
-          rgba(216, 225, 231, 1) 50%,
-          rgba(181, 198, 208, 1) 51%,
-          rgba(224, 239, 249, 1) 100%
-        );
-        background: -ms-linear-gradient(
-          top,
-          rgba(242, 246, 248, 1) 0%,
-          rgba(216, 225, 231, 1) 50%,
-          rgba(181, 198, 208, 1) 51%,
-          rgba(224, 239, 249, 1) 100%
-        );
-        background: linear-gradient(
-          to bottom,
-          rgba(242, 246, 248, 1) 0%,
-          rgba(216, 225, 231, 1) 50%,
-          rgba(181, 198, 208, 1) 51%,
-          rgba(224, 239, 249, 1) 100%
-        );
-        height: 200000px;
-      }
-      .example {
-        margin: 10px;
-        padding: 10px;
-        background-color: #eee;
-        cursor: pointer;
-      }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body>
     <div class="wrapper">
-      <!-- <div class="example" data-sendsay-form-subscribe="xeliusestate/1">Open modal dialog</div> -->
-      <!-- <div data-sendsay-form-embedded="x_1647957072928694/5"></div> -->
-      <!-- <div data-sendsay-form-embedded="elektro/2"></div> -->
+      <a
+        class="flex items-center gap-1 p-2 m-3 bg-blue-600 w-30 rounded text-white justify-center absolute right-0 top-0 z-50"
+        href="settings.html"
+      >
+        <p>Settings</p>
+        <svg
+          class="w-5 h-5"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 20 20"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M7.75 4H19M7.75 4a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 4h2.25m13.5 6H19m-2.25 0a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 10h11.25m-4.5 6H19M7.75 16a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 16h2.25"
+          />
+        </svg>
+      </a>
 
+      <script src="./website.min.js"></script>
       <div id="box"></div>
     </div>
   </body>
