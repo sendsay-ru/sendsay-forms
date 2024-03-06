@@ -23,8 +23,10 @@ export class ToggleablePopup extends Popup {
       '<span class="sendsay-toggler-desktop">[%toggle%]</span>' +
       '<span class="sendsay-toggler-mobile">[%toggle%]</span>' +
       '</div>' +
+      '<form action="" method="POST">' +
       '<div class="sendsay-content">' +
       '</div>' +
+      '</form>' +
       `</div>${!this.noWrapper ? '</div>' : ''}`;
 
     this.baseClass = `sendsay-popup ${opened ? 'sendsay-animation-none' : ''}`;

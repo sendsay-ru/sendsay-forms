@@ -4,7 +4,7 @@ export class Button extends DOMObject {
   initialize() {
     this.template =
       '<div class="[%classes%]" style="[%wrapperstyle%]">' +
-      '<input type="button"  value="[%text%]" style="[%style%]" />' +
+      '<input type="submit"  value="[%text%]" style="[%style%]" />' +
       '</div>';
 
     this.baseClass = 'sendsay-button';
