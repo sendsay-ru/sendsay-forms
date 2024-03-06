@@ -1,54 +1,60 @@
 <!DOCTYPE html>
 <html lang="en-US">
-  <head>
-    <title></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="stylesheet"
-      href="https://necolas.github.io/normalize.css/latest/normalize.css"
-      type="text/css"
-      media="all"
-    />
-    <script>
-      function SENDSAY_FORMS_CONFIG() {
-        return {
-          forms: {
-            css: {
-              url: './forms.css',
-            },
-          },
-        };
-      }
-    </script>
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body>
-    <div class="wrapper">
-      <div data-sendsay-form-embedded="codeception/566"></div>
-      <a
-        class="flex items-center gap-1 p-2 m-3 bg-blue-600 w-30 rounded text-white justify-center absolute right-0 top-0 z-50"
-        href="settings.html"
-      >
-        <p>Settings</p>
-        <svg
-          class="w-5 h-5"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 20 20"
-        >
-          <path
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M7.75 4H19M7.75 4a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 4h2.25m13.5 6H19m-2.25 0a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 10h11.25m-4.5 6H19M7.75 16a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 16h2.25"
-          />
-        </svg>
-      </a>
 
-      <script src="./website.min.js"></script>
-      <div id="box"></div>
-    </div>
-  </body>
+<head>
+  <title></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://necolas.github.io/normalize.css/latest/normalize.css" type="text/css"
+    media="all" />
+  <script>
+    function SENDSAY_FORMS_CONFIG() {
+      return {
+        forms: {
+          css: {
+            url: './forms.css',
+          },
+        },
+      };
+    }
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <a class="flex items-center gap-1 p-2 m-3 bg-blue-600 w-30 rounded text-white justify-center absolute right-0 top-0 z-50"
+      href="settings.html">
+      <p>Settings</p>
+      <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M7.75 4H19M7.75 4a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 4h2.25m13.5 6H19m-2.25 0a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 10h11.25m-4.5 6H19M7.75 16a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 16h2.25" />
+      </svg>
+    </a>
+
+    <script src="./website.min.js"></script>
+    <div id="box"></div>
+  </div>
+
+  <!-- Yandex.Metrika counter -->
+  <script type="text/javascript">
+    (function (m, e, t, r, i, k, a) {
+      m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments) };
+      m[i].l = 1 * new Date();
+      for (var j = 0; j < document.scripts.length; j++) { if (document.scripts[j].src === r) { return; } }
+      k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+    })
+      (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+    ym(96672951, "init", {
+      clickmap: true,
+      trackLinks: true,
+      accurateTrackBounce: true
+    });
+  </script>
+  <noscript>
+    <div><img src="https://mc.yandex.ru/watch/96672951" style="position:absolute; left:-9999px;" alt="" /></div>
+  </noscript>
+  <!-- /Yandex.Metrika counter -->
+</body>
+
 </html>
