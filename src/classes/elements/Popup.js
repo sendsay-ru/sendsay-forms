@@ -9,8 +9,6 @@ export class Popup extends DOMObject {
   initialize() {
     this.isShow = false;
 
-    this.sndsyApi = window.sndsyApi;
-
     const appearance = this.data.appearance || {};
 
     this.noWrapper = !appearance.overlayEnabled;
@@ -222,6 +220,7 @@ export class Popup extends DOMObject {
       }
       this.container.appendChild(this.el);
     }
+    this.trigger('sendsay-show', this.gainedData);
   }
 
   hide() {
@@ -233,14 +232,6 @@ export class Popup extends DOMObject {
         this.mediaQuery.el.remove();
         this.mediaQuery = null;
       }
-    }
-  }
-
-  setEmail() {
-    const email = this.gainedData._member_email;
-
-    if (this.sndsyApi && this.sndsyApi.setEmail && email) {
-      this.sndsyApi.setEmail(email);
     }
   }
 
@@ -267,8 +258,6 @@ export class Popup extends DOMObject {
     }
     if (isValid) {
       this.extend(this.gainedData, data);
-
-      this.setEmail();
 
       if (this.steps.length - 2 !== this.curStep) {
         this.proceedToNextStep();

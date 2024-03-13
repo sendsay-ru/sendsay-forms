@@ -161,7 +161,15 @@ export class DOMObject {
 
   trigger(eventName, data) {
     let event;
-    const extra = { extra: data };
+
+    const { id, formId, login } = this.data;
+
+    const extra = {
+      id,
+      formId,
+      login,
+      extra: data,
+    };
 
     if (CustomEvent && typeof CustomEvent === 'function') {
       event = new CustomEvent(eventName, { detail: extra });
