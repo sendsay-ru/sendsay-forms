@@ -70,6 +70,18 @@
       );
     </script>
 
+    <script type="text/javascript">
+      window.addEventListener(
+        'sendsay-sent',
+        (event) => {
+          if (event.detail.formId === '561') {
+            ym(96672951, 'reachGoal', 'submit');
+          }
+        },
+        true
+      );
+    </script>
+
     <!-- Yandex.Metrika counter -->
     <script type="text/javascript">
       (function (m, e, t, r, i, k, a) {
