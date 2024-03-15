@@ -31,7 +31,7 @@ export class Button extends DOMObject {
   }
 
   handleClick() {
-    this.trigger('sendsay-click');
+    this.trigger('sendsay-form-click');
   }
 
   removeEvents() {

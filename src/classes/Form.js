@@ -120,7 +120,7 @@ export class Form {
           login,
         });
         this.domObj.activate(this.options);
-        this.domObj.el.addEventListener('sendsay-success', this.handleSubmit.bind(this));
+        this.domObj.el.addEventListener('sendsay-form-success', this.handleSubmit.bind(this));
 
         this.setFrequencyCookie(this.connector.data);
         this.setCountCookie(this.connector.data);
@@ -162,7 +162,7 @@ export class Form {
     const data = this.domObj.gainedData;
     const email = data._member_email;
 
-    this.domObj.trigger('sendsay-sent', data);
+    this.domObj.trigger('sendsay-form-sent', data);
 
     if (window.sndsyApi && window.sndsyApi.setEmail && email) {
       window.sndsyApi.setEmail(email);

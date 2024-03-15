@@ -50,19 +50,10 @@
       <script src="./website.min.js"></script>
       <div id="box"></div>
     </div>
-    <script type="text/javascript">
-      window.addEventListener(
-        'sendsay-sent',
-        (event) => {
-          ym(96672951, 'reachGoal', 'submit');
-        },
-        true
-      );
-    </script>
 
     <script type="text/javascript">
       window.addEventListener(
-        'sendsay-show',
+        'sendsay-form-show',
         () => {
           document.querySelector('[name="q280"]').setAttribute('value', location.host);
         },
@@ -72,7 +63,7 @@
 
     <script type="text/javascript">
       window.addEventListener(
-        'sendsay-sent',
+        'sendsay-form-sent',
         (event) => {
           if (event.detail.formId === '561') {
             ym(96672951, 'reachGoal', 'submit');
