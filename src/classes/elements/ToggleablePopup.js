@@ -23,8 +23,10 @@ export class ToggleablePopup extends Popup {
       '<span class="sendsay-toggler-desktop">[%toggle%]</span>' +
       '<span class="sendsay-toggler-mobile">[%toggle%]</span>' +
       '</div>' +
+      '<form action="" method="POST">' +
       '<div class="sendsay-content">' +
       '</div>' +
+      '</form>' +
       `</div>${!this.noWrapper ? '</div>' : ''}`;
 
     this.baseClass = `sendsay-popup ${opened ? 'sendsay-animation-none' : ''}`;
@@ -133,13 +135,13 @@ export class ToggleablePopup extends Popup {
   addEvents() {
     super.addEvents();
     this.addEvent('click', '.sendsay-toggler', this.handleTogglerClick.bind(this));
-    this.addEvent('sendsay-image-load', '.sendsay-image', this.setSaneMaxHeight.bind(this));
+    this.addEvent('sendsay-form-image-load', '.sendsay-image', this.setSaneMaxHeight.bind(this));
   }
 
   removeEvents() {
     super.removeEvents();
     this.removeEvent('click', '.sendsay-toggler', this.handleTogglerClick.bind(this));
-    this.removeEvent('sendsay-image-load', '.sendsay-image', this.setSaneMaxHeight.bind(this));
+    this.removeEvent('sendsay-form-image-load', '.sendsay-image', this.setSaneMaxHeight.bind(this));
   }
 
   handleTogglerClick() {
