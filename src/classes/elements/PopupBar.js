@@ -18,8 +18,10 @@ export class PopupBar extends Popup {
           : ''
       }<div class="[%classes%]" style="[%style%]">` +
       '<div class="sendsay-close">×</div>' +
+      '<form action="" method="POST">' +
       '<div class="sendsay-content">' +
       '</div>' +
+      '</form>' +
       `</div>${!this.noWrapper ? '</div>' : ''}`;
 
     this.baseClass = 'sendsay-popup';

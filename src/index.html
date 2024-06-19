@@ -108,14 +108,115 @@
         cursor: pointer;
       }
     </style>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
   </head>
+
   <body>
     <div class="wrapper">
-      <!-- <div class="example" data-sendsay-form-subscribe="xeliusestate/1">Open modal dialog</div> -->
-      <!-- <div data-sendsay-form-embedded="x_1647957072928694/5"></div> -->
-      <!-- <div data-sendsay-form-embedded="elektro/2"></div> -->
+      <a
+        class="flex items-center gap-1 p-2 m-3 bg-blue-600 w-30 rounded text-white justify-center absolute right-0 top-0 z-50"
+        href="settings.html"
+      >
+        <p>Settings</p>
+        <svg
+          class="w-5 h-5"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 20 20"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M7.75 4H19M7.75 4a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 4h2.25m13.5 6H19m-2.25 0a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 10h11.25m-4.5 6H19M7.75 16a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 16h2.25"
+          />
+        </svg>
+      </a>
 
+      <script src="./website.min.js"></script>
       <div id="box"></div>
     </div>
+
+    <script type="text/javascript">
+      window.addEventListener(
+        'sendsay-form-show',
+        (event) => {
+          if (event.detail.formId === '561') {
+            document.querySelector('[name="q280"]').setAttribute('value', location.host);
+          }
+        },
+        true
+      );
+    </script>
+
+    <script type="text/javascript">
+      window.addEventListener(
+        'sendsay-form-sent',
+        (event) => {
+          if (event.detail.formId === '561') {
+            ym(96672951, 'reachGoal', 'submit');
+          }
+        },
+        true
+      );
+    </script>
+
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+      (function (m, e, t, r, i, k, a) {
+        m[i] =
+          m[i] ||
+          function () {
+            (m[i].a = m[i].a || []).push(arguments);
+          };
+        m[i].l = 1 * new Date();
+        for (var j = 0; j < document.scripts.length; j++) {
+          if (document.scripts[j].src === r) {
+            return;
+          }
+        }
+        (k = e.createElement(t)),
+          (a = e.getElementsByTagName(t)[0]),
+          (k.async = 1),
+          (k.src = r),
+          a.parentNode.insertBefore(k, a);
+      })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
+
+      ym(96672951, 'init', {
+        clickmap: true,
+        trackLinks: true,
+        accurateTrackBounce: true,
+      });
+    </script>
+    <noscript>
+      <div>
+        <img
+          src="https://mc.yandex.ru/watch/96672951"
+          style="position: absolute; left: -9999px"
+          alt=""
+        />
+      </div>
+    </noscript>
+    <!-- /Yandex.Metrika counter -->
+
+    <script type="text/javascript">
+      (function (d, w, t, u, o, s, v) {
+        w[o] =
+          w[o] ||
+          function () {
+            (w[o].q = w[o].q || []).push(arguments);
+          };
+        s = d.createElement('script');
+        s.async = 1;
+        s.src = u;
+        v = d.getElementsByTagName(t)[0];
+        v.parentNode.insertBefore(s, v);
+      })(document, window, 'script', '//image.sendsay.ru/js/target/tracking_v2.min.js', 'sndsy');
+      sndsy('init', { fid: 'ecom', v: '1.0' });
+      sndsy('send', {});
+    </script>
   </body>
 </html>

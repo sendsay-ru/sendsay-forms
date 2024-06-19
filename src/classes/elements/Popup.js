@@ -8,6 +8,7 @@ import closeIcon from '../../icons/close';
 export class Popup extends DOMObject {
   initialize() {
     this.isShow = false;
+
     const appearance = this.data.appearance || {};
 
     this.noWrapper = !appearance.overlayEnabled;
@@ -23,8 +24,10 @@ export class Popup extends DOMObject {
         }<div class="[%classes%]" style="[%style%]">` +
         '<div class="sendsay-close sendsay-close--with-icon">'
       }${closeIcon}</div>` +
-      '<div class = "sendsay-content">' +
+      '<form action="" method="POST">' +
+      '<div class="sendsay-content">' +
       '</div>' +
+      '</form>' +
       `</div>${!this.noWrapper ? '</div>' : ''}`;
 
     this.baseClass = 'sendsay-popup';
@@ -121,7 +124,10 @@ export class Popup extends DOMObject {
     } else {
       this.addEvent('click', this.handlePopupClick.bind(this));
     }
-    this.addEvent('sendsay-click', '.sendsay-button', this.handleButtonClick.bind(this));
+
+    this.addEvent('submit', 'form', this.submitForm.bind(this));
+
+    this.addEvent('sendsay-form-click', '.sendsay-button', this.handleButtonClick.bind(this));
     this.addEvent('wheel', this.handleWheel.bind(this));
     this.addEvent('DOMMouseScroll', this.handleWheel.bind(this));
 
@@ -136,11 +142,18 @@ export class Popup extends DOMObject {
     } else {
       this.removeEvent('click', this.handlePopupClick.bind(this));
     }
-    this.removeEvent('sendsay-click', '.sendsay-button', this.handleButtonClick.bind(this));
+
+    this.removeEvent('submit', 'form', this.submitForm.bind(this));
+
+    this.removeEvent('sendsay-form-click', '.sendsay-button', this.handleButtonClick.bind(this));
     this.removeEvent('wheel', this.handleWheel.bind(this));
     this.removeEvent('DOMMouseScroll', this.handleWheel.bind(this));
     this.removeEvent('click', '.sendsay-close', this.handleClose.bind(this));
     this.removeEvent('keyup', this.handleKeyPress.bind(this));
+  }
+
+  submitForm(event) {
+    event.preventDefault();
   }
 
   makeSettings() {
@@ -207,6 +220,7 @@ export class Popup extends DOMObject {
       }
       this.container.appendChild(this.el);
     }
+    this.trigger('sendsay-form-show', this.gainedData);
   }
 
   hide() {
@@ -244,11 +258,12 @@ export class Popup extends DOMObject {
     }
     if (isValid) {
       this.extend(this.gainedData, data);
+
       if (this.steps.length - 2 !== this.curStep) {
         this.proceedToNextStep();
       } else {
         button.el.querySelector('input').classList.add('sendsay-loading');
-        this.trigger('sendsay-success', this.gainedData);
+        this.trigger('sendsay-form-success', this.gainedData);
       }
     }
     return isValid;
