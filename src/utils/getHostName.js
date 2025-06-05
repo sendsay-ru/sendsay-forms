@@ -1,3 +1,4 @@
+/* eslint-disable compat/compat */
 import { parse } from 'tldts';
 
 const knownBadDomains = new Set([
@@ -12,7 +13,7 @@ const knownBadDomains = new Set([
   'co.hu',
 ]);
 
-export function getEffectiveDomain(hostname = window.location.hostname) {
+export function getHostName(hostname = window.location.hostname) {
   const parsed = parse(hostname);
 
   if (
