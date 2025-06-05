@@ -113,9 +113,14 @@ export class Form {
         this.domObj = null;
 
         // eslint-disable-next-line new-cap
-        this.domObj = new DomConstructor(data);
+        this.domObj = new DomConstructor({
+          ...data,
+          id,
+          formId,
+          login,
+        });
         this.domObj.activate(this.options);
-        this.domObj.el.addEventListener('sendsay-success', this.handleSubmit.bind(this));
+        this.domObj.el.addEventListener('sendsay-form-success', this.handleSubmit.bind(this));
 
         this.setFrequencyCookie(this.connector.data);
         this.setCountCookie(this.connector.data);
@@ -153,6 +158,15 @@ export class Form {
   handleSuccessSubmit() {
     this.domObj.showEndDialog();
     this.setSubmitCookie(this.connector.data);
+
+    const data = this.domObj.gainedData;
+    const email = data._member_email;
+
+    this.domObj.trigger('sendsay-form-sent', data);
+
+    if (window.sndsyApi && window.sndsyApi.setEmail && email) {
+      window.sndsyApi.setEmail(email);
+    }
   }
 
   handleFailSubmit() {

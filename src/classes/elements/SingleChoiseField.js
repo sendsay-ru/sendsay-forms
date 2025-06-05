@@ -48,7 +48,7 @@ export class SingleChoiseField extends Field {
           this
         );
         if (newEl) {
-          newEl.el.addEventListener('sendsay-change', this.handleChangeValue);
+          newEl.el.addEventListener('sendsay-form-change', this.handleChangeValue);
           this.elements.push(newEl);
           body.appendChild(newEl.el);
         }

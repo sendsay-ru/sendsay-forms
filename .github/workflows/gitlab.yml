@@ -1,0 +1,23 @@
+name: Backup to gitlab
+
+on:
+  push:
+  delete:
+  workflow_dispatch:
+
+jobs:
+  to_gitlab:
+    runs-on: ubuntu-latest
+
+    if: ${{ startsWith(github.repository, 'sendsay-ru') }}
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: yesolutions/mirror-action@master
+        with:
+          REMOTE: git@gitlab.sndsy.ru:sendsay-ru/sendsay-forms.git
+          PUSH_ALL_REFS: 'false'
+          GIT_SSH_PRIVATE_KEY: ${{ secrets.GITLAB_SSH_PRIVATE_KEY }}
+          GIT_SSH_NO_VERIFY_HOST: 'true'

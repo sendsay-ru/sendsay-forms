@@ -59,7 +59,7 @@ export class RadioButton extends DOMObject {
 
   handleChange(event) {
     event.stopPropagation();
-    this.trigger('sendsay-change', {
+    this.trigger('sendsay-form-change', {
       checked: event.target.checked,
       value: event.target.value,
     });
@@ -69,7 +69,7 @@ export class RadioButton extends DOMObject {
     event.stopPropagation();
     const input = this.el.querySelector('input');
     input.checked = true;
-    this.trigger('sendsay-change', {
+    this.trigger('sendsay-form-change', {
       checked: input.checked,
       value: input.value,
     });

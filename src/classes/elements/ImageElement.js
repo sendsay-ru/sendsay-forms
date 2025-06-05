@@ -23,7 +23,7 @@ export class ImageElement extends DOMObject {
   }
 
   handleLoad() {
-    this.trigger('sendsay-image-load');
+    this.trigger('sendsay-form-image-load');
   }
 
   makeStyles() {

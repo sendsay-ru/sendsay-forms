@@ -161,14 +161,21 @@ export class DOMObject {
 
   trigger(eventName, data) {
     let event;
-    const extra = { extra: data };
+
+    const { formId, login } = this.data;
+
+    const detail = {
+      formId,
+      account: login,
+      extra: data,
+    };
 
     if (CustomEvent && typeof CustomEvent === 'function') {
-      event = new CustomEvent(eventName, { detail: extra });
+      event = new CustomEvent(eventName, { detail });
     } else {
       event = document.createEvent('HTMLEvents');
       event.initEvent(eventName, true, true);
-      event.detail = extra;
+      event.detail = detail;
     }
 
     this.el.dispatchEvent(event);
