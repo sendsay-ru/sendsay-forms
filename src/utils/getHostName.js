@@ -1,22 +1,28 @@
-const REG_EXP_DOMAIN = /(^|\.)[a-zA-Z0-9\-]+\.{0,1}[a-zA-Z0-9\-]*$/;
+/* eslint-disable compat/compat */
+import { parse } from 'tldts';
 
-// eslint-disable-next-line compat/compat
+const knownBadDomains = new Set([
+  'com.ru',
+  'net.ru',
+  'org.ru',
+  'pp.ru',
+  'com.ua',
+  'co.com',
+  'co.nl',
+  'co.pl',
+  'co.hu',
+]);
+
 export function getHostName(hostname = window.location.hostname) {
-  try {
-    const match = hostname.match(REG_EXP_DOMAIN);
+  const parsed = parse(hostname);
 
-    if (match) {
-      let domain = match[0];
-
-      if (domain.charAt(0) === '.') {
-        domain = domain.substring(1);
-      }
-
-      return domain;
-    }
-  } catch (e) {
+  if (
+    !parsed.domain ||
+    parsed.domain === parsed.publicSuffix ||
+    knownBadDomains.has(parsed.domain)
+  ) {
     return hostname;
   }
 
-  return hostname;
+  return parsed.domain;
 }
