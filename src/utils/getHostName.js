@@ -11,6 +11,9 @@ const knownBadDomains = new Set([
   'co.nl',
   'co.pl',
   'co.hu',
+  'netlify.app',
+  'github.io',
+  'vercel.app',
 ]);
 
 export function getHostName(hostname = window.location.hostname) {
@@ -19,6 +22,7 @@ export function getHostName(hostname = window.location.hostname) {
   if (
     !parsed.domain ||
     parsed.domain === parsed.publicSuffix ||
+    parsed.isPrivate ||
     knownBadDomains.has(parsed.domain)
   ) {
     return hostname;
