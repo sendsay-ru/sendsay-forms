@@ -113,21 +113,25 @@
     </noscript>
     <!-- /Yandex.Metrika counter -->
 
-    <script type="text/javascript">
-      (function (d, w, t, u, o, s, v) {
-        w[o] =
-          w[o] ||
-          function () {
-            (w[o].q = w[o].q || []).push(arguments);
-          };
-        s = d.createElement('script');
-        s.async = 1;
-        s.src = u;
-        v = d.getElementsByTagName(t)[0];
-        v.parentNode.insertBefore(s, v);
-      })(document, window, 'script', '//image.sendsay.ru/js/target/tracking_v2.min.js', 'sndsy');
-      sndsy('init', { fid: 'ecom', v: '1.0' });
-      sndsy('send', {});
+    <script type="text/javascript" defer>
+      try {
+        (function (d, w, t, u, o, s, v) {
+          w[o] =
+            w[o] ||
+            function () {
+              (w[o].q = w[o].q || []).push(arguments);
+            };
+          s = d.createElement('script');
+          s.async = 1;
+          s.src = u;
+          v = d.getElementsByTagName(t)[0];
+          v.parentNode.insertBefore(s, v);
+        })(document, window, 'script', '//image.sendsay.ru/js/target/tracking_v2.min.js', 'sndsy');
+        sndsy('init', { fid: 'ecom', v: '1.0' });
+        sndsy('send', {});
+      } catch (err) {
+        console.log('!!err', err);
+      }
     </script>
   </body>
 </html>

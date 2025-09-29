@@ -15,6 +15,11 @@ const getScriptElement = ({ isProduction = DEFAULT_IS_PRODUCTION_VALUE }) => {
   const scriptTag = document.createElement('script');
 
   scriptTag.src = source;
+  scriptTag.defer = true;
+
+  scriptTag.onerror = (error) => {
+    console.log('!!form error', error);
+  };
 
   return scriptTag;
 };
