@@ -19,7 +19,16 @@ class EmbeddedFormWatcher {
         return;
       }
       el.setAttribute(ATTRIBUTES.INIT, true);
-      this.activatePopup(`https://sendsay.ru/form/${formId}`, { el });
+      let url;
+
+      try {
+        // eslint-disable-next-line compat/compat
+        url = new URL(formId).toString();
+      } catch {
+        url = `https://sendsay.ru/form/${formId}`;
+      }
+
+      this.activatePopup(url, { el });
     });
   };
 

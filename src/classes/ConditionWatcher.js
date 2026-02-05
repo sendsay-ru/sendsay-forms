@@ -31,7 +31,7 @@ export class ConditionWatcher {
 
     const clickTrigger = new ClickTrigger();
     clickTrigger.watch((attr) => {
-      if (attr === `${this.login}/${this.formId}`) {
+      if (attr.includes(`${this.login}/${this.formId}`)) {
         resolve('click');
       }
     });
