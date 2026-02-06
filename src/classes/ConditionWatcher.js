@@ -31,7 +31,9 @@ export class ConditionWatcher {
 
     const clickTrigger = new ClickTrigger();
     clickTrigger.watch((attr) => {
-      if (attr.includes(`${this.login}/${this.formId}`)) {
+      const pattern = new RegExp(`(^|/)${this.login}/${this.formId}$`);
+
+      if (pattern.test(attr)) {
         resolve('click');
       }
     });
