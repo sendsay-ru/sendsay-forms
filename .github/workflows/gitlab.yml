@@ -17,7 +17,7 @@ jobs:
           fetch-depth: 0
       - uses: yesolutions/mirror-action@master
         with:
-          REMOTE: git@gitlab.sndsy.ru:sendsay-ru/sendsay-forms.git
+          REMOTE: 'ssh://git@gitlab.sndsy.ru:22000/sendsay-ru/sendsay-forms.git'
           PUSH_ALL_REFS: 'false'
           GIT_SSH_PRIVATE_KEY: ${{ secrets.GITLAB_SSH_PRIVATE_KEY }}
           GIT_SSH_NO_VERIFY_HOST: 'true'
