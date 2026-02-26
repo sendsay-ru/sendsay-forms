@@ -1,4 +1,4 @@
-export const getExternalFormConfig = (formId) => {
+const getExternalFormConfig = (formId) => {
   if (!window.SENDSAY_FORMS || !formId) {
     return;
   }
@@ -16,7 +16,6 @@ export const applyExternalFormConfig = ({ element, formId }) => {
   if (formConfig.email) {
     const emailConfig = formConfig.email;
 
-    // Set default value for email field
     if (emailConfig.defaultValue !== undefined) {
       const emailInputName = '_member_email';
       const emailInput = element?.querySelector(`input[name="${emailInputName}"]`);
