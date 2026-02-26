@@ -4,6 +4,10 @@ import { Column } from './Column';
 import { Field } from './Field';
 import { Button } from './Button';
 import closeIcon from '../../icons/close';
+import {
+  applyExternalFormConfig,
+  getExternalFormData,
+} from '../../utils';
 
 export class Popup extends DOMObject {
   initialize() {
@@ -220,6 +224,9 @@ export class Popup extends DOMObject {
       }
       this.container.appendChild(this.el);
     }
+
+    applyExternalFormConfig({ element: this.el, formId: this.data.formId });
+
     this.trigger('sendsay-form-show', this.gainedData);
   }
 
@@ -240,7 +247,8 @@ export class Popup extends DOMObject {
       (element) => element instanceof Field || element instanceof Button
     );
     let isValid = true;
-    const data = {};
+    const externalData = getExternalFormData(this.data.formId) ?? {};
+    const data = { ...externalData };
     let button;
 
     if (elements) {
