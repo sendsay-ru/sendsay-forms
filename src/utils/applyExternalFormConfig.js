@@ -6,6 +6,29 @@ const getExternalFormConfig = (formId) => {
   return window.SENDSAY_FORMS[formId];
 };
 
+const createInputSelector = (fieldName) => `input[name="${fieldName}"]`;
+
+const hideFieldInput = (fieldName, element) => {
+  const input = element?.querySelector(createInputSelector(fieldName));
+  if (input) {
+    input.style.display = 'none';
+  }
+};
+
+const hideFieldLabel = (fieldName, element) => {
+  const input = element?.querySelector(createInputSelector(fieldName));
+
+  if (!input) {
+    return;
+  }
+
+  const label = input.parentElement?.querySelector('label');
+
+  if (label) {
+    label.style.display = 'none';
+  }
+};
+
 export const applyExternalFormConfig = ({ element, formId }) => {
   const formConfig = getExternalFormConfig(formId);
 
@@ -18,7 +41,7 @@ export const applyExternalFormConfig = ({ element, formId }) => {
 
     if (emailConfig.defaultValue !== undefined) {
       const emailInputName = '_member_email';
-      const emailInput = element?.querySelector(`input[name="${emailInputName}"]`);
+      const emailInput = element?.querySelector(createInputSelector(emailInputName));
 
       if (emailInput) {
         emailInput.value = emailConfig.defaultValue;
@@ -45,25 +68,4 @@ export const getExternalFormData = (formId) => {
   }
 
   return { ...formConfig.extraData };
-};
-
-const hideFieldInput = (fieldName, element) => {
-  const input = element.querySelector(`input[name="${fieldName}"]`);
-  if (input) {
-    input.style.display = 'none';
-  }
-};
-
-const hideFieldLabel = (fieldName, element) => {
-  const input = element?.querySelector(`input[name="${fieldName}"]`);
-
-  if (!input) {
-    return;
-  }
-
-  const label = input.parentElement?.querySelector('label');
-
-  if (label) {
-    label.style.display = 'none';
-  }
 };
