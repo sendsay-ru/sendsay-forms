@@ -4,9 +4,7 @@ import { Column } from './Column';
 import { Field } from './Field';
 import { Button } from './Button';
 import closeIcon from '../../icons/close';
-import {
-  applyExternalFormConfig,
-} from '../../utils';
+import { applyExternalFormConfig } from '../../utils';
 
 export class Popup extends DOMObject {
   initialize() {
