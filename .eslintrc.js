@@ -63,6 +63,8 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'object-curly-newline': 'off',
     'arrow-parens': [2, 'always'],
+    'template-curly-spacing': 'off',
+    indent: 'off',
   },
 
   env: {
