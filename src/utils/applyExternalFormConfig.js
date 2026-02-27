@@ -1,23 +1,22 @@
 const getExternalFormConfig = (formId) => {
-  if (!window.SENDSAY_FORMS || !formId) {
+  if (!window.SENDSAY_FORM_FIELDS || !formId) {
     return;
   }
 
-  return window.SENDSAY_FORMS[formId];
+  return window.SENDSAY_FORM_FIELDS[formId];
 };
 
 const createInputSelector = (fieldName) => `input[name="${fieldName}"]`;
 
-const hideFieldInput = (fieldName, element) => {
-  const input = element?.querySelector(createInputSelector(fieldName));
-  if (input) {
-    input.style.display = 'none';
+const hideFieldInput = (input) => {
+  const element = input;
+
+  if (element) {
+    element.style.display = 'none';
   }
 };
 
-const hideFieldLabel = (fieldName, element) => {
-  const input = element?.querySelector(createInputSelector(fieldName));
-
+const hideFieldLabel = (input) => {
   if (!input) {
     return;
   }
@@ -36,36 +35,25 @@ export const applyExternalFormConfig = ({ element, formId }) => {
     return;
   }
 
-  if (formConfig.email) {
-    const emailConfig = formConfig.email;
+  Object.keys(formConfig).forEach((fieldName) => {
+    const fieldConfig = formConfig[fieldName];
+    const input = element?.querySelector(createInputSelector(fieldName));
 
-    if (emailConfig.defaultValue !== undefined) {
-      const emailInputName = '_member_email';
-      const emailInput = element?.querySelector(createInputSelector(emailInputName));
-
-      if (emailInput) {
-        emailInput.value = emailConfig.defaultValue;
-
-        emailInput.dispatchEvent(new Event('input', { bubbles: true }));
-      }
-
-      if (emailConfig.hideInput) {
-        hideFieldInput(emailInputName, element);
-      }
-
-      if (emailConfig.hideLabel) {
-        hideFieldLabel(emailInputName, element);
-      }
+    if (!input) {
+      return;
     }
-  }
-};
 
-export const getExternalFormData = (formId) => {
-  const formConfig = getExternalFormConfig(formId);
+    if (fieldConfig.defaultValue !== undefined) {
+      input.value = fieldConfig.defaultValue;
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    }
 
-  if (!formConfig) {
-    return;
-  }
+    if (fieldConfig.hideInput) {
+      hideFieldInput(input);
+    }
 
-  return { ...formConfig.extraData };
+    if (fieldConfig.hideLabel) {
+      hideFieldLabel(input);
+    }
+  });
 };

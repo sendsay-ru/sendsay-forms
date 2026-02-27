@@ -6,7 +6,6 @@ import { Button } from './Button';
 import closeIcon from '../../icons/close';
 import {
   applyExternalFormConfig,
-  getExternalFormData,
 } from '../../utils';
 
 export class Popup extends DOMObject {
@@ -247,8 +246,7 @@ export class Popup extends DOMObject {
       (element) => element instanceof Field || element instanceof Button
     );
     let isValid = true;
-    const externalData = getExternalFormData(this.data.formId) ?? {};
-    const data = { ...externalData };
+    const data = {};
     let button;
 
     if (elements) {
