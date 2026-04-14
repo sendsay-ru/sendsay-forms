@@ -6,6 +6,10 @@ class EmbeddedFormWatcher {
   }
 
   start = () => {
+    if (window.__sendsayTMInstance) {
+      return;
+    }
+
     this.checkEmbeddedForms();
     document.addEventListener('DOMContentLoaded', this.checkEmbeddedForms);
     this.embeddedFormWatcher();
