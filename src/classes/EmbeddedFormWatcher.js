@@ -18,12 +18,21 @@ class EmbeddedFormWatcher {
   checkEmbeddedForms = () => {
     const elements = document.querySelectorAll(`[${ATTRIBUTES.EMBEDDED}]`);
     elements.forEach((el) => {
-      const formId = el.getAttribute(ATTRIBUTES.EMBEDDED);
-      if (!formId || el.hasAttribute(ATTRIBUTES.INIT)) {
+      const formPath = el.getAttribute(ATTRIBUTES.EMBEDDED);
+      if (!formPath || el.hasAttribute(ATTRIBUTES.INIT)) {
         return;
       }
       el.setAttribute(ATTRIBUTES.INIT, true);
-      this.activatePopup(`https://sendsay.ru/form/${formId}`, { el });
+      let url;
+
+      try {
+        // eslint-disable-next-line compat/compat
+        url = new URL(formPath).toString();
+      } catch {
+        url = `https://sendsay.ru/form/${formPath}`;
+      }
+
+      this.activatePopup(url, { el });
     });
   };
 
